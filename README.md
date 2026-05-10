@@ -19,7 +19,7 @@
 
 <br>
 
-📖 **[コンセプト絵本 (concept-storybook.html)](concept-storybook.html)** — 12 場面でサービス全体を俯瞰する童謡風の紙芝居 (ブラウザで開いてください)
+📖 **[コンセプト絵本 (concept-storybook.html)](https://morimatsutemp.blob.core.windows.net/workshare/concept-storybook.html)** — 12 場面でサービス全体を俯瞰する童謡風の紙芝居 (ブラウザで開いてください)
 
 </div>
 
@@ -208,7 +208,7 @@ CONSTRUCTION フェーズで実装する主要画面のワイヤーフレーム 
 
 > 💡 詳細なワイヤーフレーム (8 画面 × ASCII モックアップ + デザインシステム) は **[ui-mockups.md](aidlc-docs/inception/application-design/ui-mockups.md)** および **[ui-mockups.drawio](aidlc-docs/inception/application-design/diagrams/ui-mockups.drawio)** (9 ページ) を参照
 >
-> 📖 サービスの全体像をストーリー仕立てで体感したい場合は **[concept-storybook.html](concept-storybook.html)** を開いてください
+> 📖 サービスの全体像をストーリー仕立てで体感したい場合は **[コンセプト絵本](https://morimatsutemp.blob.core.windows.net/workshare/concept-storybook.html)** を開いてください
 
 ---
 
@@ -809,9 +809,9 @@ gantt
 
 | ファイル | 場面数 | 内容 |
 |---|:---:|---|
-| 📖 [concept-storybook.html](concept-storybook.html) | 12 | サービス全体を俯瞰する童謡風の紙芝居。判断疲労 → AI 委任 → 合議 → リアルタイム議論 → 委任度スコア → 4 ドメイン応答停止 → 再考メッセージ → 新しい暮らし まで 12 場面で表現 (キーボード ← →・スワイプ・自動再生・ベル音対応) |
+| 📖 [concept-storybook.html](https://morimatsutemp.blob.core.windows.net/workshare/concept-storybook.html) | 12 | サービス全体を俯瞰する童謡風の紙芝居。判断疲労 → AI 委任 → 合議 → リアルタイム議論 → 委任度スコア → 4 ドメイン応答停止 → 再考メッセージ → 新しい暮らし まで 12 場面で表現 (キーボード ← →・スワイプ・自動再生・ベル音対応) |
 
-> 💡 ローカルでは `open concept-storybook.html` (macOS) または該当ファイルをブラウザにドラッグ &ドロップで開けます
+> 💡 ホスティング URL からブラウザで開く以外に、ローカルでも `open concept-storybook.html` (macOS) または該当ファイルをブラウザにドラッグ &ドロップで開けます
 
 ### 📜 開発履歴
 
