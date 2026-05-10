@@ -1,0 +1,82 @@
+# ==============================================================
+# YesMan / AI-DLC project .gitignore
+# ==============================================================
+
+# === OS / Editor ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# === IDE / Tools ===
+.vscode/
+.idea/
+*.iml
+
+# === AI-DLC framework (external dependency, not project source) ===
+.aidlc-rule-details/
+
+# === Claude Code session / settings ===
+.claude/
+
+# === Python (CONSTRUCTION フェーズで apps/api 配下に登場予定) ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+env/
+ENV/
+
+# === Node.js / pnpm (CONSTRUCTION フェーズで apps/web 配下に登場予定) ===
+node_modules/
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+.turbo/
+.cache/
+dist/
+build/
+
+# === Secrets / Local config ===
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# === Logs / Coverage ===
+*.log
+coverage/
+.coverage
+.pytest_cache/
+htmlcov/
+
+# === drawio backup files ===
+*.drawio.bkp
+
+# === Temp / scratch ===
+*.tmp
+*.bak
+.tmp/

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+  <!-- status divider -->
+  <line x1="22" y1="58" x2="258" y2="58" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- header -->
+  <rect x="14" y="60" width="252" height="40" fill="#F5E5C4" opacity="0.5"/>
+  <text x="32" y="84" font-family="inherit" font-size="14" font-weight="700" fill="#4A3D45">🪞 YesMan</text>
+  <text x="248" y="84" font-family="inherit" font-size="11" fill="#4A3D45" text-anchor="end">⚙️ 📊 👤</text>
+
+  <!-- proposal card -->
+  <rect x="40" y="130" width="200" height="200" rx="14" fill="#FAFAFA" stroke="#0A0A0A" stroke-width="2"
+        filter="drop-shadow(0 4px 8px rgba(0,0,0,0.1))"/>
+  <text x="140" y="160" text-anchor="middle" font-size="12" fill="#424242">今日の ランチは</text>
+  <text x="140" y="200" text-anchor="middle" font-size="22" font-weight="800" fill="#0A0A0A">ラーメン</text>
+  <text x="140" y="226" text-anchor="middle" font-size="14" font-weight="700" fill="#E8775A">いっこ です</text>
+  <line x1="70" y1="246" x2="210" y2="246" stroke="#E0D5BC" stroke-dasharray="3 2"/>
+  <text x="140" y="266" text-anchor="middle" font-size="10" fill="#616161" font-style="italic">あなたに最適化された結論です</text>
+  <!-- discussion link -->
+  <rect x="60" y="285" width="160" height="28" rx="14" fill="#FFE0B2" stroke="#FF5722" stroke-width="1.5" stroke-dasharray="3 2"/>
+  <text x="140" y="303" text-anchor="middle" font-size="10" font-weight="700" fill="#BF360C">📂 議論を見る (FR-CV-04)</text>
+
+  <!-- swipe hint left -->
+  <text x="56" y="380" text-anchor="middle" font-size="22" fill="#90A4AE">←</text>
+  <text x="56" y="402" text-anchor="middle" font-size="11" font-weight="700" fill="#9E9E9E">No</text>
+  <text x="56" y="416" text-anchor="middle" font-size="8" fill="#9E9E9E">別案 再生成</text>
+
+  <!-- swipe hint right -->
+  <text x="224" y="380" text-anchor="middle" font-size="22" fill="#6FBE8E">→</text>
+  <text x="224" y="402" text-anchor="middle" font-size="11" font-weight="700" fill="#1B5E20">Yes</text>
+  <text x="224" y="416" text-anchor="middle" font-size="8" fill="#1B5E20">承認！</text>
+
+  <!-- center action arrow -->
+  <text x="140" y="394" text-anchor="middle" font-size="14" fill="#90A4AE">スワイプして！</text>
+
+  <!-- bottom: AI generated nudge -->
+  <rect x="32" y="442" width="216" height="44" rx="10" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="1"/>
+  <text x="140" y="460" text-anchor="middle" font-size="9" fill="#E8775A" font-weight="700">合議された結論です。</text>
+  <text x="140" y="474" text-anchor="middle" font-size="9" fill="#E8775A">迷う必要は ありません ♪</text>
+
+</svg>

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+  <!-- status divider -->
+  <line x1="22" y1="58" x2="258" y2="58" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- header -->
+  <rect x="14" y="60" width="252" height="40" fill="#F5E5C4" opacity="0.5"/>
+  <text x="32" y="84" font-family="inherit" font-size="14" font-weight="700" fill="#4A3D45">🪞 YesMan</text>
+  <text x="248" y="84" font-family="inherit" font-size="11" fill="#4A3D45" text-anchor="end">⚙️ 📊 👤</text>
+
+  <!-- LIVE badge -->
+  <g transform="translate(140 130)">
+    <rect x="-46" y="-13" width="92" height="22" rx="11" fill="#FFB39A" stroke="#E8775A" stroke-width="1.5"/>
+    <circle cx="-30" cy="-2" r="3.5" fill="#E8775A">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    <text x="6" y="2" text-anchor="middle" font-size="10" font-weight="800" fill="#FFF">LIVE</text>
+  </g>
+
+  <!-- bubble: 慎重派 -->
+  <g transform="translate(0 168)">
+    <circle cx="40" cy="0" r="14" fill="#5C6BC0" stroke="#1A237E" stroke-width="1.5"/>
+    <text x="40" y="4" text-anchor="middle" font-size="11">🛡️</text>
+    <rect x="60" y="-14" width="180" height="32" rx="10" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="1.5"/>
+    <text x="68" y="-2" font-size="9" font-weight="700" fill="#1A237E">慎重派</text>
+    <text x="68" y="12" font-size="9" fill="#1A237E">ラーメンは塩分が…</text>
+  </g>
+
+  <!-- bubble: 楽観派 -->
+  <g transform="translate(0 220)">
+    <circle cx="40" cy="0" r="14" fill="#FFB74D" stroke="#E65100" stroke-width="1.5"/>
+    <text x="40" y="4" text-anchor="middle" font-size="11">☀️</text>
+    <rect x="60" y="-14" width="180" height="32" rx="10" fill="#FFF8E1" stroke="#FFB74D" stroke-width="1.5"/>
+    <text x="68" y="-2" font-size="9" font-weight="700" fill="#E65100">楽観派</text>
+    <text x="68" y="12" font-size="9" fill="#E65100">ラーメン 最高じゃない！</text>
+  </g>
+
+  <!-- bubble: 効率派 (typing) -->
+  <g transform="translate(0 272)">
+    <circle cx="40" cy="0" r="14" fill="#66BB6A" stroke="#1B5E20" stroke-width="1.5"/>
+    <text x="40" y="4" text-anchor="middle" font-size="11">⚡</text>
+    <rect x="60" y="-14" width="180" height="32" rx="10" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <text x="68" y="-2" font-size="9" font-weight="700" fill="#1B5E20">効率派</text>
+    <text x="68" y="12" font-size="9" fill="#1B5E20">駅前の二郎系が ▍</text>
+  </g>
+
+  <!-- progress bar -->
+  <text x="140" y="324" text-anchor="middle" font-size="9" fill="#9E9E9E" font-style="italic">（chunk 受信中…）</text>
+  <rect x="60" y="338" width="160" height="8" rx="4" fill="#FFE0B2" stroke="#FF5722" stroke-width="1"/>
+  <rect x="60" y="338" width="100" height="8" rx="4" fill="#FF5722"/>
+  <text x="140" y="362" text-anchor="middle" font-size="10" fill="#BF360C" font-weight="700">persona-utterance × 11</text>
+
+  <!-- LiteLLM hint -->
+  <text x="140" y="398" text-anchor="middle" font-size="10" fill="#4A3D45" font-style="italic">LiteLLM stream=True</text>
+  <text x="140" y="412" text-anchor="middle" font-size="9" fill="#9E9E9E">＝ 1 推論で chunk 配信</text>
+
+  <!-- ↓ next state hint -->
+  <text x="140" y="450" text-anchor="middle" font-size="9" fill="#BF360C">↓ 完了で 提案カード切替</text>
+
+  <!-- SSE event labels -->
+  <text x="32" y="478" font-size="7" fill="#5C6BC0">event: persona-utterance</text>
+  <text x="32" y="490" font-size="7" fill="#388E3C">event: final-proposal / completed</text>
+
+</svg>

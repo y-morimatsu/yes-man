@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 YesManの えほん 〜 かみしばい 〜</title>
+<style>
+:root {
+  --paper:        #FFF7E8;
+  --paper-edge:   #F2DFB8;
+  --gold:         #D4AC5A;
+  --pink:         #FFD6E0;
+  --pink-deep:    #FF8FAE;
+  --sky:          #CEE6F4;
+  --sky-deep:     #6BAED9;
+  --mint:         #CDEBD7;
+  --mint-deep:    #6FBE8E;
+  --sun:          #FFE6A0;
+  --sun-deep:     #F1B843;
+  --coral:        #FFB39A;
+  --coral-deep:   #E8775A;
+  --lavender:     #DCCDEC;
+  --lavender-deep:#9F88C8;
+  --ink:          #4A3D45;
+  --soft-ink:     #715B62;
+  --shadow:       rgba(120, 80, 50, 0.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: "Hiragino Maru Gothic ProN", "Hiragino Maru Gothic Pro",
+               "ヒラギノ丸ゴ ProN", "Yu Gothic", "Quicksand", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 18% 22%, #FFE8C4 0%, transparent 38%),
+    radial-gradient(circle at 82% 78%, #F8D8A6 0%, transparent 42%),
+    linear-gradient(135deg, #F5E5C4 0%, #EBCFA0 100%);
+  overflow: hidden;
+  user-select: none;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(120, 80, 50, 0.06) 1px, transparent 1px),
+    radial-gradient(circle, rgba(120, 80, 50, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px, 13px 13px;
+  background-position: 0 0, 12px 12px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.theater {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.kamishibai {
+  width: min(960px, 100%);
+  aspect-ratio: 4 / 3;
+  max-height: calc(100vh - 32px);
+  background: var(--paper);
+  border-radius: 28px;
+  box-shadow:
+    0 24px 60px var(--shadow),
+    0 8px 18px var(--shadow),
+    inset 0 0 100px rgba(255, 230, 190, 0.5);
+  position: relative;
+  overflow: hidden;
+  border: 10px double var(--gold);
+}
+
+/* sumie paper texture overlay */
+.kamishibai::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 22% 30%, rgba(200,150,100,0.08) 0%, transparent 45%),
+    radial-gradient(ellipse at 78% 65%, rgba(200,150,100,0.08) 0%, transparent 45%),
+    repeating-linear-gradient(120deg, transparent 0 40px, rgba(180, 130, 80, 0.02) 40px 41px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scene {
+  position: absolute;
+  inset: 36px 36px 60px 36px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 2;
+}
+
+.scene.active {
+  display: flex;
+  animation: pageTurn 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes pageTurn {
+  from { opacity: 0; transform: translateX(28px) rotate(0.6deg); }
+  to   { opacity: 1; transform: translateX(0) rotate(0); }
+}
+
+.illustration {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: floaty 4s ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+.illustration svg {
+  width: 100%;
+  height: 100%;
+  max-height: clamp(180px, 32vh, 320px);
+}
+
+.verse {
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  line-height: 2.0;
+  text-align: center;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  color: var(--ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+  max-width: 88%;
+}
+.verse strong {
+  color: var(--coral-deep);
+  font-weight: 700;
+  font-size: 1.15em;
+}
+.verse em {
+  font-style: normal;
+  color: var(--lavender-deep);
+  font-weight: 600;
+}
+
+.scene[data-page="1"] .verse,
+.scene[data-page="12"] .verse {
+  font-size: clamp(1.5rem, 3.8vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+}
+
+.subtitle {
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  color: var(--soft-ink);
+  letter-spacing: 0.12em;
+  font-weight: 500;
+}
+
+/* Top label */
+.banner {
+  position: absolute;
+  top: 14px;
+  left: 24px;
+  font-size: 0.78rem;
+  color: var(--soft-ink);
+  letter-spacing: 0.15em;
+  z-index: 10;
+}
+.page-label {
+  position: absolute;
+  top: 14px;
+  right: 28px;
+  font-size: 0.78rem;
+  color: var(--soft-ink);
+  letter-spacing: 0.1em;
+  z-index: 10;
+  font-feature-settings: "tnum";
+}
+
+/* Navigation */
+.nav {
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+.nav button {
+  pointer-events: auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 14px var(--shadow);
+  transition: transform 180ms, background 180ms, color 180ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav button:hover:not(:disabled) {
+  background: var(--coral);
+  color: #fff;
+  transform: scale(1.12);
+}
+.nav button:disabled { opacity: 0.32; cursor: default; }
+
+/* Page dots */
+.dots {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 7px;
+  z-index: 10;
+}
+.dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: rgba(120, 80, 50, 0.22);
+  cursor: pointer;
+  transition: all 220ms;
+}
+.dot.active {
+  background: var(--coral-deep);
+  transform: scale(1.5);
+  box-shadow: 0 0 0 3px rgba(232, 119, 90, 0.18);
+}
+
+/* Bottom-right controls */
+.controls {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.controls button {
+  background: var(--paper);
+  border: 2px solid var(--gold);
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 180ms;
+  letter-spacing: 0.05em;
+}
+.controls button:hover { background: var(--coral); color: #fff; }
+.controls button.on { background: var(--mint-deep); color: #fff; border-color: var(--mint-deep); }
+
+/* Page-specific theming */
+.scene[data-page="2"]  { background: linear-gradient(180deg, transparent 50%, rgba(220, 205, 236, 0.18)); }
+.scene[data-page="3"]  { background: linear-gradient(180deg, rgba(255, 214, 224, 0.12), transparent); }
+.scene[data-page="4"]  { background: radial-gradient(circle, rgba(255, 230, 160, 0.32) 0%, transparent 60%); }
+.scene[data-page="6"]  { background: linear-gradient(135deg, rgba(206, 230, 244, 0.18), rgba(255, 230, 160, 0.18)); }
+.scene[data-page="7"]  { background: linear-gradient(180deg, rgba(206, 230, 244, 0.18), transparent); }
+.scene[data-page="8"]  { background: radial-gradient(circle at 70% 30%, rgba(220, 205, 236, 0.28), transparent 65%); }
+.scene[data-page="9"]  { background: linear-gradient(180deg, rgba(74, 61, 69, 0.06), rgba(74, 61, 69, 0.12)); }
+.scene[data-page="9"] .verse { color: var(--soft-ink); }
+.scene[data-page="10"] { background: radial-gradient(circle, rgba(255, 214, 224, 0.22), transparent 60%); }
+.scene[data-page="11"] { background: linear-gradient(180deg, rgba(220, 205, 236, 0.22), rgba(255, 230, 160, 0.18)); }
+.scene[data-page="12"] { background: radial-gradient(circle, rgba(255, 230, 160, 0.45), transparent 60%); }
+
+/* tiny chorus line that recurs */
+.chorus {
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  color: var(--coral-deep);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+/* heart rain on final page */
+.heart-rain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.heart-rain .h {
+  position: absolute;
+  font-size: 22px;
+  animation: rain linear infinite;
+}
+@keyframes rain {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* hint hand */
+.hint {
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.78rem;
+  color: var(--soft-ink);
+  background: rgba(255,255,255,0.7);
+  padding: 4px 10px;
+  border-radius: 12px;
+  z-index: 9;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .scene { inset: 18px 18px 50px 18px; gap: 8px; }
+  .verse { line-height: 1.8; letter-spacing: 0.06em; }
+  .nav button { width: 44px; height: 44px; font-size: 18px; }
+  .banner, .page-label { display: none; }
+}
+
+/* keep illustrations from looking flat */
+.illustration .pop {
+  animation: pop 600ms ease-out;
+}
+@keyframes pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  60%  { transform: scale(1.06); opacity: 1; }
+  100% { transform: scale(1); }
+}
+</style>
+</head>
+<body>
+<div class="theater">
+  <div class="kamishibai" id="stage">
+
+    <div class="banner">🌸 YesMan かみしばい 🌸</div>
+    <div class="page-label" id="pageLabel">1 / 12</div>
+
+    <!-- ========== PAGE 1: 表紙 ========== -->
+    <div class="scene active" data-page="1">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- ribbon -->
+          <path d="M40 70 L280 70 L260 110 L280 150 L40 150 L60 110 Z"
+                fill="#FFB39A" stroke="#E8775A" stroke-width="2"/>
+          <text x="160" y="118" text-anchor="middle"
+                font-family="inherit" font-size="22" font-weight="800" fill="#FFF">
+            YesMan の えほん
+          </text>
+          <!-- robot mascot peeking -->
+          <g transform="translate(160 165)">
+            <circle r="22" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <circle cx="-7" cy="-3" r="3" fill="#4A3D45"/>
+            <circle cx="7" cy="-3" r="3" fill="#4A3D45"/>
+            <path d="M-7 6 Q0 12 7 6" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="-12" cy="2" r="2" fill="#FF8FAE"/>
+            <circle cx="12" cy="2" r="2" fill="#FF8FAE"/>
+          </g>
+          <!-- sparkles -->
+          <text x="40" y="40" font-size="20">✨</text>
+          <text x="280" y="200" font-size="20">✨</text>
+          <text x="280" y="40" font-size="16">🌸</text>
+          <text x="30" y="200" font-size="16">🌸</text>
+        </svg>
+      </div>
+      <div class="verse">YesMan の えほん</div>
+      <div class="subtitle">〜 ぜんぶ きめてくれる えーじぇんと の ものがたり 〜</div>
+      <div class="chorus">♪ Yes って いってね ♪</div>
+    </div>
+
+    <!-- ========== PAGE 2: むかしむかし ========== -->
+    <div class="scene" data-page="2">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- tired person -->
+          <g transform="translate(160 130)">
+            <ellipse cx="0" cy="60" rx="40" ry="14" fill="#DCCDEC" opacity="0.5"/>
+            <!-- body -->
+            <path d="M-22 30 Q-22 10 0 5 Q22 10 22 30 Z" fill="#9F88C8"/>
+            <!-- head -->
+            <circle cx="0" cy="-10" r="22" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <!-- closed sleepy eyes -->
+            <path d="M-9 -10 Q-6 -7 -3 -10" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M3 -10 Q6 -7 9 -10" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- tired mouth -->
+            <path d="M-5 0 L5 0" stroke="#4A3D45" stroke-width="2" stroke-linecap="round"/>
+            <!-- droopy hands -->
+            <line x1="-22" y1="20" x2="-30" y2="40" stroke="#9F88C8" stroke-width="6" stroke-linecap="round"/>
+            <line x1="22" y1="20" x2="30" y2="40" stroke="#9F88C8" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <!-- thought clouds -->
+          <g opacity="0.85">
+            <circle cx="60" cy="50" r="22" fill="#CEE6F4"/>
+            <text x="60" y="56" text-anchor="middle" font-size="18">？</text>
+            <circle cx="260" cy="50" r="22" fill="#FFD6E0"/>
+            <text x="260" y="56" text-anchor="middle" font-size="18">？</text>
+            <circle cx="40" cy="170" r="18" fill="#CDEBD7"/>
+            <text x="40" y="176" text-anchor="middle" font-size="16">？</text>
+          </g>
+        </svg>
+      </div>
+      <div class="verse">
+        むかしむかし あるところに<br>
+        <strong>きめごとに つかれた おとな</strong> が いました
+      </div>
+    </div>
+
+    <!-- ========== PAGE 3: きめごとが多すぎる ========== -->
+    <div class="scene" data-page="3">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(160 120)">
+            <circle r="30" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <circle cx="-9" cy="-5" r="2.5" fill="#4A3D45"/>
+            <circle cx="9" cy="-5" r="2.5" fill="#4A3D45"/>
+            <path d="M-7 8 Q0 4 7 8" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- decision items orbiting -->
+          <g font-size="18">
+            <text x="50" y="60">👕</text>
+            <text x="100" y="40">🍱</text>
+            <text x="180" y="32">📧</text>
+            <text x="240" y="50">📱</text>
+            <text x="270" y="120">💼</text>
+            <text x="240" y="180">🛒</text>
+            <text x="170" y="200">😴</text>
+            <text x="100" y="200">🎓</text>
+            <text x="40" y="180">💰</text>
+            <text x="20" y="120">💌</text>
+          </g>
+        </svg>
+      </div>
+      <div class="verse">
+        あさは なに きる？ ひるは なに たべる？<br>
+        メール どう かえす？ あ〜 <em>つかれちゃった</em>
+      </div>
+    </div>
+
+    <!-- ========== PAGE 4: YesMan あらわる ========== -->
+    <div class="scene" data-page="4">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- light rays -->
+          <g opacity="0.5">
+            <path d="M160 110 L40 30" stroke="#F1B843" stroke-width="2"/>
+            <path d="M160 110 L100 20" stroke="#F1B843" stroke-width="2"/>
+            <path d="M160 110 L160 10" stroke="#F1B843" stroke-width="2"/>
+            <path d="M160 110 L220 20" stroke="#F1B843" stroke-width="2"/>
+            <path d="M160 110 L280 30" stroke="#F1B843" stroke-width="2"/>
+          </g>
+          <!-- YesMan robot -->
+          <g transform="translate(160 130)" class="pop">
+            <ellipse cx="0" cy="58" rx="45" ry="10" fill="#000" opacity="0.1"/>
+            <!-- body -->
+            <rect x="-32" y="-2" width="64" height="48" rx="14" fill="#CEE6F4" stroke="#6BAED9" stroke-width="2.5"/>
+            <!-- head -->
+            <rect x="-28" y="-46" width="56" height="46" rx="14" fill="#FFE6A0" stroke="#F1B843" stroke-width="2.5"/>
+            <!-- antenna -->
+            <line x1="0" y1="-46" x2="0" y2="-58" stroke="#F1B843" stroke-width="2.5"/>
+            <circle cx="0" cy="-62" r="4" fill="#FF8FAE"/>
+            <!-- eyes -->
+            <circle cx="-10" cy="-25" r="5" fill="#4A3D45"/>
+            <circle cx="10" cy="-25" r="5" fill="#4A3D45"/>
+            <circle cx="-9" cy="-26" r="1.5" fill="#FFF"/>
+            <circle cx="11" cy="-26" r="1.5" fill="#FFF"/>
+            <!-- smile -->
+            <path d="M-10 -12 Q0 -5 10 -12" stroke="#4A3D45" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- chest "Yes" badge -->
+            <circle cx="0" cy="22" r="10" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="2"/>
+            <text x="0" y="26" text-anchor="middle" font-size="9" font-weight="800" fill="#E8775A">Yes</text>
+            <!-- arms -->
+            <line x1="-32" y1="14" x2="-50" y2="20" stroke="#6BAED9" stroke-width="6" stroke-linecap="round"/>
+            <line x1="32" y1="14" x2="50" y2="20" stroke="#6BAED9" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <text x="40" y="40" font-size="22">✨</text>
+          <text x="280" y="200" font-size="22">✨</text>
+        </svg>
+      </div>
+      <div class="verse">
+        そこに あらわれた <strong>YesMan くん</strong><br>
+        「ぼくに ぜんぶ まかせてね♪」
+      </div>
+    </div>
+
+    <!-- ========== PAGE 5: スワイプひとつで ========== -->
+    <div class="scene" data-page="5">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- phone -->
+          <rect x="100" y="20" width="120" height="180" rx="16" fill="#FFF" stroke="#4A3D45" stroke-width="3"/>
+          <rect x="110" y="36" width="100" height="148" rx="6" fill="#FFE6A0"/>
+          <!-- proposal card -->
+          <rect x="118" y="60" width="84" height="74" rx="8" fill="#FFF" stroke="#F1B843" stroke-width="2"/>
+          <text x="160" y="86" text-anchor="middle" font-size="9" fill="#715B62">きょうの ランチは</text>
+          <text x="160" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#4A3D45">ラーメン</text>
+          <text x="160" y="124" text-anchor="middle" font-size="11" font-weight="700" fill="#E8775A">いっこ です</text>
+          <!-- swipe hints -->
+          <text x="125" y="160" font-size="10" fill="#9F88C8">← No</text>
+          <text x="178" y="160" font-size="10" fill="#6FBE8E">Yes →</text>
+          <!-- swipe finger -->
+          <g transform="translate(228 100)">
+            <path d="M-4 18 Q-4 -4 0 -8 Q6 -4 6 0 L6 14 L12 16 L14 22 L8 26 L-2 28 Z"
+                  fill="#FFD6E0" stroke="#FF8FAE" stroke-width="2"/>
+          </g>
+          <!-- direction arrow -->
+          <path d="M210 120 Q240 100 260 130" stroke="#6FBE8E" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <polygon points="258,128 268,128 263,138" fill="#6FBE8E"/>
+          <text x="260" y="160" text-anchor="middle" font-size="12" font-weight="700" fill="#6FBE8E">Yes!</text>
+          <!-- left side ? -->
+          <g opacity="0.6">
+            <text x="40" y="120" font-size="18">🤔</text>
+          </g>
+        </svg>
+      </div>
+      <div class="verse">
+        あなたの しごとは ひとつだけ<br>
+        <strong>みぎに スワイプ</strong> で <em>「Yes」</em><br>
+        ボタン さがしは いらないよ
+      </div>
+    </div>
+
+    <!-- ========== PAGE 6: さんにんの じんかく ========== -->
+    <div class="scene" data-page="6">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- triangle of personas -->
+          <!-- 慎重派 (shield, blue) -->
+          <g transform="translate(80 80)">
+            <circle r="32" fill="#CEE6F4" stroke="#6BAED9" stroke-width="3"/>
+            <text x="0" y="6" text-anchor="middle" font-size="26">🛡️</text>
+            <text x="0" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#6BAED9">しんちょう</text>
+          </g>
+          <!-- 楽観派 (sun, yellow) -->
+          <g transform="translate(240 80)">
+            <circle r="32" fill="#FFE6A0" stroke="#F1B843" stroke-width="3"/>
+            <text x="0" y="6" text-anchor="middle" font-size="26">☀️</text>
+            <text x="0" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#F1B843">らっかん</text>
+          </g>
+          <!-- 効率派 (lightning, green) -->
+          <g transform="translate(160 170)">
+            <circle r="32" fill="#CDEBD7" stroke="#6FBE8E" stroke-width="3"/>
+            <text x="0" y="6" text-anchor="middle" font-size="26">⚡</text>
+            <text x="0" y="48" text-anchor="middle" font-size="11" font-weight="700" fill="#6FBE8E">こうりつ</text>
+          </g>
+          <!-- center talking bubble -->
+          <g transform="translate(160 100)">
+            <ellipse rx="44" ry="28" fill="#FFF" stroke="#FF8FAE" stroke-width="2"/>
+            <text x="0" y="-2" text-anchor="middle" font-size="11" fill="#4A3D45">3にんで</text>
+            <text x="0" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#E8775A">ぎろん♪</text>
+          </g>
+          <!-- connecting lines -->
+          <line x1="105" y1="95" x2="125" y2="105" stroke="#FF8FAE" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <line x1="215" y1="95" x2="195" y2="105" stroke="#FF8FAE" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <line x1="160" y1="135" x2="160" y2="145" stroke="#FF8FAE" stroke-width="1.5" stroke-dasharray="3 2"/>
+        </svg>
+      </div>
+      <div class="verse">
+        うらがわで <strong>3にんの じんかく</strong> が<br>
+        🛡️「うーん…」 ☀️「いいね！」 ⚡「これだ！」<br>
+        ぎろんして <em>ひとつに きめる</em>
+      </div>
+    </div>
+
+    <!-- ========== PAGE 7: ぎろん が みえる (FR-CV) ========== -->
+    <div class="scene" data-page="7">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- LIVE badge -->
+          <g transform="translate(160 22)">
+            <rect x="-40" y="-12" width="80" height="22" rx="11" fill="#FFB39A" stroke="#E8775A" stroke-width="2"/>
+            <circle cx="-26" cy="-1" r="4" fill="#E8775A">
+              <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <text x="6" y="3" text-anchor="middle" font-size="11" font-weight="800" fill="#FFF">LIVE</text>
+          </g>
+          <!-- bubble 1 (慎重) -->
+          <g transform="translate(60 70)">
+            <circle r="16" fill="#CEE6F4" stroke="#6BAED9" stroke-width="2"/>
+            <text x="0" y="5" text-anchor="middle" font-size="14">🛡️</text>
+            <rect x="22" y="-12" width="120" height="24" rx="8" fill="#FFF" stroke="#6BAED9" stroke-width="1.5"/>
+            <text x="82" y="3" text-anchor="middle" font-size="10" fill="#4A3D45">うーん しんぱいだなぁ…</text>
+          </g>
+          <!-- bubble 2 (楽観) -->
+          <g transform="translate(60 120)">
+            <circle r="16" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <text x="0" y="5" text-anchor="middle" font-size="14">☀️</text>
+            <rect x="22" y="-12" width="140" height="24" rx="8" fill="#FFF" stroke="#F1B843" stroke-width="1.5"/>
+            <text x="92" y="3" text-anchor="middle" font-size="10" fill="#4A3D45">だいじょうぶ！ いこう！</text>
+          </g>
+          <!-- bubble 3 (効率) typing -->
+          <g transform="translate(60 170)">
+            <circle r="16" fill="#CDEBD7" stroke="#6FBE8E" stroke-width="2"/>
+            <text x="0" y="5" text-anchor="middle" font-size="14">⚡</text>
+            <rect x="22" y="-12" width="140" height="24" rx="8" fill="#FFF" stroke="#6FBE8E" stroke-width="1.5" stroke-dasharray="3 2"/>
+            <text x="80" y="3" text-anchor="middle" font-size="10" fill="#4A3D45">えきまえの みせ が ▍</text>
+          </g>
+          <!-- "stream" wave -->
+          <text x="240" y="118" font-size="22" opacity="0.5">📡</text>
+        </svg>
+      </div>
+      <div class="verse">
+        ぎろんは <strong>ぴこぴこ</strong> ながれてくる<br>
+        ぜんぶ みえるから <em>あんしん</em> して<br>
+        Yes って おせるよ
+      </div>
+    </div>
+
+    <!-- ========== PAGE 8: ふしぎな スコア ========== -->
+    <div class="scene" data-page="8">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- chart frame -->
+          <rect x="50" y="40" width="220" height="120" rx="12" fill="#FFF" stroke="#9F88C8" stroke-width="2"/>
+          <text x="160" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#9F88C8">しゅたいせい スコア</text>
+          <!-- gridlines -->
+          <line x1="60" y1="80" x2="260" y2="80" stroke="#DCCDEC" stroke-width="1"/>
+          <line x1="60" y1="110" x2="260" y2="110" stroke="#DCCDEC" stroke-width="1"/>
+          <line x1="60" y1="140" x2="260" y2="140" stroke="#DCCDEC" stroke-width="1"/>
+          <!-- descending line (lower is "better") -->
+          <polyline points="60,80 100,90 140,110 180,128 220,140 260,148"
+                    fill="none" stroke="#E8775A" stroke-width="3" stroke-linecap="round"/>
+          <!-- dots -->
+          <g fill="#E8775A">
+            <circle cx="60" cy="80" r="3"/>
+            <circle cx="100" cy="90" r="3"/>
+            <circle cx="140" cy="110" r="3"/>
+            <circle cx="180" cy="128" r="3"/>
+            <circle cx="220" cy="140" r="3"/>
+            <circle cx="260" cy="148" r="3"/>
+          </g>
+          <!-- speech of AI -->
+          <g transform="translate(160 190)">
+            <rect x="-100" y="-12" width="200" height="22" rx="11" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="1.5"/>
+            <text x="0" y="3" text-anchor="middle" font-size="10" fill="#E8775A" font-weight="700">「うまく まかせられて いますね」</text>
+          </g>
+          <text x="40" y="32" font-size="18">✨</text>
+          <text x="280" y="32" font-size="18">✨</text>
+        </svg>
+      </div>
+      <div class="verse">
+        スコアは <em>ひくい ほど</em><br>
+        <strong>「うまく まかせられて いますね」</strong><br>
+        AI に あんしんして ゆだねよう
+      </div>
+    </div>
+
+    <!-- ========== PAGE 9: しずかな ドメイン ========== -->
+    <div class="scene" data-page="9">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- moon -->
+          <circle cx="60" cy="50" r="20" fill="#FFE6A0" opacity="0.7"/>
+          <circle cx="55" cy="48" r="20" fill="#F5E5C4"/>
+          <text x="220" y="40" font-size="14">⭐</text>
+          <text x="280" y="60" font-size="14">⭐</text>
+          <text x="180" y="30" font-size="14">⭐</text>
+          <!-- sleeping robot -->
+          <g transform="translate(160 130)">
+            <ellipse cx="0" cy="50" rx="55" ry="10" fill="#000" opacity="0.1"/>
+            <rect x="-32" y="0" width="64" height="46" rx="14" fill="#DCCDEC" stroke="#9F88C8" stroke-width="2"/>
+            <rect x="-28" y="-44" width="56" height="46" rx="14" fill="#CEE6F4" stroke="#6BAED9" stroke-width="2"/>
+            <!-- closed eyes -->
+            <path d="M-15 -22 Q-10 -18 -5 -22" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M5 -22 Q10 -18 15 -22" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- silent mouth -->
+            <text x="0" y="-6" text-anchor="middle" font-size="11" fill="#4A3D45">…</text>
+            <!-- antenna with z -->
+            <line x1="0" y1="-44" x2="0" y2="-58" stroke="#9F88C8" stroke-width="2"/>
+            <text x="6" y="-58" font-size="14" fill="#9F88C8">z</text>
+            <text x="14" y="-66" font-size="11" fill="#9F88C8">z</text>
+          </g>
+          <!-- four silent domain icons fading -->
+          <g opacity="0.4" font-size="14">
+            <text x="20" y="180">🛐</text>
+            <text x="80" y="200">🗳️</text>
+            <text x="240" y="200">⚔️</text>
+            <text x="290" y="180">🌶️</text>
+          </g>
+        </svg>
+      </div>
+      <div class="verse">
+        でもね こんなときは <em>そっと</em><br>
+        <strong>YesMan くん だんまり</strong><br>
+        しゅうきょう・せんきょ・ぼうりょく・ひわい は<br>
+        しずかに しているよ
+      </div>
+    </div>
+
+    <!-- ========== PAGE 10: やさしい ささやき ========== -->
+    <div class="scene" data-page="10">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- person facing right -->
+          <g transform="translate(80 130)">
+            <circle r="22" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <circle cx="-7" cy="-3" r="2.5" fill="#4A3D45"/>
+            <circle cx="7" cy="-3" r="2.5" fill="#4A3D45"/>
+            <path d="M-5 6 Q0 4 5 6" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect x="-22" y="22" width="44" height="36" rx="10" fill="#CEE6F4" stroke="#6BAED9" stroke-width="2"/>
+          </g>
+          <!-- bubble 1 -->
+          <g transform="translate(180 70)">
+            <rect x="-60" y="-16" width="120" height="32" rx="16" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="2"/>
+            <text x="0" y="5" text-anchor="middle" font-size="13" font-weight="700" fill="#E8775A">「ほんとうに？」</text>
+            <polygon points="-50,16 -42,16 -56,30" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="2"/>
+          </g>
+          <!-- bubble 2 -->
+          <g transform="translate(220 130)">
+            <rect x="-70" y="-14" width="140" height="28" rx="14" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <text x="0" y="4" text-anchor="middle" font-size="12" font-weight="700" fill="#F1B843">「もう いちど かんがえて？」</text>
+            <polygon points="-60,14 -52,14 -66,26" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+          </g>
+          <!-- bubble 3 -->
+          <g transform="translate(200 185)">
+            <rect x="-72" y="-13" width="144" height="26" rx="13" fill="#DCCDEC" stroke="#9F88C8" stroke-width="2"/>
+            <text x="0" y="4" text-anchor="middle" font-size="11" font-weight="700" fill="#9F88C8">「3かいめの No ですよ」</text>
+            <polygon points="-62,13 -54,13 -68,24" fill="#DCCDEC" stroke="#9F88C8" stroke-width="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="verse">
+        No を おす たびに<br>
+        <strong>「ほんとうに？」</strong> <strong>「もういちど？」</strong><br>
+        やさしい <em>ささやき</em> が きこえてくる
+      </div>
+    </div>
+
+    <!-- ========== PAGE 11: あたらしい くらし ========== -->
+    <div class="scene" data-page="11">
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- gentle sun -->
+          <circle cx="260" cy="50" r="22" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+          <g stroke="#F1B843" stroke-width="2" stroke-linecap="round" opacity="0.7">
+            <line x1="260" y1="20" x2="260" y2="10"/>
+            <line x1="290" y1="50" x2="300" y2="50"/>
+            <line x1="240" y1="32" x2="232" y2="24"/>
+            <line x1="280" y1="32" x2="288" y2="24"/>
+          </g>
+          <!-- ground line -->
+          <path d="M20 180 Q160 165 300 180" stroke="#6FBE8E" stroke-width="3" fill="none"/>
+          <!-- person walking with robot -->
+          <g transform="translate(115 145)">
+            <circle r="20" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <circle cx="-6" cy="-3" r="2.5" fill="#4A3D45"/>
+            <circle cx="6" cy="-3" r="2.5" fill="#4A3D45"/>
+            <path d="M-6 7 Q0 11 6 7" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <rect x="-20" y="20" width="40" height="32" rx="9" fill="#CDEBD7" stroke="#6FBE8E" stroke-width="2"/>
+            <line x1="-20" y1="32" x2="-30" y2="40" stroke="#6FBE8E" stroke-width="5" stroke-linecap="round"/>
+            <line x1="20" y1="32" x2="30" y2="32" stroke="#6FBE8E" stroke-width="5" stroke-linecap="round"/>
+          </g>
+          <!-- holding hands -->
+          <line x1="145" y1="177" x2="170" y2="177" stroke="#4A3D45" stroke-width="2"/>
+          <!-- YesMan robot beside -->
+          <g transform="translate(200 145)">
+            <rect x="-22" y="0" width="44" height="34" rx="10" fill="#CEE6F4" stroke="#6BAED9" stroke-width="2"/>
+            <rect x="-20" y="-32" width="40" height="34" rx="10" fill="#FFE6A0" stroke="#F1B843" stroke-width="2"/>
+            <line x1="0" y1="-32" x2="0" y2="-42" stroke="#F1B843" stroke-width="2"/>
+            <circle cx="0" cy="-44" r="3" fill="#FF8FAE"/>
+            <circle cx="-7" cy="-17" r="3" fill="#4A3D45"/>
+            <circle cx="7" cy="-17" r="3" fill="#4A3D45"/>
+            <path d="M-7 -8 Q0 -3 7 -8" stroke="#4A3D45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="0" cy="15" r="7" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="1.5"/>
+            <text x="0" y="18" text-anchor="middle" font-size="7" font-weight="800" fill="#E8775A">Yes</text>
+            <line x1="-22" y1="14" x2="-32" y2="10" stroke="#6BAED9" stroke-width="5" stroke-linecap="round"/>
+            <line x1="22" y1="14" x2="32" y2="22" stroke="#6BAED9" stroke-width="5" stroke-linecap="round"/>
+          </g>
+          <!-- title banner -->
+          <rect x="60" y="32" width="180" height="26" rx="13" fill="#CDEBD7" stroke="#6FBE8E" stroke-width="2"/>
+          <text x="150" y="50" text-anchor="middle" font-size="13" font-weight="800" fill="#1B5E20">あたらしい くらし</text>
+          <text x="40" y="200" font-size="14">🌱</text>
+          <text x="280" y="200" font-size="14">🌱</text>
+        </svg>
+      </div>
+      <div class="verse">
+        これは <strong>ほんき で つくった</strong> サービス<br>
+        AI と <em>あゆむ</em> あたらしい くらし<br>
+        きめなくて いい じだい へ
+      </div>
+    </div>
+
+    <!-- ========== PAGE 12: おしまい ========== -->
+    <div class="scene" data-page="12">
+      <div class="heart-rain" id="heartRain"></div>
+      <div class="illustration">
+        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- sun rays -->
+          <g opacity="0.5">
+            <line x1="160" y1="110" x2="60" y2="40"  stroke="#F1B843" stroke-width="2"/>
+            <line x1="160" y1="110" x2="120" y2="20" stroke="#F1B843" stroke-width="2"/>
+            <line x1="160" y1="110" x2="160" y2="10" stroke="#F1B843" stroke-width="2"/>
+            <line x1="160" y1="110" x2="200" y2="20" stroke="#F1B843" stroke-width="2"/>
+            <line x1="160" y1="110" x2="260" y2="40" stroke="#F1B843" stroke-width="2"/>
+          </g>
+          <!-- big heart with Yes -->
+          <g transform="translate(160 130)">
+            <path d="M0 36 C-50 0, -50 -34, -20 -34 C-8 -34, 0 -22, 0 -10 C0 -22, 8 -34, 20 -34 C50 -34, 50 0, 0 36 Z"
+                  fill="#FF8FAE" stroke="#E8775A" stroke-width="3"/>
+            <text x="0" y="2" text-anchor="middle" font-size="22" font-weight="900" fill="#FFF">Yes</text>
+          </g>
+          <text x="60"  y="200" font-size="18">🌸</text>
+          <text x="260" y="200" font-size="18">🌸</text>
+        </svg>
+      </div>
+      <div class="verse">
+        にんげん さいごの しごとは<br>
+        <strong>「Yes」で しょうにん する こと</strong>
+      </div>
+      <div class="subtitle">〜 おしまい 〜</div>
+      <div class="chorus">♪ Yes って いってね ♪</div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="nav">
+      <button id="prev"  aria-label="まえのページ">◀</button>
+      <button id="next"  aria-label="つぎのページ">▶</button>
+    </div>
+
+    <!-- Page dots -->
+    <div class="dots" id="dots"></div>
+
+    <!-- Bottom-right controls -->
+    <div class="controls">
+      <button id="autoBtn"  title="じどう めくり">▶ じどう</button>
+      <button id="soundBtn" title="ページ めくり おん">🔔 おと</button>
+    </div>
+
+    <div class="hint" id="hint">← → や クリックで すすむよ</div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const scenes     = Array.from(document.querySelectorAll('.scene'));
+  const total      = scenes.length;
+  const prevBtn    = document.getElementById('prev');
+  const nextBtn    = document.getElementById('next');
+  const dotsEl     = document.getElementById('dots');
+  const pageLabel  = document.getElementById('pageLabel');
+  const autoBtn    = document.getElementById('autoBtn');
+  const soundBtn   = document.getElementById('soundBtn');
+  const hint       = document.getElementById('hint');
+  const heartRain  = document.getElementById('heartRain');
+
+  let current   = 0;
+  let autoTimer = null;
+  let autoOn    = false;
+  let soundOn   = false;
+  let audioCtx  = null;
+
+  // build dots
+  scenes.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  });
+
+  function chime(freq = 880) {
+    if (!soundOn) return;
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.18, audioCtx.currentTime + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.65);
+    // soft second harmonic
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.value = freq * 1.5;
+    gain2.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+    gain2.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.05);
+    gain2.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+    osc2.connect(gain2).connect(audioCtx.destination);
+    osc2.start();
+    osc2.stop(audioCtx.currentTime + 0.55);
+  }
+
+  function update() {
+    scenes.forEach((s, i) => s.classList.toggle('active', i === current));
+    dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    pageLabel.textContent = `${current + 1} / ${total}`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+    if (current === total - 1) {
+      spawnHearts();
+      stopAuto();
+    }
+    if (current > 0 && hint) hint.style.display = 'none';
+  }
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= total || idx === current) return;
+    const dir = idx > current ? 1 : -1;
+    current = idx;
+    update();
+    chime(dir > 0 ? 880 : 660);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft')                    { prev(); }
+    if (e.key === 'Home')                         { goTo(0); }
+    if (e.key === 'End')                          { goTo(total - 1); }
+  });
+
+  // click stage to advance (but not on buttons or dots)
+  document.getElementById('stage').addEventListener('click', e => {
+    if (e.target.closest('button, .dot, .controls')) return;
+    next();
+  });
+
+  // touch swipe
+  let tStart = null;
+  document.getElementById('stage').addEventListener('touchstart', e => {
+    tStart = e.touches[0].clientX;
+  });
+  document.getElementById('stage').addEventListener('touchend', e => {
+    if (tStart === null) return;
+    const dx = e.changedTouches[0].clientX - tStart;
+    if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
+    tStart = null;
+  });
+
+  // auto-play
+  function startAuto() {
+    autoOn = true;
+    autoBtn.textContent = '⏸ ていし';
+    autoBtn.classList.add('on');
+    autoTimer = setInterval(() => {
+      if (current >= total - 1) { stopAuto(); return; }
+      next();
+    }, 5500);
+  }
+  function stopAuto() {
+    autoOn = false;
+    autoBtn.textContent = '▶ じどう';
+    autoBtn.classList.remove('on');
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+  autoBtn.addEventListener('click', () => { autoOn ? stopAuto() : startAuto(); });
+
+  // sound toggle
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    soundBtn.classList.toggle('on', soundOn);
+    soundBtn.textContent = soundOn ? '🔔 おん' : '🔔 おと';
+    if (soundOn) chime(990);
+  });
+
+  // confetti hearts on final page
+  function spawnHearts() {
+    if (!heartRain || heartRain.dataset.spawned === '1') return;
+    heartRain.dataset.spawned = '1';
+    const emojis = ['💖', '🌸', '✨', '💛', '💕'];
+    for (let i = 0; i < 28; i++) {
+      const s = document.createElement('span');
+      s.className = 'h';
+      s.textContent = emojis[i % emojis.length];
+      s.style.left = (Math.random() * 100) + '%';
+      s.style.top = (-Math.random() * 60 - 10) + 'vh';
+      s.style.animationDuration = (4 + Math.random() * 6) + 's';
+      s.style.animationDelay    = (Math.random() * 2) + 's';
+      s.style.fontSize = (16 + Math.random() * 18) + 'px';
+      s.style.opacity = (0.6 + Math.random() * 0.4);
+      heartRain.appendChild(s);
+    }
+  }
+
+  // initial render
+  update();
+
+  // hide hint after 5s
+  setTimeout(() => { if (hint) hint.style.opacity = '0'; }, 5000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+  <!-- status divider -->
+  <line x1="22" y1="58" x2="258" y2="58" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- header -->
+  <rect x="14" y="60" width="252" height="40" fill="#F5E5C4" opacity="0.5"/>
+  <text x="32" y="84" font-family="inherit" font-size="14" font-weight="700" fill="#4A3D45">🪞 委任度 スコア</text>
+  <text x="248" y="84" font-family="inherit" font-size="11" fill="#4A3D45" text-anchor="end">←</text>
+
+  <!-- main score -->
+  <g transform="translate(140 180)">
+    <circle r="62" fill="none" stroke="#DCCDEC" stroke-width="10"/>
+    <circle r="62" fill="none" stroke="#9F88C8" stroke-width="10"
+            stroke-dasharray="35 360" stroke-dashoffset="-90" transform="rotate(-90)"/>
+    <text x="0" y="-2" text-anchor="middle" font-size="34" font-weight="800" fill="#9F88C8">8</text>
+    <text x="22" y="-12" text-anchor="middle" font-size="14" font-weight="700" fill="#9F88C8">%</text>
+    <text x="0" y="22" text-anchor="middle" font-size="9" fill="#715B62">委任度 (No 比率)</text>
+  </g>
+
+  <!-- AI comment -->
+  <rect x="32" y="278" width="216" height="40" rx="12" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="1.5"/>
+  <text x="140" y="295" text-anchor="middle" font-size="9" fill="#E8775A" font-weight="600">「うまく まかせられて いますね」</text>
+  <text x="140" y="310" text-anchor="middle" font-size="8" fill="#E8775A" font-style="italic">— AI 生成 可変コメント</text>
+
+  <!-- mini chart -->
+  <text x="32" y="346" font-size="10" font-weight="700" fill="#4A3D45">📈 推移 (30日)</text>
+  <rect x="32" y="354" width="216" height="80" rx="8" fill="#FFFFFF" stroke="#9E9E9E" stroke-width="1"/>
+  <line x1="40" y1="380" x2="240" y2="380" stroke="#EEEEEE"/>
+  <line x1="40" y1="400" x2="240" y2="400" stroke="#EEEEEE"/>
+  <line x1="40" y1="420" x2="240" y2="420" stroke="#EEEEEE"/>
+  <polyline points="48,372 80,378 112,388 144,402 176,414 208,420 240,422"
+            fill="none" stroke="#E8775A" stroke-width="2.5"/>
+  <g fill="#E8775A">
+    <circle cx="48"  cy="372" r="2"/>
+    <circle cx="80"  cy="378" r="2"/>
+    <circle cx="112" cy="388" r="2"/>
+    <circle cx="144" cy="402" r="2"/>
+    <circle cx="176" cy="414" r="2"/>
+    <circle cx="208" cy="420" r="2"/>
+    <circle cx="240" cy="422" r="2"/>
+  </g>
+
+  <!-- summary stats -->
+  <text x="32" y="458" font-size="9" fill="#715B62">総決定: <tspan font-weight="700" fill="#4A3D45">142</tspan> / Yes: <tspan font-weight="700" fill="#1B5E20">131</tspan> / No: <tspan font-weight="700" fill="#9F88C8">11</tspan></text>
+  <text x="32" y="474" font-size="8" fill="#9E9E9E">スコアが ひくいほど AI を信頼できています</text>
+
+</svg>

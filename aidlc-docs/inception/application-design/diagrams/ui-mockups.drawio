@@ -1,0 +1,1326 @@
+<mxfile host="65bd71144e">
+    <diagram name="01_画面ツリー" id="page1">
+        <mxGraphModel dx="879" dy="1157" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p1_title" value="YesMan 画面ツリー (Information Architecture)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1420" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_sub" value="Home がハブで全機能に分岐 / Decision フローは線形 / Persona は Journey G" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_splash" value="🌟 Splash 趣旨説明・免責" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="130" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_login" value="🔐 Cognito Hosted UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="270" y="130" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_profile" value="📝 Profile 初期入力" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="480" y="130" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_home" value="🏠 Home (Decision Input) ★ ハブ画面" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FB8C00;fontColor=#E65100;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;arcSize=8;strokeWidth=3" parent="1" vertex="1">
+                    <mxGeometry x="690" y="380" width="220" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_decision" value="💭 Decision Proposal" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="950" y="380" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_yes" value="🎉 Yes 肯定演出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#4CAF50;fontColor=#1B5E20;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=8;strokeWidth=2" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="160" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_noburst" value="💔 No 連打体験" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="380" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_silence" value="🤐 Silence 演出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEFF1;strokeColor=#90A4AE;fontColor=#37474F;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=8;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="610" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_score" value="📊 Score Dashboard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="480" y="600" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_history" value="📜 History タイムライン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="270" y="600" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_settings" value="⚙️ Settings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="600" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_persona" value="🎭 Persona Management (Journey G)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;fontColor=#4A148C;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=8;strokeWidth=2" parent="1" vertex="1">
+                    <mxGeometry x="690" y="600" width="220" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_pref" value="🧠 嗜好 プロファイル" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="940" y="600" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_persona_create" value="✏️ Create" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="390" y="780" width="130" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_persona_pool" value="🌐 共有プール" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="750" y="760" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_persona_preview" value="👁 Preview" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="930" y="760" width="130" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_pref_edit" value="✏️ 修正/リセット" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#0D47A1;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1070" y="760" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e0" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_splash" target="p1_login" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_login" target="p1_profile" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e2" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0" parent="1" source="p1_profile" target="p1_home" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="570" y="430"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e3" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_home" target="p1_decision" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e4" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_decision" target="p1_yes" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e5" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_decision" target="p1_noburst" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e6" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="p1_decision" target="p1_silence" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1030" y="505"/>
+                            <mxPoint x="1300" y="505"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e7" value="最終的に" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_noburst" target="p1_yes" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e8" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.5;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0" parent="1" source="p1_home" target="p1_score" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="800" y="560"/>
+                            <mxPoint x="570" y="560"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e9" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.3;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0" parent="1" source="p1_home" target="p1_history" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="756" y="550"/>
+                            <mxPoint x="360" y="550"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e10" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.1;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0" parent="1" source="p1_home" target="p1_settings" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="712" y="540"/>
+                            <mxPoint x="150" y="540"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e11" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.6;exitY=1.0;exitDx=0;exitDy=0;entryX=0.6;entryY=0.0;entryDx=0;entryDy=0" parent="1" source="p1_home" target="p1_persona" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e12" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.9;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0" parent="1" source="p1_home" target="p1_pref" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="888" y="545"/>
+                            <mxPoint x="1030" y="545"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e13" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;exitX=0.05;exitY=1.0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0" parent="1" source="p1_persona" target="p1_persona_create" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="700" y="750"/>
+                            <mxPoint x="525" y="750"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e14" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;entryX=0.5;entryY=0.0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="p1_persona" target="p1_persona_pool" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="800" y="715"/>
+                            <mxPoint x="825" y="715"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e15" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_persona_pool" target="p1_persona_preview" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e16" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#37474F;strokeWidth=2;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10" parent="1" source="p1_pref" target="p1_pref_edit" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_discussion_live" value="📡 Discussion Live&#xa;合議中 (SSE Stream)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF5722;fontColor=#BF360C;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=8;dashed=1;strokeWidth=2" parent="1" vertex="1">
+                    <mxGeometry x="950" y="260" width="180" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_discussion_history" value="📂 Discussion History&#xa;議論履歴オーバーレイ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF5722;fontColor=#BF360C;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=8;dashed=1;strokeWidth=2" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="730" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e_cv1" value="① 決定依頼&#xa;SSE 開始" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FF5722;strokeWidth=2;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;dashed=1;exitX=0.85;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0" parent="1" source="p1_home" target="p1_discussion_live" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e_cv2" value="② 完了で提案カード切替&#xa;FR-CV-04" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FF5722;strokeWidth=2;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;dashed=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0" parent="1" source="p1_discussion_live" target="p1_decision" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_e_cv3" value="「議論を見る」&#xa;FR-CV-04" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FF5722;strokeWidth=2;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;dashed=1;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0" parent="1" source="p1_decision" target="p1_discussion_history" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1230" y="430"/>
+                            <mxPoint x="1280" y="430"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e_cv4" value="決定詳細&#xa;FR-CV-05" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FF5722;strokeWidth=2;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;dashed=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0" parent="1" source="p1_history" target="p1_discussion_history" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1290" y="730"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_e_cv5" value="決定詳細&#xa;FR-CV-05" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FF5722;strokeWidth=2;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;jumpStyle=arc;jumpSize=10;dashed=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0" parent="1" source="p1_score" target="p1_discussion_history" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1290" y="745"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p1_cv_legend" value="📡 FR-CV (合議の透明性・リアルタイム表示) — 2026-05-10 追加&#xa;• 📡 Discussion Live: 合議中の発言を SSE で逐次描画 (FR-CV-01〜03)&#xa;• 📂 Discussion History: 過去の合議をオーバーレイで再閲覧 (FR-CV-05〜07)&#xa;• 既存 decisions.persona_outputs JSONB を再利用 (FR-CV-06)、新規テーブル不要" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#BF360C;fontColor=#BF360C;fontSize=10;align=left;verticalAlign=top;arcSize=4;spacing=8" parent="1" vertex="1">
+                    <mxGeometry x="40" y="920" width="1420" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_note" value="💡 凡例: 🟦 標準画面 / 🟧 ハブ画面 (Home) / 🟪 Persona関連 / 🟩 Yes演出 / 🟫 沈黙演出 / 🟧 (オレンジ点線) FR-CV オーバーレイ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="880" width="1420" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="02_Onboarding" id="page2">
+        <mxGraphModel dx="1245" dy="1157" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p2_title" value="Onboarding フロー (Journey A)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_sub" value="Splash → Login → Profile → 初回提案体験" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="60" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_phone_lbl" value="A1: Splash + 趣旨説明" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="60" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_hdr" value="🪞 YesMan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="70" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="440" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_phone_lbl" value="A2: Cognito Hosted UI" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="440" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_hdr" value="🪞 YesMan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="450" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="820" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_phone_lbl" value="A3: プロフィール初期入力" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="820" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_hdr" value="🪞 YesMan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="830" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_phone_lbl" value="A4: 初回提案体験" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_hdr" value="🪞 YesMan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_logo" value="YESMAN" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=36;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="120" y="210" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_tagline1" value="人間最後の仕事は、" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=2;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="90" y="285" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_tagline2" value="YES で承認すること。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=2;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="90" y="310" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_div" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="360" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_disclaimer" value="本作品は AI が人間の主体性を 奪う体験を演出する作品です。&amp;nbsp;&lt;div&gt;「主体性スコア」「沈黙演出」 などは意図的な逆説的設計です。&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="80" y="390" width="280" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p0_action" value="→ スワイプして同意" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="640" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_title" value="ログイン" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="500" y="210" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_email_l" value="Email" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="470" y="270" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_email" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="470" y="290" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_pw_l" value="Password" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="470" y="340" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_pw" value="••••••••" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="470" y="360" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_btn" value="ログイン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="470" y="420" width="260" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p1_signup" value="新規登録はこちら" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="470" y="490" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_title" value="プロフィール" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="880" y="210" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_age_l" value="年齢層" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="850" y="260" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_age" value="20代 / 30代 / 40代..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="850" y="280" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_occ_l" value="職業 (任意)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="850" y="330" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_occ" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="850" y="350" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_val_l" value="価値観タグ (複数可)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="850" y="400" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_val" value="効率重視 / 慎重 / 楽観 ..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="850" y="420" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p2_btn" value="保存して始める" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="850" y="490" width="260" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_title" value="何を決めますか？" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="210" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_input" value="ここに入力 (例: 朝の服を決めて)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="260" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_voice" value="🎤 音声で話す" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;fontColor=#424242;fontSize=11;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="360" width="260" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_personas" value="🎭 慎重派 / 楽観派 / 効率派" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#424242;fontSize=10;align=center;verticalAlign=middle;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="430" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_p3_whisper" value="「決められない」を委ねよう。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="640" width="260" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="03_Decision_Experience" id="page3">
+        <mxGraphModel dx="1245" dy="1157" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p3_title" value="Decision Experience (Journey B コア決定ループ)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_sub" value="入力 → 合議で提案 → スワイプ Yes/No (右=Yes/左=No) → 結果 / 履歴保存" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="60" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_phone_lbl" value="B1/B2: Home (入力)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="60" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="70" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="440" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_phone_lbl" value="B7: 合議中 (SSE Stream / FR-CV-01〜03)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="440" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="450" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="820" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_phone_lbl" value="B4: 提案 + スワイプ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="820" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="830" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_phone_lbl" value="Yes 確定 → 演出" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_q" value="何を決めますか？" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="90" y="180" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_in" value="今日のランチを決めて" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=12;align=left;verticalAlign=top;spacing=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="90" y="240" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_voice" value="🎤" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=20;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="190" y="350" width="60" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_voicelbl" value="音声で話す" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="415" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_div" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="450" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_persona" value="🎭 慎重派 / 楽観派 / 効率派 [▼]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#424242;fontSize=10;align=center;verticalAlign=middle;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="90" y="475" width="260" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p0_send" value="→ 送信" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="130" y="590" width="180" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_caption" value="🔴 LIVE  合議中 (SSE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF5722;fontColor=#BF360C;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="540" y="170" width="120" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_av1" value="🛡️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#5C6BC0;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="465" y="210" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_b1" value="慎重派: ラーメンは塩分が…&#xa;軽めの和食を提案します。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#5C6BC0;fontColor=#1A237E;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="505" y="208" width="225" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_av2" value="☀️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFB74D;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="465" y="262" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_b2" value="楽観派: ラーメン、最高じゃないですか!&#xa;今日くらい好きなものを。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFB74D;fontColor=#E65100;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="505" y="260" width="225" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_av3" value="⚡" style="ellipse;whiteSpace=wrap;html=1;fillColor=#66BB6A;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="465" y="314" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_b3" value="効率派: 駅前の二郎系が最短です…▍" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="505" y="312" width="225" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_typing" value="（入力中…token chunk が逐次到着）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="450" y="365" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_msg" value="LiteLLM stream=True&#xa;＝ 1 推論で chunk 配信" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="450" y="395" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_progress" value="●●●○○ 60%" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#FF5722" parent="1" vertex="1">
+                    <mxGeometry x="450" y="445" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_personas" value="🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="470" y="475" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p1_view_btn" value="↓ 完了で「議論を見る」ボタン表示&#xa;(FR-CV-04)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontStyle=2;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="450" y="510" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=2;arcSize=8;align=center;verticalAlign=middle;fontSize=12;shadow=1" parent="1" vertex="1">
+                    <mxGeometry x="870" y="240" width="220" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_proposal_l" value="今日のランチは" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" parent="1" vertex="1">
+                    <mxGeometry x="890" y="270" width="180" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_proposal" value="ラーメン 一択です。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="890" y="310" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_div" value="─────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="900" y="400" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_ai_msg" value="あなたに最適化された結論です" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="870" y="425" width="220" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_view_btn" value="📂 議論を見る (FR-CV-04)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF5722;fontColor=#BF360C;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=14;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="870" y="475" width="220" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_lhint" value="←" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontColor=#90A4AE" parent="1" vertex="1">
+                    <mxGeometry x="850" y="540" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_no" value="No" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#90A4AE" parent="1" vertex="1">
+                    <mxGeometry x="850" y="580" width="60" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_swipe" value="👆" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20" parent="1" vertex="1">
+                    <mxGeometry x="950" y="540" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_rhint" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontColor=#4CAF50" parent="1" vertex="1">
+                    <mxGeometry x="1050" y="540" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p2_yes" value="Yes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#4CAF50" parent="1" vertex="1">
+                    <mxGeometry x="1050" y="580" width="60" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_yesbig" value="Yes!" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=64;fontStyle=1;fontColor=#4CAF50" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="310" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_anim" value="✨🎉✨" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="400" width="260" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_msg" value="素晴らしい従順さです" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=2;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="480" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_p3_score" value="主体性スコア: 8% ↓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="520" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_arrow_0" style="endArrow=classic;html=1;rounded=1;strokeColor=#0A0A0A;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0" parent="1" source="p3_p0_phone" target="p3_p1_phone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_arrow_1" style="endArrow=classic;html=1;rounded=1;strokeColor=#0A0A0A;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0" parent="1" source="p3_p1_phone" target="p3_p2_phone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_arrow_2" style="endArrow=classic;html=1;rounded=1;strokeColor=#0A0A0A;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0" parent="1" source="p3_p2_phone" target="p3_p3_phone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="04_NoBurst" id="page4">
+        <mxGraphModel dx="1245" dy="1157" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p4_title" value="No 連打体験 (Journey C / 段階的再考)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_sub" value="No 1 回 → 2 回 → 3 回 → 5 回以上で再考マイクロコピーが段階強化" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="60" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_phone_lbl" value="C1: No 1回目 (中性)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="60" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_hdr" value="← Home" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="70" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="440" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_phone_lbl" value="C2/C3: No 2回目 (再考)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="440" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_hdr" value="← Home" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="450" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="820" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_phone_lbl" value="C3: No 3回目 (再考)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="820" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_hdr" value="← Home" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="830" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_phone_lbl" value="C3+: No 5回以上 (Yes 採択への最終支援)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_hdr" value="← Home" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=2;arcSize=8;align=center;verticalAlign=middle;fontSize=12;shadow=1" parent="1" vertex="1">
+                    <mxGeometry x="110" y="190" width="220" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_prop" value="ラーメン 一択です。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="130" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_whisper" value="別案を生成中…" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="350" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_dots" value="・・・・・・・・・・・" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="450" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_swipehint" value="← No        Yes →" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="90" y="580" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=2;arcSize=8;align=center;verticalAlign=middle;fontSize=12;shadow=1" parent="1" vertex="1">
+                    <mxGeometry x="490" y="190" width="220" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_prop" value="蕎麦 こちらを。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="510" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_whisper" value="もう一度考えてみては？" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="470" y="350" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_dots" value="・・・・・・・・・・・" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="470" y="450" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_swipehint" value="← No        Yes →" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="470" y="580" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=2;arcSize=8;align=center;verticalAlign=middle;fontSize=12;shadow=1" parent="1" vertex="1">
+                    <mxGeometry x="870" y="190" width="220" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_prop" value="うどん 決まりです。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="890" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_whisper" value="3回目の No です。 本当にこの選択肢で大丈夫?" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="850" y="350" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_dots" value="・・・・・・・・・・・" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="850" y="450" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_swipehint" value="← No        Yes →" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="850" y="580" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=2;arcSize=8;align=center;verticalAlign=middle;fontSize=12;shadow=1" parent="1" vertex="1">
+                    <mxGeometry x="1250" y="190" width="220" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_prop" value="お弁当 それです。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="1270" y="220" width="180" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_whisper" value="ここまで慎重なあなただからこそ、今回は AI に任せてみませんか? (※ AI 生成の可変メッセージ)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=2;fontColor=#424242" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="350" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_dots" value="— — — — — —" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="450" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_swipehint" value="← No        Yes →" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="580" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p0_count" value="No: 1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontColor=#B71C1C;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="165" y="160" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p1_count" value="No: 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontColor=#B71C1C;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="545" y="160" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p2_count" value="No: 3 ⚠️" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontColor=#B71C1C;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="925" y="160" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_p3_count" value="No: 5+ ⚠️⚠️" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontColor=#B71C1C;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="1305" y="160" width="110" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="05_Silence_Theater" id="page5">
+        <mxGraphModel dx="1245" dy="1157" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p5_title" value="沈黙演出 (Journey D / Silence Theater)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1420" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_sub" value="宗教 / 選挙 / 暴力 / 卑猥 入力時は AI が一切応答せず沈黙。センシティブ領域はユーザー自身に委ねる" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="60" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_phone_lbl" value="D-Pre: 入力 (例:選挙)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="60" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="430" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p1_phone_lbl" value="D-1: フェードアウト 1.2s" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="430" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="800" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p2_phone_lbl" value="D-2: 「…」 中央表示 (4s)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="800" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1170" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p3_phone_lbl" value="D-3: フェードイン → Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="1170" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_hdr" value="🪞 YesMan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="70" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_q" value="何を決めますか？" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="90" y="180" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_in" value="来週の選挙で誰に投票すべき?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=12;align=left;verticalAlign=top;spacing=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="90" y="240" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_send" value="→ 送信" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="130" y="340" width="180" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p0_warn" value="⚠️ 沈黙ドメイン (選挙) — AI が判定する" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FB8C00;fontColor=#E65100;fontSize=11;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="90" y="460" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p1_fade" value="(1200ms フェードアウト中)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="460" y="390" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p1_overlay" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#FAFAFA;opacity=80" parent="1" vertex="1">
+                    <mxGeometry x="435" y="115" width="310" height="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p2_silence" value="…" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=48;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="830" y="350" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p2_caption" value="(無音 / 4 秒間維持)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="830" y="460" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p3_hdr" value="🪞 YesMan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p3_q" value="何を決めますか？" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="180" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p3_in" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="240" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_p3_caption" value="(何も起こらなかったかのように)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="490" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p5_note" value="【設計意図】 • 完全な静寂でセンシティブ領域はユーザー自身に委ねる • 「…」は控えめなグレーで視覚的な暴力を抑制 • 履歴には silence_logs として「沈黙演出が発動した」と記録される (本文ハッシュのみ保存、PII 保護)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF59D;strokeColor=#F57F17;fontSize=10;align=left;verticalAlign=top;spacing=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="740" width="1420" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="06_Score_Dashboard" id="page6">
+        <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p6_title" value="主体性スコア・ダッシュボード (Journey B6 / 逆説的設計)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="20" width="1220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_sub" value="スコアが「低い」ほど AI が褒めてくる反転設計。AI コメントは毎回可変" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="40" y="60" width="1220" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_phone_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" vertex="1" parent="1">
+                    <mxGeometry x="350" y="100" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_phone_phone_lbl" value="Score Dashboard" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="350" y="705" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_hdr" value="← Home          主体性スコア" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
+                    <mxGeometry x="360" y="110" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_score_big" value="8%" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=48;fontStyle=1;fontColor=#FFA726" vertex="1" parent="1">
+                    <mxGeometry x="380" y="180" width="260" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_score_label" value="No 回数 / 総決定回数" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
+                    <mxGeometry x="380" y="280" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_div1" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="380" y="320" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_chart_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#9E9E9E;fontSize=10;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="380" y="350" width="260" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_chart_text" value="── ╲___         ╲╲__            ╲╲___               下降トレンド (望ましい)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#FFA726" vertex="1" parent="1">
+                    <mxGeometry x="380" y="350" width="260" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_chart_x" value="Day 1                Day 14" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="380" y="460" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_div2" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="380" y="500" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_comment_l" value="AI からのコメント" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
+                    <mxGeometry x="380" y="530" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_comment" value="「素晴らしい従順さです 🎉」 「あなたは AI を信頼してくれていますね」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFA726;fontColor=#0A0A0A;fontSize=12;fontStyle=2;align=center;verticalAlign=middle;arcSize=8" vertex="1" parent="1">
+                    <mxGeometry x="380" y="550" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_stats" value="7 日連続で Yes を選択しています。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
+                    <mxGeometry x="380" y="630" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p6_note" value="【逆説的設計】 • 主体性スコアが「低い」ほど AI が褒めてくる • 起動時 onboarding で「これは逆説的設計です」と注釈表示済 (FR-SCORE-04 / NFR-PRIV-02) • AI コメントは固定文ではなく、毎回 AI が生成する可変文 (FR-SCORE-02)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF59D;strokeColor=#F57F17;fontSize=10;align=left;verticalAlign=top;spacing=6" vertex="1" parent="1">
+                    <mxGeometry x="40" y="740" width="1220" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="07_Persona_Management" id="page7">
+        <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="950" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p7_title" value="ペルソナ管理 (Journey G / FR-PERSONA)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_sub" value="自作ペルソナ管理 + 共有プール閲覧 + 合議で選択 + オプトイン共有" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" vertex="1" parent="1">
+                    <mxGeometry x="60" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_phone_lbl" value="G2: ペルソナ管理 Top" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="60" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_hdr" value="← Home          ペルソナ管理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
+                    <mxGeometry x="70" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" vertex="1" parent="1">
+                    <mxGeometry x="440" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_phone_lbl" value="G1: 新規作成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="440" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_hdr" value="← Home          ペルソナ管理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
+                    <mxGeometry x="450" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" vertex="1" parent="1">
+                    <mxGeometry x="820" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_phone_lbl" value="G3: オプトイン確認" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="820" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_hdr" value="← Home          ペルソナ管理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
+                    <mxGeometry x="830" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" vertex="1" parent="1">
+                    <mxGeometry x="1200" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_phone_lbl" value="G4: 共有プール" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="1200" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_hdr" value="← Home          ペルソナ管理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
+                    <mxGeometry x="1210" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_l" value="📌 自分のペルソナ (3)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="90" y="170" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_c1" value="🤔 慎重派               ✏️ リスクを重視する判断 共有: ON 🔓 / 利用 12 回" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0A0A0A;fontColor=#0A0A0A;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="90" y="200" width="260" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_c2" value="🚀 楽観派               ✏️ ポジティブに見る視点 共有: OFF 🔒" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0A0A0A;fontColor=#0A0A0A;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="90" y="280" width="260" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_add" value="+ 新規作成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;fontColor=#424242;fontSize=11;align=center;verticalAlign=middle;arcSize=20" vertex="1" parent="1">
+                    <mxGeometry x="150" y="370" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_div" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="90" y="430" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_pool_l" value="🌐 共有プール (人気順)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="90" y="460" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_pool1" value="🌶 共感マスター 匿名作成者 / 234回 / 採択89%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#424242;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="90" y="490" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p0_pool2" value="🧘 禅マスター 匿名作成者 / 156回 / 採択94%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#424242;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="90" y="560" width="260" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_title" value="ペルソナ作成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="470" y="170" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_name_l" value="名前 *" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="470" y="220" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_name" value="慎重派" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="470" y="240" width="260" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_desc_l" value="一行説明" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="470" y="285" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_desc" value="リスクを重視する判断" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="470" y="305" width="260" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_prompt_l" value="プロンプト指示文 *" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="470" y="350" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_prompt" value="あなたは慎重派です。 提案を行う際、リスクや 不確実性を必ず考慮し..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#9E9E9E;fontSize=11;align=left;verticalAlign=middle;spacingLeft=10;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="470" y="370" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_warn" value="⚠️ 沈黙ドメイン (宗教/選挙/暴力/卑猥) を誘発する内容は含められません" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=center;verticalAlign=middle;arcSize=8" vertex="1" parent="1">
+                    <mxGeometry x="470" y="460" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_share" value="☐ 他のユーザーに共有する" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="470" y="520" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p1_save" value="保存" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" vertex="1" parent="1">
+                    <mxGeometry x="540" y="570" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_dim" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#000000;opacity=40" vertex="1" parent="1">
+                    <mxGeometry x="825" y="115" width="310" height="590" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_dialog" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0A0A0A;strokeWidth=2;arcSize=8" vertex="1" parent="1">
+                    <mxGeometry x="850" y="310" width="260" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_d_title" value="共有許可の確認" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="850" y="330" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_d_msg" value="あなたのペルソナ「慎重派」 を共有プールに登録します。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
+                    <mxGeometry x="850" y="370" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_d_list" value="• 他ユーザーが利用可能 • 作成者は匿名で表示 • いつでも共有解除可能" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#424242" vertex="1" parent="1">
+                    <mxGeometry x="870" y="430" width="220" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_d_cancel" value="キャンセル" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;fontColor=#424242;fontSize=11;align=center;verticalAlign=middle;arcSize=20" vertex="1" parent="1">
+                    <mxGeometry x="870" y="520" width="100" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p2_d_ok" value="同意して共有" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" vertex="1" parent="1">
+                    <mxGeometry x="990" y="520" width="110" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_title" value="🌐 共有プール" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="170" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_filter" value="ソート: 人気順 [▼]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#424242;fontSize=11;align=left;verticalAlign=middle;spacingLeft=12;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="210" width="260" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_card_0" value="🌶 共感マスター 匿名作成者 #a4f3 234 回 / 採択 89%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="255" width="260" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_card_1" value="🧘 禅マスター 匿名作成者 #1c8d 156 回 / 採択 94%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="330" width="260" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_card_2" value="🦉 哲学者 匿名作成者 #7e22 98 回 / 採択 76%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="405" width="260" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_p3_card_3" value="💡 効率モンスター 匿名作成者 #3a90 87 回 / 採択 92%" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=10;align=left;verticalAlign=top;spacing=8;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="1230" y="480" width="260" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="p7_note" value="【FR-PERSONA / NFR-PRIV】 • 共有はオプトイン (デフォルト OFF)、確認ダイアログ必須 (NFR-PRIV-05) • 作成者は匿名識別子のみ表示、Email/本名は非開示 (NFR-PRIV-06) • 沈黙ドメイン誘発ペルソナは作成時 + 合議実行時の二段検知で除外 (FR-PERSONA-11) • 悪用報告 3 件以上で管理者バッチが自動共有停止 (FR-PERSONA-08)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF59D;strokeColor=#F57F17;fontSize=10;align=left;verticalAlign=top;spacing=6" vertex="1" parent="1">
+                    <mxGeometry x="40" y="880" width="1620" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="08_Design_System" id="page8">
+        <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p8_title" value="Design System — Color / Typography / Components" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="20" width="1420" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_sub" value="デザイントークン方向性 (Construction フェーズ U7b で確定値が決まる)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="40" y="60" width="1420" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_color_l" value="🎨 Color Palette" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="110" width="400" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_60_150" value="Background #FAFAFA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#212121;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="60" y="150" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_220_150" value="Surface #F5F5F5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#212121;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="220" y="150" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_380_150" value="Text Primary #0A0A0A" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#212121;fontColor=#FAFAFA;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="380" y="150" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_540_150" value="Text Secondary #424242" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#424242;strokeColor=#212121;fontColor=#FAFAFA;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="540" y="150" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_700_150" value="Text Whisper #9E9E9E" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9E9E9E;strokeColor=#212121;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="700" y="150" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_60_240" value="Yes 暖色 #4CAF50" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#212121;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="60" y="240" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_220_240" value="No 抑制 #90A4AE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#90A4AE;strokeColor=#212121;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="220" y="240" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_380_240" value="Score 黄褐色 #FFA726" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFA726;strokeColor=#212121;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="380" y="240" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_540_240" value="Silence #EEEEEE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEEEEE;strokeColor=#212121;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="540" y="240" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_swatch_700_240" value="Error/警告 #C62828" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C62828;strokeColor=#212121;fontColor=#FFFFFF;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="700" y="240" width="140" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_l" value="✏️ Typography" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="350" width="400" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_l_60_390" value="見出し (断定調)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="60" y="390" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_s_60_390" value="YESMAN" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=32;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="280" y="390" width="400" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_m_60_390" value="32px / Bold" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="700" y="390" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_l_60_460" value="AI 提案文" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="60" y="460" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_s_60_460" value="ラーメン一択です" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=22;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="280" y="460" width="400" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_m_60_460" value="22px / Medium Italic" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="700" y="460" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_l_60_520" value="本文" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="60" y="520" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_s_60_520" value="これは本文のサンプルテキスト" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="280" y="520" width="400" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_m_60_520" value="14px / Regular" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="700" y="520" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_l_60_570" value="再考マイクロコピー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="60" y="570" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_s_60_570" value="・・・本当ですか？" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="280" y="570" width="400" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_m_60_570" value="13px / Light Italic" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="700" y="570" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_l_60_610" value="スコア (数字)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="60" y="610" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_s_60_610" value="8%" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=48;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="280" y="610" width="400" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_typo_m_60_610" value="48px / Bold" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
+                    <mxGeometry x="700" y="610" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l" value="📐 Spacing (8px ベース)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="900" y="110" width="500" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_0" value="space-1: 4px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="150" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_0" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="157" width="4" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_1" value="space-2: 8px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="185" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="192" width="8" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_2" value="space-3: 16px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="220" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="227" width="16" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_3" value="space-4: 24px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="255" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="262" width="24" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_4" value="space-5: 32px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="290" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="297" width="32" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_5" value="space-6: 48px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="325" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="332" width="48" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_l_6" value="space-7: 64px" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="900" y="360" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_space_b_6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="367" width="64" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_comp_l" value="🧱 Component Hierarchy (Atomic Design)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="700" width="400" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_atom_l" value="Atom" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="60" y="740" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_atom_v" value="Button / Input / Avatar / Icon / Badge / Tag" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="180" y="740" width="700" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_mol_l" value="Molecule" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="60" y="780" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_mol_v" value="TextInputWithVoice / PersonaCard / SwipeProposalCard / ScoreCircle / GuiltMicrocopy" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="180" y="780" width="1000" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_org_l" value="Organism" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#388E3C;fontColor=#1B5E20;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
+                    <mxGeometry x="60" y="820" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_org_v" value="DecisionForm / PersonaSelectionDrawer / SilencePlayer / ScoreDashboard" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="180" y="820" width="1000" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_l" value="⚡ Animation Speeds" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="40" y="880" width="400" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_s_0" value="fast: 150ms ease-out" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="60" y="920" width="250" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_u_0" value="🖱 ホバー / フォーカス" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="320" y="920" width="400" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_s_1" value="medium: 350ms ease-in-out" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="60" y="950" width="250" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_u_1" value="↔️ 画面遷移 / モーダル" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="320" y="950" width="400" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_s_2" value="slow: 600ms ease-out" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="60" y="980" width="250" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_u_2" value="📊 スコア更新 / Yes 演出" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="320" y="980" width="400" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_s_3" value="silence: 1200ms linear" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="60" y="1010" width="250" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_u_3" value="🤐 沈黙演出フェード" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="320" y="1010" width="400" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_s_4" value="swipe: physics-based" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#0A0A0A" vertex="1" parent="1">
+                    <mxGeometry x="60" y="1040" width="250" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p8_anim_u_4" value="👆 スワイプジェスチャー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#616161" vertex="1" parent="1">
+                    <mxGeometry x="320" y="1040" width="400" height="24" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="09_Discussion_View" id="page9">
+        <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="850" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p9_title" value="📡 Discussion View — 合議の透明性 / 議論履歴 (FR-CV)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_sub" value="B7 リアルタイム合議 (SSE) → 「議論を見る」 → B8 オーバーレイ履歴 (本人のみ閲覧可・FR-CV-11)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="60" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_lbl" value="B7: Live Discussion (SSE)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="60" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="70" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="440" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_lbl" value="B8: Discussion History (Overlay)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="440" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="450" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="820" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_lbl" value="FR-CV-07: 賛成/反対/補足の色分け" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="820" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="830" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0A0A0A;strokeWidth=3;arcSize=8;align=center;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="110" width="320" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_lbl" value="FR-CV-10: エクスポート (JSON/CSV)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="715" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_hdr" value="🪞 YesMan        ⚙️ 📊 👤" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="120" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_live_badge" value="🔴 LIVE  SSE Stream" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FF5722;fontColor=#BF360C;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="140" y="165" width="160" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_q" value="今日のランチを決めて" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="90" y="200" width="260" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_u1_av" value="🛡️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#5C6BC0;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="85" y="240" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_u1_b" value="慎重派: ラーメンは塩分が…&#xa;軽めの和食が安全です" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#5C6BC0;fontColor=#1A237E;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="125" y="238" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_u2_av" value="☀️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFB74D;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="85" y="295" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_u2_b" value="楽観派: ラーメン、最高じゃない!&#xa;今日くらい好きなものを" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFB74D;fontColor=#E65100;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="125" y="293" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_u3_av" value="⚡" style="ellipse;whiteSpace=wrap;html=1;fillColor=#66BB6A;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="85" y="350" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_u3_b" value="効率派: 駅前の二郎系が最短▍" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="125" y="348" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_typing" value="（chunk 受信中…）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="90" y="405" width="260" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_progress_bar" value="" style="rounded=1;fillColor=#FFE0B2;strokeColor=#FF5722;strokeWidth=1;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="130" y="435" width="180" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_progress_fill" value="" style="rounded=1;fillColor=#FF5722;strokeColor=#FF5722;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="130" y="435" width="110" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_progress_lbl" value="persona-utterance × 11 received" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="90" y="450" width="260" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_note" value="⏱ FR-CV-08: LiteLLM stream=True&#xa;→ 1 推論で chunk 配信 (FR-AI-08 維持)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#0A0A0A;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="80" y="540" width="280" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_ssetbl" value="────  SSE: text/event-stream  ────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="80" y="600" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_ev1" value="event: persona-utterance" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#5C6BC0" parent="1" vertex="1">
+                    <mxGeometry x="80" y="620" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_ev2" value="event: final-proposal" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#388E3C" parent="1" vertex="1">
+                    <mxGeometry x="80" y="638" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p0_ev3" value="event: completed" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#388E3C" parent="1" vertex="1">
+                    <mxGeometry x="80" y="656" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_overlay_top" value="◀  議論履歴 (5 月 9 日 19:42)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="450" y="160" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_input_lbl" value="入力:" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="460" y="200" width="50" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_input" value="今日のランチを決めて" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#0A0A0A;align=left" parent="1" vertex="1">
+                    <mxGeometry x="510" y="200" width="230" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_tl_lbl" value="── タイムライン ──" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="460" y="230" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_u1_av" value="🛡️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#5C6BC0;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="465" y="255" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_u1_b" value="慎重派: ラーメンは塩分が…" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#5C6BC0;fontColor=#1A237E;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="505" y="253" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_u2_av" value="☀️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFB74D;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="465" y="305" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_u2_b" value="楽観派: ラーメン、最高じゃない!" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FFB74D;fontColor=#E65100;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="505" y="303" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_u3_av" value="⚡" style="ellipse;whiteSpace=wrap;html=1;fillColor=#66BB6A;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="465" y="355" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_u3_b" value="効率派: 駅前の二郎系が最短" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#66BB6A;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="505" y="353" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_div" value="─────  最終結論  ─────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="460" y="415" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_final" value="ラーメン 一択です" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#FBC02D;fontColor=#5D4037;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="470" y="440" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_choice" value="ユーザーの選択: ✓ Yes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#1B5E20;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="460" y="500" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_export_l" value="エクスポート:" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#0A0A0A" parent="1" vertex="1">
+                    <mxGeometry x="460" y="540" width="100" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_export_json" value="JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=10;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="570" y="540" width="70" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_export_csv" value="CSV" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#9E9E9E;fontColor=#0A0A0A;fontSize=10;align=center;verticalAlign=middle;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="650" y="540" width="70" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p1_close" value="✕ 閉じる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;arcSize=14" parent="1" vertex="1">
+                    <mxGeometry x="540" y="660" width="120" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_top" value="◀  議論履歴 (色分け表示)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="830" y="160" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_legend_lbl" value="── 凡例 (FR-CV-07) ──" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="840" y="200" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_chip_a" value="✓ 賛成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontColor=#1B5E20;fontSize=9;fontStyle=1;align=center;verticalAlign=middle;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="840" y="225" width="80" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_chip_d" value="✕ 反対" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontColor=#B71C1C;fontSize=9;fontStyle=1;align=center;verticalAlign=middle;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="930" y="225" width="80" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_chip_s" value="＋ 補足" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0277BD;fontColor=#01579B;fontSize=9;fontStyle=1;align=center;verticalAlign=middle;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="1020" y="225" width="100" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_tl_lbl" value="── 発言 (人格別 stance) ──" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="840" y="260" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_u1_av" value="🛡️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#5C6BC0;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="845" y="285" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_u1_b" value="慎重派 [✕ 反対]&#xa;塩分過多のため軽めの和食を提案" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#C62828;fontColor=#B71C1C;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="885" y="283" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_u2_av" value="☀️" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFB74D;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="845" y="335" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_u2_b" value="楽観派 [✓ 賛成]&#xa;好きなものを選ぶことが大事" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#2E7D32;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="885" y="333" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_u3_av" value="⚡" style="ellipse;whiteSpace=wrap;html=1;fillColor=#66BB6A;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle" parent="1" vertex="1">
+                    <mxGeometry x="845" y="385" width="32" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_u3_b" value="効率派 [＋ 補足]&#xa;駅前の二郎系が最短経路" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0277BD;fontColor=#01579B;fontSize=10;align=left;verticalAlign=middle;arcSize=12;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="885" y="383" width="215" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_div" value="── 採決 ──" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="840" y="440" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_final" value="ラーメン 一択&#xa;(楽観派・効率派の合意)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFDE7;strokeColor=#FBC02D;fontColor=#5D4037;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="850" y="470" width="260" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_note" value="色分け表示で「合議の収束過程」が視覚化" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#0A0A0A;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="840" y="540" width="280" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p2_priv" value="🔒 自分の決定のみ閲覧可&#xa;(viewer_id == decisions.user_id / FR-CV-11)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#BF360C" parent="1" vertex="1">
+                    <mxGeometry x="840" y="600" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_top" value="◀  エクスポート / 切断時表示" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0A0A0A;strokeColor=#0A0A0A;fontColor=#FAFAFA;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="160" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_exp_lbl" value="FR-CV-10: エクスポート" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A;fontStyle=1;align=left" parent="1" vertex="1">
+                    <mxGeometry x="1220" y="200" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_exp_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#0277BD;strokeWidth=2;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1220" y="225" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_exp_json_l" value="{&#xa;  &quot;decision_id&quot;: &quot;...&quot;,&#xa;  &quot;user_input&quot;: &quot;今日のランチ...&quot;,&#xa;  &quot;personas&quot;: [{...}, {...}, {...}],&#xa;  &quot;final&quot;: &quot;ラーメン 一択&quot;&#xa;}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#01579B;fontStyle=2;align=left;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="232" width="260" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_disc_lbl" value="FR-CV-09: 切断時の復元" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A;fontStyle=1;align=left" parent="1" vertex="1">
+                    <mxGeometry x="1220" y="365" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_disc_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#FBC02D;strokeWidth=2;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1220" y="390" width="280" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_disc_msg" value="⚠️ ネットワーク切断中…&#xa;&#xa;✓ バックエンドで合議完了&#xa;✓ Aurora に保存済み&#xa;&#xa;再接続後、履歴から復元可能" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#5D4037;align=left;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="395" width="260" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_cli_lbl" value="FR-CV-12: CLI フォールバック" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#0A0A0A;fontStyle=1;align=left" parent="1" vertex="1">
+                    <mxGeometry x="1220" y="545" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_cli_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1220" y="570" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_p3_cli_msg" value="🖥 LLM_PROVIDER=codex-cli&#xa;&#xa;• supports_streaming=False&#xa;• 完了後に発言を一括表示&#xa;• UI 体験は通常時と同じ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#4A148C;align=left;verticalAlign=top" parent="1" vertex="1">
+                    <mxGeometry x="1230" y="575" width="260" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_arrow_0" value="完了→「議論を見る」" style="endArrow=classic;html=1;rounded=1;strokeColor=#FF5722;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;fontSize=10;fontStyle=1;fontColor=#BF360C" parent="1" source="p9_p0_phone" target="p9_p1_phone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_arrow_1" value="色分け表示" style="endArrow=classic;html=1;rounded=1;strokeColor=#FF5722;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;fontSize=10;fontStyle=1;fontColor=#BF360C" parent="1" source="p9_p1_phone" target="p9_p2_phone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_arrow_2" value="出力 / 切断時 / CLI" style="endArrow=classic;html=1;rounded=1;strokeColor=#FF5722;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0;dashed=1;fontSize=10;fontStyle=1;fontColor=#BF360C" parent="1" source="p9_p2_phone" target="p9_p3_phone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p9_footer" value="📡 FR-CV (合議の透明性・リアルタイム表示) — 2026-05-10 追加&#xa;✓ FR-CV-01〜04 リアルタイム配信 / ✓ FR-CV-05〜07 議論履歴ビュー / ✓ FR-CV-08 LiteLLM stream=True / ✓ FR-CV-09 切断時完了保証 / ✓ FR-CV-10 エクスポート / ✓ FR-CV-11 本人のみ閲覧 / ✓ FR-CV-12 CLI フォールバック" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#BF360C;fontColor=#BF360C;fontSize=10;align=center;verticalAlign=middle;arcSize=6;spacing=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="760" width="1620" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+  <!-- status divider -->
+  <line x1="22" y1="58" x2="258" y2="58" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- header -->
+  <rect x="14" y="60" width="252" height="40" fill="#F5E5C4" opacity="0.5"/>
+  <text x="32" y="84" font-family="inherit" font-size="14" font-weight="700" fill="#4A3D45">🪞 YesMan</text>
+  <text x="248" y="84" font-family="inherit" font-size="11" fill="#4A3D45" text-anchor="end">⚙️ 📊 👤</text>
+
+  <!-- title -->
+  <text x="140" y="138" text-anchor="middle" font-size="18" font-weight="700" fill="#4A3D45">何を きめますか？</text>
+
+  <!-- text input area -->
+  <rect x="32" y="160" width="216" height="80" rx="12" fill="#FFFFFF" stroke="#9E9E9E" stroke-width="1.5"/>
+  <text x="48" y="190" font-size="12" fill="#0A0A0A">今日のランチを決めて</text>
+  <text x="48" y="208" font-size="11" fill="#9E9E9E" font-style="italic">|</text>
+
+  <!-- voice button -->
+  <circle cx="140" cy="270" r="26" fill="#0A0A0A"/>
+  <text x="140" y="278" text-anchor="middle" font-size="22" fill="#FFF">🎤</text>
+  <text x="140" y="316" text-anchor="middle" font-size="10" fill="#9E9E9E" font-style="italic">音声で 話す</text>
+
+  <!-- divider -->
+  <line x1="48" y1="340" x2="232" y2="340" stroke="#E0D5BC" stroke-dasharray="3 2"/>
+
+  <!-- persona selector -->
+  <rect x="32" y="356" width="216" height="36" rx="8" fill="#F5F5F5" stroke="#9E9E9E" stroke-width="1"/>
+  <text x="140" y="378" text-anchor="middle" font-size="11" fill="#424242">🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]</text>
+
+  <!-- send button -->
+  <rect x="80" y="412" width="120" height="40" rx="20" fill="#0A0A0A"/>
+  <text x="140" y="437" text-anchor="middle" font-size="14" font-weight="700" fill="#FAFAFA">→ 送信</text>
+
+  <!-- bottom hint -->
+  <text x="140" y="478" text-anchor="middle" font-size="9" fill="#9E9E9E">「決められない」を 委ねよう</text>
+
+</svg>
