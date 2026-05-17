@@ -1,0 +1,45 @@
+{
+  "name": "@yesman/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Typed fetch wrapper for YesMan API (auto-generated from OpenAPI schema)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "generate": "openapi-typescript ../../apps/api/openapi.json -o src/generated/schema.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "lint": "eslint src tests",
+    "size": "size-limit"
+  },
+  "size-limit": [
+    {
+      "name": "main bundle",
+      "path": "dist/index.js",
+      "limit": "5 KB"
+    }
+  ],
+  "dependencies": {},
+  "peerDependencies": {},
+  "devDependencies": {
+    "openapi-typescript": "^7.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.0.0",
+    "msw": "^2.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "eslint": "^9.0.0",
+    "size-limit": "^11.0.0",
+    "@size-limit/preset-small-lib": "^11.0.0"
+  }
+}

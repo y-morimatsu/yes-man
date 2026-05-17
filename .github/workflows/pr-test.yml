@@ -1,0 +1,70 @@
+name: PR test (cross-unit)
+
+on:
+  pull_request:
+    paths:
+      - "tests/**"
+      - "apps/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/pr-test.yml"
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+
+      # Playwright browser cache (ultrathink Infra Design §1.1)
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('tests/e2e/package.json') }}
+
+      - run: pnpm install --frozen-lockfile
+      - run: pip install -e apps/api[dev]
+
+      # workspace build (api-client + ui を web 用に build)
+      - run: pnpm --filter @yesman/api-client build
+      - run: pnpm --filter @yesman/ui build
+
+      # Install Playwright browsers (cached)
+      - run: pnpm --filter @yesman/e2e exec playwright install --with-deps chromium
+
+      # E2E
+      - run: pnpm --filter @yesman/e2e test
+        env:
+          CI: "true"
+
+      # Integration (pytest)
+      - run: pytest tests/integration -v
+
+      # PBT (既存 + 新規)
+      - run: pytest apps/api/tests/property -v
+
+      # Smoke (Mock backend で起動後想定、Playwright webServer が残っていれば実行可)
+      - run: bash tests/smoke/smoke.sh
+        env:
+          API_URL: "http://localhost:8000"
+          WEB_URL: "http://localhost:5173"
+        continue-on-error: true
+
+      # Upload Playwright report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: tests/e2e/playwright-report
+          retention-days: 7

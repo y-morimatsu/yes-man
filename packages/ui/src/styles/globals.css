@@ -1,0 +1,86 @@
+/**
+ * @yesman/ui globals.css — Tailwind v4 base + tokens 適用.
+ *
+ * Tailwind v4 は `@theme` directive で CSS variable 経由 token を注入する設計.
+ * tokens/colors.ts などの TS 定義と本 @theme ブロックを 1:1 で同期させる
+ * (U7b FD §2 — JS preset は v3 互換用、v4 では本 file が真).
+ *
+ * consumer (apps/web) で `import "@yesman/ui/styles.css";` で読み込み.
+ * ultrathink Imp1: source-level 直接 export、consumer (Vite/webpack) が PostCSS + minify 処理.
+ */
+
+@import "tailwindcss";
+
+/* INCEPTION §1.3: 見出し Noto Serif JP / 本文 Inter + Noto Sans JP */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500;700;800&display=swap");
+
+/* dark mode は class strategy: <html class="dark"> で切替 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ==================================================================
+   * INCEPTION canonical palette (ui-mockups.md §1.2 + screens/*.svg)
+   * brand は coral (#E8775A) を canonical 化、warm cream theme.
+   * U7b FD MVP 暫定値は本 @theme で上書き (Designer レビュー後の確定値).
+   * ================================================================== */
+
+  /* brand = INCEPTION coral (decision の重さを表現するアクセント) */
+  --color-brand-50: #fff1ed;
+  --color-brand-100: #ffe0d6;
+  --color-brand-200: #ffc4b0;
+  --color-brand-300: #ffa085;
+  --color-brand-400: #f08866;
+  --color-brand-500: #ec8060;
+  --color-brand-600: #e8775a;   /* canonical coral (INCEPTION screen-03 accent) */
+  --color-brand-700: #c25540;
+  --color-brand-800: #9a3f30;
+  --color-brand-900: #7c2d20;
+
+  /* semantic — INCEPTION §1.2 */
+  --color-success: #4caf50;     /* Yes 強調 (暖色グリーン) */
+  --color-warning: #ffa726;     /* 主体性スコア (黄褐色アクセント) */
+  --color-danger: #c62828;      /* エラー/警告 (控えめ赤) */
+  --color-info: #3b82f6;
+
+  /* neutral = warm cream theme (INCEPTION 完全準拠) */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #fff7e8;  /* 背景 Light = warm cream */
+  --color-neutral-100: #f5e5c4; /* 背景 Surface / header beige */
+  --color-neutral-200: #e0d5bc; /* divider / border (warm beige) */
+  --color-neutral-300: #d4c5a8;
+  --color-neutral-400: #9e9e9e; /* whisper text */
+  --color-neutral-500: #715b62;
+  --color-neutral-600: #616161;
+  --color-neutral-700: #424242; /* secondary text */
+  --color-neutral-800: #4a3d45; /* primary text — warm dark brown */
+  --color-neutral-900: #0a0a0a; /* 最強調文字 */
+
+  /* domain-specific */
+  --color-silence: #90a4ae;     /* 沈黙演出 cool grey (INCEPTION §1.2) */
+  --color-yes: #4caf50;         /* Yes 強調 暖色グリーン */
+  --color-no: #90a4ae;          /* No 抑制 cool grey */
+  --color-score-accent: #ffa726;/* 主体性スコア専用 */
+
+  /* ============== spacing (U7b FD §2.2、Tailwind 互換 + YesMan 特殊) ============== */
+  --spacing-swipe: 20rem;
+  --spacing-utterance: min(28rem, 100% - 2rem);
+
+  /* ============== typography (INCEPTION §1.3) ============== */
+  --font-sans: "Inter", "Noto Sans JP", system-ui, sans-serif;
+  --font-serif: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", serif;
+  --font-mono: "JetBrains Mono", "Inter", monospace;
+
+  --text-decision: 2rem;
+  --text-persona: 1.125rem;
+}
+
+/* base reset (Tailwind preflight に含まれるが追加 fine-tune) */
+:root {
+  font-family: "Inter", "Noto Sans JP", system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+html.dark {
+  color-scheme: dark;
+}

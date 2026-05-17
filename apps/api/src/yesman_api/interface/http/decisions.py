@@ -1,0 +1,174 @@
+"""Decision API endpoints (FR-AI, FR-CV, FR-NUDGE, FR-NO).
+
+NFR Design §6 + ultrathink Imp2 (SSE start event 事前 decision_id) + Imp3 (Nudge TTL 切れ 410) 反映.
+"""
+from __future__ import annotations
+
+import json
+from uuid import UUID, uuid4
+
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
+from fastapi.responses import StreamingResponse
+
+from yesman_api.application.persistence.protocols import DecisionRepository
+from yesman_api.domain.auth.models import AuthenticatedUser
+from yesman_api.domain.decision.engine import DecisionEngine
+from yesman_api.domain.decision.errors import DecisionError
+from yesman_api.domain.decision.models import DecisionRequest
+from yesman_api.domain.decision.nudge import NudgeCache, NudgeMessageGenerator
+from yesman_api.interface.deps import (
+    get_current_user,
+    get_decision_engine,
+    get_decision_repo,
+    get_nudge_cache,
+    get_nudge_generator,
+)
+from yesman_api.interface.http.dto.decision import (
+    ChoiceRequest,
+    ChoiceResponse,
+    DecisionRequestDTO,
+    DecisionResponse,
+    NudgeResponse,
+    UtteranceDTO,
+)
+
+router = APIRouter(prefix="/v1/decisions", tags=["decisions"])
+
+
+# ============================================================
+# 非ストリーミング合議
+# ============================================================
+@router.post("/request", response_model=DecisionResponse)
+async def request_decision(
+    payload: DecisionRequestDTO,
+    user: AuthenticatedUser = Depends(get_current_user),
+    engine: DecisionEngine = Depends(get_decision_engine),
+) -> DecisionResponse:
+    request = DecisionRequest(
+        user_id=UUID(user.sub),
+        user_input=payload.user_input,
+        selected_persona_ids=payload.selected_persona_ids or [],
+    )
+    try:
+        decision_id, consensus, no_attempt_count = await engine.run(request)
+    except DecisionError as exc:
+        raise HTTPException(status_code=502, detail={"reason": exc.reason, "detail": exc.detail})
+    return DecisionResponse(
+        decision_id=decision_id,
+        domain=consensus.domain_classification,
+        utterances=[
+            UtteranceDTO(persona_id=u.persona_id, persona_name=u.persona_name, text=u.text)
+            for u in consensus.utterances
+        ],
+        proposal_text=consensus.proposal_text,
+        nudge_url=f"/v1/decisions/{decision_id}/nudge",
+        no_attempt_count=no_attempt_count,
+    )
+
+
+# ============================================================
+# SSE ストリーミング合議
+# ============================================================
+def _sse(event: str, data: dict) -> str:
+    return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
+
+
+@router.post("/request/stream")
+async def request_decision_stream(
+    payload: DecisionRequestDTO,
+    user: AuthenticatedUser = Depends(get_current_user),
+    engine: DecisionEngine = Depends(get_decision_engine),
+) -> StreamingResponse:
+    request = DecisionRequest(
+        user_id=UUID(user.sub),
+        user_input=payload.user_input,
+        selected_persona_ids=payload.selected_persona_ids or [],
+    )
+    decision_id = uuid4()  # ultrathink Imp2: SSE start event で client に事前通知
+
+    async def event_stream():
+        yield _sse("start", {"decision_id": str(decision_id)})
+        try:
+            async for event in engine.run_stream(decision_id=decision_id, request=request):
+                yield _sse(event.type, event.data)
+            yield _sse("complete", {"decision_id": str(decision_id)})
+        except DecisionError as exc:
+            yield _sse("error", {"reason": exc.reason, "detail": exc.detail})
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+# ============================================================
+# Yes/No 採択
+# ============================================================
+@router.post("/{decision_id}/choice", response_model=ChoiceResponse)
+async def choose(
+    decision_id: UUID,
+    payload: ChoiceRequest,
+    background_tasks: BackgroundTasks,
+    user: AuthenticatedUser = Depends(get_current_user),
+    engine: DecisionEngine = Depends(get_decision_engine),
+    nudge_gen: NudgeMessageGenerator = Depends(get_nudge_generator),
+) -> ChoiceResponse:
+    try:
+        decision, no_count = await engine.apply_choice(
+            decision_id=decision_id,
+            user_id=UUID(user.sub),
+            choice=payload.choice,
+        )
+    except DecisionError as exc:
+        if exc.reason == "decision_not_found":
+            raise HTTPException(status_code=404, detail="decision not found")
+        raise HTTPException(status_code=502, detail={"reason": exc.reason})
+
+    # Nudge は非同期生成 (NFR Req I5 / FR-NUDGE-05)
+    no_streak = no_count if payload.choice == "no" else 0
+    background_tasks.add_task(
+        nudge_gen.generate,
+        decision_id=str(decision_id),
+        proposal_text=decision.proposal_text,
+        choice=payload.choice,
+        no_streak=no_streak,
+    )
+
+    return ChoiceResponse(
+        decision_id=decision_id,
+        nudge_url=f"/v1/decisions/{decision_id}/nudge",
+        no_attempt_count=decision.no_attempt_count,
+    )
+
+
+# ============================================================
+# Nudge polling
+# ============================================================
+@router.get("/{decision_id}/nudge")
+async def get_nudge(
+    decision_id: UUID,
+    request: Request,
+    user: AuthenticatedUser = Depends(get_current_user),
+    cache: NudgeCache = Depends(get_nudge_cache),
+    decision_repo: DecisionRepository = Depends(get_decision_repo),
+):
+    """ultrathink Imp3 反映: TTL 切れは 410 Gone (FE 再発火抑止)."""
+    # SEC-U4-09: 所有者検証
+    decision = await decision_repo.get(decision_id)
+    if decision is None or decision.user_id != UUID(user.sub):
+        raise HTTPException(status_code=404, detail="decision not found")
+
+    cached = cache.get(str(decision_id))
+    if cached is None:
+        # decision はあるが nudge cache に無い → TTL 切れ
+        raise HTTPException(status_code=410, detail="nudge expired")
+
+    if cached.status == "pending":
+        return _json_response({"status": "pending", "message": None}, status_code=202)
+    return NudgeResponse(status=cached.status, message=cached.message)
+
+
+def _json_response(data: dict, *, status_code: int):
+    from fastapi.responses import JSONResponse
+
+    return JSONResponse(content=data, status_code=status_code)
+
+
+__all__ = ["router"]

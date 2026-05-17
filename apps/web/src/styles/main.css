@@ -1,0 +1,24 @@
+/**
+ * main.css — Tailwind v4 base + @yesman/ui tokens.
+ *
+ * ultrathink NFR Req I2: prod CSP では style-src 'unsafe-inline' を維持 (Tailwind utility class 用).
+ */
+@import "tailwindcss";
+
+/* @yesman/ui の global base (CSS) を取り込み */
+@import "@yesman/ui/styles.css";
+
+/* @yesman/ui の component class を Tailwind v4 content scanner に拾わせる
+   (default では apps/web/src のみ scan、workspace package は対象外のため
+   monorepo workspace 配下を明示的に source として追加) */
+@source "../../../../packages/ui/src/**/*.{ts,tsx}";
+@source "../../../../packages/ui/dist/**/*.js";
+
+/* App-level overrides (必要に応じて追加) */
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}

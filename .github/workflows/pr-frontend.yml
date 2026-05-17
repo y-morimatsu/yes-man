@@ -1,0 +1,75 @@
+name: PR frontend
+on:
+  pull_request:
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "package.json"
+      - ".github/workflows/pr-frontend.yml"
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      # ultrathink Infra Design I2: pip + pnpm cache
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pnpm
+          key: deps-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - run: pnpm install --frozen-lockfile
+
+      # api-client (U7c)
+      - run: pnpm --filter @yesman/api-client build
+      - run: pnpm --filter @yesman/api-client lint
+      - run: pnpm --filter @yesman/api-client test
+      - run: pnpm --filter @yesman/api-client size
+
+      # ui (U7b)
+      - run: pnpm --filter @yesman/ui build
+      - run: pnpm --filter @yesman/ui lint
+      - run: pnpm --filter @yesman/ui test
+      - run: pnpm --filter @yesman/ui size
+
+      # web (U7a)
+      - name: Inject VITE_APP_VERSION
+        run: echo "VITE_APP_VERSION=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - run: pnpm --filter @yesman/web build
+        env:
+          # CI 環境では mock env (実 deploy では vars に置換)
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL || 'http://localhost:8000' }}
+          VITE_COGNITO_REGION: ${{ vars.VITE_COGNITO_REGION || 'ap-northeast-1' }}
+          VITE_COGNITO_USER_POOL_ID: ${{ vars.VITE_COGNITO_USER_POOL_ID || 'ap-northeast-1_ci' }}
+          VITE_COGNITO_APP_CLIENT_ID: ${{ vars.VITE_COGNITO_APP_CLIENT_ID || 'ci-client' }}
+          VITE_COGNITO_HOSTED_UI_URL: ${{ vars.VITE_COGNITO_HOSTED_UI_URL || 'https://ci.auth.example.com' }}
+      - run: pnpm --filter @yesman/web lint
+      - run: pnpm --filter @yesman/web test
+
+      # Storybook (U7b)
+      - run: pnpm --filter @yesman/ui build-storybook
+      - name: Upload Storybook artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: packages/ui/storybook-static
+
+      # Web dist
+      - name: Upload web dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist

@@ -1,0 +1,66 @@
+[project]
+name = "yesman-api"
+version = "0.1.0"
+description = "YesMan API - decision support service backend"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "sqlmodel>=0.0.16",
+    "sqlalchemy[asyncio]>=2.0.27",
+    "asyncpg>=0.29",
+    "greenlet>=3.0",                     # sqlalchemy async 用
+    "alembic>=1.13",
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    "httpx>=0.27",
+    "aws-xray-sdk>=2.13",
+    "boto3>=1.34",
+    # U3 / auth
+    "pyjwt[crypto]>=2.9,<3.0",
+    "structlog>=24.4",
+    "email-validator>=2.2",              # EmailStr 用
+    "starlette>=0.32",                   # _LazyAuthMiddleware の scope["app"] 依存
+    "python-multipart>=0.0.9",           # U6 voice STT の UploadFile/Form 依存 (FastAPI 要求)
+    # U4 / decision
+    "litellm>=1.55,<2.0",                # Bedrock 抽象化、Guardrails サポートは 1.55+
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=4.1",
+    "hypothesis>=6.99",
+    "ruff>=0.3",
+    "mypy>=1.9",
+    "types-python-dateutil",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: requires running Docker PostgreSQL",
+    "property: Hypothesis PBT (slow)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

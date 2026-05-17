@@ -1,0 +1,32 @@
+name: Load test (manual trigger)
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: "k6 scenario (decision-throughput / sse-concurrent / persona-list)"
+        required: true
+        default: "decision-throughput"
+        type: choice
+        options:
+          - decision-throughput
+          - sse-concurrent
+          - persona-list
+      api_url:
+        description: "Target API URL"
+        required: false
+        default: "http://localhost:8000"
+
+jobs:
+  load:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: grafana/setup-k6-action@v1
+
+      - name: Run k6 scenario
+        run: k6 run tests/load/scenarios/${{ inputs.scenario }}.js
+        env:
+          API_URL: ${{ inputs.api_url }}

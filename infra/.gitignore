@@ -1,0 +1,25 @@
+# CDK
+cdk.out/
+.cdk.staging/
+
+# TypeScript build artifacts
+*.js
+*.d.ts
+!jest.config.js
+*.tsbuildinfo
+
+# Node
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,19 @@
+{
+  "app": "npx tsx bin/yesman.ts",
+  "watch": {
+    "include": ["**"],
+    "exclude": [
+      "README.md",
+      "RUNBOOK.md",
+      "cdk.out",
+      "**/*.test.ts",
+      "**/__snapshots__/**",
+      "node_modules"
+    ]
+  },
+  "context": {
+    "envName": "prod",
+    "cloudfrontPrefixListId": "pl-XXXXXXXX",
+    "@aws-cdk/aws-iam:minimizePolicies": true
+  }
+}
