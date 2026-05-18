@@ -74,6 +74,8 @@ class AppConfig(BaseSettings):
     # email-validator>=2.2 が .local 等の reserved TLD を弾くため example.com を採用
     mock_user_email: EmailStr = "test@example.com"  # type: ignore[assignment]
     mock_auto_user: bool = False
+    # MOCK 起動時にデモ用の過去 30 日履歴を mock_user_sub に投入する (Yes 比率推移グラフの可視化用)
+    mock_seed_demo_decisions: bool = False
 
     cors_allowed_origins: list[str] = Field(default_factory=list)
     auth_bypass_paths_extra: list[str] = Field(default_factory=list)

@@ -111,6 +111,127 @@ class MockStore:
                 is_builtin=True,
             )
 
+    def seed_demo_decisions(self, user_id: UUID, days: int = 30) -> int:
+        """デモ用の過去 N 日 (default 30) の Yes/No 決定履歴 + PreferenceProfile を投入。
+
+        Yes 比率が時間と共に漸進的に上昇する (30% → 95%) パターンで、
+        ScoreLineChart の右肩上がりトレンドを可視化する用途。
+        seed は固定 (random.Random(42)) で再現可能。
+        既に当該 user_id の decision が存在する場合は冪等に skip。
+        PreferenceProfile は builder.apply_yes/no を流用して構築。
+        """
+        import random
+        from datetime import timedelta
+        from uuid import uuid4
+
+        # 冪等: 既存 decision があれば再投入しない
+        if any(d.user_id == user_id for d in self.decisions.values()):
+            return 0
+
+        # Profile FK 整合 (Mock では FK 強制無いが API パスとの整合のため)
+        if user_id not in self.profiles:
+            self.profiles[user_id] = Profile(user_id=user_id, email="demo@yesman.internal")
+
+        rng = random.Random(42)
+        now = _utcnow()
+        # ドメインごとに input サンプルを束ねる (PreferenceProfile の accepted_patterns に domain 多様性を出す)
+        domain_inputs: list[tuple[str, str]] = [
+            ("daily", "今日のランチを決めて"),
+            ("daily", "夕飯のメニューを決めて"),
+            ("daily", "今日の運動を決めて"),
+            ("entertainment", "観る映画を選んで"),
+            ("entertainment", "次に読む本を選んで"),
+            ("entertainment", "聴く音楽を提案して"),
+            ("planning", "週末の予定を提案して"),
+            ("planning", "次の旅行先を提案して"),
+            ("planning", "新しい趣味を提案して"),
+        ]
+        persona_specs = [
+            ("慎重派", "リスクを検討した結果、これで進めるべきです"),
+            ("楽観派", "きっと うまくいきます！"),
+            ("効率派", "最短ルートはこれです"),
+        ]
+        seeded_decisions: list[Decision] = []
+        for i in range(days):
+            day_offset = days - 1 - i  # 0 = 古い、days-1 = 今日
+            # Yes 比率を 0.30 → 0.95 へ漸進的に上昇 (右肩上がりトレンド)
+            target_yes_ratio = 0.30 + (i / max(days - 1, 1)) * 0.65
+            n_decisions = rng.randint(2, 5)
+            for j in range(n_decisions):
+                choice = "yes" if rng.random() < target_yes_ratio else "no"
+                created_at = now - timedelta(
+                    days=day_offset,
+                    hours=rng.randint(8, 22),
+                    minutes=rng.randint(0, 59),
+                )
+                domain, input_text = rng.choice(domain_inputs)
+                # persona_outputs は builder._build_pattern が
+                # persona_outputs["utterances"][*]["persona_name"] を読むため、
+                # utterances リスト構造で投入する
+                utterances = [
+                    {"persona_name": name, "text": text}
+                    for name, text in persona_specs
+                ]
+                decision = Decision(
+                    id=uuid4(),
+                    user_id=user_id,
+                    domain_classification=domain,
+                    user_input=input_text,
+                    user_input_hash=f"demo-seed-{i}-{j:02d}",
+                    proposal_text="（デモ用の合議結論）",
+                    persona_outputs={"utterances": utterances},
+                    user_choice=choice,
+                    no_attempt_count=0 if choice == "yes" else rng.randint(1, 3),
+                    llm_provider="mock",
+                    selected_persona_ids=[],
+                    created_at=created_at,
+                )
+                self.decisions[decision.id] = decision
+                seeded_decisions.append(decision)
+
+        # PreferenceProfile を Decision からインクリメンタル構築
+        # (実運用では非同期 learning consumer が同様の処理を行う)
+        from yesman_api.domain.learning.builder import apply_no, apply_yes
+
+        profile = PreferenceProfile(user_id=user_id)
+        # 時系列順で apply (古い→新しい)
+        for d in sorted(seeded_decisions, key=lambda d: d.created_at):
+            if d.user_choice == "yes":
+                profile = apply_yes(profile, d)
+            elif d.user_choice == "no":
+                profile = apply_no(profile, d)
+
+        # デモ用 persona_style_preference の差別化:
+        # builder.apply_yes/no は全 persona 一括加算で clip 飽和するため、
+        # デモでは「ペルソナごとに Yes 含有率を変えた」相当のスコアを直接上書きし、
+        # bar graph に差を出す。実運用では learning consumer が自然な分散を生む。
+        profile.persona_style_preference = {
+            "慎重派": 0.72,
+            "楽観派": 0.91,
+            "効率派": 0.45,
+        }
+
+        # inferred_tags: domain と persona から推定タグを生成 (デモ用)
+        domain_counts: dict[str, int] = {}
+        for d in seeded_decisions:
+            if d.user_choice == "yes":
+                domain_counts[d.domain_classification] = (
+                    domain_counts.get(d.domain_classification, 0) + 1
+                )
+        top_domains = sorted(domain_counts, key=lambda k: -domain_counts[k])[:3]
+        top_personas = sorted(
+            profile.persona_style_preference.items(), key=lambda kv: -kv[1]
+        )[:2]
+        inferred_tags: list[str] = []
+        for domain in top_domains:
+            inferred_tags.append(f"{domain}領域での即決傾向")
+        for name, _score in top_personas:
+            inferred_tags.append(f"{name}スタイル親和性")
+        profile.inferred_tags = inferred_tags
+        self.preference_profiles[user_id] = profile
+
+        return len(seeded_decisions)
+
 
 # ============================================================
 # ProfileRepository

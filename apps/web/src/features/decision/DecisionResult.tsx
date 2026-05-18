@@ -103,9 +103,12 @@ export function DecisionResult({
         </div>
       )}
 
-      {/* INCEPTION B4: 3-line proposal card + SwipeChoice (swipe + fallback button) */}
+      {/* INCEPTION B4: 3-line proposal card + SwipeChoice (swipe + fallback button).
+          key={decisionId}: buffer swap で No 確定済 internal state (confirming/dx) を
+          持ち越さないよう、別案到着時は instance を強制 remount する. */}
       {proposal && !chosen && (
         <SwipeChoice
+          key={decisionId ?? "no-decision"}
           proposalText={proposal}
           onYes={() => handleChoose("yes")}
           onNo={() => handleChoose("no")}

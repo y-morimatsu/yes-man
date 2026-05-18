@@ -12,9 +12,12 @@ import { Button, Input } from "@yesman/ui";
 import { VoiceMicInput } from "../voice/VoiceMicInput";
 import { decisionReducer, initialState } from "./reducer";
 import { useDecisionStream } from "./useDecisionStream";
+import { usePrefetchedDecisions } from "./usePrefetchedDecisions";
 import { DecisionResult } from "./DecisionResult";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
 import { t } from "./strings";
+
+const PREFETCH_BUFFER_SIZE = 2;
 
 export default function DecisionPage() {
   const [state, dispatch] = useReducer(decisionReducer, initialState);
@@ -26,6 +29,9 @@ export default function DecisionPage() {
   // 最後に submit した user_input を保持 (regenerate で再利用、reducer state 透過には依存しない).
   const lastInputRef = useRef<string>("");
 
+  // No 採択時の待ち時間を消すための buffer (同じ user_input で別案を先 prefetch)
+  const prefetch = usePrefetchedDecisions({ bufferSize: PREFETCH_BUFFER_SIZE });
+
   const { startStream } = useDecisionStream({
     onStart: (id) => dispatch({ type: "onStart", decisionId: id }),
     onUtterance: (u) => dispatch({ type: "onUtterance", utterance: u }),
@@ -33,6 +39,13 @@ export default function DecisionPage() {
     onComplete: () => {
       dispatch({ type: "onComplete" });
       setRegenerating(false);
+      // proposal 確定したら、裏で別案を満タンまで prefetch (No 連打時の待ち時間消し)
+      const input = lastInputRef.current;
+      if (input) {
+        for (let i = 0; i < PREFETCH_BUFFER_SIZE; i++) {
+          prefetch.prefetchOne(input);
+        }
+      }
     },
     onSilence: (message) => dispatch({ type: "onSilence", message }),
     onError: (err) => {
@@ -48,19 +61,39 @@ export default function DecisionPage() {
     lastInputRef.current = state.input;
     setNoStage(0); // 新規 submit は No carry-forward を reset
     setRegenerating(false);
+    // 新規 submit のため、前のセッションの buffer を破棄
+    prefetch.clear();
     dispatch({ type: "start" });
     await startStream({ user_input: state.input });
   };
 
   /** INCEPTION Journey C: No 採択 → 自動再生成 + 段階的 microcopy.
-   *  DecisionResult からの callback、no_attempt_count を受けて新 stream を発火. */
+   *  DecisionResult からの callback、no_attempt_count を受けて新 stream を発火.
+   *
+   *  buffer に prefetch 済の別案があれば即時 swap (loading 演出スキップ).
+   *  なければ従来通り startStream で生成中 UI を表示する. */
   const handleNoChosen = async (count: number) => {
     const input = lastInputRef.current;
     if (!input) return;
     setNoStage(count);
+
+    const buffered = prefetch.pop();
+    if (buffered) {
+      // 即時 swap: completed → completed (新 decisionId / proposal で上書き)
+      dispatch({
+        type: "swapFromBuffer",
+        decisionId: buffered.decisionId,
+        utterances: buffered.utterances,
+        proposal: buffered.proposal,
+      });
+      // buffer 補充 (次の No 連打に備える)
+      prefetch.prefetchOne(input);
+      setRegenerating(false);
+      return;
+    }
+
+    // buffer 切れの fallback: 従来の同期 stream
     setRegenerating(true);
-    // dispatch("start") は state.status==="streaming" でガード入るが、
-    // 採択時点は completed → streaming へ遷移可能.
     dispatch({ type: "start" });
     await startStream({ user_input: input });
   };
@@ -70,6 +103,7 @@ export default function DecisionPage() {
     setNoStage(0);
     setRegenerating(false);
     lastInputRef.current = "";
+    prefetch.clear();
     dispatch({ type: "reset" });
   };
 

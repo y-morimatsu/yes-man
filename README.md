@@ -34,6 +34,7 @@
 - [🚀 主要機能](#-主要機能)
 - [🏗️ アーキテクチャ](#️-アーキテクチャ)
 - [🛠️ 技術スタック](#️-技術スタック)
+- [🚀 ローカル起動](#-ローカル起動)
 - [🗂️ データモデル (ER 図)](#️-データモデル-er-図)
 - [🔄 ユーザーフロー (シーケンス図)](#-ユーザーフロー-シーケンス図)
 - [📂 リポジトリ構成](#-リポジトリ構成)
@@ -401,6 +402,182 @@ flowchart TB
 
 > 💡 **Strategy + DI** によって、上記すべてのカテゴリで本番↔MOCK↔ローカルエミュレータを設定ファイルで切替可能です。
 > 例: `LLM_PROVIDER=ollama` でローカル LLM、`STORAGE_BACKEND=docker-postgres` でローカル PostgreSQL、`AUTH_BACKEND=mock` で AWS リソース不要の開発環境が完成。
+
+---
+
+## 🚀 ローカル起動
+
+API (FastAPI, port 8000) と Web (Vite, port 5173) を 2 プロセス並列起動します。LLM プロバイダーは `LLM_PROVIDER` env で 3 つから選択できます。
+
+### 共通: 事前準備
+
+```bash
+# 依存インストール (Node + Python)
+pnpm install
+cd apps/api && uv sync && cd ../..        # or: python -m venv .venv && pip install -e .
+
+# Web は AuthBypass で起動 (Mock User 自動ログイン)
+# → apps/web の起動 env は全モード共通、API のみ env が変わる
+```
+
+下記 3 モードはどれも **同じ Web 起動コマンド** を使います:
+
+```bash
+# Web (port 5173) — 全モード共通
+VITE_API_BASE_URL=http://localhost:8000 \
+VITE_AUTH_BYPASS=true \
+VITE_MOCK_USER_SUB=11111111-1111-1111-1111-111111111111 \
+VITE_MOCK_USER_EMAIL=test@example.com \
+VITE_COGNITO_REGION=ap-northeast-1 \
+VITE_COGNITO_USER_POOL_ID=ap-northeast-1_test \
+VITE_COGNITO_APP_CLIENT_ID=test \
+VITE_COGNITO_HOSTED_UI_URL=https://test.auth.example.com \
+VITE_APP_VERSION=local \
+pnpm --filter @yesman/web dev
+```
+
+API 起動は以下のいずれかを別ターミナルで実行してください。
+
+---
+
+### Mode 1: Mock LLM (推奨・最速、LLM 実呼び出しなし)
+
+完全オフラインで動作。CI / e2e / UI 確認用。応答は固定文・即時返答 (`<1s`)。
+
+```bash
+LLM_PROVIDER=mock \
+STORAGE_BACKEND=mock AUTH_BACKEND=mock VOICE_BACKEND=mock \
+EVENT_BACKEND=sync MOCK_AUTO_USER=true \
+LEARNING_CONSUMER_ENABLED=false \
+SILENCE_HASH_SALT=local-salt PERSONA_ANONYMIZER_SALT=local-persona-salt \
+CORS_ALLOWED_ORIGINS='["http://localhost:5173"]' \
+pnpm --filter @yesman/api start
+```
+
+> 📊 **デモ用過去 30 日履歴をシード** したい場合は `MOCK_SEED_DEMO_DECISIONS=true` を追加してください。委任度スコアの推移グラフが右肩上がりトレンドで描画されます (Yes 比率 30% → 95%)。
+
+---
+
+### Mode 2: Claude CLI (Claude Code 公式 CLI を subprocess 起動)
+
+開発機にインストール済の `claude` コマンドを呼び出します。**Anthropic API key 不要** (OAuth subscription / keychain 認証を流用)。Claude Sonnet / Opus を実際に使った合議体験ができます。
+
+事前確認:
+
+```bash
+which claude          # → /Users/<user>/.local/bin/claude など
+claude --version      # → 2.x 以上を推奨
+```
+
+起動:
+
+```bash
+LLM_PROVIDER=claude-cli \
+CLAUDE_CLI_PATH=$(which claude) \
+CLAUDE_CLI_MODEL=sonnet \
+STORAGE_BACKEND=mock AUTH_BACKEND=mock VOICE_BACKEND=mock \
+EVENT_BACKEND=sync MOCK_AUTO_USER=true \
+LEARNING_CONSUMER_ENABLED=false \
+SILENCE_HASH_SALT=local-salt PERSONA_ANONYMIZER_SALT=local-persona-salt \
+CORS_ALLOWED_ORIGINS='["http://localhost:5173"]' \
+pnpm --filter @yesman/api start
+```
+
+| 環境変数 | 説明 | 例 |
+|---|---|---|
+| `CLAUDE_CLI_PATH` | `claude` バイナリのパス | `$(which claude)` |
+| `CLAUDE_CLI_MODEL` | model alias または完全名 | `sonnet` / `opus` / `claude-sonnet-4-6` |
+| `CLAUDE_CLI_EXTRA_ARGS` | 追加 CLI 引数 (JSON 配列) | `["--allowed-tools", "Read"]` |
+
+**特性:**
+- 初回 subprocess cold start ~1s + LLM 生成 5〜30s
+- SSE streaming はテキストモード (256 byte chunk 単位で擬似ストリーミング)
+- No 連打時の待ち時間は **フロント側の prefetch buffer** で吸収 (`PREFETCH_BUFFER_SIZE=2`)
+- `--system-prompt` で Claude Code デフォルトプロンプトを完全置換 (合議用 pure LLM として動作)
+
+---
+
+### Mode 3: LiteLLM (Bedrock / OpenAI / Anthropic / Ollama 等を統一)
+
+[LiteLLM](https://github.com/BerriAI/litellm) Proxy 経由で OpenAI 互換 API を叩きます。Bedrock / OpenAI / Anthropic / Google / Ollama などを **単一 env 切替** で使い分け可能。
+
+事前準備 (LiteLLM Proxy の起動):
+
+```bash
+pip install 'litellm[proxy]'
+# config.yaml の例 (Bedrock Claude を OpenAI 互換 API として公開)
+litellm --config litellm-config.yaml --port 4000
+```
+
+`litellm-config.yaml` 例:
+
+```yaml
+model_list:
+  - model_name: yesman-llm
+    litellm_params:
+      model: bedrock/anthropic.claude-3-5-sonnet-20240620-v1:0
+      aws_region_name: ap-northeast-1
+  - model_name: yesman-llm-fallback
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY
+litellm_settings:
+  fallbacks: [{"yesman-llm": ["yesman-llm-fallback"]}]
+```
+
+起動:
+
+```bash
+LLM_PROVIDER=litellm \
+LITELLM_BASE_URL=http://localhost:4000 \
+LITELLM_API_KEY=sk-dummy \
+LITELLM_MODEL=yesman-llm \
+STORAGE_BACKEND=mock AUTH_BACKEND=mock VOICE_BACKEND=mock \
+EVENT_BACKEND=sync MOCK_AUTO_USER=true \
+LEARNING_CONSUMER_ENABLED=false \
+SILENCE_HASH_SALT=local-salt PERSONA_ANONYMIZER_SALT=local-persona-salt \
+CORS_ALLOWED_ORIGINS='["http://localhost:5173"]' \
+pnpm --filter @yesman/api start
+```
+
+| 環境変数 | 説明 | 例 |
+|---|---|---|
+| `LITELLM_BASE_URL` | LiteLLM Proxy のエンドポイント | `http://localhost:4000` |
+| `LITELLM_API_KEY` | LiteLLM Proxy への bearer (Proxy 側で任意設定) | `sk-dummy` |
+| `LITELLM_MODEL` | `litellm-config.yaml` の `model_name` | `yesman-llm` |
+
+**特性:**
+- 真のストリーミング対応 (OpenAI API `stream=True` 準拠)
+- Bedrock Guardrails と組み合わせる場合は `LLM_PROVIDER=bedrock` を直接使う方が良い (Mode 4 として将来追加予定)
+- フォールバックチェーン (Bedrock → OpenAI → Anthropic 等) を Proxy 側で構成可能
+
+---
+
+### モード切替の早見表
+
+| Mode | LLM_PROVIDER | 認証 | 速度 | デモ向き |
+|---|---|---|---|---|
+| **Mock** | `mock` | 不要 | <1s 即時 | ✅ UI 確認 / e2e |
+| **Claude CLI** | `claude-cli` | Claude Code subscription | 5〜30s | ✅ 実 LLM 体験 |
+| **LiteLLM** | `litellm` | LiteLLM Proxy 側で構成 | 3〜20s | ✅ マルチプロバイダ評価 |
+
+### 動作確認 URL
+
+| エンドポイント | URL |
+|---|---|
+| Web (PWA) | http://localhost:5173/ |
+| API (OpenAPI Swagger) | http://localhost:8000/docs |
+| Score (委任度) ダッシュボード | http://localhost:5173/score |
+| Persona 共有プール | http://localhost:5173/personas |
+
+### よくあるトラブル
+
+| 症状 | 原因 | 対処 |
+|---|---|---|
+| `AuthUserPoolException: Auth UserPool not configured` | `VITE_AUTH_BYPASS` 不足 | Web 側 env に `VITE_AUTH_BYPASS=true` を追加 |
+| CORS preflight 400 | `CORS_ALLOWED_ORIGINS` に web origin が無い | `'["http://localhost:5173"]'` を API 起動 env に |
+| `claude CLI not found` | `CLAUDE_CLI_PATH` が見つからない | `which claude` で絶対パス取得し env に指定 |
+| LiteLLM 接続失敗 | Proxy 未起動 | `litellm --config ... --port 4000` を別ターミナルで起動 |
 
 ---
 

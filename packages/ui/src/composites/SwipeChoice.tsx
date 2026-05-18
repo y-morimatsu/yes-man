@@ -13,7 +13,7 @@
  * - WCAG 2.5.1 Pointer Gestures: 単一 tap で操作可能な fallback button を併設
  * - haptic feedback: navigator.vibrate(20) で確定時のみ短く振動
  */
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useSwipeable } from "react-swipeable";
 import { Button } from "../primitives/Button";
 
@@ -52,6 +52,18 @@ export function SwipeChoice({
 }: SwipeChoiceProps) {
   const [dx, setDx] = useState(0);
   const [confirming, setConfirming] = useState<"yes" | "no" | null>(null);
+
+  // 防御的 reset: proposalText が変わったら (No 採択後の別案 swap 等で) confirming/dx を初期化.
+  // 上位で <SwipeChoice key={decisionId}> が付いていれば本来 instance ごと remount されるが、
+  // key 付け忘れの場合のフェイルセーフとして残す.
+  const prevProposalRef = useRef(proposalText);
+  useEffect(() => {
+    if (prevProposalRef.current !== proposalText) {
+      prevProposalRef.current = proposalText;
+      setDx(0);
+      setConfirming(null);
+    }
+  }, [proposalText]);
 
   const handlers = useSwipeable({
     onSwiping: ({ deltaX }) => {

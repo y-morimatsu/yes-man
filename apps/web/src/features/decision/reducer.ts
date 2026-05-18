@@ -41,7 +41,14 @@ export type DecisionAction =
   | { type: "onComplete" }
   | { type: "onSilence"; message: string }
   | { type: "onError"; error: string }
-  | { type: "reset" };
+  | { type: "reset" }
+  // 事前 prefetch した別案で即時 swap (loading 演出なし、completed に直接遷移)
+  | {
+      type: "swapFromBuffer";
+      decisionId: string;
+      utterances: Utterance[];
+      proposal: string;
+    };
 
 export const initialState: DecisionState = { status: "idle", input: "" };
 
@@ -100,6 +107,20 @@ export function decisionReducer(
 
     case "reset":
       return { status: "idle", input: "" };
+
+    case "swapFromBuffer": {
+      // No 採択後の prefetch 済み別案で即時 swap.
+      // 直前の状態が completed (proposal 表示中) であることが前提だが、
+      // 念のため input を残しつつ completed に強制遷移する.
+      const input = "input" in state ? state.input : "";
+      return {
+        status: "completed",
+        decisionId: action.decisionId,
+        input,
+        utterances: action.utterances,
+        proposal: action.proposal,
+      };
+    }
 
     default: {
       // ultrathink U7d NFR Design I2: exhaustive check

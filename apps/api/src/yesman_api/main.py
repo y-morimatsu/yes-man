@@ -127,6 +127,17 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         )
         await consumer_supervisor.start()
 
+    # Mock backend + MOCK_SEED_DEMO_DECISIONS=true で、デモ用の過去 30 日履歴を投入
+    # (ScoreLineChart の右肩上がりトレンド可視化用)
+    if config.mock_seed_demo_decisions and repo_factory.mock_store is not None:
+        seeded = repo_factory.mock_store.seed_demo_decisions(user_id=config.mock_user_sub)
+        if seeded > 0:
+            get_logger("startup").info(
+                "mock.seed_demo_decisions",
+                user_id=str(config.mock_user_sub),
+                seeded_count=seeded,
+            )
+
     app.state.repo_factory = repo_factory
     app.state.auth_factory = auth_factory
     app.state.auth_adapter = auth_adapter
@@ -195,7 +206,7 @@ def create_app() -> FastAPI:
         CORSMiddleware,
         allow_origins=config.cors_allowed_origins,
         allow_credentials=False,
-        allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=[
             "Authorization",
             "Content-Type",
