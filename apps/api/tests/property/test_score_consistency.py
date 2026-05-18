@@ -1,7 +1,7 @@
 """PBT: score consistency 不変条件 (U-Test FD §4.2).
 
-不変条件:
-- ratio = no_count / total (total > 0)
+不変条件 (Yes 比率モデル):
+- ratio = (total - no_count) / total (total > 0)
 - ratio is None when total == 0
 - 0 <= ratio <= 1
 """
@@ -15,7 +15,7 @@ from hypothesis import strategies as st
 )
 @settings(max_examples=100)
 def test_score_ratio_invariant(no_count: int, total: int):
-    """ratio is None iff total == 0、それ以外は no_count / total."""
+    """ratio is None iff total == 0、それ以外は (total - no_count) / total (Yes 比率)."""
     if no_count > total:
         # invariant: no_count cannot exceed total
         return
@@ -23,7 +23,7 @@ def test_score_ratio_invariant(no_count: int, total: int):
     if total == 0:
         ratio = None
     else:
-        ratio = no_count / total
+        ratio = (total - no_count) / total
 
     if total == 0:
         assert ratio is None

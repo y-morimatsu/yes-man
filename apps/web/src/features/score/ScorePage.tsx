@@ -1,5 +1,5 @@
 /**
- * ScorePage — 主体性スコア表示 (U7d FD §5 + ultrathink Imp2: threshold UI).
+ * ScorePage — 委任度スコア表示 (Yes 比率モデル、U7d FD §5 + ultrathink Imp2: threshold UI).
  */
 import { Card, Spinner } from "@yesman/ui";
 import { useScore } from "./useScore";
@@ -37,10 +37,10 @@ export default function ScorePage() {
           </p>
         )}
         {level === "warning" && (
-          <p className="text-warning mb-2">{t("warningHighNoRatio")}</p>
+          <p className="text-warning mb-2">{t("warningLowYesRatio")}</p>
         )}
 
-        {/* INCEPTION screen-04: 大きな % 表示 (委任度 = No 比率) + ラベル */}
+        {/* INCEPTION screen-04: 大きな % 表示 (委任度 = Yes 比率) + ラベル */}
         <div className="flex flex-col items-center py-4">
           <div className="font-mono text-6xl font-bold text-warning">
             {ratioPercent !== null ? `${ratioPercent}%` : "0%"}
@@ -77,7 +77,7 @@ export default function ScorePage() {
         {t("footnote")}
       </p>
 
-      {/* drawio B6: 逆説的設計の明示 (主体性スコア = 元の name)、起動時 onboarding でも提示済 */}
+      {/* スコアの解釈ガイド (Yes 比率モデルの説明) */}
       <p className="text-center text-xs italic text-neutral-500">
         {t("paradoxNote")}
       </p>

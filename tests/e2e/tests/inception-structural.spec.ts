@@ -115,13 +115,12 @@ test.describe("INCEPTION Pink Nudge Banner (drawio B4 下部 nudge)", () => {
 });
 
 test.describe("INCEPTION Score Dashboard (drawio Score 拡張)", () => {
-  test("Score page に「主体性スコア」副題 + 説明テキスト (逆説的設計の明示)", async ({
+  test("Score page に Yes 比率モデルの解説テキスト (委任度の可視化)", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/score");
-    // 旧来コピー「主体性スコア」も補助情報として表示すべき (drawio Score-Yes 演出参照)
     await expect(
-      page.getByText(/逆説的設計/).first(),
+      page.getByText(/委ねているかを可視化/).first(),
     ).toBeVisible();
   });
 

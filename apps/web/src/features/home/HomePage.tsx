@@ -21,7 +21,7 @@ export default function HomePage() {
           本作品は AI が人間の主体性を奪う体験を演出する作品です。
         </p>
         <p className="text-sm text-neutral-700 leading-relaxed">
-          「主体性スコア」「沈黙演出」 などは意図的な
+          「委任度スコア」「沈黙演出」 などは意図的な
           <strong className="font-semibold text-brand-700">逆説的設計</strong>
           です。
         </p>

@@ -1,4 +1,4 @@
-"""GET /v1/scores/me — 主体性スコア (FR-SCORE-01〜04)."""
+"""GET /v1/scores/me — 委任度スコア (FR-SCORE-01〜04、ratio = Yes 比率)."""
 from __future__ import annotations
 
 from uuid import UUID

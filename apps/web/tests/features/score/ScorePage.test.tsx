@@ -31,7 +31,7 @@ describe("ScorePage", () => {
   afterAll(() => server.close());
 
   it("renders danger UI when no_count >= 5", async () => {
-    setup({ no_count: 6, total: 10, ratio: 0.6, message: "Test message" });
+    setup({ no_count: 6, total: 10, ratio: 0.4, message: "Test message" });
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
     });
@@ -39,7 +39,7 @@ describe("ScorePage", () => {
   });
 
   it("renders ok UI without warning when no_count low", async () => {
-    setup({ no_count: 1, total: 10, ratio: 0.1, message: "OK" });
+    setup({ no_count: 1, total: 10, ratio: 0.9, message: "OK" });
     await waitFor(() => {
       expect(screen.getByText("OK")).toBeInTheDocument();
     });

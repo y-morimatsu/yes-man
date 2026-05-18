@@ -112,11 +112,11 @@ test.describe("Journey B: Decision Experience (5 screens)", () => {
     ).toBeVisible();
   });
 
-  test("B6 Score Dashboard: 委任度 + paradox + AI コメント", async ({ page }) => {
+  test("B6 Score Dashboard: 委任度 (Yes 比率) + 解説 + AI コメント", async ({ page }) => {
     await gotoAuthenticated(page, "/score");
     await expect(page.getByRole("heading", { name: /委任度 スコア/ })).toBeVisible();
-    await expect(page.getByText(/委任度 \(No 比率\)/)).toBeVisible();
-    await expect(page.getByText(/逆説的設計/).first()).toBeVisible();
+    await expect(page.getByText(/委任度 \(Yes 比率\)/)).toBeVisible();
+    await expect(page.getByText(/委ねているかを可視化/).first()).toBeVisible();
   });
 
   test("B8 議論履歴: 議論を見る click で utterance 全表示 (overlay or expand)", async ({

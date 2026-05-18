@@ -122,19 +122,19 @@ test.describe("INCEPTION Score Dashboard (screen-04 score-dashboard.svg)", () =>
     ).toBeVisible();
   });
 
-  test("「委任度 (No 比率)」ラベル表示 (INCEPTION 中核 metric label)", async ({
+  test("「委任度 (Yes 比率)」ラベル表示 (INCEPTION 中核 metric label)", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/score");
-    await expect(page.getByText(/委任度 \(No 比率\)/)).toBeVisible();
+    await expect(page.getByText(/委任度 \(Yes 比率\)/)).toBeVisible();
   });
 
-  test("「スコアが ひくいほど AI を信頼できています」 footnote 表示 (INCEPTION 説明文)", async ({
+  test("「スコアが たかいほど AI を信頼できています」 footnote 表示 (INCEPTION 説明文)", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/score");
     await expect(
-      page.getByText(/スコアが ひくいほど AI を信頼できています/),
+      page.getByText(/スコアが たかいほど AI を信頼できています/),
     ).toBeVisible();
   });
 

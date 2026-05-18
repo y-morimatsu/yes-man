@@ -62,7 +62,7 @@ class NudgeResponse(BaseModel):
 class ScoreResponse(BaseModel):
     no_count: int
     total: int
-    ratio: float | None
+    ratio: float | None  # Yes 比率 = (total - no_count) / total、total=0 → None
     message: str
 
 

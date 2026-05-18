@@ -1,4 +1,4 @@
-"""AutonomyScorer — total=0 null / pending 除外 / 通常 ratio."""
+"""AutonomyScorer — total=0 null / pending 除外 / Yes 比率 ratio."""
 from __future__ import annotations
 
 from uuid import uuid4
@@ -26,16 +26,16 @@ async def test_total_zero_returns_null_ratio():
 
 
 @pytest.mark.asyncio
-async def test_low_ratio_message():
+async def test_high_yes_ratio_message():
     scorer = AutonomyScorer(decision_repo=_StubRepo(no_count=1, total=10))
     result = await scorer.compute(uuid4())
-    assert result.ratio == 0.1
+    assert result.ratio == 0.9
     assert "信頼" in result.message
 
 
 @pytest.mark.asyncio
-async def test_high_ratio_message():
+async def test_low_yes_ratio_message():
     scorer = AutonomyScorer(decision_repo=_StubRepo(no_count=7, total=10))
     result = await scorer.compute(uuid4())
-    assert result.ratio == 0.7
-    assert "No" in result.message
+    assert result.ratio == 0.3
+    assert "Yes" in result.message
