@@ -29,7 +29,8 @@ export interface components {
     ChoiceResponse: { decision_id: string; nudge_url: string; no_attempt_count: number };
     NudgeResponse: { status: "pending" | "ready" | "failed"; message?: string | null };
     // U4 score
-    ScoreResponse: { no_count: number; total: number; ratio: number | null; message: string };
+    ScoreHistoryPointResponse: { date: string; yes_ratio: number | null; total: number };
+    ScoreResponse: { no_count: number; total: number; ratio: number | null; message: string; history: { date: string; yes_ratio: number | null; total: number }[] };
     // U5 preference
     PreferenceProfileResponse: any;
     PreferenceProfileUpdateRequest: any;

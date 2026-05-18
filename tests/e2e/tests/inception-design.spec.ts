@@ -138,16 +138,15 @@ test.describe("INCEPTION Score Dashboard (screen-04 score-dashboard.svg)", () =>
     ).toBeVisible();
   });
 
-  test("Score numeric は accent warning #FFA726 (INCEPTION §1.2 主体性スコア用)", async ({
+  test("Score radial chart numeric は purple #9F88C8 (INCEPTION 04-score-dashboard.svg 準拠)", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/score");
-    const numericValue = page.locator("dd.text-warning, .text-warning").first();
-    await expect(numericValue).toBeVisible();
-    const color = await numericValue.evaluate(
-      (el) => getComputedStyle(el).color,
-    );
-    expect(color).toBe("rgb(255, 167, 38)");
+    // ScoreRadialChart: SVG <text fill="#9F88C8"> で数字を描画
+    const numericText = page.getByRole("img", { name: /委任度/ }).locator("text").first();
+    await expect(numericText).toBeVisible();
+    const fill = await numericText.evaluate((el) => el.getAttribute("fill"));
+    expect(fill).toBe("#9F88C8");
   });
 });
 

@@ -93,12 +93,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2025,
+                      "duration": 1449,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:26.613Z",
+                      "startTime": "2026-05-18T07:22:40.097Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -127,12 +127,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1982,
+                      "duration": 1447,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:26.618Z",
+                      "startTime": "2026-05-18T07:22:40.100Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -161,12 +161,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 2165,
+                      "duration": 1727,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:26.619Z",
+                      "startTime": "2026-05-18T07:22:40.107Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -212,12 +212,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1965,
+                      "duration": 1464,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:26.611Z",
+                      "startTime": "2026-05-18T07:22:40.098Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -243,15 +243,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1292,
+                      "duration": 1468,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:28.858Z",
+                      "startTime": "2026-05-18T07:22:41.837Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -277,15 +277,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1687,
+                      "duration": 1619,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:28.896Z",
+                      "startTime": "2026-05-18T07:22:41.837Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -328,15 +328,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1391,
+                      "duration": 1390,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:28.932Z",
+                      "startTime": "2026-05-18T07:22:41.877Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -365,12 +365,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1323,
+                      "duration": 1293,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:29.065Z",
+                      "startTime": "2026-05-18T07:22:42.117Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -399,12 +399,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1209,
+                      "duration": 1243,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:30.170Z",
+                      "startTime": "2026-05-18T07:22:43.275Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -430,15 +430,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1265,
+                      "duration": 1216,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:30.348Z",
+                      "startTime": "2026-05-18T07:22:43.324Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -467,12 +467,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1261,
+                      "duration": 1140,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:30.394Z",
+                      "startTime": "2026-05-18T07:22:43.421Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -498,15 +498,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1264,
+                      "duration": 1298,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:30.601Z",
+                      "startTime": "2026-05-18T07:22:43.475Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -535,12 +535,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1452,
+                      "duration": 1524,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:31.385Z",
+                      "startTime": "2026-05-18T07:22:44.525Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -566,15 +566,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1302,
+                      "duration": 1306,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:31.626Z",
+                      "startTime": "2026-05-18T07:22:44.549Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -603,12 +603,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1536,
+                      "duration": 1484,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:31.663Z",
+                      "startTime": "2026-05-18T07:22:44.574Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -651,15 +651,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1338,
+                      "duration": 1239,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:31.881Z",
+                      "startTime": "2026-05-18T07:22:44.790Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -685,15 +685,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1313,
+                      "duration": 1306,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:32.854Z",
+                      "startTime": "2026-05-18T07:22:45.872Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -722,12 +722,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 682,
+                      "duration": 676,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:32.951Z",
+                      "startTime": "2026-05-18T07:22:46.040Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -753,15 +753,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1348,
+                      "duration": 1225,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:33.220Z",
+                      "startTime": "2026-05-18T07:22:46.062Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -795,15 +795,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1311,
+                      "duration": 1211,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:33.229Z",
+                      "startTime": "2026-05-18T07:22:46.078Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -818,7 +818,7 @@
             },
             {
               "title": "B7 Live SSE: 🔴 LIVE badge + persona icon utterances",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -831,18 +831,116 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1382,
-                      "errors": [],
+                      "status": "failed",
+                      "duration": 92332,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50",
+                        "location": {
+                          "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                          "column": 50,
+                          "line": 80
+                        },
+                        "snippet": "  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                            "column": 50,
+                            "line": 80
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n\n  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:33.645Z",
+                      "startTime": "2026-05-18T07:22:46.722Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                        "column": 50,
+                        "line": 80
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 92360,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50",
+                        "location": {
+                          "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                          "column": 50,
+                          "line": 80
+                        },
+                        "snippet": "  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                            "column": 50,
+                            "line": 80
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n\n  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-05-18T07:24:19.354Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                        "column": 50,
+                        "line": 80
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "095776dff2e7e4cd6161-7195626b56d11b13bd31",
@@ -863,15 +961,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1356,
+                      "duration": 1404,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:34.173Z",
+                      "startTime": "2026-05-18T07:22:47.184Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -897,15 +995,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1227,
+                      "duration": 1282,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:34.546Z",
+                      "startTime": "2026-05-18T07:22:47.299Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -934,12 +1032,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1435,
+                      "duration": 1432,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:34.578Z",
+                      "startTime": "2026-05-18T07:22:47.318Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -973,15 +1071,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1344,
+                      "duration": 1398,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:35.039Z",
+                      "startTime": "2026-05-18T07:22:48.595Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1007,15 +1105,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1682,
+                      "duration": 1701,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:35.533Z",
+                      "startTime": "2026-05-18T07:22:48.595Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1041,15 +1139,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1709,
+                      "duration": 1350,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:35.778Z",
+                      "startTime": "2026-05-18T07:22:48.758Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1083,15 +1181,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1453,
+                      "duration": 1411,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:36.018Z",
+                      "startTime": "2026-05-18T07:22:49.998Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1117,15 +1215,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1504,
+                      "duration": 1457,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:36.389Z",
+                      "startTime": "2026-05-18T07:22:50.118Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1151,15 +1249,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1455,
+                      "duration": 1412,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:37.219Z",
+                      "startTime": "2026-05-18T07:22:50.302Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1193,15 +1291,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1204,
+                      "duration": 1107,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:37.477Z",
+                      "startTime": "2026-05-18T07:22:51.415Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1227,15 +1325,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1297,
+                      "duration": 1294,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:37.492Z",
+                      "startTime": "2026-05-18T07:22:51.582Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1261,15 +1359,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1378,
+                      "duration": 1452,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:37.903Z",
+                      "startTime": "2026-05-18T07:22:51.719Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1298,12 +1396,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1341,
+                      "duration": 1411,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:38.680Z",
+                      "startTime": "2026-05-18T07:22:52.529Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1349,12 +1447,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1289,
+                      "duration": 1228,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:38.700Z",
+                      "startTime": "2026-05-18T07:22:52.896Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1383,12 +1481,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1246,
+                      "duration": 1209,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:38.809Z",
+                      "startTime": "2026-05-18T07:22:53.186Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1414,15 +1512,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1272,
+                      "duration": 1222,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:39.291Z",
+                      "startTime": "2026-05-18T07:22:53.957Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1451,12 +1549,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1243,
+                      "duration": 1263,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:39.995Z",
+                      "startTime": "2026-05-18T07:22:54.132Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1482,15 +1580,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1305,
+                      "duration": 1261,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:40.041Z",
+                      "startTime": "2026-05-18T07:22:54.402Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1524,15 +1622,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1294,
+                      "duration": 1268,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:40.064Z",
+                      "startTime": "2026-05-18T07:22:55.188Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1558,15 +1656,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1251,
+                      "duration": 1212,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:40.569Z",
+                      "startTime": "2026-05-18T07:22:55.403Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1600,15 +1698,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1187,
+                      "duration": 1239,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:41.246Z",
+                      "startTime": "2026-05-18T07:22:55.673Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1637,12 +1735,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1264,
+                      "duration": 1157,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:41.351Z",
+                      "startTime": "2026-05-18T07:22:56.464Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1668,15 +1766,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1262,
+                      "duration": 1143,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:41.369Z",
+                      "startTime": "2026-05-18T07:22:56.621Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1710,15 +1808,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1318,
+                      "duration": 1216,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:41.824Z",
+                      "startTime": "2026-05-18T07:22:56.917Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1744,15 +1842,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1335,
+                      "duration": 1185,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:42.439Z",
+                      "startTime": "2026-05-18T07:22:57.629Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1778,15 +1876,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1746,
+                      "duration": 1237,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:42.621Z",
+                      "startTime": "2026-05-18T07:22:57.769Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1800,7 +1898,7 @@
               "column": 3
             },
             {
-              "title": "Score numeric は accent warning #FFA726 (INCEPTION §1.2 主体性スコア用)",
+              "title": "Score radial chart numeric は purple #9F88C8 (INCEPTION 04-score-dashboard.svg 準拠)",
               "ok": true,
               "tags": [],
               "tests": [
@@ -1815,12 +1913,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1249,
+                      "duration": 1216,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:42.636Z",
+                      "startTime": "2026-05-18T07:22:58.137Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1828,7 +1926,7 @@
                   "status": "expected"
                 }
               ],
-              "id": "8f3fe1a53c4d9d064a59-58243178417bfdd5e1eb",
+              "id": "8f3fe1a53c4d9d064a59-521fc1c8900c55d255d0",
               "file": "inception-design.spec.ts",
               "line": 141,
               "column": 3
@@ -1838,7 +1936,7 @@
         {
           "title": "INCEPTION Proposal Card + Yes/No (screen-03 proposal-card.svg)",
           "file": "inception-design.spec.ts",
-          "line": 154,
+          "line": 153,
           "column": 6,
           "specs": [
             {
@@ -1854,15 +1952,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1327,
+                      "duration": 1383,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:43.147Z",
+                      "startTime": "2026-05-18T07:22:58.818Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1872,7 +1970,7 @@
               ],
               "id": "8f3fe1a53c4d9d064a59-8b7d287845f08069f5e3",
               "file": "inception-design.spec.ts",
-              "line": 155,
+              "line": 154,
               "column": 3
             },
             {
@@ -1891,12 +1989,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1407,
+                      "duration": 1471,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:43.779Z",
+                      "startTime": "2026-05-18T07:22:59.011Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1906,7 +2004,7 @@
               ],
               "id": "8f3fe1a53c4d9d064a59-0de3011446ee9456d33a",
               "file": "inception-design.spec.ts",
-              "line": 175,
+              "line": 174,
               "column": 3
             }
           ]
@@ -1914,7 +2012,7 @@
         {
           "title": "INCEPTION Persona Pool (screen-06 persona-pool.svg)",
           "file": "inception-design.spec.ts",
-          "line": 192,
+          "line": 191,
           "column": 6,
           "specs": [
             {
@@ -1933,12 +2031,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1285,
+                      "duration": 1203,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:43.890Z",
+                      "startTime": "2026-05-18T07:22:59.358Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1948,7 +2046,7 @@
               ],
               "id": "8f3fe1a53c4d9d064a59-495a6e2ca09924ac68b6",
               "file": "inception-design.spec.ts",
-              "line": 193,
+              "line": 192,
               "column": 3
             },
             {
@@ -1967,12 +2065,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1181,
+                      "duration": 1418,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:44.371Z",
+                      "startTime": "2026-05-18T07:23:00.205Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -1982,7 +2080,7 @@
               ],
               "id": "8f3fe1a53c4d9d064a59-47a60fd49ec88a71de78",
               "file": "inception-design.spec.ts",
-              "line": 200,
+              "line": 199,
               "column": 3
             },
             {
@@ -1998,15 +2096,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1233,
+                      "duration": 1158,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:44.482Z",
+                      "startTime": "2026-05-18T07:23:00.486Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2016,7 +2114,7 @@
               ],
               "id": "8f3fe1a53c4d9d064a59-5f1a1a4340f190f1e493",
               "file": "inception-design.spec.ts",
-              "line": 209,
+              "line": 208,
               "column": 3
             }
           ]
@@ -2024,7 +2122,7 @@
         {
           "title": "INCEPTION input style",
           "file": "inception-design.spec.ts",
-          "line": 217,
+          "line": 216,
           "column": 6,
           "specs": [
             {
@@ -2043,12 +2141,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1212,
+                      "duration": 1207,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:45.179Z",
+                      "startTime": "2026-05-18T07:23:00.565Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2058,7 +2156,7 @@
               ],
               "id": "8f3fe1a53c4d9d064a59-9aa5eee36e43d110cb12",
               "file": "inception-design.spec.ts",
-              "line": 218,
+              "line": 217,
               "column": 3
             }
           ]
@@ -2091,15 +2189,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1236,
+                      "duration": 1275,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:45.198Z",
+                      "startTime": "2026-05-18T07:23:01.634Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2125,15 +2223,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1204,
+                      "duration": 1249,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:45.561Z",
+                      "startTime": "2026-05-18T07:23:01.653Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2159,15 +2257,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1286,
+                      "duration": 1337,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:45.729Z",
+                      "startTime": "2026-05-18T07:23:01.788Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2201,15 +2299,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1201,
+                      "duration": 1353,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:46.402Z",
+                      "startTime": "2026-05-18T07:23:02.907Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2235,15 +2333,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1418,
+                      "duration": 1502,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:46.439Z",
+                      "startTime": "2026-05-18T07:23:02.914Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2277,15 +2375,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1282,
+                      "duration": 1263,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:46.771Z",
+                      "startTime": "2026-05-18T07:23:03.131Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2319,15 +2417,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1314,
+                      "duration": 1238,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:47.021Z",
+                      "startTime": "2026-05-18T07:23:04.266Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2356,12 +2454,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1369,
+                      "duration": 1402,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:47.610Z",
+                      "startTime": "2026-05-18T07:23:04.399Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2387,15 +2485,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1146,
+                      "duration": 1189,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:47.866Z",
+                      "startTime": "2026-05-18T07:23:04.424Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2429,15 +2527,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1204,
+                      "duration": 1139,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:48.058Z",
+                      "startTime": "2026-05-18T07:23:05.512Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2451,7 +2549,7 @@
               "column": 3
             },
             {
-              "title": "Score page metric (大% + label) が visible without horizontal scroll",
+              "title": "Score page metric (radial chart + label) が visible without horizontal scroll",
               "ok": true,
               "tags": [],
               "tests": [
@@ -2463,15 +2561,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1299,
+                      "duration": 1224,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:48.340Z",
+                      "startTime": "2026-05-18T07:23:05.620Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2479,7 +2577,7 @@
                   "status": "expected"
                 }
               ],
-              "id": "36f1f81e41b0e1292815-86097b3a14dc7eb3fe75",
+              "id": "36f1f81e41b0e1292815-8a884219630e7203ea75",
               "file": "inception-mobile.spec.ts",
               "line": 144,
               "column": 3
@@ -2508,12 +2606,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
-                      "duration": 1297,
+                      "duration": 1241,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:48.989Z",
+                      "startTime": "2026-05-18T07:23:05.809Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2550,12 +2648,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1241,
+                      "duration": 1245,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:49.019Z",
+                      "startTime": "2026-05-18T07:23:06.655Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2584,12 +2682,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1252,
+                      "duration": 1215,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:49.268Z",
+                      "startTime": "2026-05-18T07:23:06.850Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2621,7 +2719,7 @@
           "specs": [
             {
               "title": "合議中に 🔴 LIVE badge 表示 (drawio B7、FR-CV-01〜03)",
-              "ok": true,
+              "ok": false,
               "tags": [],
               "tests": [
                 {
@@ -2632,20 +2730,118 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1332,
-                      "errors": [],
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 61888,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/🔴 LIVE|LIVE/).first()\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 60000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/🔴 LIVE|LIVE/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/🔴 LIVE|LIVE/).first()\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 60000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/🔴 LIVE|LIVE/).first()\u001b[22m\n\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts:25:58",
+                        "location": {
+                          "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                          "column": 58,
+                          "line": 25
+                        },
+                        "snippet": "  23 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n  24 |     // SSE streaming 中に \"LIVE\" 文字が表示される\n> 25 |     await expect(page.getByText(/🔴 LIVE|LIVE/).first()).toBeVisible({\n     |                                                          ^\n  26 |       timeout: 60_000,\n  27 |     });\n  28 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                            "column": 58,
+                            "line": 25
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/🔴 LIVE|LIVE/).first()\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 60000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/🔴 LIVE|LIVE/).first()\u001b[22m\n\n\n  23 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n  24 |     // SSE streaming 中に \"LIVE\" 文字が表示される\n> 25 |     await expect(page.getByText(/🔴 LIVE|LIVE/).first()).toBeVisible({\n     |                                                          ^\n  26 |       timeout: 60_000,\n  27 |     });\n  28 |   });\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts:25:58"
+                        }
+                      ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:49.650Z",
+                      "startTime": "2026-05-18T07:23:07.062Z",
                       "annotations": [],
-                      "attachments": []
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                        "column": 58,
+                        "line": 25
+                      }
+                    },
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 62030,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/🔴 LIVE|LIVE/).first()\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 60000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/🔴 LIVE|LIVE/).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/🔴 LIVE|LIVE/).first()\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 60000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/🔴 LIVE|LIVE/).first()\u001b[22m\n\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts:25:58",
+                        "location": {
+                          "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                          "column": 58,
+                          "line": 25
+                        },
+                        "snippet": "  23 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n  24 |     // SSE streaming 中に \"LIVE\" 文字が表示される\n> 25 |     await expect(page.getByText(/🔴 LIVE|LIVE/).first()).toBeVisible({\n     |                                                          ^\n  26 |       timeout: 60_000,\n  27 |     });\n  28 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                            "column": 58,
+                            "line": 25
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/🔴 LIVE|LIVE/).first()\nExpected: visible\nTimeout: 60000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 60000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/🔴 LIVE|LIVE/).first()\u001b[22m\n\n\n  23 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n  24 |     // SSE streaming 中に \"LIVE\" 文字が表示される\n> 25 |     await expect(page.getByText(/🔴 LIVE|LIVE/).first()).toBeVisible({\n     |                                                          ^\n  26 |       timeout: 60_000,\n  27 |     });\n  28 |   });\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts:25:58"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2026-05-18T07:24:09.247Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-structural-INCEP-0969d-e-表示-drawio-B7、FR-CV-01〜03--mobile-chrome-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                        "column": 58,
+                        "line": 25
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "status": "unexpected"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-988c75222b9d48fff124",
@@ -2669,12 +2865,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1393,
+                      "duration": 1362,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:50.273Z",
+                      "startTime": "2026-05-18T07:23:07.909Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2708,15 +2904,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1357,
+                      "duration": 1387,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:50.297Z",
+                      "startTime": "2026-05-18T07:23:08.074Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2742,15 +2938,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1306,
+                      "duration": 1353,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:50.531Z",
+                      "startTime": "2026-05-18T07:23:09.275Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2784,15 +2980,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1404,
+                      "duration": 1408,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:50.986Z",
+                      "startTime": "2026-05-18T07:23:09.464Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2818,15 +3014,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1544,
+                      "duration": 1439,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:51.659Z",
+                      "startTime": "2026-05-18T07:23:10.632Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2860,15 +3056,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1264,
+                      "duration": 1221,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:51.671Z",
+                      "startTime": "2026-05-18T07:23:10.877Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2882,7 +3078,7 @@
               "column": 3
             },
             {
-              "title": "AI コメント (可変文) が大きく表示 (drawio B6 中央)",
+              "title": "AI コメント (可変文) が pink バブルで表示 (drawio B6 中央 pink badge)",
               "ok": true,
               "tags": [],
               "tests": [
@@ -2894,15 +3090,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1149,
+                      "duration": 1205,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:51.844Z",
+                      "startTime": "2026-05-18T07:23:12.076Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2910,7 +3106,7 @@
                   "status": "expected"
                 }
               ],
-              "id": "b8653a9d58d3a2a4a435-e8d78a10f3198ee474db",
+              "id": "b8653a9d58d3a2a4a435-74bd0fe3368115906024",
               "file": "inception-structural.spec.ts",
               "line": 127,
               "column": 3
@@ -2920,7 +3116,7 @@
         {
           "title": "INCEPTION G2 Persona Management (drawio: icon + 共有 status)",
           "file": "inception-structural.spec.ts",
-          "line": 135,
+          "line": 137,
           "column": 6,
           "specs": [
             {
@@ -2936,15 +3132,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1158,
+                      "duration": 1209,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:52.393Z",
+                      "startTime": "2026-05-18T07:23:12.102Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2954,7 +3150,7 @@
               ],
               "id": "b8653a9d58d3a2a4a435-f60eeb516eb71d85bd67",
               "file": "inception-structural.spec.ts",
-              "line": 136,
+              "line": 138,
               "column": 3
             },
             {
@@ -2973,12 +3169,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1423,
+                      "duration": 1366,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:52.939Z",
+                      "startTime": "2026-05-18T07:23:13.286Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -2988,7 +3184,7 @@
               ],
               "id": "b8653a9d58d3a2a4a435-48e804b40004de579768",
               "file": "inception-structural.spec.ts",
-              "line": 144,
+              "line": 146,
               "column": 3
             }
           ]
@@ -2996,7 +3192,7 @@
         {
           "title": "INCEPTION D: Silence Theater (drawio: 沈黙演出専用画面)",
           "file": "inception-structural.spec.ts",
-          "line": 163,
+          "line": 165,
           "column": 6,
           "specs": [
             {
@@ -3015,12 +3211,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1426,
+                      "duration": 1583,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:53.008Z",
+                      "startTime": "2026-05-18T07:23:13.317Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3030,7 +3226,7 @@
               ],
               "id": "b8653a9d58d3a2a4a435-3593006a5c094ec5521d",
               "file": "inception-structural.spec.ts",
-              "line": 164,
+              "line": 166,
               "column": 3
             }
           ]
@@ -3063,15 +3259,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1398,
+                      "duration": 1423,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:53.214Z",
+                      "startTime": "2026-05-18T07:23:14.663Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3097,15 +3293,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1440,
+                      "duration": 1535,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:53.562Z",
+                      "startTime": "2026-05-18T07:23:14.909Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3134,12 +3330,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1431,
+                      "duration": 1338,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:54.377Z",
+                      "startTime": "2026-05-18T07:23:16.089Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3168,12 +3364,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1357,
+                      "duration": 1440,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:54.457Z",
+                      "startTime": "2026-05-18T07:23:16.449Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3199,15 +3395,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1333,
+                      "duration": 1394,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:54.617Z",
+                      "startTime": "2026-05-18T07:23:17.430Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3250,15 +3446,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1164,
+                      "duration": 1206,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:55.010Z",
+                      "startTime": "2026-05-18T07:23:17.898Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3287,12 +3483,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1306,
+                      "duration": 1288,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:55.825Z",
+                      "startTime": "2026-05-18T07:23:18.833Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3321,12 +3517,12 @@
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1270,
+                      "duration": 1189,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:55.826Z",
+                      "startTime": "2026-05-18T07:23:19.108Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3369,15 +3565,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1199,
+                      "duration": 1173,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:55.962Z",
+                      "startTime": "2026-05-18T07:23:20.131Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3403,15 +3599,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 985,
+                      "duration": 1058,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:56.184Z",
+                      "startTime": "2026-05-18T07:23:20.305Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3454,15 +3650,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1420,
+                      "duration": 1215,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:57.111Z",
+                      "startTime": "2026-05-18T07:23:21.313Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3488,15 +3684,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1443,
+                      "duration": 1343,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:57.142Z",
+                      "startTime": "2026-05-18T07:23:21.378Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3522,15 +3718,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1562,
+                      "duration": 1395,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:57.185Z",
+                      "startTime": "2026-05-18T07:23:22.533Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3564,15 +3760,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1454,
+                      "duration": 1398,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:57.192Z",
+                      "startTime": "2026-05-18T07:23:22.733Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3598,15 +3794,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1347,
+                      "duration": 1365,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:58.539Z",
+                      "startTime": "2026-05-18T07:23:23.931Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3632,15 +3828,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1679,
+                      "duration": 1645,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:58.594Z",
+                      "startTime": "2026-05-18T07:23:24.135Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3666,15 +3862,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1583,
+                      "duration": 1513,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:58.662Z",
+                      "startTime": "2026-05-18T07:23:25.300Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3700,15 +3896,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1353,
+                      "duration": 1334,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:58.762Z",
+                      "startTime": "2026-05-18T07:23:25.783Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3734,15 +3930,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1318,
+                      "duration": 1455,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:45:59.893Z",
+                      "startTime": "2026-05-18T07:23:26.817Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3785,15 +3981,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
                       "status": "passed",
-                      "duration": 1153,
+                      "duration": 1195,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:46:00.128Z",
+                      "startTime": "2026-05-18T07:23:27.125Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3819,15 +4015,15 @@
                   "projectName": "mobile-chrome",
                   "results": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
                       "status": "passed",
-                      "duration": 1168,
+                      "duration": 1210,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-05-18T06:46:00.258Z",
+                      "startTime": "2026-05-18T07:23:28.283Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -3847,11 +4043,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-05-18T06:45:23.480Z",
-    "duration": 37991.143000000004,
-    "expected": 100,
+    "startTime": "2026-05-18T07:22:37.729Z",
+    "duration": 194206.878,
+    "expected": 98,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 2,
     "flaky": 0
   }
 }

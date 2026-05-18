@@ -141,17 +141,17 @@ test.describe("Mobile copy fits without truncation", () => {
     await expect(hint).toBeVisible();
   });
 
-  test("Score page metric (大% + label) が visible without horizontal scroll", async ({
+  test("Score page metric (radial chart + label) が visible without horizontal scroll", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/score");
     await expect(
       page.getByRole("heading", { name: /委任度 スコア/ }),
     ).toBeInViewport();
-    // 大きな % 値は overflow しない (font-mono text-6xl)
-    const percent = page.locator(".text-6xl").first();
-    await expect(percent).toBeVisible();
-    const box = await percent.boundingBox();
+    // ScoreRadialChart の SVG が viewport 幅内に収まる (INCEPTION 04 spec)
+    const radial = page.getByRole("img", { name: /委任度/ });
+    await expect(radial).toBeVisible();
+    const box = await radial.boundingBox();
     expect(box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
   });
 });

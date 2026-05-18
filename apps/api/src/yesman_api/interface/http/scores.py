@@ -8,7 +8,10 @@ from fastapi import APIRouter, Depends
 from yesman_api.domain.auth.models import AuthenticatedUser
 from yesman_api.domain.decision.scorer import AutonomyScorer
 from yesman_api.interface.deps import get_autonomy_scorer, get_current_user
-from yesman_api.interface.http.dto.decision import ScoreResponse
+from yesman_api.interface.http.dto.decision import (
+    ScoreHistoryPointResponse,
+    ScoreResponse,
+)
 
 router = APIRouter(prefix="/v1/scores", tags=["scores"])
 
@@ -24,6 +27,10 @@ async def get_my_score(
         total=summary.total,
         ratio=summary.ratio,
         message=summary.message,
+        history=[
+            ScoreHistoryPointResponse(date=p.date, yes_ratio=p.yes_ratio, total=p.total)
+            for p in summary.history
+        ],
     )
 
 

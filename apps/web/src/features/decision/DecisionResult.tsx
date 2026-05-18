@@ -127,6 +127,25 @@ export function DecisionResult({
         </SwipeChoice>
       )}
 
+      {/* INCEPTION 03-proposal-card.svg L46-49: 下部 pink nudge banner (proposal 表示中は常時表示).
+          「合議された結論です。/ 迷う必要は ありません ♪」 */}
+      {proposal && !chosen && (
+        <div
+          className="rounded-2xl border px-4 py-3 text-center"
+          style={{ background: "#FFD6E0", borderColor: "#FF8FAE" }}
+          role="region"
+          aria-label="合議メッセージ"
+          data-testid="proposal-pink-nudge"
+        >
+          <p className="text-xs font-bold" style={{ color: "#E8775A" }}>
+            合議された結論です。
+          </p>
+          <p className="text-xs" style={{ color: "#E8775A" }}>
+            迷う必要は ありません ♪
+          </p>
+        </div>
+      )}
+
       {/* 議論を見る toggle (FR-CV-04): proposal 後ずっと visible、採択後も残置 */}
       {showDiscussionButton && (
         <button

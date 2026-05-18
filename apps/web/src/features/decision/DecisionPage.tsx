@@ -7,6 +7,7 @@
  * - 別案 streaming 中も NoMicroCopyBanner は持続、Yes 採択時のみ hide
  */
 import { useReducer, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button, Input } from "@yesman/ui";
 import { VoiceMicInput } from "../voice/VoiceMicInput";
 import { decisionReducer, initialState } from "./reducer";
@@ -89,16 +90,40 @@ export default function DecisionPage() {
             onChange={(e) => dispatch({ type: "setInput", input: e.target.value })}
             placeholder={t("inputPlaceholder")}
           />
-          <div className="flex gap-2 items-center">
+
+          {/* INCEPTION screen-01: 中央配置 voice button + キャプション「音声で 話す」 */}
+          <div className="flex flex-col items-center gap-1 my-2">
+            <VoiceMicInput
+              onTranscript={(text) => dispatch({ type: "setInput", input: text })}
+            />
+            <p className="text-xs italic text-neutral-500">音声で 話す</p>
+          </div>
+
+          {/* INCEPTION screen-01: ダッシュド divider */}
+          <hr
+            className="my-3 border-t border-dashed"
+            style={{ borderColor: "#E0D5BC" }}
+          />
+
+          {/* INCEPTION screen-01: inline persona セレクタ pill (FR-PERSONA-10、最大 3) */}
+          <Link
+            to="/personas/selection"
+            className="block rounded-xl border bg-neutral-100 px-4 py-2.5 text-center text-sm text-neutral-700 hover:bg-neutral-200"
+            style={{ borderColor: "#E0D5BC" }}
+            aria-label="合議に使うペルソナを選択"
+            data-testid="persona-selector-pill"
+          >
+            🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]
+          </Link>
+
+          {/* 送信ボタン (INCEPTION screen-01: 黒 pill「→ 送信」、CTA は中央配置) */}
+          <div className="flex justify-center mt-3">
             <Button
               onClick={handleStart}
               disabled={!inputValue}
             >
               {t("startButton")}
             </Button>
-            <VoiceMicInput
-              onTranscript={(text) => dispatch({ type: "setInput", input: text })}
-            />
           </div>
         </>
       )}
@@ -123,34 +148,77 @@ export default function DecisionPage() {
         />
       )}
 
-      {/* INCEPTION D Silence Theater: 沈黙ドメイン (宗教/選挙/暴力/卑猥) 検出時 */}
+      {/* INCEPTION D Silence Theater: 沈黙ドメイン (宗教/選挙/暴力/卑猥) 検出時.
+          screen-05-silence-domain.svg 完全準拠: ダーク背景 #1A2329、ダッシュド円囲み「…」、
+          4 ドメイン絵文字 opacity 0.35、ミュート系の色階調 */}
       {state.status === "silenced" && (
         <div
-          className="rounded-2xl bg-neutral-100 p-8 text-center"
+          className="rounded-2xl p-8 text-center relative overflow-hidden"
+          style={{ background: "#1A2329" }}
           role="region"
           aria-label="沈黙演出"
         >
-          <p className="text-5xl font-serif text-silence mb-4" aria-hidden>
-            …
-          </p>
-          <p className="text-sm text-neutral-700 italic mb-1">
+          {/* ダッシュド円 + 中央「…」 (drawio: circle r=56 stroke #455A64 dasharray 2 4) */}
+          <div className="flex flex-col items-center">
+            <svg viewBox="-64 -64 128 128" width="120" height="120" aria-hidden>
+              <circle
+                r="56"
+                fill="none"
+                stroke="#455A64"
+                strokeWidth="0.5"
+                strokeDasharray="2 4"
+              />
+              <text
+                x="0"
+                y="14"
+                textAnchor="middle"
+                fontSize="40"
+                fontWeight="300"
+                fill="#78909C"
+              >
+                …
+              </text>
+            </svg>
+          </div>
+          <p
+            className="text-sm italic mt-1"
+            style={{ color: "#78909C" }}
+          >
             （沈黙）
           </p>
-          <p className="text-sm text-neutral-700">
+          <p
+            className="text-xs mt-3"
+            style={{ color: "#607D8B" }}
+          >
             この領域は AI が 代行しません
           </p>
-          <p className="mt-4 text-xs text-neutral-400 italic">
-            宗教 / 選挙 / 暴力 / 卑猥 ＝ ご自身で 判断する 領域
+          {/* 4 ドメイン絵文字 ⛪🗳️⚔️🔞 opacity 0.35 (drawio L28-33 準拠) */}
+          <div
+            className="flex justify-center gap-8 mt-6 text-2xl"
+            style={{ opacity: 0.35 }}
+            aria-hidden
+          >
+            <span>⛪</span>
+            <span>🗳️</span>
+            <span>⚔️</span>
+            <span>🔞</span>
+          </div>
+          <p className="text-[10px] mt-2" style={{ color: "#546E7A" }}>
+            宗教 / 選挙 / 暴力 / 卑猥
+          </p>
+          <p className="text-[10px]" style={{ color: "#546E7A" }}>
+            ＝ ご自身で 判断する 領域
           </p>
           {state.message && (
-            <p className="mt-3 text-sm text-neutral-700 whitespace-pre-wrap">
+            <p className="mt-3 text-sm whitespace-pre-wrap" style={{ color: "#90A4AE" }}>
               {state.message}
             </p>
           )}
           <button
             type="button"
             onClick={handleFullReset}
-            className="mt-6 text-xs italic text-neutral-500 underline"
+            className="mt-6 text-xs italic underline"
+            style={{ color: "#455A64" }}
           >
             タップで Home へ もどる
           </button>

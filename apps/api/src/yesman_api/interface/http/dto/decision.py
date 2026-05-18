@@ -59,11 +59,18 @@ class NudgeResponse(BaseModel):
     message: str | None = None
 
 
+class ScoreHistoryPointResponse(BaseModel):
+    date: str  # ISO date (YYYY-MM-DD)
+    yes_ratio: float | None
+    total: int
+
+
 class ScoreResponse(BaseModel):
     no_count: int
     total: int
     ratio: float | None  # Yes 比率 = (total - no_count) / total、total=0 → None
     message: str
+    history: list[ScoreHistoryPointResponse] = []
 
 
 __all__ = [
@@ -74,4 +81,5 @@ __all__ = [
     "ChoiceResponse",
     "NudgeResponse",
     "ScoreResponse",
+    "ScoreHistoryPointResponse",
 ]

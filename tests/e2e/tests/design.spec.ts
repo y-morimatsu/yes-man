@@ -89,8 +89,8 @@ test.describe("Design system tokens (U7b FD §2)", () => {
     page,
   }) => {
     await gotoAuthenticated(page, "/score");
-    // INCEPTION refactor 後: 大きな % 表示 + 下部の 3 列 stats (font-mono text-lg)
-    const noCountValue = page.locator("dd.font-mono").first();
+    // INCEPTION 04-score-dashboard.svg 準拠: 統計は inline 1 行に font-mono の数字
+    const noCountValue = page.locator("span.font-mono").first();
     await expect(noCountValue).toBeVisible();
     const ff = await noCountValue.evaluate(
       (el) => getComputedStyle(el).fontFamily,

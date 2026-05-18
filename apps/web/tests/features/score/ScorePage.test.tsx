@@ -9,9 +9,17 @@ import ScorePage from "../../../src/features/score/ScorePage";
 
 const server = setupServer();
 
-function setup(score: { no_count: number; total: number; ratio: number | null; message: string }) {
+function setup(score: {
+  no_count: number;
+  total: number;
+  ratio: number | null;
+  message: string;
+  history?: { date: string; yes_ratio: number | null; total: number }[];
+}) {
   server.use(
-    http.get("http://localhost:8000/v1/scores/me", () => HttpResponse.json(score)),
+    http.get("http://localhost:8000/v1/scores/me", () =>
+      HttpResponse.json({ ...score, history: score.history ?? [] }),
+    ),
   );
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(

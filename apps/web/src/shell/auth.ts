@@ -46,9 +46,11 @@ export class CognitoTokenProvider implements TokenProvider {
 }
 
 export async function signIn(): Promise<void> {
+  if (env.authBypass) return;
   await signInWithRedirect();
 }
 
 export async function signOutUser(): Promise<void> {
+  if (env.authBypass) return;
   await signOut({ global: false });
 }

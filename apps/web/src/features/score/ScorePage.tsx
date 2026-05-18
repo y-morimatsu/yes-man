@@ -1,9 +1,19 @@
 /**
- * ScorePage — 委任度スコア表示 (Yes 比率モデル、U7d FD §5 + ultrathink Imp2: threshold UI).
+ * ScorePage — 委任度スコア表示 (INCEPTION screen-04 完全準拠 / Yes 比率モデル).
+ *
+ * 構成:
+ *   1. 円形プログレスチャート (ScoreRadialChart、紫色 #9F88C8)
+ *   2. AI 生成可変コメント (ピンクバブル #FFD6E0 / border #FF8FAE)
+ *   3. 📈 推移 (30日) 折れ線グラフ (ScoreLineChart、coral #E8775A)
+ *   4. inline 統計 (総決定 / Yes / No)
+ *   5. footnote (スコアが たかいほど AI を信頼できています)
+ *   6. paradox / 解釈ガイド
  */
 import { Card, Spinner } from "@yesman/ui";
 import { useScore } from "./useScore";
 import { getScoreLevel } from "./scoreLevel";
+import { ScoreRadialChart } from "./ScoreRadialChart";
+import { ScoreLineChart } from "./ScoreLineChart";
 import { t } from "./strings";
 
 export default function ScorePage() {
@@ -21,7 +31,7 @@ export default function ScorePage() {
   }
 
   const level = getScoreLevel(data.no_count, data.ratio);
-  const ratioPercent = data.ratio !== null ? Math.round(data.ratio * 100) : null;
+  const yesCount = data.total - data.no_count;
 
   const borderClass =
     level === "danger" ? "border-l-4 border-danger" :
@@ -30,6 +40,7 @@ export default function ScorePage() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
+
       <Card className={borderClass}>
         {level === "danger" && (
           <p className="text-danger font-bold mb-2" role="alert">
@@ -40,44 +51,56 @@ export default function ScorePage() {
           <p className="text-warning mb-2">{t("warningLowYesRatio")}</p>
         )}
 
-        {/* INCEPTION screen-04: 大きな % 表示 (委任度 = Yes 比率) + ラベル */}
-        <div className="flex flex-col items-center py-4">
-          <div className="font-mono text-6xl font-bold text-warning">
-            {ratioPercent !== null ? `${ratioPercent}%` : "0%"}
-          </div>
-          <div className="mt-2 text-sm text-neutral-700">{t("metricLabel")}</div>
+        {/* INCEPTION screen-04 (1): 円形プログレスチャート (radial) */}
+        <div className="flex justify-center py-2">
+          <ScoreRadialChart ratio={data.ratio} caption={t("metricLabel")} />
         </div>
 
-        {/* AI 生成可変コメント (INCEPTION では大きく italic 風) */}
-        <p className="mt-3 text-center font-serif italic text-neutral-700 dark:text-neutral-300">
-          「{data.message}」
-        </p>
+        {/* INCEPTION screen-04 (2): AI 生成可変コメント (pink bubble) */}
+        <div
+          className="mt-3 rounded-2xl border px-4 py-3 text-center"
+          style={{ background: "#FFD6E0", borderColor: "#FF8FAE" }}
+          role="region"
+          aria-label="AI コメント"
+        >
+          <p
+            className="text-sm font-semibold"
+            style={{ color: "#E8775A" }}
+          >
+            「{data.message}」
+          </p>
+          <p
+            className="text-xs italic mt-1"
+            style={{ color: "#E8775A" }}
+          >
+            — AI 生成 可変コメント
+          </p>
+        </div>
 
-        {/* 詳細 stats: 総決定 / Yes / No */}
-        <dl className="mt-4 grid grid-cols-3 gap-2 text-sm text-center">
-          <div>
-            <dt className="text-neutral-400">{t("labelTotal")}</dt>
-            <dd className="font-mono text-lg">{data.total}</dd>
+        {/* INCEPTION screen-04 (3): 📈 推移 (30日) 折れ線グラフ */}
+        {data.history.length > 0 && (
+          <div className="mt-4">
+            <ScoreLineChart history={data.history} />
           </div>
-          <div>
-            <dt className="text-neutral-400">Yes</dt>
-            <dd className="font-mono text-lg text-success">
-              {data.total - data.no_count}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-neutral-400">{t("labelNoCount")}</dt>
-            <dd className="font-mono text-lg text-silence">{data.no_count}</dd>
-          </div>
-        </dl>
+        )}
+
+        {/* INCEPTION screen-04 (4): inline 統計 */}
+        <p className="mt-4 text-xs text-neutral-600">
+          {t("labelTotal")}:{" "}
+          <span className="font-bold font-mono text-neutral-900">{data.total}</span>{" "}
+          / Yes:{" "}
+          <span className="font-bold font-mono text-success">{yesCount}</span>{" "}
+          / {t("labelNoCount")}:{" "}
+          <span className="font-bold font-mono text-silence">{data.no_count}</span>
+        </p>
       </Card>
 
-      {/* INCEPTION footnote: スコアの解釈ガイド */}
+      {/* INCEPTION screen-04 (5): footnote */}
       <p className="text-center text-xs italic text-neutral-400">
         {t("footnote")}
       </p>
 
-      {/* スコアの解釈ガイド (Yes 比率モデルの説明) */}
+      {/* INCEPTION screen-04 (6): 解釈ガイド (Yes 比率モデルの説明) */}
       <p className="text-center text-xs italic text-neutral-500">
         {t("paradoxNote")}
       </p>

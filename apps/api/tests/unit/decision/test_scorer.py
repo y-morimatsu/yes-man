@@ -16,6 +16,10 @@ class _StubRepo:
     async def count_no_by_user(self, user_id):
         return {"no_count": self.no_count, "total": self.total}
 
+    async def list_by_user(self, user_id, limit=100, offset=0, order_by="created_at_desc"):
+        # scorer._build_history からのみ呼ばれる; 履歴は別途検証するのでここでは空
+        return []
+
 
 @pytest.mark.asyncio
 async def test_total_zero_returns_null_ratio():
