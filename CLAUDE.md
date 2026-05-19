@@ -537,3 +537,124 @@ The Operations stage will eventually include:
 - Application code: Workspace root (NEVER in aidlc-docs/)
 - Documentation: aidlc-docs/ only
 - Project structure: See code-generation.md for patterns by project type
+
+---
+
+## Git-Flow Branching Model
+
+This project follows the **Git-Flow** branching model with a hackathon-friendly pragmatism layer. The AI assistant MUST adhere to the structure and merge rules below when creating branches, opening PRs, and committing.
+
+### Branch Structure
+
+| Branch | Purpose | Source | Merges into |
+|---|---|---|---|
+| **`main`** | Production-ready code, always deployable | (none) | (tag only) |
+| **`develop`** | Integration branch for the next release | `main` (initial) | `release/*` → `main` |
+| **`feature/<name>`** | New feature development | `develop` | `develop` |
+| **`bugfix/<name>`** | Bug fix during development | `develop` | `develop` |
+| **`hotfix/<name>`** | Emergency fix on production | `main` | `main` **AND** `develop` |
+| **`release/<version>`** | Release preparation (version bump, changelog, last-mile fixes) | `develop` | `main` **AND** `develop` |
+
+### Branch Naming Convention
+
+- `feature/issue-<N>-<short-description>` — e.g., `feature/issue-1-push-notification`
+- `bugfix/issue-<N>-<short-description>` — e.g., `bugfix/issue-12-cors-put`
+- `hotfix/v<x.y.z+1>-<short-description>` — e.g., `hotfix/v1.2.1-auth-bypass`
+- `release/v<MAJOR.MINOR.PATCH>` — e.g., `release/v1.2.0`
+
+Branch names MUST be lowercase, hyphen-separated, and reference a GitHub Issue when applicable.
+
+### Commit Message Convention (Conventional Commits)
+
+Format: `<type>(<scope>): <subject>`
+
+| Type | Use case |
+|---|---|
+| `feat` | New feature |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `style` | Code style / formatting (no behavior change) |
+| `refactor` | Code restructuring without behavior change |
+| `perf` | Performance improvement |
+| `test` | Test additions / changes |
+| `build` | Build system / dependency changes |
+| `ci` | CI configuration changes |
+| `chore` | Other maintenance |
+
+**Rules**:
+- `<scope>` is a top-level area: `api` / `web` / `ui` / `voice` / `aidlc` / `infra` / `docs` / `deps` / etc.
+- `<subject>` is imperative mood, ≤50 characters, no trailing period
+- Body explains *why* (not just *what*), wraps at 72 characters
+- AI-assisted commits MUST include the `Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>` trailer (or applicable model name)
+- Reference Issues in the body or footer: `Closes #N` / `Refs #N`
+
+**Examples**:
+```
+feat(voice): Web Speech API + Server STT の切替 UI を追加
+
+ProfilePage の radio で user が backend を選択、localStorage で永続化。
+非対応ブラウザは Server STT に自動 fallback。
+
+Closes #14
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+```
+
+### Merge Strategy
+
+| 流れ | コマンド / 方針 |
+|---|---|
+| `feature/*` → `develop` | **Squash merge** (PR UI から) or `git merge --squash` で clean linear history |
+| `bugfix/*` → `develop` | 同上 |
+| `release/*` → `main` | `git merge --no-ff` で release point を保持 + `git tag -a vX.Y.Z` |
+| `release/*` → `develop` | `git merge --no-ff` で back-merge |
+| `hotfix/*` → `main` | `git merge --no-ff` + `git tag -a vX.Y.Z+1` |
+| `hotfix/*` → `develop` | back-merge (cherry-pick または merge --no-ff) |
+
+**Destructive operation policy** (CLAUDE.md global "Executing actions with care" と整合):
+- `git reset --hard`, `git push --force`, `git branch -D` は user の明示的承認 (just-in-time) なしに実行禁止
+- `--force-with-lease` は force-push よりは安全だが、`main` / `develop` には禁止
+- pre-commit hook の skip (`--no-verify`) は user の明示的承認なしに使用禁止
+
+### Pull Request (PR) Workflow
+
+- **`feature/*` → `develop`**: PR を作成、GitHub Issue を本文で `Closes #N` 形式で参照
+- **`release/*` → `main`**: PR にリリースノート (CHANGELOG セクション) + バンプ後のバージョン番号を記載
+- **`hotfix/*` → `main`** および **→ `develop`**: 2 PR、両方が同一インシデントを参照
+- PR タイトルは Conventional Commits と同形式
+- `main` / `develop` への merge 前に **e2e + unit tests が green** であることが必須
+
+### Tagging
+
+- セマンティックバージョニング (`vMAJOR.MINOR.PATCH`)
+- `main` への merge 後のみタグ付与: `git tag -a vX.Y.Z -m "Release vX.Y.Z"`
+- 直後に push: `git push origin vX.Y.Z` (もしくは `git push --tags`)
+- リリースノートは GitHub Releases 上で公開、本文に変更点 (`feat:` / `fix:` / `docs:` の Conventional Commits をカテゴリ別に集計)
+
+### Hackathon Pragmatism (現実的緩和ルール)
+
+ハッカソン期間中の単独開発 / 緊急対応では、以下の **緩和ルール** を許容する:
+
+1. **`main` への直接 commit を許容** (single developer の場合)
+   - ただしコミットメッセージは Conventional Commits 形式を厳守
+   - `develop` ブランチを作らず `main` を develop と兼用しても良い
+2. **PR レビューを省略可能** (single developer の場合)
+3. **release branch を省略可能** — `main` を直接 tag するパスを許容
+4. **mandatory tests のスキップは不可** — e2e / unit が壊れたまま push は禁止
+
+緩和ルールを使った場合は、コミットメッセージ本文または PR description に "hackathon-direct-commit" のタグを残し、後でリリース管理時に判別できるようにする。
+
+### Pre-Commit Checklist (AI assistant が commit する前に確認)
+
+1. `git status` で意図したファイルだけ stage されているか
+2. `git diff --staged` で **secrets / .env / credentials** が含まれていないか
+3. コミットメッセージが Conventional Commits 形式か
+4. AI-assisted の場合 `Co-Authored-By` trailer が付与されているか
+5. 破壊的操作 (`--force`, `--hard`) を含む場合 user の明示的承認があるか
+6. push 先が `main` / `develop` の場合、関連 PR またはハッカソン緩和ルール条件を満たすか
+
+### Push Rules
+
+- AI assistant は **user が明示的に push を指示した場合のみ** push 実行可
+- `main` への force-push は **常に禁止** (緩和ルール対象外)
+- push 後は `gh pr create` などを user が要求した場合のみ実行
