@@ -192,3 +192,22 @@ U4 FD で確定した 7 サービス (SilenceGuard / LLMProviderAdapter / Consen
   - Imp3 PERF-U4-05 Nudge cache TTL 切れ 410 Gone
   - Imp4 TEST-U4-14 LLM timeout エッジケース 3 サブテスト
   - Imp5 §6 環境変数表に Type 列 (plain/secret) 追加
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 12 fixes 適用済) を保持。
+
+**Important 7 / Improvements 5 の合計 12 件の NFR 修正点は全て継続有効**。Post-CONSTRUCTION で追加された機能は既存 NFR の枠内:
+
+### 影響評価
+- **Yes-ratio 反転** (`317280b`): scorer の計算式変更のみ、PERF (`POST /v1/scores/me` < 200ms p95) には影響なし。
+- **`_build_history` + `ScoreResponse.history`** (`2400f45`): 30日 × `O(1)` 集計、p95 latency への影響は実測で +5ms 未満を想定。
+- **Dynamic Persona Routing** (`07c1c78`): `_resolve_personas` 内で `PreferenceProfileRepository.get_by_user` を 1 回追加読み (per request)、cache 効果込みで PERF への影響軽微。
+
+### 新規 NFR は追加なし
+- prefetch buffer (`usePrefetchedDecisions`) は U7d frontend 担当、U4 NFR には影響なし。
+- decision SSE の throughput / SilenceGuard latency 目標値は不変。
+
+→ U4 NFR Req は CONSTRUCTION 完了状態を維持しつつ、Dynamic Persona Routing による追加コストを許容範囲内で吸収。

@@ -184,3 +184,18 @@ aws ecs execute-command \
 - [x] 環境変数仕様確定 + 本番 DATABASE_URL 組み立てロジック
 - [x] 本番マイグレーション手順 (ECS Exec) 確定
 - [x] 24 ファイルの生成計画 (Code Generation 入力)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot (light review approved) を保持。
+
+**apps/api/ ディレクトリ構造 (DDD 4-layer) + pyproject 依存 + 24 ファイル生成計画は全て継続有効**。
+
+### 軽微な infra-level 変更
+- **`infrastructure/config.py`** (`2b08a75`): CORSMiddleware の `allow_methods` に `PUT` を追加 (既存の GET/POST/PATCH/DELETE/OPTIONS に加え 6 method 許可)
+- **`infrastructure/persistence/mock_repositories.py`** (`2b08a75`): `MOCK_SEED_DEMO_DECISIONS=true` 環境変数で 30日 / 105 decisions の demo seed 機能を追加 (in-memory only、prod path には影響なし)
+- **CDK 側 (U1-infra) には変更なし**: Aurora / DataStack / SecretsManager 等の AWS リソースは不変
+
+→ U2 Infrastructure Design は基本構成不変、env-driven の Mock seed と CORS allow_methods 拡張のみ。

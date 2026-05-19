@@ -215,3 +215,21 @@ cd infra && pnpm test -- --updateSnapshot && cdk synth
 - **Improvements 2**:
   - Imp1 (§10): リスク 6 件目 (U3 SilenceGuard + U4 DecisionEngine + U5 依存チェーン明示)
   - Imp2 (§7 E.10): PBT 4 不変条件を (a) 上限 3 / (b) 重複なし / (c) can_access / (d) blocked 除外 と具体明示
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Phase A.0a〜F (U2 確認 + access.py / U4 engine 遡及 / domain persona 6 / interface 4 / config + main / tests 10 / .env + RUNBOOK + api-stack) の生成計画は全て継続有効**。
+
+### Backend (apps/api) 側の追加変更なし
+- `domain/persona/` + `application/persona/` + `interface/http/personas.py` + `persona_selections.py` 配下に Post-CONSTRUCTION の commit なし
+- PersonaCatalogService + PersonaModerator + PersonaReport AUTO_BLOCK 等の構成不変
+
+### Frontend (apps/web) 側の Dynamic Routing 連携 (本 plan の scope 外、U7d で実装)
+- `apps/web/src/features/persona/PersonaSelectionPage.tsx` に 💡おすすめ pink pill badge 追加 (`07c1c78`)
+- `usePreference` (U5 既存 hook) との合成
+
+→ U-Persona Code Gen Plan は backend 構成を維持、frontend Dynamic Routing UI は U7d Code Gen Plan 参照。

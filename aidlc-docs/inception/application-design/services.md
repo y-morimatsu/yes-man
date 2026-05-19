@@ -290,3 +290,11 @@ EventBridge 発火失敗時はリトライ可能なメッセージとして outb
 - **構造化ログ**: 入出力の要約 + correlation_id (FastAPI ミドルウェアで自動付与)
 - **メトリクス**: `decision.requested`, `decision.yes`, `decision.no`, `silence.triggered`, `score.calculated` 等のカウンタとレイテンシ
 - **トレース**: X-Ray セグメント (FastAPI → Service → Repository → 外部 API)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。
+
+Service レイヤの構成 / 責務分担に変更なし。`DecisionService` 内で `DecisionEngine` が `PreferenceProfileRepository` を読むようになった (`07c1c78`) が、Service レベルの interface (`POST /v1/decisions/request` の handler) は不変。

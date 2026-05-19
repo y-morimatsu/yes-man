@@ -196,3 +196,21 @@ it("client instance stable across AuthProvider re-renders", () => {
 ### Improvements 2
 - **Imp1** (§9 G.3): LOC 内訳表 (config 150 + entry 30 + shell 450 + features 80 + styles 20 + tests 250 = ~980 LOC)
 - **Imp2** (§7 E.5): ApiProvider useRef isolation test の具体 code (`rerender → expect(client).toBe(firstClient)`)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Phase A.0〜G (設定 9 / public + entry 2 / shell 8 / features placeholder 4 / tests 6 / edge-stack patch + CI workflow) の生成計画は全て継続有効**。
+
+### Post-CONSTRUCTION で変更されたファイル
+| ファイル | commit | 変更内容 |
+|---|---|---|
+| `apps/web/src/shell/auth.ts` | `2400f45` | `signIn()` / `signOutUser()` が `env.authBypass=true` のとき no-op |
+| `apps/web/src/shell/Layout.tsx` | `1924411` | container を `max-w-md` 制約、header palette `#F5E5C4` 固定 |
+
+shell 構成 (`ApiProvider` / `AuthProvider` / `QueryProvider` / `RequireAuth` / `ErrorBoundary` / `routes.tsx`) は不変。msw mock 構成 + vi.stubEnv も不変。
+
+→ U7a Code Gen Plan は 32 ファイル + edge-stack patch + CI workflow 構成を維持、2 ファイルへの FE-DESIGN 整合変更のみ。

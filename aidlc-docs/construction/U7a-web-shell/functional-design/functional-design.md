@@ -519,3 +519,27 @@ VitePWA({
 - **Imp1** (§3.1): aws-amplify v6 subpath imports (`aws-amplify/auth`) で tree-shake、bundle size 削減
 - **Imp2** (§5.3-5.4): `location.state.from` 経由で sign-in 後の元 page 復帰、CallbackPage で `navigate(from)`
 - **Imp3** (§7): `workbox: { skipWaiting: true, clientsClaim: true }` で新 SW 即時 activate、トレードオフ注記
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### 1. AuthBypass 整合性の厳密化 (`2400f45`、2026-05-17)
+- **`apps/web/src/shell/auth.ts`**: `signIn()` / `signOutUser()` が `env.authBypass === true` のとき完全に no-op になるよう修正
+- 動機: AuthBypass mode で `aws-amplify` の cognito SDK 呼び出しを抑止、e2e テストで Sign in / Sign out ボタンを押した際に network へ出ないことを保証
+- `RequireAuth` の挙動は不変 (`authBypass=true` なら常に通す)
+
+### 2. Layout の FE-DESIGN 準拠 (`1924411`、2026-05-19)
+- **`apps/web/src/shell/Layout.tsx`**:
+  - container を `max-w-md` (mobile-first 480px) で制約
+  - header palette を `#F5E5C4` (INCEPTION drawio 準拠の和紙色) に固定
+- FE-DESIGN-03 (Intentional Color Palette) + FE-DESIGN-05 (Mobile-First Viewport) 準拠
+
+### Shell 構成は不変
+- `ApiProvider` / `AuthProvider` / `QueryProvider` / `RequireAuth` / `ErrorBoundary` / `routes.tsx` の構成は変更なし
+- Vite + React 18 + React Router v6 + Cognito v6 + msw mock の組み合わせ不変
+- `tests/setup.ts` + `tests/mocks/aws-amplify.ts` の 6 test ファイルも不変 (assertion のみ update)
+
+→ U7a / web-shell は構造を維持したまま、AuthBypass の watertight 化と FE-DESIGN 準拠の 2 点を強化。

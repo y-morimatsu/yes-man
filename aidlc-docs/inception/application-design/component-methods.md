@@ -477,3 +477,17 @@ class ErrorResponse(BaseModel):
 - 本書は **インターフェース契約** のみを定義
 - DI 用設定の具体名・環境変数キーは Infrastructure Design で定める
 - スキーマ正規化・インデックス設計は Functional Design / Infrastructure Design で扱う
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。
+
+### AutonomyScorer の method 追加 / 変更
+- `_build_history(now: datetime) -> list[ScoreHistoryPoint]` 追加 (`2400f45`、30日 trend)
+- `compute()` の `ratio` 計算式: `no_count / total` → `yes_count / total` (`317280b`、意味反転)
+
+### DecisionEngine の signature 拡張
+- `__init__(self, ..., preference_repo: PreferenceProfileRepository)` keyword-only 追加 (`07c1c78`)
+- `_resolve_personas` 内で `preference_repo.get_by_user(user_id)` を読み、`persona_style_preference` 降順 top-3 を返却

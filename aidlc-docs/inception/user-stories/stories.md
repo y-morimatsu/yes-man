@@ -943,3 +943,29 @@ Scenario: 全ペルソナが除外された場合は組み込みフォールバ�
 - **倫理的判断基準**（沈黙演出ドメインの分類ロジック、ナッジ強度の境界）は本ストーリー集には含まれない。別途 RFC / 設計ドキュメントで扱う（`story-generation-plan.md` Section 2 / CQ1=A に基づく）。
 - **要件 ID トレース**は Construction フェーズの Functional Design で別途整理する（CQ + Q10=D に基づく）。
 - **ハッカソン審査員シナリオ**への特別配慮はしない（Q8 + CQ6=B に基づく）。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。以下のストーリーに実装段階での解釈変更が加わった:
+
+### Journey C (Score Dashboard) の意味反転
+- 旧解釈: 「主体性スコア」= No 比率 (低い = 委任過多 = 警告)
+- 新解釈: 「**委任度スコア**」= Yes 比率 (低い = 委任不十分 = 警告)
+- e2e `score.spec.ts` (2 test) で実装は新解釈で検証済
+- screen-04 mockup の大% metric 解釈は新解釈で表示
+
+### Journey B (Decision) の UX 強化 (Post-CONSTRUCTION 段階で追加)
+- B6 nudge ストーリーに加え、No 連打バーストに備えた **prefetch buffer** (`usePrefetchedDecisions`) を実装
+- e2e `no-burst-regenerate.spec.ts` (5 test) で動作検証
+
+### Journey F (Voice) の backend 選択追加
+- F1-F4 ストーリーに加え、user が Web Speech API / Server STT を選択する radio UI を Profile 画面に追加
+- e2e `voice.spec.ts` (2 test) で動作検証
+
+### Journey G (Persona) に Dynamic Routing 追加
+- G1-G6 ストーリーに加え、cold-start でない user に対し builtin persona top-3 を自動推奨 (💡 おすすめ pink pill badge)
+- e2e `persona.spec.ts` (3 test) で動作検証
+
+→ いずれも既存ストーリー (A1-A4 / B1-B6 / C1-C4 / F1-F4 / G1-G6) を超える新規ストーリーではなく、既存 acceptance criteria を拡張する形で実装。

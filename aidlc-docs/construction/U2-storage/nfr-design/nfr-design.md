@@ -250,3 +250,16 @@ aws-embedded-metrics (EMF) で構造化ログ + CloudWatch カスタムメトリ
 - [x] 本番 migration 案 A (ECS Exec 手動) 採用
 - [x] 2 種 Repository 実装パターン (SqlModel / Mock)
 - [x] X-Ray + CloudWatch カスタムメトリクス
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot (light review approved) を保持。
+
+**SQLAlchemy engine config (pool_size 5 / max_overflow 15 / pool_pre_ping True) + SQL query patterns + Alembic config + Repository implementation patterns は全て継続有効**。
+
+### 軽微な追加
+- **Mock backend seed 機能** (`2b08a75`): `MOCK_SEED_DEMO_DECISIONS=true` 環境変数で `MockDecisionRepository` 内に in-memory seed を行う pattern を追加。SQLAlchemy / Alembic には影響なし、dev/demo path のみで作用。
+
+→ U2 NFR Design は CONSTRUCTION 完了状態のまま、Mock side で demo seed pattern を追加。

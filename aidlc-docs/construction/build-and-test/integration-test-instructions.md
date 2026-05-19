@@ -2,7 +2,8 @@
 
 **Phase**: CONSTRUCTION — Build and Test
 **Created**: 2026-05-16
-**Status**: 🟡 IN REVIEW
+**Last Updated**: 2026-05-19 (Post-CONSTRUCTION: E2E 100 件構成に拡張)
+**Status**: ✅ APPROVED 2026-05-16 / 🟢 E2E 100/100 PASS (2026-05-17 〜 継続検証)
 **Scope**: unit 跨ぎ integration test (U-Test §3) + E2E (U-Test §2)
 
 ---
@@ -64,15 +65,23 @@ pnpm test:ui
 pnpm exec playwright test tests/decision.spec.ts
 ```
 
-### 2.3 spec 一覧 (U-Test §2.2)
+### 2.3 spec 一覧 (Post-CONSTRUCTION 2026-05-19 実測: 12 spec / 100 test)
 
-| spec | story | 検証内容 |
-|---|---|---|
-| `auth.spec.ts` | A1-A4 | sign-in/profile/二段階削除 confirmation |
-| `decision.spec.ts` | B1-B6 | SSE → utterance → Yes/No → nudge |
-| `persona.spec.ts` | G1-G6 | list / create / selection 上限 3 |
-| `score.spec.ts` | C1-C4 | initial + No 5 連発で danger UI (API seed hybrid) |
-| `voice.spec.ts` | F1-F4 | VoiceMicButton render + mic permission |
+| spec | test 数 | story | 検証内容 |
+|---|---:|---|---|
+| `auth.spec.ts` | 3 | A1-A4 | sign-in / profile / 二段階削除 confirmation |
+| `decision.spec.ts` | 3 | B1-B6 | SSE → utterance → Yes/No → nudge |
+| `design.spec.ts` | 9 | (cross) | FE-DESIGN 整合性 (typography / color palette / motion / mobile-first) |
+| `inception-complete-screens.spec.ts` | 19 | (cross) | INCEPTION drawio 全 20 画面網羅 (URL ナビゲーション含む) |
+| `inception-design.spec.ts` | 20 | (cross) | INCEPTION drawio design fidelity (tokens + copy + icons) |
+| `inception-mobile.spec.ts` | 14 | (cross) | Pixel 5 mobile viewport (WCAG 2.5.5 touch target 44×44 / no horizontal scroll) |
+| `inception-structural.spec.ts` | 11 | (cross) | INCEPTION structural (LIVE / pink nudge / persona icons / silence theater) |
+| `no-burst-regenerate.spec.ts` | 5 | B6 | No 連打 → prefetch buffer swap (`usePrefetchedDecisions`、commit `2b08a75`) |
+| `persona.spec.ts` | 3 | G1-G6 | list / create / selection 上限 3 / 💡おすすめ badge (`07c1c78` 反映後) |
+| `score.spec.ts` | 2 | C1-C4 | Yes-ratio で warning 表示 / radial + line chart 描画 (`317280b` + `2400f45`) |
+| `swipe-and-discussion.spec.ts` | 9 | B1-B3 | SwipeChoice 動作 + discussion live UI + AI bubble |
+| `voice.spec.ts` | 2 | F1-F4 | VoiceMicButton render + mic permission + backend toggle (`775f6a5`) |
+| **合計** | **100** | - | **全件 PASS (2026-05-17 〜 2026-05-19)** |
 
 ### 2.4 環境
 
@@ -142,8 +151,26 @@ CI 合計実行時間: **~8 min** (10 min 予算内)
 ## 6. 受入基準
 
 - [x] Integration: 5 シナリオで cross-unit flow 検証 (現状 placeholder + Consumer 直接 test)
-- [x] E2E: 5 spec × 4-6 case = ~25 case、Mock backend で portable
+- [x] **E2E: 12 spec × 平均 8.3 test = 100 test、Mock backend で portable、全件 PASS** (Post-CONSTRUCTION 2026-05-17 実機確定)
 - [x] Contract: Repository Protocol 適合 (既存)
 - [x] Smoke: 3 step sanity check
 - [x] CI workflow 統合、~8 min 内
-- [x] Playwright HTML report が CI artifact で確認可能
+- [x] Playwright HTML report が CI artifact で確認可能 (`tests/e2e/playwright-report/index.html`)
+
+---
+
+## 7. Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+CONSTRUCTION 完了時点で **5 spec / ~25 test** だった E2E 構成が、Post-CONSTRUCTION 段階で以下のように **12 spec / 100 test** に拡張された:
+
+| 追加 spec | 目的 | 関連 commit |
+|---|---|---|
+| `design.spec.ts` (9 test) | FE-DESIGN extension 適用後の token/color/motion 整合性検証 | `1c7c5eb` + `1924411` |
+| `inception-complete-screens.spec.ts` (19 test) | INCEPTION drawio 全 20 画面網羅 | `2400f45` |
+| `inception-design.spec.ts` (20 test) | INCEPTION drawio design fidelity | `2400f45` |
+| `inception-mobile.spec.ts` (14 test) | Pixel 5 mobile viewport (WCAG 2.5.5) | `2400f45` |
+| `inception-structural.spec.ts` (11 test) | INCEPTION structural compliance | `2400f45` |
+| `no-burst-regenerate.spec.ts` (5 test) | `usePrefetchedDecisions` (No 連打 prefetch buffer) | `2b08a75` |
+| `swipe-and-discussion.spec.ts` (9 test) | `SwipeChoice` state-leak fix + discussion live UI | `2b08a75` |
+
+→ Score-flip + Dynamic Persona Routing + Voice backend toggle + Splash 文言削除の各 commit 直後に E2E 全件再実行、いずれも 100/100 PASS で regression なしを確認。

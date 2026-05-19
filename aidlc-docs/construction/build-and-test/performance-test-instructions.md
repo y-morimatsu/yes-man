@@ -129,3 +129,16 @@ CloudWatch Logs Insights で集計、Metric Filter で CW Metric 化、Alarm で
 - [x] size-limit で frontend bundle 自動 enforce
 - [x] Backend latency は structlog + CloudWatch で post-deploy 観測可能
 - [x] Lighthouse CI は Phase 2 candidate として明記
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+CONSTRUCTION 完了後の performance 関連変更:
+
+- **Decision SSE**: `usePrefetchedDecisions` 導入 (`2b08a75`) により No 連打 (バースト) シナリオで体感レイテンシが大幅改善。k6 `decision-throughput.js` シナリオでは `MOCK_SEED_DEMO_DECISIONS=true` での seed 状態を前提に再計測推奨。
+- **CORS preflight**: `OPTIONS` → `PUT` 経路追加 (`2b08a75`) により preflight 1 RTT 増だが、persona-selections は user 1 回しか叩かないので全体的な P95 への影響なし。
+- **Score endpoint**: `ScoreResponse.history` (30 日 × 4 byte 程度) 追加 (`2400f45`) でレスポンス size +120 byte 程度、NFR PERF 内。
+- **Voice STT 422 fix**: `FormData` Content-Type strip (`775f6a5`) は元々動かなかった経路の修正、性能 baseline 変更なし。
+
+→ k6 3 scenarios (decision-throughput / sse-concurrent / persona-list) の NFR PERF 目標値は未変更。staging 実機測定は OPERATIONS phase へ持越し。

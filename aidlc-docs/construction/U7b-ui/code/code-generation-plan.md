@@ -212,3 +212,22 @@ bundle 対象 LOC は NFR Req §1.1 試算 (~565 LOC ベース) と整合、~6.3
 ### Improvements 2
 - **Imp1** (§9.1): LOC 内訳詳細表 (~1,510 total、bundle 対象 ~710 src LOC のみ)
 - **Imp2** (§3 A.1): Storybook devDep install のみで動作、`storybook init` は不要 (config files は A.6 で手動配置)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Phase A.0〜G (設定 6 / tokens 4 + preset + globals.css / primitives 7 / icons 4 + composites 4 / hooks 2 / stories 6 / tests 9) の生成計画は全て継続有効**。
+
+### Post-CONSTRUCTION で変更されたファイル
+| ファイル | commit | 変更内容 |
+|---|---|---|
+| `packages/ui/src/composites/SwipeChoice.tsx` | `2b08a75` + `1924411` | state-leak fix (`key={decision.id}` + `useEffect` reset) + transition `duration-150` |
+| `packages/ui/src/composites/VoiceMicButton.tsx` | `775f6a5` | push-to-talk → click toggle (state machine: idle | recording | error) |
+| (各 h2) | `1924411` | PersonaCard / DecisionUtteranceBubble 等の h2 に `font-serif` (Noto Serif JP) 追加 |
+
+tokens / primitives 構成 (`Spinner` / `Button` / `Card` / `Input` / `Toast` / `ToastProvider` / `Modal`) は不変。Storybook 6 stories + 9 test ファイルは構成不変 (assertion のみ update)。
+
+→ U7b Code Gen Plan は 48 ファイル構成を維持、composite 2 件の改修と h2 font-serif 統一のみ。

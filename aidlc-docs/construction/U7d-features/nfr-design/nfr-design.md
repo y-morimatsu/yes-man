@@ -391,3 +391,23 @@ describe("decisionReducer", () => {
 ### Improvements 2
 - **Imp1** (§9): STRINGS に `keyof typeof` 型 + `t(key)` 関数で typo を TS compile error
 - **Imp2** (§4): Provider 順序の依存関係コメント (QueryProvider 順序自由 / ApiProvider は AuthProvider 依存)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の NFR Design 修正点は全て継続有効**。React Query QueryProvider、state machine reducer、manualChunks (react-vendor / amplify / chart)、threshold UI、二段階削除等の Design pattern は不変。
+
+### Post-CONSTRUCTION で追加された Design pattern
+- **`usePrefetchedDecisions` buffer hook** (`2b08a75`): React Query の `prefetchQuery` を 2 件先読み、`SwipeChoice` swap 時に instant 表示。state machine reducer 内に `swapFromBuffer` action を新設。
+- **`ScoreRadialChart` + `ScoreLineChart` pure SVG components** (`2400f45`): 外部 chart library 非依存 (bundle size 観点)、`ScoreResponse.history` を pure function で SVG path に変換
+- **`useVoiceBackend` localStorage pattern** (`775f6a5`): `voice.backend` key で永続化、起動時に capability detection + auto-fallback
+- **Dynamic Persona Routing 💡 badge pattern** (`07c1c78`): `usePreference` + `usePersona.builtin()` 合成、top-3 のみ表示、cold-start 時非表示
+
+### Page-level Design 変更
+- **PreferencePage 4 セクション再設計** (`2b08a75`): accepted_patterns dict[] + domain tags + persona_style_preference bar graph + inferred_tags pills
+- **DecisionPage layout 再構成** (`2400f45`): persona pill inline + central voice button + horizontal input+send
+
+→ U7d NFR Design は Post-CONSTRUCTION で最大量の pattern 追加を吸収、既存の React Query + reducer + manualChunks 基盤の上で安全に拡張。

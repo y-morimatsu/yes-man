@@ -219,3 +219,17 @@ Journey F は独立ユニットを設けず、以下に解消される (Q7=A 採
 - **共有モデルは `packages/shared-types` または `apps/api/src/domain` に集約** (重複定義なし)
 - **Strategy + DI で実装差し替え可能** (本番↔MOCK↔エミュレータ)
 - **すべての Story がいずれかのユニットに割り当て済み** — `unit-of-work-story-map.md` で確認
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot を保持。12 unit (U1-U7d + U-Persona + U-Test) の境界 / 責務分担は不変。
+
+### Unit 間の新規依存 edge
+- **U4 (decision) → U5 (learning)**: `DecisionEngine._resolve_personas` が `PreferenceProfileRepository` を読む依存追加 (`07c1c78`)
+- Unit 内部の Strategy 選択は変更なし
+
+### Unit 跨ぎの bug fix
+- **U2 (storage) ↔ U7d (features)**: CORS `PUT` 許可で `PersonaSelectionPage` の preflight 解決 (`2b08a75`)
+- **U7c (api-client) ↔ U6 (voice)**: `FormData` Content-Type strip で STT 422 fix (`775f6a5`)

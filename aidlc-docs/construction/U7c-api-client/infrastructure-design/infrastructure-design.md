@@ -369,3 +369,17 @@ gzip -c packages/api-client/dist/index.js | wc -c
 ### Improvements 2
 - **Imp1** (§3.1): LOC → bundle size 換算表 (~565 runtime LOC → ~11.5 KB minified → ~4.2 KB gzip)、NFR Req §1.1 根拠
 - **Imp2** (§3.2 + §4.1 Step 5): `size-limit` (preset-small-lib) で 5 KB gzip 上限を CI 自動 enforce
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の Infra Design 修正点は全て継続有効**。`packages/api-client` の monorepo 配置、`pnpm-workspace.yaml`、`apps/api/scripts/dump_openapi.py` + 静的 OpenAPI 配置 (`apps/api/openapi.json`) 等の Design は不変。
+
+### Schema 自動再生成の運用 (`2400f45`)
+- `dump_openapi.py` 経由で `apps/api/openapi.json` → `packages/api-client/src/generated/schema.ts` を再生成
+- CI 統合 (実機 schema → TS 型 chain) の Design は不変、`ScoreResponse.history` 追加が automatic propagation で反映済
+
+→ U7c Infrastructure Design は CONSTRUCTION 完了状態のまま継続有効、schema 自動再生成 chain も従来通り稼働。

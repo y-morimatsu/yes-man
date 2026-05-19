@@ -489,3 +489,17 @@ JWT モック生成は `tests/fixtures/jwt.py` で RSA 鍵ペア + JWS 発行ヘ
 - [x] テスト戦略 (Unit / Integration / Contract / PBT / E2E)
 - [x] 次ステージ (NFR Requirements) への引き継ぎ事項
 - [x] FR-AUTH-01〜07 全カバレッジ確認
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-15 承認時の Snapshot を保持。
+
+**Auth ロジックへの直接変更なし** (post-CONSTRUCTION 期間 2026-05-17 〜 2026-05-19 を通じて `apps/api/src/yesman_api/{domain,application,infrastructure,interface}/auth/` および `middleware/` 配下に commit による変更なし)。
+
+ただし以下の **波及効果** がある:
+- **U7a-web-shell の AuthBypass guard 強化** (`2400f45`): frontend 側で `env.authBypass=true` 時に `signIn()` / `signOutUser()` が no-op になるよう厳密化。backend 側 `MockAuthAdapter` の SPECIAL_TOKENS 3 種 (`mock-valid` / `mock-expired` / `mock-malformed`) と整合した動作を維持。
+- **Dynamic Persona Routing で `preference_repo` を inject** (`07c1c78`): DecisionEngine が認証済 user の preference を読むようになったが、`get_current_user` middleware の挙動は不変。
+
+→ U3 / auth は CONSTRUCTION 完了状態のまま、認証 surface を維持して下流の機能拡張を支えている。

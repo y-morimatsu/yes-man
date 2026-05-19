@@ -442,3 +442,24 @@ NFR Req で確定する事項:
   - Imp2: persona_style_preference 50 key 上限 (古い順 prune)
   - Imp3: PATCH の DTO + handler 側 clip 強制 ([-1.0, 1.0] + 50 key)
   - Imp4: DELETE は ColdStart 再推定で再初期化 (完全空ではない、UX 悪化防止)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに波及した:
+
+### Dynamic Persona Routing への学習結果の活用 (`07c1c78`、Closes #4)
+
+U5 が学習する `PreferenceProfile.persona_style_preference` (dict[persona_id, score]) が、U4 `DecisionEngine._resolve_personas` から **読み取り専用** で参照されるようになった:
+
+- U5 の **書き込み path 不変**: `apply_yes / apply_no` でのスコア更新ロジック、SQS consumer、ColdStart Loader、PATCH/DELETE clip 動作はすべて維持
+- 新しい **読み取り消費者**: U4 DecisionEngine (cold-start 判定 + 推奨 top-3)
+- 読み取り頻度: 1 decision request あたり最大 1 回、`PreferenceProfileRepository.get_by_user(user_id)`
+- 既存の `GET / PATCH / DELETE /v1/preferences/me` endpoint には影響なし
+
+### Mock seed への影響 (`2b08a75`)
+- U2 の `MOCK_SEED_DEMO_DECISIONS=true` で `builder.apply_yes/no` が 105 回呼ばれ、`persona_style_preference` が demo 用に {慎重派 0.72 / 楽観派 0.91 / 効率派 0.45} に収束
+- これにより demo 用 user の Dynamic Persona Routing は「楽観派 → 慎重派 → 効率派」順で top-3 推奨が出る (E2E `persona.spec.ts` で検証)
+
+→ U5 / learning は学習ロジックを変更せず、結果データの新規消費者が増えた形。

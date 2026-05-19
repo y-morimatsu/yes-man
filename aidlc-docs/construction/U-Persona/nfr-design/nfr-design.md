@@ -458,3 +458,17 @@ def validate_runtime(self) -> None:
 - **Improvements 2**:
   - Imp1 (§3 list_shared): `cast(Literal[...], sort)` 削除、API DTO で Literal validate
   - Imp2 (§5): MVP は set_selection inline、将来 PBT 切り出し候補として残す
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Important / Improvements の合計 6 件の NFR Design 修正点は全て継続有効**。Persona anonymizer (HMAC-SHA256 + salt)、PersonaModerator U3 流用、PersonaReport AUTO_BLOCK、UserPersonaSelection 上限 3 等の Design pattern は不変。
+
+### Dynamic Persona Routing UI 連携 (`07c1c78`)
+- Backend (`apps/api`) 側の Persona module Design pattern には変更なし
+- Frontend (`apps/web`) で `usePreference` (U5 既存 hook) + `usePersona.builtin()` を合成して 💡おすすめ pink pill badge を表示する pattern を追加 — これは U7d/U-Persona の境界面で frontend 側の責務
+
+→ U-Persona NFR Design は CONSTRUCTION 完了状態のまま継続有効。

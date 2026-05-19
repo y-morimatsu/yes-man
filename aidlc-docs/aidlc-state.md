@@ -4,8 +4,9 @@
 - **Project Name**: YesMan
 - **Project Type**: Greenfield
 - **Start Date**: 2026-05-09T00:00:00Z
-- **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** / OPERATIONS phase (placeholder)
+- **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** + 🔁 **Post-CONSTRUCTION 改修フェーズ** (Hackathon Pragmatism 緩和ルール下で `main` 直接 commit 運用、2026-05-17 〜 進行中) / OPERATIONS phase (placeholder)
 - **Last Approved Stage**: CONSTRUCTION - Build and Test (approved 2026-05-16、CONSTRUCTION フェーズ 11 unit + Build and Test ALWAYS EXECUTE 全完了)
+- **Latest Post-CONSTRUCTION Commit**: `28c8adc style(web): Splash の "→ スワイプして同意" 文言を削除` (2026-05-19)
 - **U1 完了**: 全 4 ステージ承認済 (Functional Design SKIP / NFR Req / NFR Design / Infrastructure Design / Code Gen Part 1+2)、`infra/` に 24 ファイル / 約 2,959 行
 - **Hackathon**: AWS Hackathon
 
@@ -356,3 +357,44 @@
 
 ### 🟡 OPERATIONS PHASE
 - [ ] Operations (PLACEHOLDER)
+
+---
+
+## 🔁 Post-CONSTRUCTION 改修ログ (2026-05-17 〜 2026-05-19)
+
+CONSTRUCTION 全完了 (2026-05-16) 以降に発生した実装/仕様変更を記録する。`main` ブランチへ直接 commit する **Hackathon Pragmatism 緩和ルール** (CLAUDE.md `Git-Flow Branching Model` 章) の下で運用。CONSTRUCTION 段階の各設計ドキュメントは「2026-05-16 当時の Snapshot + 末尾の Post-CONSTRUCTION 改修注記」で構成される。
+
+### 改修一覧
+
+| Date | Commit | Scope | 影響ドキュメント |
+|---|---|---|---|
+| 2026-05-17 | `b3bceb0` | E2E 100/100 PASS レポート確定 | `construction/build-and-test/` 5 ファイル |
+| 2026-05-17 | `317280b` | **委任度スコアの意味反転** (No 比率 → Yes 比率) | `inception/requirements/requirements.md`、`construction/U4-decision/functional-design`、`construction/U7d-features/functional-design`、`construction/U7d-features/code/code-generation-plan` |
+| 2026-05-17 | `2400f45` | INCEPTION screen-04/05 厳密準拠 + AuthBypass 整合 (`ScoreRadialChart` + `ScoreLineChart` 新規 / `ScoreResponse.history` 追加) | `construction/U4-decision/functional-design`、`construction/U7d-features/functional-design`、`construction/U7c-api-client/functional-design`、`inception/application-design/ui-mockups` |
+| 2026-05-17 | `2b08a75` | デモ体験 UX 改修一式 (`usePrefetchedDecisions` / `SwipeChoice` state-leak fix / `PreferencePage` 再設計 / Mock seed 105 decisions 30 days / CORS `PUT` 許可 / README ローカル起動章 +177 LOC) | `construction/U2-storage/functional-design` (CORS allow_methods)、`construction/U7d-features/functional-design`、`construction/U7d-features/code/code-generation-plan` |
+| 2026-05-17 | `9a52954` | Playwright artifacts を `.gitignore` 追加 | `construction/U-Test/code/code-generation-plan` (.gitignore 記述補足) |
+| 2026-05-19 | `1c7c5eb` | **AI-DLC Extensions 追加** (Construction Flow + Frontend Design)、Issue #6 | `aidlc-state.md` `## Extension Configuration` (反映済)、`construction/*` 全 unit (Pragmatic 適用方針) |
+| 2026-05-19 | `1924411` | FE-DESIGN ルール準拠の style fix 8 件 (`font-serif` h2 5 箇所、`Layout max-w-md`、`SwipeChoice duration-150`、header palette `#F5E5C4`) | `construction/U7a-web-shell/functional-design`、`construction/U7b-ui/functional-design`、`construction/U7d-features/functional-design` |
+| 2026-05-19 | `775f6a5` | **Voice backend 切替 UI** (`useVoiceBackend` + `useWebSpeechRecognition` 新規、`ProfilePage` radio、`VoiceMicButton` toggle 化、api-client `FormData` content-type 自動化) | `construction/U6-voice/functional-design`、`construction/U7d-features/functional-design`、`construction/U7c-api-client/functional-design`、`construction/U7b-ui/functional-design` |
+| 2026-05-19 | `c44e032` | CLAUDE.md += Git-Flow Branching Model | `CLAUDE.md` (リポジトリ root)、本セクション |
+| 2026-05-19 | `07c1c78` | **Dynamic Persona Routing** (Closes #4) — `DecisionEngine._resolve_personas` 拡張、嗜好プロファイルから top-3 builtin persona を自動推奨、`PersonaSelectionPage` 「💡おすすめ」pink pill badge | `construction/U4-decision/functional-design`、`construction/U-Persona/functional-design`、`construction/U5-learning/functional-design`、`construction/U7d-features/functional-design` |
+| 2026-05-19 | `28c8adc` | Splash の「→ スワイプして同意」削除 | `construction/U7d-features/functional-design` (Splash 文言) |
+
+### Extension Configuration (Post-CONSTRUCTION 追加)
+| Extension | Enabled | 適用方針 |
+|---|---|---|
+| Construction Flow | Yes (Pragmatic) | Hackathon 緩和ルール下では 03 (Multi-Approach Proposal) / 04 (Approval Gating) を skip、01/02/05/06/07 のみ適用 |
+| Frontend Design | Yes (Pragmatic) | INCEPTION drawio をソース・オブ・トゥルースとして 01/03/04 を厳密適用、02/05/06/07 はベストエフォート |
+
+### Build and Test 実機結果
+- **e2e**: Playwright `tests/e2e/` で **100/100 PASS** (b3bceb0 にて確定、12 spec × 平均 8.3 test)
+  - `auth.spec.ts` 3 / `decision.spec.ts` 3 / `design.spec.ts` 9 / `inception-complete-screens.spec.ts` 19 / `inception-design.spec.ts` 20 / `inception-mobile.spec.ts` 14 / `inception-structural.spec.ts` 11 / `no-burst-regenerate.spec.ts` 5 / `persona.spec.ts` 3 / `score.spec.ts` 2 / `swipe-and-discussion.spec.ts` 9 / `voice.spec.ts` 2
+- **API unit/integration/contract/property**: 53 `test_*.py` ファイル (内訳: `apps/api/tests/`)
+- **Web unit (Vitest)**: 14 ファイル (内訳: `apps/web/tests/`)
+- **Cross-unit integration (pytest)**: 5 ファイル (内訳: `tests/integration/tests/`)
+
+### Post-CONSTRUCTION 改修原則
+1. **Snapshot 不変性**: 各 unit の `functional-design.md` / `nfr-*` / `infrastructure-design.md` / `code-generation-plan.md` 本体は 2026-05-16 当時の承認済 Snapshot を保持
+2. **Post-CONSTRUCTION 改修注記**: 改修が発生した unit には末尾に `## Post-CONSTRUCTION 改修注記 (YYYY-MM-DD)` セクションを追記
+3. **audit.md は Append-only**: 全ての改修は `audit.md` 末尾に時系列追記
+4. **本 `aidlc-state.md` の改修ログ表**: 上記「改修一覧」を単一の起点として参照

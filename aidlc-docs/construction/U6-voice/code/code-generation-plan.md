@@ -269,3 +269,23 @@ cd infra && pnpm test -- --updateSnapshot && cdk synth
 ### Improvements 2
 - **Imp1** (§3 + §3.1): `scripts/generate_silence_mp3.py` 追加で shell-free 生成 (ffmpeg 依存回避)、3 段 fail-safe (生成 / minimal MP3 binary / 0 byte fallback)
 - **Imp2** (§9 G.2): API RUNBOOK §11 (developer-facing) vs Infra Design §11 (ops-facing) の役割分離明示 + cross-link
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Phase A〜G (SilenceGuard DRY refactor / silence_1s.mp3 fixture / domain/voice 3 + Protocol / 3 backend + Factory / interface DTO + router + deps / config 6 env vars / tests 8 / RUNBOOK + api-stack) の生成計画は全て継続有効**。
+
+### Backend (apps/api) 側の追加変更なし
+- `domain/voice/` + `application/voice/` + `infrastructure/voice/` + `interface/http/voice.py` 配下に Post-CONSTRUCTION の commit なし
+- VoiceProviderFactory 3 Strategy (Mock / WebSpeechApi / AWS Transcribe) の構成不変
+
+### Frontend (apps/web) 側の新規 hook (本 plan の scope 外、U7d で実装)
+- `useVoiceBackend.ts` 新規 (`775f6a5`)
+- `useWebSpeechRecognition.ts` 新規 (`775f6a5`)
+- `useVoiceInput.ts` 改修 (`775f6a5`)
+- `VoiceMicButton.tsx` toggle 化 (`775f6a5`、U7b 担当)
+
+→ U6 Code Gen Plan は backend 構成を維持、frontend 拡張は U7d/U7b の Code Gen Plan 末尾注記参照。

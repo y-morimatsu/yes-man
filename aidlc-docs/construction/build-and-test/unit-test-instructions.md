@@ -168,3 +168,25 @@ pnpm --filter @yesman/web exec vitest run --reporter=verbose tests/features/deci
   - web: lines > 75% / branches > 65%
 - [x] PBT 全 case max_examples=100 で fail なし
 - [x] CI unit test 実行時間 < 5 min
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+CONSTRUCTION 完了後に追加/更新された unit test:
+
+### Backend (`apps/api/tests/`)
+- `tests/unit/decision/test_scorer.py`: Yes-ratio 反転 (`317280b`) + `_build_history` 追加 (`2400f45`) を反映
+- `tests/property/test_score_consistency.py`: PBT を Yes-ratio に更新 (`317280b`)
+- 既存 53 ファイル構成は不変
+
+### Web (`apps/web/tests/`)
+- `tests/features/score/ScorePage.test.tsx`: radial + line chart 描画検証を追加 (`2400f45`)
+- `tests/features/score/scoreLevel.test.ts`: 閾値反転検証 (`317280b`)
+- `tests/setup.ts`: `getUserMedia` + `MediaRecorder` mock 拡張 (Voice toggle 検証用、`775f6a5`)
+- 既存 14 ファイル構成は不変
+
+### Cross-package
+- `packages/ui` Storybook stories は 6 件で不変、`VoiceMicButton` の toggle 化 (`775f6a5`) は story 更新で対応
+
+→ 既存の `pytest -v` + `pnpm test` コマンドで全件 PASS、CI 実行時間 < 5 min 予算内を維持。

@@ -578,3 +578,62 @@ const PreferencePage = lazy(() => import("../features/preference/PreferencePage"
 - **Imp1** (§3.1): DecisionPage を `useReducer` + discriminated union state machine 化
 - **Imp2** (§5.1): ScorePage threshold UI (no_count>=5 danger / ratio>0.5 warning)
 - **Imp3** (§7.1.1): Profile 削除を二段階確認 (Modal + checkbox + final button)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった (本 unit が最大の改修負荷):
+
+### 1. Score 画面の Yes-ratio 化 + radial / line chart 二段表示 (`317280b` + `2400f45`)
+
+- **`features/score/scoreLevel.ts`**: warning 閾値を `ratio > 0.5` → `ratio < 0.5` に反転 (低 Yes 比率 = 委任不十分 = warning)
+- **`features/score/strings.ts`**: copy を「主体性スコア」→「**委任度スコア (Yes 比率)**」「たかいほど信頼できています」に統一
+- **`features/score/ScoreRadialChart.tsx`** **新規**: INCEPTION drawio screen-04 準拠の SVG 円グラフ、中央に大% metric
+- **`features/score/ScoreLineChart.tsx`** **新規**: 30 日 trend line chart、`ScoreResponse.history` を消費
+- **`features/score/ScorePage.tsx`** 全面再設計: 円グラフ + line chart + pink AI bubble (励まし) を縦 stack、scrollable
+- **`features/score/useScore.ts`**: `useQuery(['scores', 'me'])` の return 型を `ScoreResponse` (history 含む) に拡張
+
+### 2. Decision 画面の UX 改修 (`2400f45` + `2b08a75` + `775f6a5`)
+
+- **`features/decision/usePrefetchedDecisions.ts`** **新規**: No 連打バーストに備え 2 件の next decision を background prefetch、`SwipeChoice` swap 時に instant 表示
+- **`features/decision/reducer.ts`**: `swapFromBuffer` action 追加 + `setInput` idempotency (同じ input を連投しても state 変化なし)
+- **`features/decision/DecisionPage.tsx`**: persona pill を utterance bubble 上 inline 化、central voice button、horizontal input+send layout
+- **`features/decision/NudgeBanner.tsx`**: pink AI bubble の copy 整理 (Voice toggle 関連も含む)
+
+### 3. Voice 入力 UI の backend toggle 統合 (`775f6a5`)
+
+- **`features/voice/VoiceMicInput.tsx`**: `useVoiceBackend` + `useVoiceInput` (composed) を消費、Server STT / Web Speech API を user 設定に従って自動切替
+- **`features/profile/ProfilePage.tsx`**: 「🎤 音声入力 backend」radio セクションを追加、localStorage 永続化
+
+### 4. Persona 画面の Dynamic Routing 反映 (`07c1c78`、Closes #4)
+
+- **`features/persona/PersonaSelectionPage.tsx`**: builtin persona card に「💡 おすすめ」pink pill badge、`usePreference` の `persona_style_preference` で top-3 にのみ表示、cold-start user は badge 非表示
+- **`features/persona/usePersona.ts`**: 既存の `useQuery` を維持、新たに `usePreference` を import して読み取り合成
+
+### 5. Preference 画面の全面再設計 (`2b08a75`)
+
+- **`features/preference/PreferencePage.tsx`**: `accepted_patterns dict[]` + domain tags + `persona_style_preference` bar graph + `inferred_tags` pills の 4 セクション構成に再設計
+- **`features/preference/usePreference.ts`**: response type を拡張、API surface (GET / PATCH / DELETE `/v1/preferences/me`) は不変
+
+### 6. HomePage Splash の整理 (`28c8adc`)
+
+- **`features/home/HomePage.tsx`**: 「→ スワイプして同意」の italic 灰色案内文字を削除 (実機ではスワイプ操作を要求していないため誤解防止)
+- 削除部分: `<p className="mt-4 text-xs italic text-neutral-400">→ スワイプして同意</p>`
+
+### 7. FE-DESIGN style 8 件修正 (`1924411`)
+
+- 各 feature 内の h2 5 箇所に `font-serif` 追加 (FE-DESIGN-02)
+- `Layout.tsx` (U7a 担当) の `max-w-md` + header palette 修正は U7a の改修注記参照
+
+### 受入条件 (Post-CONSTRUCTION 実機検証)
+
+- E2E `tests/e2e/tests/score.spec.ts` (2 test): Yes-ratio 警告表示 + radial + line chart 描画
+- E2E `tests/e2e/tests/no-burst-regenerate.spec.ts` (5 test): No 連打 → prefetch buffer swap 動作
+- E2E `tests/e2e/tests/swipe-and-discussion.spec.ts` (9 test): SwipeChoice state-leak なし
+- E2E `tests/e2e/tests/persona.spec.ts` (3 test): 💡おすすめ badge 表示 (cold-start 除く)
+- E2E `tests/e2e/tests/voice.spec.ts` (2 test): VoiceMicButton toggle + backend 切替
+- E2E `tests/e2e/tests/inception-*` (4 spec / 64 test): INCEPTION drawio 仕様準拠
+- すべて 2026-05-19 時点で PASS
+
+→ U7d / features は CONSTRUCTION 完了後の最大改修対象、Score / Decision / Voice / Persona / Preference / Home の全 6 feature に手が入ったが、`@yesman/api-client` schema の自動 propagation により breaking change は最小化された。

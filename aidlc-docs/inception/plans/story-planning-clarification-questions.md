@@ -120,3 +120,11 @@ X) Other (please describe after [Answer]: tag below)
 ## 完了したら
 
 すべての `[Answer]:` を埋めたら「**完了**」「**done**」「**回答終わりました**」などと教えてください。回答を踏まえてストーリー生成計画の最終承認プロンプトを表示します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19) — Historical Artifact
+
+本ファイルは 2026-05-09 当時の Story Planning 段階で発生した user-AI clarification 対話の **Snapshot (immutable historical artifact)** であり、Post-CONSTRUCTION で modify しない。
+
+Post-CONSTRUCTION 段階の clarification は CLAUDE.md `Git-Flow Branching Model` 「Hackathon Pragmatism」緩和ルールに従い、直接コミットメッセージ + audit.md 末尾追記で記録。

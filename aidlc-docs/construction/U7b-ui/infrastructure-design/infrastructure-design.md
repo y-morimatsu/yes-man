@@ -316,3 +316,13 @@ pnpm publish --access public
 ### Improvements 2
 - **Imp1** (§2.2): Chromatic 統合 option (無料枠 5K snapshots/月)、MVP は artifact 維持
 - **Imp2** (§6.2): changesets 将来導入候補、internal package version + CHANGELOG 自動生成
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の Infra Design 修正点は全て継続有効**。`packages/ui` の `package.json` exports、tsconfig、vitest config、eslintrc、`.storybook` 設定、size-limit budget 等の Design は不変。
+
+→ U7b Infrastructure Design は CONSTRUCTION 完了状態のまま継続有効。Post-CONSTRUCTION 期間中、build config / package exports の変更なし。

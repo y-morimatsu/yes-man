@@ -625,3 +625,16 @@ U2-U4 既存を流用、**新規追加なし**:
   - Imp1 (§3.2): `recent_accepted` の persona_names を `json.dumps(names, ensure_ascii=False)` で YAML-safe な double-quote 表現に
   - Imp2 (§7): `decision_events_queue_url` コメント補足 (U1 ApiStack 由来の説明)
   - Imp3 (§8.1): `_format_profile_with_preferences` を **keyword-only signature** で引数順事故防止
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Important 3 / Improvements 3 の合計 6 件の NFR Design 修正点は全て継続有効**。`persona_names 統一`、`N+1 注記`、`asyncio.timeout`、`json.dumps names`、`queue_url コメント`、`keyword-only signature` 等の Design pattern は不変。
+
+### 軽微な波及
+- **U4 が U5 学習結果を読む新依存** (`07c1c78`): `PreferenceProfileRepository.get_by_user` への read access が追加、既存の SQLModel ORM パターン (cold-start fallback 含む) で対応可能
+
+→ U5 NFR Design は CONSTRUCTION 完了状態のまま継続有効。

@@ -407,3 +407,13 @@ U1 は CDK スタックの中で、本番リソースのみを定義する (Dock
 - [x] **CI は AWS リソースに一切アクセスせず完結 (§8.5)**
 - [x] **環境変数だけで `prod` ↔ `dev` ↔ `ci` 切替可能 (§8.2、NFR-DEV-04)**
 - [x] 次ステージ (NFR Design) への引き継ぎ事項を明示
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot を保持。
+
+**NFR 数値目標 (Performance / Security / Operations) には Post-CONSTRUCTION で変更なし**。Post-CONSTRUCTION 期間 (2026-05-17 〜 2026-05-19) 中に CDK スタックへの commit は発生していないため、Cognito MFA、ALB/CloudFront SG、Aurora pool 設定、CW Billing Alarm、`/health` 所有権などの NFR は全て CONSTRUCTION 完了時点のまま維持。
+
+→ 本 NFR Req は OPERATIONS phase の実機検証時に再評価予定。

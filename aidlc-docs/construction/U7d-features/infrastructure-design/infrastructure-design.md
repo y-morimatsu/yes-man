@@ -238,3 +238,20 @@ U7d は AWS インフラ追加なし、U7a コスト ~¥200/月 に含まれる�
 ### Improvements 2
 - **Imp1** (§2.1): magic number `256000` を size-limit の宣言的 `"250 KB"` に置換
 - **Imp2** (§5): ローカル動作確認に `du -sh` で bundle 全体サイズ確認 + stats.html 視覚化
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の Infra Design 修正点は全て継続有効**。`apps/web` の Vite config (manualChunks + visualizer)、`@tanstack/react-query` 依存、`vitest.config.ts`、size-limit preset 等の Design は不変。
+
+### 軽微な追加
+- **`apps/web/src/features/voice/`** 配下に新規 hook 2 種 (`useVoiceBackend.ts` + `useWebSpeechRecognition.ts`、`775f6a5`)
+- **`apps/web/src/features/score/`** 配下に新規 component 2 種 (`ScoreRadialChart.tsx` + `ScoreLineChart.tsx`、`2400f45`)
+- **`apps/web/src/features/decision/`** 配下に新規 hook 1 種 (`usePrefetchedDecisions.ts`、`2b08a75`)
+
+これらは既存の `features/{voice,score,decision}/` ディレクトリ pattern に従って追加されており、build config / package.json 依存等への影響なし。
+
+→ U7d Infrastructure Design は CONSTRUCTION 完了状態のまま、6 新規ファイルが既存 directory pattern 内で追加。

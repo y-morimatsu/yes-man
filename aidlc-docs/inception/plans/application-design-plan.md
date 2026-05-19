@@ -213,3 +213,18 @@ X) Other (please describe after [Answer]: tag below)
 ## 3. 完了したら
 
 すべての `[Answer]:` を埋めたら「**完了**」「**done**」「**回答終わりました**」と教えてください。回答を分析し、矛盾・曖昧性があれば追加質問、なければ承認プロンプトを表示します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-09 当時の Application Design 実行計画 Snapshot を保持 (FR-PERSONA / FR-CV の post-approval addition 含む)。
+
+### Post-CONSTRUCTION での Application-level 追加
+- **Dynamic Persona Routing** (`07c1c78`): DecisionEngine ← PreferenceProfileRepository の依存 edge 追加
+- **Score scorer 意味反転 + history 拡張** (`317280b` + `2400f45`): AutonomyScorer の method 拡張
+- **Voice backend Strategy の frontend 側拡張** (`775f6a5`): backend Strategy 不変、frontend に backend selector 追加
+
+詳細は `aidlc-docs/inception/application-design/application-design.md` 末尾の「Post-CONSTRUCTION 改修注記」参照。
+
+→ Application Design Plan は INCEPTION フェーズ実行計画として完了済、Post-CONSTRUCTION での追加は plan を経由せず各 unit FD への直接追記で運用。

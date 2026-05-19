@@ -273,3 +273,22 @@ pnpm --filter @yesman/api-client size
 ### Improvements 2
 - **Imp1** (§4 C.1): `engines.node: ">=20"` を package.json に明示、Web Streams API Node 18 互換性問題回避
 - **Imp2** (§7): test module を 1 → 3 に拡張 (personas / decisions / voice、主要 endpoint カバー)、profiles/scores/preferences/persona-selections は U7d 開発時に追加可能
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Phase A.0〜G (monorepo 基盤 / dump_openapi.py + placeholder / api-client 設定 5 / generated schema placeholder / src runtime 12 / tests 8 / JSON+YAML 構文検証) の生成計画は全て継続有効**。
+
+### Post-CONSTRUCTION で変更されたファイル
+| ファイル | commit | 変更内容 |
+|---|---|---|
+| `packages/api-client/src/generated/schema.ts` | `2400f45` | `ScoreResponse.history: ScoreHistoryPoint[]` 追加に伴い `dump_openapi.py` → `openapi-typescript` chain で再生成 |
+| `packages/api-client/src/client.ts` | `775f6a5` | `body instanceof FormData` 判定で `Content-Type` header を strip (browser 自動付与に委譲) |
+| `packages/api-client/src/modules/voice.ts` | `775f6a5` | `stt(audio: Blob)` から手動 `Content-Type: 'multipart/form-data'` 削除 |
+
+7 module (`decisions, persona-selections, personas, preferences, profiles, scores, voice`) の構成不変。TokenProvider / ApiError discriminated union / DecisionStream SSE wrapper も不変。msw v2 test 構成も不変。
+
+→ U7c Code Gen Plan は 29 ファイル構成を維持、schema 自動再生成 + FormData fix の 2 件のみ。

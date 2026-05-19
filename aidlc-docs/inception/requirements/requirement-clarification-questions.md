@@ -171,3 +171,11 @@ X) Other (please describe after [Answer]: tag below)
 ## 完了したら
 
 すべての `[Answer]:` を埋めたら「**完了**」「**done**」「**回答終わりました**」などと教えてください。これらの回答を踏まえて要件ドキュメント (`requirements.md`) を作成します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19) — Historical Artifact
+
+本ファイルは 2026-05-09 当時の Requirements Analysis 段階で発生した user-AI clarification 対話の **Snapshot (immutable historical artifact)** であり、Post-CONSTRUCTION で modify しない。
+
+要件 (`requirements.md`) 本体への post-approval addition (FR-PERSONA / FR-CV) および Post-CONSTRUCTION での解釈変更 (委任度スコア / Voice toggle / Dynamic Persona Routing) は `requirements.md` 末尾の「Post-CONSTRUCTION 改修注記」参照。

@@ -126,3 +126,16 @@
 ```
 
 各 Phase 内のユニットは独立して per-unit ループ (Functional Design → NFR Requirements → NFR Design → Infrastructure Design → Code Generation) を回す。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot を保持。Story → Unit のマッピングは不変。
+
+### Post-CONSTRUCTION で追加された implicit story (受け入れ基準のみ)
+- 「Yes-ratio による委任度スコア表示」: U4 + U7d 共担当 (`317280b`)
+- 「30日トレンドの線グラフ表示」: U4 (history field) + U7d (ScoreLineChart) (`2400f45`)
+- 「No 連打バーストでも快適な遷移」: U7d (usePrefetchedDecisions) (`2b08a75`)
+- 「Voice backend の動的切替」: U7d (useVoiceBackend) + U6 (既存 Strategy 利用) (`775f6a5`)
+- 「嗜好プロファイルからの persona 推奨」: U4 (DecisionEngine._resolve_personas) + U-Persona (badge) (`07c1c78`)

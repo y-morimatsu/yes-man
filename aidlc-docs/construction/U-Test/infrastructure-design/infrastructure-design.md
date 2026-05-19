@@ -148,3 +148,19 @@ bash tests/smoke/smoke.sh
 - [x] Playwright browser binary を actions/cache で 2 回目以降高速化
 - [x] AWS インフラ影響ゼロ
 - [x] ローカル動作確認 4 step
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (light review approved) を保持。
+
+**CI workflow (pr-test.yml / load-test.yml) + Playwright cache 戦略 + integration / load / smoke の Design は不変**。
+
+### E2E spec 拡張に伴う infra-level 影響
+- `tests/e2e/tests/*.spec.ts` の追加 7 spec はすべて既存の Playwright config (mobile-chrome / Pixel 5) で実行
+- CI `pr-test.yml` の workflow 構成は不変、cache 戦略も従来通り
+- HTML report (`tests/e2e/playwright-report/index.html`) は GitHub Actions artifact upload 設定で取得可能
+- `.gitignore` で `tests/e2e/.last-run.json` 等の per-run 副産物を untrack (`9a52954`)
+
+→ U-Test Infrastructure Design は CONSTRUCTION 完了状態のまま、E2E spec 拡張は infra 不変で吸収。

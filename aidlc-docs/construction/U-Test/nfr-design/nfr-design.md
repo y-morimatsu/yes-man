@@ -294,3 +294,28 @@ SAMPLE_PERSONA = {
 - [x] k6 config + 3 scenarios
 - [x] Smoke shell script
 - [x] fixtures/shared/ で重複排除
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (light review approved) を保持。
+
+**Source tree + config (Playwright project = mobile-chrome / Pixel 5、retry / workers / trace 設定) の Design は不変**。
+
+### E2E spec 追加 (7 spec / 75 test)
+| 追加 spec | 設計判断 |
+|---|---|
+| `design.spec.ts` (9 test) | FE-DESIGN 整合性検証専用 spec として独立 |
+| `inception-complete-screens.spec.ts` (19 test) | INCEPTION drawio 全 20 画面 URL ナビゲーション網羅 |
+| `inception-design.spec.ts` (20 test) | INCEPTION drawio design fidelity (tokens + copy + icons) |
+| `inception-mobile.spec.ts` (14 test) | Pixel 5 mobile viewport + WCAG 2.5.5 touch target |
+| `inception-structural.spec.ts` (11 test) | INCEPTION structural (LIVE / pink nudge / persona icons / silence theater) |
+| `no-burst-regenerate.spec.ts` (5 test) | `usePrefetchedDecisions` 動作検証 |
+| `swipe-and-discussion.spec.ts` (9 test) | `SwipeChoice` state-leak fix + discussion live UI |
+
+### conftest / fixture 設計は不変
+- `tests/integration/conftest.py` + `tests/e2e/tests/fixtures/` の構成不変
+- assertion のみ Yes-ratio 化 + dynamic persona routing 反映
+
+→ U-Test NFR Design は spec 数を 5 → 12 に拡張しつつ、各 spec の atomicity / mock backend の portable 性は維持。

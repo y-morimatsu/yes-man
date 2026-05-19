@@ -573,3 +573,28 @@ LLM 送信前の PII フィルタは **U2 のスコープ外** (U4 / decision �
 - [x] yes_count カラム + record_usage atomic update 設計
 - [x] persona_reports UNIQUE 制約 (重複報告防止)
 - [x] RepositoryFactory パターン採用
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### Mock seed 機能拡張 (`2b08a75`)
+- **`infrastructure/persistence/mock_repositories.py`** に `MOCK_SEED_DEMO_DECISIONS=true` 環境変数で demo decision seed を注入する機能を追加
+- seed 内容: 30 日 × 平均 3.5 decision/day = 105 件、Yes-ratio が 30% → 95% に持上りするトレンド
+- `PreferenceProfile` は `builder.apply_yes/no` で同期的に再構築 (U5 sync path 経由)
+- 結果として `persona_style_preference` は demo 用に {慎重派 0.72 / 楽観派 0.91 / 効率派 0.45} に収束
+- 影響範囲: ローカル起動 / E2E のみ、prod path には影響なし
+
+### CORS allow_methods 拡張 (`2b08a75`)
+- **`infrastructure/config.py`** の CORSMiddleware 設定で `allow_methods` に `PUT` を追加
+- 動機: `PersonaSelectionPage` の `PUT /v1/persona-selections/me` preflight が CORS で reject されていた
+- 既存の `GET / POST / PATCH / DELETE / OPTIONS` に `PUT` 追加で 6 method 許可
+
+### Repository Protocol への影響
+- 上記いずれも Protocol レイヤ (`application/persistence/protocols.py`) を変更しない
+- 既存の `DecisionRepository / PreferenceProfileRepository` の signature 不変
+- contract test (`apps/api/tests/contract/test_repository_protocol.py`) は再実行で全件 PASS
+
+→ U2 / storage は API surface を維持したまま demo 体験 + CORS 整合の 2 点のみ調整。

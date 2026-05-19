@@ -552,3 +552,30 @@ flowchart TD
 - ✅ アクセシビリティ要件 (NFR-UX) が反映されているか
 - ✅ スワイプのみ (FR-UX-02) の操作で全機能にアクセス可能か
 - ✅ Construction フェーズへの引き継ぎ事項が明確か
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体および `screens/*.svg` (6 mockup) は 2026-05-09 当時の Snapshot を保持。以下の UI 動作変更が実装で反映された:
+
+### screen-04 (Score Dashboard) — 厳密準拠版を実装 (`2400f45`)
+- **`ScoreRadialChart`** 新規 (SVG 円グラフ、中央に大% metric)
+- **`ScoreLineChart`** 新規 (30日 trend、`ScoreResponse.history` 消費)
+- copy: 「主体性スコア」→「**委任度スコア**」(`317280b`)
+- 解釈反転: 大% は **Yes 比率** (高い = 委任度高 = AI 信頼)
+
+### screen-05 (Silence Theater) — dark theme 厳密準拠 (`2400f45`)
+- 暗背景 + 静音 演出を drawio 仕様通りに実装
+
+### Splash (HomePage) — 文言整理 (`28c8adc`)
+- 「→ スワイプして同意」案内文字を削除 (実機ではスワイプ操作を要求していないため誤解防止)
+- 大見出し "YESMAN" + 詩的サブタイトル + disclaimer は維持
+
+### Decision 画面 (screen-02 / 03 関連)
+- persona pill を utterance bubble 上 inline 化 (`2400f45`)
+- VoiceMicButton 中央配置 + horizontal input+send layout (`2400f45`)
+- VoiceMicButton を toggle 化 (`775f6a5`、push-to-talk → click-toggle)
+
+### Persona 選択画面 (screen-06 関連)
+- builtin persona card に「💡 おすすめ」pink pill badge 追加 (`07c1c78` Dynamic Persona Routing)

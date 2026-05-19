@@ -441,3 +441,13 @@ Part 1 (本書) 承認後、Part 2 で以下を実行:
 - [x] 検証手順 / Acceptance Criteria が明示
 - [x] リスクと緩和策が網羅
 - [x] Part 2 実行プランが明確
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-10 承認時の Snapshot (ultrathink full 9 fixes 適用済) を保持。
+
+**Phase A〜E (プロジェクト設定 7 / 7 Stack 50KB / bin/yesman.ts / 7 test / README+RUNBOOK) の生成計画は全て継続有効**。Post-CONSTRUCTION 期間中、`infra/` 配下のファイル mtime は 2026-05-16 20:10 以前のまま、CDK stack への commit による変更なし。
+
+→ U1 Code Gen Plan は CONSTRUCTION 完了状態のまま継続有効、OPERATIONS phase の `cdk deploy --all` 実機検証時に再確認予定。

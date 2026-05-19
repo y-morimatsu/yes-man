@@ -483,3 +483,29 @@ const server = setupServer(
 - **Imp1** (§3.2): header merge 順序明示 `defaultHeaders → init.headers → specific (Auth, Content-Type)`
 - **Imp2** (§4 + §3.2): `TokenProvider.refresh?()` optional + 401 で 1 回 retry (`retryOn401` flag で infinite loop 防止)
 - **Imp3** (§7): msw v2 syntax (`http.get + HttpResponse.json`)、v1 `rest.get` deprecated 明記
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### 1. ScoreResponse schema 拡張 (`2400f45`、2026-05-17)
+- **`packages/api-client/src/generated/schema.ts`** を `apps/api/scripts/dump_openapi.py` 経由で再生成
+- 差分: `ScoreResponse` に `history: ScoreHistoryPoint[]` フィールド追加 (`ScoreHistoryPoint = { date: string, ratio: number }`)
+- `src/modules/scores.ts` の return type は automatic propagation (本 unit が `paths['/v1/scores/me']['get']['responses']['200']` を再 export しているため)
+
+### 2. FormData Content-Type strip (`775f6a5`、2026-05-19)
+- **`packages/api-client/src/client.ts`**:
+  - request builder で `body instanceof FormData` のときは `Content-Type` header を明示的に削除
+  - 動機: 手動指定すると browser が boundary を付与できず、Backend が `422 Unprocessable Entity` を返していた (multipart boundary 不在)
+- **`packages/api-client/src/modules/voice.ts`**:
+  - `stt(audio: Blob)` で手動指定していた `Content-Type: 'multipart/form-data'` header を削除
+  - 結果として browser が `Content-Type: multipart/form-data; boundary=----WebKitFormBoundary...` を自動付与
+
+### Module / 構成は不変
+- 7 module (`decisions, persona-selections, personas, preferences, profiles, scores, voice`) の組み合わせ不変
+- TokenProvider / ApiError discriminated union / DecisionStream SSE wrapper は変更なし
+- msw v2 setupFiles + 8 test ファイルの構成も不変
+
+→ U7c / api-client は module 構成を維持したまま、schema 自動再生成と STT 422 fix の 2 点を反映。

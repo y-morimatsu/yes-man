@@ -152,3 +152,18 @@ CDK は依存自動解決するため、`cdk deploy --all` で以下の順序で
 ```
 
 API コンテナ起動時は Alembic マイグレーションを Init Container として実行し、スキーマを最新化する。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot (12 ユニットの依存マトリクス) を保持。
+
+### Post-CONSTRUCTION での依存追加
+| from → to | 依存内容 | commit |
+|---|---|---|
+| U4 (decision) → U5 (learning) | `PreferenceProfileRepository` 読み取り依存 (Dynamic Persona Routing 用) | `07c1c78` |
+
+その他の unit 間依存 (U7d → U7c / U7b / U7a、U-Persona → U2、U6 → U2 等) は不変。
+
+→ Unit Dependency 表は基本構成を維持、1 新規 read-only edge のみ追加。

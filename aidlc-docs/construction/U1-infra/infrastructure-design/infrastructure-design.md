@@ -476,3 +476,15 @@ Deploy 順 (CDK が依存解決):
 - [x] Code Generation で生成すべきファイル一覧が確定
 - [x] Operational Runbook (手動投入 / 監視) が言及されている
 - [x] テスト戦略 (Jest snapshot + assertions) が確定
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot を保持。
+
+**CDK スタックへの直接変更なし** (post-CONSTRUCTION 期間 2026-05-17 〜 2026-05-19 を通じて `infra/` 配下のファイル mtime は 2026-05-16 20:10 以前のまま)。
+
+Post-CONSTRUCTION の application-level 改修 (score flip / dynamic persona routing / voice toggle 等) はすべて `apps/api` および `apps/web` の source code 変更のみで実現されており、AWS リソース構成 (network / auth / ai / data / api / edge / monitoring の 7 stack) は変更されていない。
+
+→ U1 / infra は CONSTRUCTION 完了状態のままで Post-CONSTRUCTION 改修を受け止めている。`cdk deploy --all` は OPERATIONS phase で実施予定。

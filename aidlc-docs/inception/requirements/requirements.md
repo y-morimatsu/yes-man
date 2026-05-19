@@ -402,3 +402,26 @@
 ## 12. トレーサビリティ
 
 要件は次の段階で User Stories（条件付き実行）/ Workflow Planning（必須）/ Application Design / Code Generation の各段階に展開される。本書の各 ID は後続成果物から参照されること。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。以下の用語 / 動作変更が Post-CONSTRUCTION 段階で実装に反映された:
+
+### スコア用語の反転 (`317280b`、2026-05-17)
+- 旧 (CONSTRUCTION 時): 「**主体性スコア**」= No 比率 (高いほど自律的)
+- 新 (Post-CONSTRUCTION): 「**委任度スコア**」= Yes 比率 (高いほど AI を信頼)
+- 仕様意図 (本作品が AI 委任の "心地良さ" を演出する) と整合させるため反転
+- 本ドキュメント内の「主体性」言及は **歴史的記述** として保持、現行実装の用語は「委任度スコア」
+
+### Dynamic Persona Routing の自動推奨追加 (`07c1c78`、Closes #4)
+- FR-PERSONA に対する後付け拡張: cold-start でない user で `selected_ids` 空のとき、嗜好プロファイルから top-3 builtin persona を自動推奨
+- 既存 NFR (PERF / SEC) に影響なし
+
+### Voice backend 切替の追加要求 (`775f6a5`)
+- 旧: Server STT (Mock / Transcribe / WebSpeechApi 経由) のみ
+- 新: user が **Web Speech API (ブラウザ内蔵)** vs **Server STT** を選択可能
+- 動機: 低レイテンシ + offline 動作 (Mock 環境) の両立、デモ体験向上
+
+→ 上記いずれも spec の根本変更ではなく、実装段階での精緻化として位置付けられる。

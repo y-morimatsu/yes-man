@@ -912,3 +912,17 @@ dev 依存: 既存 `pytest`, `hypothesis`, `httpx` (MockTransport 用) で十分
 - **Critical 1**: C1 stream_parse の state 3 分離 (persona 名と meta tag の衝突回避)
 - **Important 6**: I1 SilenceGuard fail-closed / I2 Guardrails kwargs 3 候補 + Code Gen で確定 / I3 tee_chunks 実装明示 / I4 Mock stream_delay 可変 / I5 NudgeCache _maybe_evict / I6 CC Luhn 検証
 - **Improvements 4**: Imp1 persona 名 escape / Imp2 boto3 独立 Session / Imp3 LLM 自己判定 prompt 改善 / Imp4 validate_runtime 明示メソッド意図
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 11 fixes 適用済) を保持。
+
+**Critical 1 / Important 6 / Improvements 4 の合計 11 件の NFR Design 修正点は全て継続有効**。SilenceGuard 2 段判定、LLMProvider Bedrock/Mock、ConsensusOrchestrator single-prompt、SSE/non-SSE 切替、Nudge 非同期、EventPublisher 3 backend 等の Design pattern は不変。
+
+### Design レベルでの追加
+- **`scorer._build_history` メソッド** (`2400f45`): 30日 × `O(1)` 集計を pure function で実装、既存の Strategy/DI パターンに従う
+- **`DecisionEngine.__init__(..., preference_repo: PreferenceProfileRepository)`** (`07c1c78`): DI 拡張で keyword-only 引数追加、既存 caller (test fixtures 含む) は同時更新
+
+→ U4 NFR Design は CONSTRUCTION 完了状態のまま、scorer + engine への機能追加は既存 pattern 内で吸収。

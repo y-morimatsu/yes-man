@@ -171,3 +171,11 @@ X) Other (please describe after [Answer]: tag below)
 ## 完了したら
 
 すべての `[Answer]:` を埋めたら「**完了**」「**done**」「**回答終わりました**」などと教えてください。回答を読んで要件ドキュメントを作成します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19) — Historical Artifact
+
+本ファイルは 2026-05-09 当時の Requirements Analysis 段階で user に提示された 12 検証質問の **Snapshot (immutable historical artifact)** であり、Post-CONSTRUCTION で modify しない。
+
+Q11 (Security Baseline) / Q12 (Property-Based Testing) は user が "A 強制" を選択、両 extension は CONSTRUCTION 全 unit で適用済。Post-CONSTRUCTION で追加された Construction Flow / Frontend Design extension は本 questions ファイル時点では未存在 (`1c7c5eb` で 2026-05-19 に追加)、aidlc-docs/aidlc-state.md の `## Extension Configuration` を参照。

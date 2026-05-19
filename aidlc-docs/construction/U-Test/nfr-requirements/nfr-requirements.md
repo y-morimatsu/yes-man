@@ -104,3 +104,21 @@ FD §1-9 で確定した「Playwright + pytest + k6 + smoke、Mock everywhere po
 
 ### Improvements 1
 - **Imp1** (TEST-Test-04): `tests/fixtures/shared/` で E2E + Integration の seed 共通化
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 3 fixes 適用済) を保持。
+
+### E2E 件数の拡張
+- CONSTRUCTION 時点: 5 spec / ~25 test (target NFR)
+- Post-CONSTRUCTION 実機: **12 spec / 100 test 全件 PASS** (2026-05-17 `b3bceb0` で確定)
+- CI ~8 min budget は維持 (mobile-chrome / Pixel 5 で 2.1m 実行)
+
+### NFR 数値目標
+- **CI 実行時間 < 10 min**: 達成 (実測 ~8 min)
+- **Mock everywhere portable**: 達成 (Docker 不要、cryptography native build 不要)
+- **PBT max_examples=100**: 不変
+
+→ U-Test NFR Req は CONSTRUCTION 完了時の目標値を超過達成 (test 件数 4 倍化しつつ CI budget 内に収まる)。

@@ -501,3 +501,22 @@ export function validateBaseUrl(baseUrl: string): void {
 ### Improvements 2
 - **Imp1** (§3): `peerDependencies: {}` 明示、library package convention 整備
 - **Imp2** (§8): validateBaseUrl の dev hostname resolver 注記 (`.local` mDNS / `.localhost` RFC 6761 / `localhost` 全環境)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の NFR Design 修正点は全て継続有効**。静的 OpenAPI dump、7 module YesmanApiClient、TokenProvider、ApiError discriminated union、DecisionStream SSE wrapper、msw v2 test 構成等の Design pattern は不変。
+
+### FormData Content-Type 自動委譲 pattern (`775f6a5`)
+- `request builder` で `body instanceof FormData` を判定して `Content-Type` header を strip する pattern を追加
+- 動機: browser が boundary 付与できず STT が 422 を返していた既存 bug 修正
+- 影響: `voice.stt(audio: Blob)` の挙動正常化、他 module への影響なし
+
+### Schema 自動再生成 (`2400f45`)
+- `ScoreResponse.history` 追加に伴い `src/generated/schema.ts` を `dump_openapi.py` + `openapi-typescript` chain で再生成
+- TypeScript 型は automatic propagation、scores module の return type が `history` 含むよう自動更新
+
+→ U7c NFR Design は CONSTRUCTION 完了状態のまま、FormData fix と schema 自動再生成の 2 点を追加。

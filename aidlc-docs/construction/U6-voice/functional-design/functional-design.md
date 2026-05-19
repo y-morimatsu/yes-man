@@ -478,3 +478,45 @@ class STTResponseDTO(BaseModel):
 - **Imp2** (§4.2): WebSpeechApiAdapter の class 採用理由表 (Protocol 適合 + Factory 整合 + 将来拡張)
 - **Imp3** (§7.1.1): Polly コスト試算表 (¥0.192/req、月 ¥5,760 → 30% opt-in で ¥1,728、節約 70%)
 - **Imp4** (§6.1): `/v1/voice/config` Cache-Control: private, max-age=3600 + PWA Service Worker 親和性
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### Voice backend 切替 UI + Web Speech API 統合 (`775f6a5`、2026-05-19)
+
+**背景**: CONSTRUCTION 段階では「Server STT (Mock / Transcribe / WebSpeechApi 経由) のみ」を想定していたが、user が明示的に **ブラウザの `webkitSpeechRecognition` (Web Speech API)** を選択できるようにする要求が追加。
+
+**Frontend 側変更** (apps/web、本 unit のスコープ拡張):
+- **`features/voice/useVoiceBackend.ts`** 新規:
+  - state: `'webspeech' | 'server'` (localStorage `voice.backend` キーで永続化)
+  - 非対応ブラウザ判定: `'webkitSpeechRecognition' in window`、false なら自動的に `'server'` に fallback
+- **`features/voice/useWebSpeechRecognition.ts`** 新規:
+  - `webkitSpeechRecognition` の thin wrapper、`lang='ja-JP'`、`continuous=true`、`interimResults=true`
+  - リスナー: `onresult` / `onerror` / `onend`、`start()` / `stop()` 制御
+- **`features/voice/useVoiceInput.ts`** 改修:
+  - `useVoiceBackend` で backend を判定し、`useWebSpeechRecognition` または既存の Server STT path を composed
+  - 共通 interface: `{ recording, transcript, start, stop }`
+- **`features/profile/ProfilePage.tsx`** に「🎤 音声入力 backend」radio セクション追加
+  - "Web Speech API (ブラウザ内蔵 / 低レイテンシ / 一部ブラウザのみ)" vs "Server STT (Mock / Transcribe / 全環境対応)"
+- **`packages/ui/src/composites/VoiceMicButton.tsx`** を **toggle 化** (push-to-talk → click-start / click-stop)
+  - 理由: Web Speech API は continuous モードなので push-to-hold が不要
+  - state machine: idle → recording → idle、record 中は赤色 + アニメーション
+
+**Backend 側変更** (apps/api、既存の VoiceProviderFactory に影響なし):
+- 既存の `/v1/voice/{config,tts,stt}` endpoint と 3 backend Strategy (Mock / WebSpeechApi / AWS Transcribe) は全て不変
+- `useWebSpeechRecognition` は完全にブラウザ内で完結するため、user が "webspeech" を選択した場合 STT endpoint は呼ばれない
+- `voice/config` endpoint の return value にも変更なし (backend 選択は frontend 内 state)
+
+**FormData Content-Type fix** (`775f6a5` 同 commit、波及修正):
+- `packages/api-client/src/client.ts` と `src/modules/voice.ts` で、`FormData` body 送信時に手動指定していた `Content-Type: multipart/form-data` を削除
+- 動機: browser に boundary 自動付与を委譲するための必須修正、これがないと STT が 422 を返していた
+
+### 影響範囲
+- Backend API surface: 不変
+- Frontend state: localStorage `voice.backend` キーが追加
+- Mock backend のみで動作する `webspeech` mode が新設されたため、demo / offline 環境でも音声入力が機能する
+
+→ U6 / voice は backend 実装を維持しつつ、frontend に動的 backend selector を追加。Web Speech API の品質依存はあるが、Server STT への fallback で safety net を確保。

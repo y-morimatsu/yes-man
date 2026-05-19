@@ -156,3 +156,17 @@ Infrastructure Design で確定する事項:
 - **Critical 2**: C1 token_use=id|access 両方受け入れ + userInfo lazy / C2 U2 Profile gender + preferences 追加計画
 - **Important 5**: I1 タイムアウト構造体 / I2 CORS 所有権引き継ぎ / I3 audit.profile_updated 追加 / I4 stale 利用は kid 既存時のみ / I5 Mock は dev/ci 限定
 - **Improvements 6**: Imp1 asyncio.Lock 直列化 / Imp2 MOCK_USER_SUB 別系統 / Imp3 cognito 必須環境変数バリデーション / Imp4 workers コスト注記 / Imp5 isinstance ベース contract / Imp6 カバレッジ U-Test 集約
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-15 承認時の Snapshot (ultrathink full 13 fixes 適用済) を保持。
+
+**Critical 2 / Important 5 / Improvements 6 の合計 13 件の NFR 修正点は全て継続有効**。Post-CONSTRUCTION 期間中、`apps/api/src/yesman_api/{domain,application,infrastructure,interface}/auth/` 配下に commit による変更なし。
+
+### 波及確認
+- `2400f45` での frontend AuthBypass guard 強化 (`signIn` / `signOutUser` no-op 化) は U7a-web-shell の scope であり、backend NFR (token 検証 / JWKS cache / userinfo lazy 等) には影響なし。
+- `07c1c78` での `get_current_user` middleware 利用は不変、Decision エンドポイントで認証情報を読む用法は CONSTRUCTION 時から想定済。
+
+→ U3 NFR Req は CONSTRUCTION 完了状態のまま継続有効。

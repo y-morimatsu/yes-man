@@ -242,3 +242,16 @@ cd infra && pnpm test -- --updateSnapshot && cdk synth
 - [x] リスク 5 項目 + 緩和策
 - [x] 全ファイル集計 (新規 10 + 変更 5 + テスト 9 + 変更 2 + ドキュメント 2 + CDK 1 = 約 29 ファイル)
 - [x] ultrathink 累計 30 件全反映の引き継ぎ (FD 10 + NFR Req 7 + NFR Design 6 + Infra Design 7)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot を保持。
+
+**SQS Consumer + ColdStart Loader + apply_yes/no + PATCH/DELETE 等の生成計画は全て継続有効**。Post-CONSTRUCTION 期間中、`apps/api/src/yesman_api/{domain,application,infrastructure,interface}/learning/` および preference module 配下に commit による変更なし。
+
+### 波及効果のみ (本 plan の scope 外)
+- U4 DecisionEngine が `PreferenceProfileRepository.get_by_user` を読むようになった (`07c1c78`)、U5 自身の書き込み path は不変
+
+→ U5 Code Gen Plan は CONSTRUCTION 完了状態のまま継続有効。

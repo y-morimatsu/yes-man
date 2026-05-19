@@ -359,3 +359,26 @@ deploy 後の post-deploy check で実行。
 ### Improvements 2
 - **Imp1** (§2.2.4): ScorePage No 5 連発 test を `page.request.post` API seed + UI verify hybrid で高速化 (~30s → ~2s)
 - **Imp2** (§7): CI time budget ~8 min (E2E 5 + Integration 2 + PBT 0.5 + Smoke 0.5)、10 min 予算内
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。
+
+### E2E spec 構成の拡張 (2026-05-17 以降)
+CONSTRUCTION 完了時点で **5 spec / ~25 test** だった E2E 構成が、Post-CONSTRUCTION の各 commit に合わせて **12 spec / 100 test** に拡張された。詳細は `aidlc-docs/construction/build-and-test/integration-test-instructions.md` § 7 「Post-CONSTRUCTION 改修注記」参照。
+
+### 全件 PASS 維持
+- 各 Post-CONSTRUCTION commit 直後に E2E 全件再実行、いずれも 100/100 PASS で regression なしを確認 (詳細は `build-and-test-summary.md` § 7 検証履歴表)
+- mobile-chrome / Pixel 5 viewport (393×851) で 2.1m 実行
+
+### `.gitignore` への Playwright artifacts 追加 (`9a52954`)
+- `tests/e2e/.last-run.json` などの per-run 副産物を untrack
+- HTML report (`tests/e2e/playwright-report/index.html`) と `results.json` のみ tracking 継続
+
+### PBT / Integration / Load / Smoke 構成は不変
+- Integration 5 シナリオ、PBT 2 ファイル、Load 3 scenario、Smoke 3 step の構成は変更なし
+- assertion update のみ (Yes-ratio 化 / dynamic persona routing 反映) で対応
+
+→ U-Test (横断) は E2E spec を 5 → 12 spec に拡張、他は構成不変。`pr-test.yml` workflow の ~8 min budget 内で全件実行可能。

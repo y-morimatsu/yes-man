@@ -313,3 +313,13 @@ curl -i -X POST "${HEADERS[@]}" -d '{"reason": "再報告"}' \
 - [x] ファイル依存グラフ (Mermaid)
 - [x] ローカル開発フロー 8 curl パターン
 - [x] Code Generation Plan への引き継ぎ (Phase A.0a/A.0b + B-F の 8 段階)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の Infra Design 修正点は全て継続有効**。PersonaAnonymizerSaltSecret、env vars (ANONYMIZER_PEPPER 等)、Built-in personas seed migration の Design は不変。
+
+→ U-Persona Infrastructure Design は CONSTRUCTION 完了状態のまま継続有効。Post-CONSTRUCTION 期間中、CDK / Secret / IAM の変更なし。

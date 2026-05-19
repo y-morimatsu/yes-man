@@ -85,3 +85,24 @@ Phase G: Documentation (RUNBOOK)
 - 型注釈と async/await の整合
 
 Critical 級が発見されたら停止して報告。Improvement/Minor はそのまま反映。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-10 承認時の Snapshot を保持。
+
+**Phase A〜G (pyproject 1 + alembic 1 + 5 package marker / 7 SQLModel + 6 Protocol / engine/factory/sqlmodel/mock repos / interface deps + health / alembic env + 2 migration / test 6 種 / RUNBOOK) は全て継続有効**。
+
+### Post-CONSTRUCTION で変更されたファイル
+| ファイル | commit | 変更内容 |
+|---|---|---|
+| `apps/api/src/yesman_api/infrastructure/persistence/mock_repositories.py` | `2b08a75` | `MOCK_SEED_DEMO_DECISIONS=true` 環境変数 hook + 105 decision seed 機能 |
+| `apps/api/src/yesman_api/infrastructure/config.py` | `2b08a75` | CORSMiddleware `allow_methods` += `PUT` |
+| `apps/api/src/yesman_api/main.py` | `2b08a75` | Mock seed flag を起動時に評価 |
+
+### Repository Protocol への影響なし
+- `application/persistence/protocols.py` の signature 不変
+- contract test (`apps/api/tests/contract/test_repository_protocol.py`) 全件 PASS
+
+→ U2 Code Gen Plan は 24 主要ファイル構成を維持、3 ファイルへの後方互換変更のみ。

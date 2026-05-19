@@ -4800,3 +4800,157 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 - Pixel 5 (393×851) は Android 中位機種を代表、PWA install 想定の実環境
 - 86 件 e2e、すべて mobile viewport で実機検証
 
+
+---
+
+## Post-CONSTRUCTION フェーズ 改修ログ (2026-05-17 〜 2026-05-19)
+
+**Timestamp**: 2026-05-19T16:00:00Z
+**Context**: CONSTRUCTION フェーズ全完了 (2026-05-16) 後の **Hackathon Pragmatism 緩和ルール下での `main` 直接 commit 運用**。本セクションは 2026-05-17 〜 2026-05-19 にかけて user 主導で行われた 11 commit の改修を audit log に時系列追記する。CLAUDE.md `Git-Flow Branching Model` 章で定義された緩和ルールに従い、PR レビュー / release branch / approval gate は省略。
+
+---
+
+## E2E 100/100 PASS レポート更新
+**Timestamp**: 2026-05-17T00:00:00Z
+**User Input**: (test execution run)
+**Commit**: `b3bceb0 test(e2e): Playwright e2e 全 100 件 PASS レポート更新`
+**AI Response**: Playwright E2E test を mobile viewport (Pixel 5 / 393×851) で再実行、12 spec × 100 test を全件 PASS 確認。`tests/e2e/playwright-report/index.html` + `results.json` を更新。
+**Context**: Post-CONSTRUCTION - Build and Test 実機 verification (CONSTRUCTION 段階で生成された 86 spec から 100 spec へ拡張、全件 PASS)
+
+---
+
+## 委任度スコアの意味反転 (No 比率 → Yes 比率)
+**Timestamp**: 2026-05-17T01:00:00Z
+**User Input**: (bug report / spec correction)
+**Commit**: `317280b fix(score): 委任度スコアの意味反転 (No 比率 → Yes 比率)`
+**AI Response**: スコアの意味論的バグ修正。CONSTRUCTION 時点の AutonomyScorer は「No 比率 = 自律性」と定義していたが、コンセプト「Yes 比率が高いほど委任度が高い (=信頼している)」と整合しないため反転。
+- `apps/api/src/yesman_api/domain/decision/scorer.py`: ratio 計算式を反転、警告閾値も反転
+- `apps/web/src/features/score/scoreLevel.ts`: `ratio < 0.5` を warning に
+- 4 spec ファイル (score 関連 e2e + unit) を Yes-ratio に更新
+- copy 統一: 「主体性スコア」→「**委任度スコア**」
+**Context**: Post-CONSTRUCTION - U4-decision + U7d-features 横断改修 (16 ファイル)
+
+---
+
+## INCEPTION screen-04/05 厳密準拠 + AuthBypass 整合
+**Timestamp**: 2026-05-17T02:00:00Z
+**User Input**: (drawio 仕様準拠の追加要件)
+**Commit**: `2400f45 feat(ui): INCEPTION screen-04/05 + AuthBypass 整合の厳密準拠`
+**AI Response**: drawio screen-04 (Score Dashboard 円グラフ) + screen-05 (Silence Theater dark theme) の厳密準拠を実装。
+- `apps/web/src/features/score/ScoreRadialChart.tsx` **新規** (SVG 円グラフ)
+- `apps/web/src/features/score/ScoreLineChart.tsx` **新規** (30日トレンド line chart)
+- `apps/api/src/yesman_api/domain/decision/scorer.py`: `_build_history` メソッド追加 (30日累積 Yes-ratio)
+- `apps/api/src/yesman_api/interface/http/dto/decision.py`: `ScoreResponse.history: ScoreHistoryPoint[]` フィールド追加
+- `apps/web/src/shell/auth.ts`: `signIn()` / `signOutUser()` が `env.authBypass=true` のとき no-op
+- Decision page: persona pill inline 化、Silence Theater 暗背景化
+- packages/api-client: `generated/schema.ts` 再生成 (history 追加)
+**Context**: Post-CONSTRUCTION - U4-decision + U7d-features + U7c-api-client + U7a-web-shell 横断改修 (18 ファイル)
+
+---
+
+## デモ体験向上 UX 改修一式 + ローカル起動 README
+**Timestamp**: 2026-05-17T03:00:00Z
+**User Input**: (デモ準備フェーズ)
+**Commit**: `2b08a75 feat: デモ体験を向上させる UX 改修一式 + ローカル起動 README`
+**AI Response**: ハッカソン提出向けデモシナリオ強化。
+- `apps/web/src/features/decision/usePrefetchedDecisions.ts` **新規** — No 連打バーストに備えた 2 件 prefetch buffer
+- `apps/web/src/features/decision/reducer.ts`: `swapFromBuffer` action + `setInput` idempotency
+- `apps/web/src/features/preference/PreferencePage.tsx`: `accepted_patterns dict[]` + domain tags + persona_style_preference bar graph + inferred_tags pills に全面再設計
+- `packages/ui/src/composites/SwipeChoice.tsx`: state-leak fix (buffer swap 時の key + useEffect)
+- `apps/api/src/yesman_api/infrastructure/persistence/mock_repositories.py`: `MOCK_SEED_DEMO_DECISIONS=true` で 30 日 105 decision + 持上り Yes-ratio (30% → 95%) を seed、PreferenceProfile を builder.apply_yes/no で再構築、demo persona_style_preference {慎重派 0.72 / 楽観派 0.91 / 効率派 0.45}
+- `apps/api/src/yesman_api/infrastructure/config.py`: CORS `allow_methods` に `PUT` 追加 (persona-selections preflight 解決)
+- `README.md`: 「## 🚀 ローカル起動」章を +177 LOC 追加 (Mock LLM / Claude CLI / LiteLLM 3 mode、env 一覧、トラブルシュート、起動 URL 7 種、mode-switch quick reference)
+**Context**: Post-CONSTRUCTION - U2-storage + U7d-features + U7b-ui 横断改修 (10 ファイル)
+
+---
+
+## Playwright artifacts を .gitignore 追加
+**Timestamp**: 2026-05-17T04:00:00Z
+**User Input**: (cleanup)
+**Commit**: `9a52954 chore: Playwright test artifacts を gitignore に追加`
+**AI Response**: `tests/e2e/.last-run.json` などのテスト副産物を `.gitignore` で untrack。
+**Context**: Post-CONSTRUCTION - U-Test 改修 (2 ファイル)
+
+---
+
+## AI-DLC Extensions 追加 (Construction Flow + Frontend Design) — Issue #6
+**Timestamp**: 2026-05-19T06:00:00Z
+**User Input**: "AI-DLC に Construction Flow + Frontend Design extension を追加したい (Issue #6)"
+**Commit**: `1c7c5eb feat(aidlc): Construction Flow + Frontend Design extension を追加 (Issue #6)`
+**AI Response**: `.aidlc-rule-details/extensions/` 配下に 2 extension を追加。
+- `extensions/construction/flow/construction-flow.opt-in.md` + `construction-flow.md` (CONS-FLOW-01..07: Codebase Exploration / Parallel Sub-Agent / Multi-Approach / Approval Gating / Review Confidence ≥80% / Clarifying Questions / Compliance Matrix Summary)
+- `extensions/frontend/design/frontend-design.opt-in.md` + `frontend-design.md` (FE-DESIGN-01..07: INCEPTION drawio Source of Truth / Intentional Typography / Intentional Color / Anti-AI-Default / Mobile-First / Cohesive Motion / Component Reuse)
+- `aidlc-docs/aidlc-state.md` の `## Extension Configuration` に登録、Hackathon Pragmatic 適用方針を併記
+**Context**: Post-CONSTRUCTION - AI-DLC ルール拡張 (7 ファイル)
+
+---
+
+## FE-DESIGN ルール準拠の style fix 8 件 (Pragmatic)
+**Timestamp**: 2026-05-19T07:00:00Z
+**User Input**: (FE-DESIGN extension 適用後の整合性確保)
+**Commit**: `1924411 style: FE-DESIGN ルールに従い 8 件の違反を修正 (Pragmatic)`
+**AI Response**: FE-DESIGN-02 (Typography) / 03 (Color) / 06 (Motion) ルール違反 8 件を修正。
+- h2 5 箇所に `font-serif` 追加 (Noto Serif JP 統一)
+- `apps/web/src/shell/Layout.tsx`: `max-w-md` mobile-first 制約 + header palette `#F5E5C4`
+- `packages/ui/src/composites/SwipeChoice.tsx`: transition `duration-200` → `150ms`
+**Context**: Post-CONSTRUCTION - U7a-web-shell + U7b-ui + U7d-features 横断改修 (6 ファイル)
+
+---
+
+## Voice backend 切替 UI + Web Speech API + Server STT toggle
+**Timestamp**: 2026-05-19T08:00:00Z
+**User Input**: "音声入力 backend を user が選べるようにしたい (Web Speech API / Server STT)"
+**Commit**: `775f6a5 feat(voice): backend 切替 UI + Web Speech API + Server STT toggle + UX 整理`
+**AI Response**: 音声入力 backend の動的切替機能を追加。
+- `apps/web/src/features/voice/useVoiceBackend.ts` **新規** — localStorage 永続化、ブラウザ非対応時 Server STT 自動 fallback
+- `apps/web/src/features/voice/useWebSpeechRecognition.ts` **新規** — `webkitSpeechRecognition` (ja-JP, continuous, interim)
+- `apps/web/src/features/voice/useVoiceInput.ts`: backend 切替に応じて Server STT / Web Speech を選択する composed hook
+- `apps/web/src/features/profile/ProfilePage.tsx`: 「🎤 音声入力 backend」radio セクション追加
+- `packages/ui/src/composites/VoiceMicButton.tsx`: push-to-talk から **toggle (click-start / click-stop)** に変更
+- `packages/api-client/src/client.ts`: `FormData` body の Content-Type を strip (browser 自動付与に委譲、STT 422 fix)
+- `packages/api-client/src/modules/voice.ts`: 手動 Content-Type header 削除
+- `README.md`: features table に Yes-ratio 反転 + 30 日 trend + pink AI bubble + No-burst prefetch + voice backend toggle を反映、demo シナリオを 11 ステップに拡張
+**Context**: Post-CONSTRUCTION - U6-voice + U7d-features + U7c-api-client + U7b-ui 横断改修 (13 ファイル)
+
+---
+
+## CLAUDE.md += Git-Flow Branching Model
+**Timestamp**: 2026-05-19T09:00:00Z
+**User Input**: "Git-Flow ブランチング規約を CLAUDE.md に追加してほしい"
+**Commit**: `c44e032 docs(aidlc): Git-Flow ブランチング規約を CLAUDE.md に追加`
+**AI Response**: `CLAUDE.md` 末尾に `## Git-Flow Branching Model` 章 (+121 LOC) を追加。Branch Structure / Naming Convention / Commit Message (Conventional Commits) / Merge Strategy / PR Workflow / Tagging / Hackathon Pragmatism / Pre-Commit Checklist / Push Rules を定義。Hackathon 単独開発時の緩和ルール (main 直接 commit / PR 省略 / release branch 省略) を明記、ただし mandatory tests skip は禁止。
+**Context**: Post-CONSTRUCTION - リポジトリ運用規約 (1 ファイル)
+
+---
+
+## Dynamic Persona Routing (Closes #4)
+**Timestamp**: 2026-05-19T10:00:00Z
+**User Input**: "嗜好プロファイルから推奨 persona を自動選択してほしい (Issue #4)"
+**Commit**: `07c1c78 feat(api,web): Dynamic Persona Routing — 嗜好プロファイルから推奨 persona 自動選択 (Closes #4)`
+**AI Response**: Cold-start でない user で `selected_ids` 空 + `UserPersonaSelection` なしの場合、`PreferenceProfile.persona_style_preference` スコア降順で builtin persona top-3 を自動選択する dynamic routing を実装。
+- `apps/api/src/yesman_api/domain/decision/engine.py`: `_resolve_personas` 拡張 (preference_repo 注入、persona_style_preference 降順 sort、top-3 返却)
+- `apps/api/src/yesman_api/interface/deps.py`: DecisionEngine factory に `preference_repo` 注入
+- `apps/web/src/features/persona/PersonaSelectionPage.tsx`: 各 builtin persona card に「💡 おすすめ」pink pill badge (`usePreference` の persona_style_preference を読んで top-3 にのみ表示)
+- Cold-start user (まだ Yes/No 履歴がない) は badge 非表示、従来通り
+**Context**: Post-CONSTRUCTION - U4-decision + U-Persona + U5-learning + U7d-features 横断改修 (4 ファイル)
+
+---
+
+## Splash の "→ スワイプして同意" 文言を削除
+**Timestamp**: 2026-05-19T11:00:00Z
+**User Input**: "→ スワイプして同意の文言を削除"
+**Commit**: `28c8adc style(web): Splash の "→ スワイプして同意" 文言を削除`
+**AI Response**: HomePage Splash 上に表示されていた「→ スワイプして同意」の italic 灰色文字を削除。実機ではスワイプ操作を要求していないため誤解を招く案内を撤去。e2e test の description も対応する内容に更新 (assertion は `逆説的設計` を対象としていたため挙動への影響なし)。
+- `apps/web/src/features/home/HomePage.tsx`: 該当の `<p className="mt-4 text-xs italic text-neutral-400">` 要素を削除
+- `tests/e2e/tests/inception-mobile.spec.ts`: test 名 "Splash disclaimer + → スワイプして同意 は initial viewport 内に visible" を "Splash disclaimer は initial viewport 内に visible" に変更
+**Context**: Post-CONSTRUCTION - U7d-features 改修 (2 ファイル)
+
+---
+
+## ドキュメント全面更新 (本セクションの作成)
+**Timestamp**: 2026-05-19T16:00:00Z
+**User Input**: "ultrathinkで 現在の実装や仕様に合わせてドキュメントフォルダ内のファイルを１つ１つ完全に更新してください。 /Users/morimatsu/lab/ai-dlc-hackathon/aidlc-docs"
+**AI Response**: 2026-05-16 以降の post-CONSTRUCTION 改修 11 commit を、aidlc-docs/ 配下の関連ドキュメントに反映する全面更新を実施。`aidlc-state.md` に「Post-CONSTRUCTION 改修ログ」セクションを追加、`audit.md` 末尾に本セクションを append、各 unit の `functional-design.md` / `code-generation-plan.md` 末尾に Post-CONSTRUCTION 改修注記を追記、`build-and-test/` 配下 5 ファイルを E2E 100/100 PASS 実測値で更新。Snapshot 不変性ポリシー (本体 = 2026-05-16 承認時、末尾 = post-CONSTRUCTION 注記) を適用。
+**Context**: Post-CONSTRUCTION - aidlc-docs 全面更新 (~30 ファイル変更)
+
+---

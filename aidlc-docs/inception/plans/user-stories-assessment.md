@@ -66,3 +66,11 @@
 - 各機能の AC を Gherkin (Given-When-Then) で記述し、自動テスト・PBT に連携可能
 - 倫理境界（沈黙演出、ナッジ強度）の判断基準を共有
 - 「審査員 5 分デモ」「一般ユーザー継続利用」の二系統シナリオを並立
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 assessment 本体は 2026-05-09 当時の User Stories 実施判断 Snapshot を保持。
+
+CONSTRUCTION 完了時点で User Stories の必要性評価は「実施」で完了し、25 stories (post-approval で 32 stories に拡張) を generate 済。Post-CONSTRUCTION 段階で新規 story 追加は不要、既存 story の受け入れ基準解釈のみ更新 (詳細は `stories.md` 末尾の改修注記参照)。

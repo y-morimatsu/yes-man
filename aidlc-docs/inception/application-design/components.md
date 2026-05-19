@@ -257,3 +257,18 @@ flowchart TB
     style Secrets fill:#C8E6C9
     style Observability fill:#E1BEE7
 ```
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。
+
+### DecisionEngine 依存追加
+- `DecisionEngine ← PreferenceProfileRepository` の依存 edge を追加 (`07c1c78` Dynamic Persona Routing)
+- `interface/deps.py` で factory injection
+
+### AutonomyScorer (改名意図あり、ただし Class 名は維持)
+- 「主体性スコア」→「**委任度スコア**」へ意味反転 (`317280b`)
+- Class 名 `AutonomyScorer` は backward compatibility のため維持、コメントとレスポンス DTO の表現で「委任度」に統一
+- `_build_history` method 追加 (`2400f45`)

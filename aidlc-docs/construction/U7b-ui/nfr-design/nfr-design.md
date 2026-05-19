@@ -465,3 +465,18 @@ export default defineConfig({
 ### Improvements 2
 - **Imp1** (§3): `"./styles.css"` export の source-level 直接配布根拠を package.json コメントで記載
 - **Imp2** (§5): Button class を `transition` → `transition-colors` で intent 明示
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の NFR Design 修正点は全て継続有効**。cva + brand-600 default、Card polymorphic、ChoiceButtons rename、ToastProvider counter ID、useMediaQuery SSR safe、Storybook 8、Vitest+RTL 等の Design pattern は不変。
+
+### Composite 改修
+- **SwipeChoice key-based remount + useEffect reset** (`2b08a75`): state-leak fix のための pattern 追加
+- **VoiceMicButton state machine (toggle)** (`775f6a5`): push-to-talk → click-toggle の state pattern 変更
+- **FE-DESIGN-06 motion grid 厳格化** (`1924411`): `duration-200` を排除、`{150 | 350 | 600 | 1200}ms` のみ許可
+
+→ U7b NFR Design は composite レベルで 2 件の pattern 変更、token / primitive 設計は不変。

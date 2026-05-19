@@ -1018,3 +1018,13 @@ Infrastructure Design で確定する事項:
 ### ultrathink レビュー (2026-05-15) 反映済 10 件
 - **Important 5**: I1 _JwtVerifier を unverified token_use 分岐方式に / I2 JwksCache.get_key force_refetch / I3 cognito_local_userinfo_url オプション化 / I4 Starlette 0.32+ 依存明示 / I5 audit.profile.{action} 3-segment 統一
 - **Improvements 5**: Imp1 JwksCache._fetch() で empty_jwks 検知 / Imp2 _JwtVerifier sub 必須化 / Imp3 UserInfoCache を UserInfo dataclass (email + email_verified) に拡張 / Imp4 401 に Cache-Control: no-store / Imp5 MockAuthAdapter mock-malformed 特殊トークン明示 + FD §3.3 への遡及反映
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-15 承認時の Snapshot (ultrathink full 10 fixes 適用済) を保持。
+
+**Important 5 / Improvements 5 の合計 10 件の修正点は全て継続有効**。`_JwtVerifier unverified token_use 分岐`、`JwksCache.get_key force_refetch`、`CognitoLocal userInfo オプション化`、`Starlette 0.32+ 明示`、`audit.profile.{action} 3-segment` 等の NFR Design は不変。
+
+→ U3 NFR Design は CONSTRUCTION 完了状態のまま継続有効。Post-CONSTRUCTION 期間中、middleware / JWT 検証 path の logic 変更なし。

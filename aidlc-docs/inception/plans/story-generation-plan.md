@@ -224,3 +224,18 @@ X) Other (please describe after [Answer]: tag below)
 ## 4. 計画承認
 
 回答とクラリフィケーションを反映した本計画でストーリー生成 (Part 2) を進めます。承認後、Part 2 を自動実行します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-09 当時の Story Generation 実行計画 Snapshot を保持 (Journey G 7 ストーリー追加の post-approval addition 含む)。
+
+Post-CONSTRUCTION 段階で新規ストーリーは追加されておらず、本 plan の生成計画は INCEPTION フェーズで完了済。
+
+### Story-level な解釈変更 (受け入れ基準の更新のみ)
+- Journey C (Score Dashboard): 「主体性スコア」→「**委任度スコア**」(Yes 比率) に意味反転
+- Journey F (Voice): backend 選択 radio (Web Speech API / Server STT) を Profile 画面に追加
+- Journey G (Persona): cold-start でない user に 💡おすすめ pink pill badge を表示
+
+詳細は `aidlc-docs/inception/user-stories/stories.md` 末尾の「Post-CONSTRUCTION 改修注記」参照。

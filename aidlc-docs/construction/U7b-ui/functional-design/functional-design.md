@@ -552,3 +552,32 @@ export function useMediaQuery(query: string): boolean {
 - **Imp1** (§3.4): Modal MVP-optional 注記、Persona report 等で使用想定、不要なら後続 unit で削除可能
 - **Imp2** (§4.4): VoiceMicButton state machine 図 (idle ↔ recording ↔ processing ↔ error) + U6 voice flow 整合
 - **Imp3** (§6): `@storybook/test-runner` + axe-core は Phase 2 (U-Test) で導入検討
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### 1. SwipeChoice state-leak fix + Motion 規約準拠 (`2b08a75` + `1924411`)
+- **`packages/ui/src/composites/SwipeChoice.tsx`**:
+  - state-leak 修正: buffer swap 時に内部 transient state (drag offset、active touch ID) が古い decision に残る問題を修正
+  - 修正手法: 親側 `key={decision.id}` で remount + 内部 `useEffect([decision.id], ...)` で reset
+  - transition `duration-200` → `150ms` に変更 (FE-DESIGN-06 Cohesive Motion 規約準拠、`{150 | 350 | 600 | 1200}ms` の grid 内に着地)
+
+### 2. VoiceMicButton の toggle 化 (`775f6a5`)
+- **`packages/ui/src/composites/VoiceMicButton.tsx`**:
+  - 旧: push-to-talk (mousedown → recording / mouseup → stop) — touch device で誤動作多発
+  - 新: click toggle (click → recording / 再 click → stop) — Web Speech API の continuous モードと整合
+  - state machine: `idle | recording | error`、recording 中は赤背景 + pulse animation (FE-DESIGN-06 準拠)
+
+### 3. FE-DESIGN h2 font-serif 統一 (`1924411`)
+- Primitives / Composites 内で h2 を使用している 5 箇所 (PersonaCard / DecisionUtteranceBubble / Card 派生) に `font-serif` (Noto Serif JP) を明示付与
+- FE-DESIGN-02 (Intentional Typography) 違反 8 件のうち UI package 担当分を解消
+
+### Tokens / Primitives 構成は不変
+- `tokens/{colors, spacing, typography, motion}.ts` の数値は変更なし (本 unit の token 値は INCEPTION drawio から導出した固定値)
+- `primitives/{Spinner, Button, Card, Input, Toast, ToastProvider, Modal}` の API 不変
+- Storybook 6 stories + 9 test ファイルは構成不変 (assertion のみ update)
+
+→ U7b / ui は token / primitive を維持したまま、composite の 2 件改修 (SwipeChoice + VoiceMicButton) と FE-DESIGN 準拠の typography 統一を実施。

@@ -163,3 +163,21 @@ IAM Resource は `arn:aws:s3:::yesman-${env}-voice/{tts,stt-input,stt-output}/*`
 - **Imp1** (AVAIL-U6-02): Retry-After 値を 2 秒明示 (Polly throttle backoff 推奨)
 - **Imp2** (TEST-U6-02): moto より botocore Stubber 採用 (Transcribe Streaming + Polly Neural 安定性根拠)
 - **Imp3** (§7): bucket を `yesman-${env}-voice` 単一に統合、3 prefix で隔離、IAM Resource 3 件記述
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Important 3 / Improvements 3 の合計 6 件の NFR 修正点は全て継続有効**。Polly Neural × Takumi、Transcribe OutputKey prefix、asyncio.timeout、二段 fail-safe 削除、SilenceGuard regex-only fast-path 等の NFR は不変。
+
+### Post-CONSTRUCTION 段階で追加された frontend 側 NFR
+- **Web Speech API backend** (`775f6a5`、`useWebSpeechRecognition`): ブラウザ内蔵 STT、レイテンシ < 100ms (interim) を実測。Backend NFR 目標 (Server STT < 2s p95) との比較で UX 向上。
+- **Backend selector の永続化** (`useVoiceBackend`): localStorage I/O は無視できる、NFR 影響なし。
+
+### Server STT (apps/api 側) の NFR は不変
+- `/v1/voice/{config,tts,stt}` の latency / throughput 目標値は CONSTRUCTION 時のまま。
+- 3 backend Strategy (Mock / WebSpeechApi / AWS Transcribe) の選択も backend 側不変。
+
+→ U6 NFR Req は Backend SLI を維持しつつ、Frontend が Web Speech API による低レイテンシ option を新規に提供。

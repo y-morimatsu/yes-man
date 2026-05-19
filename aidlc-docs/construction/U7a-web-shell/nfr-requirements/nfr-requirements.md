@@ -190,3 +190,18 @@ VitePWA({
 ### Improvements 2
 - **Imp1** (AVAIL-U7a-01 + §3.1): Workbox runtimeCaching で画像 CacheFirst 30day、precache は HTML/CSS/JS
 - **Imp2** (§7.1): VITE_APP_VERSION 注入手順 (`git rev-parse --short HEAD`)、Infra Design §G で詳細
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の NFR 修正点は全て継続有効**。Vite bundle size budget、React Router lazy loading、PWA cache strategy、Cognito v6 token refresh policy 等の NFR は不変。
+
+### 軽微な変更
+- **AuthBypass guard 強化** (`2400f45`): `signIn` / `signOutUser` no-op 化により、e2e テスト時の network 出力をゼロにする (テストカバレッジ NFR の信頼性向上)
+- **`max-w-md` mobile-first 制約** (`1924411`): UX/Accessibility NFR (タッチターゲット 44×44) の前提となる viewport 制約を強化
+- **header palette `#F5E5C4`** (`1924411`): FE-DESIGN-03 (Intentional Color Palette) 厳格化
+
+→ U7a NFR Req は CONSTRUCTION 完了状態を維持、FE-DESIGN 整合性が強化。

@@ -78,3 +78,11 @@ X) Other (please describe after [Answer]: tag below)
 - **Q6 = C (役割分担)**: フロント担当 / バック担当 / インフラ担当を主担当として割当て、必要に応じて越境可能とします（PR レビューで品質担保）。
 - **Q1 = A (モジュラー・モノリス) + Q8 = A (同コンテナ Worker)**: API は単一 ECS Service / 単一 FastAPI コンテナでデプロイ、内部に DDD 形式 (Q4=A) のモジュール (auth/decision/learning/voice/storage/internal-events) を配置します。
 - **Q7 = A (Journey F 解消)**: 設定切替は U1 (Infrastructure)・U-API 内のモジュール (各 Adapter) に分散して反映します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19) — Historical Artifact
+
+本ファイルは 2026-05-10 当時の Unit of Work 段階で発生した user-AI clarification 対話の **Snapshot (immutable historical artifact)** であり、Post-CONSTRUCTION で modify しない。
+
+Post-CONSTRUCTION 段階の clarification は CLAUDE.md `Git-Flow Branching Model` 「Hackathon Pragmatism」緩和ルールに従い、直接コミットメッセージ + audit.md 末尾追記で記録。

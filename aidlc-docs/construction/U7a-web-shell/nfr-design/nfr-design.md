@@ -515,3 +515,16 @@ export default defineConfig({
 ### Improvements 2
 - **Imp1** (§7): ToastProvider を AuthProvider より outside、auth 失敗時の toast 表示確保
 - **Imp2** (§4): tsconfig types に `"vitest/globals"` + `"@testing-library/jest-dom"` 追加
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Critical 1 / Important 3 / Improvements 2 の合計 6 件の NFR Design 修正点は全て継続有効**。Vite + React 18、React Router v6、Cognito v6、AuthProvider + ApiProvider useRef pattern、Suspense Layout、ErrorBoundary、PWA VitePWA、msw mock 分離、vi.stubEnv 等の Design pattern は不変。
+
+### 軽微な強化
+- **AuthBypass guard 厳格化** (`2400f45`): `signIn` / `signOutUser` no-op pattern を実装、e2e テスト時の network 出力を抑止
+- **Layout max-w-md mobile-first** (`1924411`): viewport 制約 pattern を強化
+
+→ U7a NFR Design は CONSTRUCTION 完了状態のまま、AuthBypass + FE-DESIGN 整合性を強化。

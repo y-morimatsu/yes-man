@@ -324,3 +324,14 @@ flowchart TB
 | 8 | Cognito User Pool | (独立、並列可能) |
 
 CDK は依存順を自動解決するため、上記は手動オペレーションではなく `cdk deploy` 内の依存ツリーが反映する。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。
+
+### 依存図への追加 edge
+- `DecisionEngine` → `PreferenceProfileRepository` (read-only、Dynamic Persona Routing 用、`07c1c78`)
+
+他の component dependency は不変。

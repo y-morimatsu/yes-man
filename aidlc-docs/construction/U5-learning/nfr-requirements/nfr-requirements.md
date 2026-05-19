@@ -154,3 +154,16 @@ U5 FD §8 引き継ぎを ID 付きで具体化。U2-U4 で確立した PERF/SEC
   - Imp1 PBT 5 番目の不変条件 `last_updated_at 単調増加` 追加
   - Imp2 YAML 2KB + プロンプト全体 5KB 上限を併記
   - Imp3 §6 Type 列 (all plain) 追加 + Infra Design 引き継ぎに **U1 SQS redrive policy 確認 + maxReceiveCount=3 + DLQ Queue** タスク追加
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 7 fixes 適用済) を保持。
+
+**Important 4 / Improvements 3 の合計 7 件の NFR 修正点は全て継続有効**。Post-CONSTRUCTION 期間中、U5 (learning) の SQS Consumer / ColdStart Loader / asyncio.timeout / 50 key 上限などの NFR 数値は不変。
+
+### 軽微な波及
+- **Dynamic Persona Routing が U5 学習結果を読む** (`07c1c78`): `PreferenceProfile.persona_style_preference` の **読み取り消費者が U4 に増える**ことになるが、U5 自身の書き込み path の NFR (apply_yes/no の同期処理 latency 目標) には影響なし。
+
+→ U5 NFR Req は CONSTRUCTION 完了状態のまま継続有効。

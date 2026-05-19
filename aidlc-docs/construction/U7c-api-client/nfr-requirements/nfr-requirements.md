@@ -195,3 +195,17 @@ api-client 自身は環境変数を読まず、すべて `YesmanApiClientOptions
 ### Improvements 2
 - **Imp1** (PERF-U7c-05): openapi-typescript 生成時間 10s → 5s に下方修正 (実測 1-3s)
 - **Imp2** (EXT-U7c-04 + §5.1): defaultHeaders 一般化用途例 (Accept-Language / X-Client-Version / X-Experiment / X-Trace-Id)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の NFR 修正点は全て継続有効**。Bundle size budget、msw v2 testing、TokenProvider lifecycle 等の NFR は不変。
+
+### 軽微な変更
+- **`ScoreResponse.history` schema 追加** (`2400f45`): 静的 OpenAPI dump 再生成、生成物 size +20 byte 程度、bundle size NFR (15KB gzip) 内
+- **FormData Content-Type 自動委譲** (`775f6a5`): client.ts の logic 変更、size には影響なし、STT 422 bug fix で機能 NFR (multipart upload 成功率 = 100%) 達成
+
+→ U7c NFR Req は CONSTRUCTION 完了状態を維持、schema 自動再生成と FormData fix で機能性を強化。

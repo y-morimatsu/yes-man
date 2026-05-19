@@ -147,3 +147,18 @@ U-Persona FD §7 引き継ぎを ID 付きで具体化。U3-U5 で確立した 5
   - Imp1 (TEST-UP-08): U5 PBT パターン継承 + max_examples=100 明示
   - Imp2 (§7 Infra Design): Phase A.0a で `is_blocked` grep 確認 + 未存在なら U2 patch
   - Imp3 (SEC-UP-05): 409 レスポンスに `message: "すでにこのペルソナを報告済です"` 明示
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Important / Improvements の合計 6 件の NFR 修正点は全て継続有効**。Persona anonymizer salt、UserPersonaSelection 上限 3、PersonaReport AUTO_BLOCK 閾値、共有プール匿名化レイテンシ等の NFR は不変。
+
+### Dynamic Persona Routing 反映 (`07c1c78`)
+- backend (`apps/api`) 側の Persona module には commit による変更なし
+- frontend (`apps/web/src/features/persona/PersonaSelectionPage.tsx`) で 💡おすすめ badge を表示する際の `GET /v1/preferences/me` 1 回読みは既存 NFR の範囲内
+- `GET /v1/personas/builtin` / `GET /v1/personas/shared` / 上限 3 制約等の NFR 数値は不変
+
+→ U-Persona NFR Req は CONSTRUCTION 完了状態のまま継続有効。

@@ -169,3 +169,18 @@ CI 想定実行時間: **~5-7 min** (cache hit 時)
 - [x] `pnpm run size` 全 package で 閾値内
 - [x] `cd infra && pnpm cdk synth` 成功
 - [x] CI workflow が ~7 min 以内に完了
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+CONSTRUCTION 完了後に発生した build 関連の変更:
+
+- **`apps/api/src/yesman_api/infrastructure/persistence/mock_repositories.py`**: `MOCK_SEED_DEMO_DECISIONS=true` 環境変数で 30日 / 105 decisions の demo seed 注入 (`2b08a75`)。local 起動時の推奨デフォルト。
+- **`apps/api/src/yesman_api/infrastructure/config.py`**: CORS `allow_methods` に `PUT` を追加 (`2b08a75`)。`PersonaSelectionPage` の preflight 解決のため。
+- **`packages/api-client/src/generated/schema.ts`**: `ScoreResponse.history` フィールド追加に伴い再生成 (`2400f45`)。CI で `dump_openapi.py` → `openapi-typescript` の chain を回した結果と一致。
+- **`packages/api-client/src/client.ts` + `src/modules/voice.ts`**: `FormData` body の Content-Type を strip して browser 自動付与に委譲 (`775f6a5`、STT 422 fix)。build 成果物に副作用なし。
+- **`README.md`**: 「## 🚀 ローカル起動」章を +177 LOC 追加 (`2b08a75`)。3 mode (Mock LLM / Claude CLI / LiteLLM)、env 一覧、起動 URL、トラブルシュートを集約。
+- **`.gitignore`**: Playwright artifacts (`tests/e2e/.last-run.json` 等) を追加 (`9a52954`)。CI artifact upload 設定は維持。
+
+→ 上記いずれも既存 build コマンド (`pnpm install --frozen-lockfile` + `pnpm build`) を変更せず、追加の手動 step を要求しない。

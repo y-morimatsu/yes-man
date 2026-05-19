@@ -332,3 +332,32 @@ NFR Req で確定する事項:
 - [x] API 9 endpoint + DTO
 - [x] テスト 7 ファイル (Unit 3 + Integration 3 + PBT 1)
 - [x] NFR Req への引き継ぎ事項 (PERF / SEC / EXT / AVAIL / TEST + 環境変数 2)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### Dynamic Persona Routing UI (`07c1c78`、Closes #4、2026-05-19)
+
+**背景**: U4 `DecisionEngine._resolve_personas` が `PreferenceProfile.persona_style_preference` から builtin persona top-3 を自動推奨するようになったことに合わせ、U-Persona の Selection page にも視覚的な手掛かりを追加。
+
+**Frontend 側変更**:
+- **`apps/web/src/features/persona/PersonaSelectionPage.tsx`**:
+  - 各 builtin persona card の右上に「💡 おすすめ」**pink pill badge** を追加
+  - `usePreference()` hook で `persona_style_preference` を取得、スコア降順 sort で top-3 のみに badge 表示
+  - Cold-start user (PreferenceProfile が空) には badge 非表示、従来通りの 4 件 builtin 表示
+  - badge 配色: `bg-pink-100 text-pink-700`、`font-serif text-xs px-2 py-0.5 rounded-full`
+
+**Backend / Domain への影響**:
+- `PersonaCatalogService` / `PersonaModerator` 本体不変
+- `UserPersonaSelection` モデル / 上限 3 / `PUT/DELETE /v1/persona-selections/me` endpoint も不変
+- 新規 API 追加なし — frontend が既存の `GET /v1/preferences/me` (U5) + `GET /v1/personas/builtin` (U-Persona) を組み合わせて表示
+
+### 共有プール / Custom Persona への影響
+- 共有プール (`GET /v1/personas/shared`) は影響なし、自動推奨はあくまで builtin に限定
+- Custom Persona も推奨対象外 (user 自身が作成した persona なので self-promotion を避ける設計判断)
+- AUTO_BLOCK (PersonaReport ≥ 3) ロジックも不変
+
+→ U-Persona は API surface を維持したまま、user の意思決定支援 UI を 1 つ追加。Cold-start 動作は保護され、user の選択自由度も損なわない。

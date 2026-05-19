@@ -351,3 +351,13 @@ ECS / Aurora 等の backend に比べ frontend インフラは桁違いに安価
 ### Improvements 2
 - **Imp1** (§3.2.1): CloudFront Response Headers Policy で HSTS / CSP / X-Content-Type-Options 等、Lambda@Edge より cost 無料 + 設定 simple
 - **Imp2** (§7): Cognito MAU を U3 計上済として除外、合算参考に変更
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の Infra Design 修正点は全て継続有効**。EdgeStack S3 + CloudFront、Lifecycle 30day、`.github/workflows/pr-frontend.yml` CI workflow 等の Design は不変。
+
+→ U7a Infrastructure Design は CONSTRUCTION 完了状態のまま継続有効。Post-CONSTRUCTION 期間中、CDK Edge / CI workflow の変更なし。

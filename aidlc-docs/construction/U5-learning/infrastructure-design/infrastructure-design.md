@@ -300,3 +300,16 @@ LEARNING_CONSUMER_ENABLED=true uvicorn yesman_api.main:app
 - [x] ローカル開発フロー 2 パターン (Mock / EventBridge)
 - [x] デプロイ順序 (U4 継承、SQS redrive 注記)
 - [x] Code Generation Plan への引き継ぎ (Phase A.0/A.1 + A-G の 9 段階、約 28 ファイル + 1 PR)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。
+
+**SQS Consumer infrastructure (queue ARN、IAM、Visibility Timeout 等) + alembic migration の Design は不変**。Post-CONSTRUCTION 期間中、CDK / SQS / IAM / alembic 等の infra-level 変更なし。
+
+### 軽微な波及
+- **U4 が U5 の `PreferenceProfileRepository` を読む** (`07c1c78`): 既存の SQLModel ORM 経由のため、新たな infra リソース不要
+
+→ U5 Infrastructure Design は CONSTRUCTION 完了状態のまま継続有効。

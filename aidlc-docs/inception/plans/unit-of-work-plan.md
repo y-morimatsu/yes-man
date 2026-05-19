@@ -213,3 +213,17 @@ X) Other (please describe after [Answer]: tag below)
 ## 3. 完了したら
 
 すべての `[Answer]:` を埋めたら「**完了**」「**done**」と教えてください。回答を分析し、矛盾・曖昧性があれば追加質問、なければ承認プロンプトを表示します。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-10 当時の Unit of Work 生成計画 Snapshot を保持 (12 ユニット: U1〜U7d + U-Persona + U-Test、依存マトリクス + Story Map 完備)。
+
+### Unit 境界の見直しなし
+Post-CONSTRUCTION で発生した 11 commit はいずれも既存 unit 境界の内側で完結し、unit 数 (12) / 責務分担 / 依存マトリクスに変更なし。
+
+### 新依存 edge の追加 (unit 内 logic 拡張)
+- U4 (decision) → U5 (learning): `PreferenceProfileRepository` 読み取り依存追加 (`07c1c78`)
+
+詳細は `aidlc-docs/inception/application-design/unit-of-work.md` 末尾の「Post-CONSTRUCTION 改修注記」参照。

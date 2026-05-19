@@ -163,3 +163,18 @@ FD §1-9 で確定した「Tailwind preset + Primitives 6 + Composites 4 + Hooks
 ### Improvements 2
 - **Imp1** (PERF-U7b-05): CSS bundle 目標は consumer 依存と注記、実測で見直し
 - **Imp2** (TEST-U7b-04): カバレッジ細分化 lines > 80% / branches > 70%、variant 全組合せ困難性考慮
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 5 fixes 適用済) を保持。
+
+**Important 3 / Improvements 2 の合計 5 件の NFR 修正点は全て継続有効**。Tree-shaking / cva / Tailwind v4 互換 / size-limit / Storybook 8 等の NFR は不変。
+
+### 軽微な変更
+- **SwipeChoice transition `duration-150`** (`1924411`): FE-DESIGN-06 Cohesive Motion 規約 (`{150 | 350 | 600 | 1200}ms` grid) への厳格準拠
+- **VoiceMicButton toggle 化** (`775f6a5`): state machine UX 改善、accessibility 観点で誤動作低減
+- **h2 font-serif 統一** (`1924411`): FE-DESIGN-02 (Intentional Typography) 準拠
+
+→ U7b NFR Req は CONSTRUCTION 完了状態を維持、FE-DESIGN 適用後の品質向上を反映。

@@ -254,3 +254,20 @@ After all units:
 2. **Units Generation** — システムを **12 ユニット** (U1〜U7d + U-Persona + U-Test) に正式分解、依存関係明確化 (FR-PERSONA 追加で U-Persona 1 ユニット増)
 3. **Per-Unit Construction** — 各ユニットで Functional Design → NFR Req → NFR Design → Infrastructure Design → Code Generation を実行
 4. **Build and Test** — 全ユニット統合・テスト・デモシナリオ通し
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は INCEPTION フェーズ開始時 (2026-05-09) の workflow 実行計画 Snapshot を保持。
+
+### 実行結果サマリ
+- 🔵 **INCEPTION フェーズ全完了** (2026-05-09 〜 2026-05-10): Requirements / User Stories / Workflow Planning / Application Design / Units Generation 全 5 stage 承認済
+- 🟢 **CONSTRUCTION フェーズ全完了** (2026-05-10 〜 2026-05-16): 11 unit + Build and Test ALWAYS EXECUTE 全完了、約 313 ファイル / 10,000+ LOC、ultrathink 累計 ~265 件
+- 🔁 **Post-CONSTRUCTION 改修フェーズ** (2026-05-17 〜 2026-05-19): Hackathon Pragmatism 緩和ルール下で `main` 直接 commit 運用、11 commit (詳細は `aidlc-docs/aidlc-state.md` 「Post-CONSTRUCTION 改修ログ」参照)
+- 🟡 **OPERATIONS フェーズ** (placeholder): `cdk deploy --all` + AWS Hackathon 提出物作成を残す
+
+### Workflow から外れた変更経路
+本 plan が想定していた「Per-Unit Loop (FD → NFR Req → NFR Design → Infra → Code Gen Part 1+2) → 承認」のフルワークフローは CONSTRUCTION で完了。Post-CONSTRUCTION 改修は CLAUDE.md `Git-Flow Branching Model` 「Hackathon Pragmatism」緩和ルール (single developer、PR レビュー省略、release branch 省略、ただし mandatory test skip 不可) を採用し、各 commit で個別に E2E 全件再実行で regression 検証。
+
+→ Post-CONSTRUCTION 段階では本 execution-plan が想定する承認 gate を経由せず、各 unit の `functional-design.md` / NFR / Infra / Code Gen Plan には末尾に「## Post-CONSTRUCTION 改修注記」セクションを追記する形で記録。

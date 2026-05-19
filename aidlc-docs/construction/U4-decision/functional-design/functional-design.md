@@ -479,3 +479,56 @@ NFR Req で確定する事項:
 ### ultrathink レビュー (2026-05-16) 反映済 13 件
 - **Important 7**: I1 SYSTEM_USER_ID 正確値 + 定数化 / I2 no_count = 既存+1 を update_choice / I3 LLM タイムアウト complete (30s) と stream (5s/120s) 分離 / I4 PII フィルタを shared/pii_filter.py / I5 NudgeMessage 非同期 + GET /nudge polling / I6 EventBridge Yes/No 両方発火 / I7 ConsensusOrchestrator persona 数 2-N 動的化
 - **Improvements 6**: Imp1 ConsensusOutput vs API DTO 分離 / Imp2 SSE `start` event で decision_id 最初配信 / Imp3 parse_with_recovery degraded 状態明示 + audit log / Imp4 BEDROCK_MODEL_ID default AppConfig / Imp5 AutonomyScorer total は採択済のみ / Imp6 PBT 追加 (silence_guard_robustness + prompt_size_bound)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot を保持。以下の改修が Post-CONSTRUCTION 段階で本 unit のスコープに加わった:
+
+### 1. 委任度スコアの意味反転 (`317280b`、2026-05-17)
+
+**背景**: CONSTRUCTION 段階の `AutonomyScorer` は「No 比率 = 自律性」と定義していたが、コンセプト「Yes 比率が高いほど委任度が高い (= AI を信頼している)」と矛盾していた。
+
+**変更点**:
+- **`domain/decision/scorer.py`**: `ratio` 計算式を `no_count / total` → `yes_count / total` に反転
+- warning 閾値も `ratio > 0.5 → 警告` から `ratio < 0.5 → 警告` に反転 (低い Yes 比率 = 委任不十分)
+- copy: 「主体性スコア」→「**委任度スコア**」に統一
+- 不変条件: `0.0 <= ratio <= 1.0`、`total = yes + no + pending` (pending 除外計算は維持)
+
+**影響範囲**:
+- API surface: `GET /v1/scores/me` の `ratio` フィールドの意味が反転 (値域・型は不変)
+- contract test / PBT (`test_score_consistency.py`) を Yes-ratio に更新
+
+### 2. ScoreResponse.history フィールド追加 (`2400f45`、2026-05-17)
+
+INCEPTION drawio screen-04 (Score Dashboard) で 30 日 trend line chart を表示するため、scorer に history 構築機能を追加:
+
+- **`domain/decision/scorer.py`**: `_build_history(now: datetime) -> list[ScoreHistoryPoint]` メソッドを新規実装
+  - 過去 30 日 × 1 日刻みで累積 Yes-ratio を計算
+  - 各 point は `{date: date, ratio: float}` の 2 フィールド
+- **`interface/http/dto/decision.py`**: `ScoreResponse.history: list[ScoreHistoryPoint]` フィールドを追加
+- **`interface/http/scores.py`**: scorer から history を取得しレスポンスに含める
+
+### 3. Dynamic Persona Routing (`07c1c78`、Closes #4、2026-05-19)
+
+Cold-start でない user で `selected_ids` が空かつ `UserPersonaSelection` も未設定の場合、嗜好プロファイルから top-3 builtin persona を自動推奨する機能:
+
+- **`domain/decision/engine.py`** の `_resolve_personas` を拡張:
+  1. user の `selected_ids` 引数を確認 (明示選択優先)
+  2. `UserPersonaSelectionRepository` で per-user selection を確認 (永続選択優先)
+  3. 両方なしの場合、`PreferenceProfileRepository` から `persona_style_preference` を取得
+  4. `persona_style_preference` スコア降順で builtin personas を sort、top-3 を返却
+  5. Cold-start (PreferenceProfile が空 = 学習履歴なし) は従来通り builtin 全 4 件を返却
+- **`interface/deps.py`**: DecisionEngine factory に `preference_repo` を inject (新 DI 依存)
+- **`domain/decision/engine.py`** signature 変更:
+  - `__init__(self, ..., preference_repo: PreferenceProfileRepository)` を追加 (keyword-only)
+  - 既存 caller (test fixtures 含む) は本コミットで同時更新
+
+**影響範囲**:
+- API surface 不変 (`POST /v1/decisions/request` の input/output は同じ、内部の persona resolution のみ変更)
+- contract test: DecisionEngine の Protocol が拡張されたため fixtures patch が必要 (本コミットで適用済)
+
+### NFR / Infrastructure / Code Gen への波及
+- NFR Requirements / NFR Design / Infrastructure Design は本体不変、本注記が記述根拠
+- code-generation-plan.md の Phase F (DecisionEngine + Scorer) は実装結果として更新済

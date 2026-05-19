@@ -672,3 +672,13 @@ Code Generation Phase で確定する事項:
   - Imp2: respx 不採用根拠 (本体 httpx の MockTransport + pyjwt で完結)
   - Imp3: Mermaid 凡例で `MID = AuthMiddleware + _LazyAuthMiddleware` の 2 クラス所在を明示
   - Imp4: §9.1 Mock backend に MOCK_AUTO_USER=true + 特殊トークン 401 のローカル動作例追加
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-15 承認時の Snapshot (ultrathink full 12 fixes 適用済) を保持。
+
+**Critical 3 / Important 5 / Improvements 4 の合計 12 件の Infra Design 修正点は全て継続有効**。Profile PK = user_id 統一、ProfileRepository.upsert ベース、U1 ApiStack 既存 Cognito env + U3 差分追加、SSM valueFromLookup、Mock store、respx 不採用根拠、Mermaid 凡例、MOCK_AUTO_USER + 特殊トークン例等の Design は不変。
+
+→ U3 Infrastructure Design は CONSTRUCTION 完了状態のまま継続有効。Post-CONSTRUCTION 期間中、Cognito / CDK / pyproject 依存等の infra-level 変更なし。

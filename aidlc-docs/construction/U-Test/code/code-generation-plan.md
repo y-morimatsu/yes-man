@@ -132,3 +132,35 @@ Phase A (fixtures + config) → B (E2E 9) → C (Integration + PBT 9) → D (Loa
 - [x] CI workflow に E2E + Integration + PBT + Smoke 統合
 - [x] Load test は manual trigger 別 workflow
 - [x] tests/fixtures/shared/ で重複排除
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (light review approved) を保持。
+
+**Phase A〜E (fixtures + tests/README / e2e 9 / integration + PBT 9 / load + smoke + CI 9 / 構文 OK) の生成計画は全て継続有効**。
+
+### Post-CONSTRUCTION で追加された E2E spec ファイル
+| spec | commit | test 数 |
+|---|---|---:|
+| `tests/e2e/tests/design.spec.ts` | `1c7c5eb` + `1924411` | 9 |
+| `tests/e2e/tests/inception-complete-screens.spec.ts` | `2400f45` | 19 |
+| `tests/e2e/tests/inception-design.spec.ts` | `2400f45` | 20 |
+| `tests/e2e/tests/inception-mobile.spec.ts` | `2400f45` | 14 |
+| `tests/e2e/tests/inception-structural.spec.ts` | `2400f45` | 11 |
+| `tests/e2e/tests/no-burst-regenerate.spec.ts` | `2b08a75` | 5 |
+| `tests/e2e/tests/swipe-and-discussion.spec.ts` | `2b08a75` | 9 |
+| **追加 spec 合計** | | **+ 87 test** |
+
+CONSTRUCTION 完了時 5 spec / ~25 test → Post-CONSTRUCTION **12 spec / 100 test**
+
+### `.gitignore` 追加 (`9a52954`)
+- `tests/e2e/.last-run.json` 等の per-run 副産物を untrack
+- HTML report (`tests/e2e/playwright-report/index.html`) と `results.json` のみ tracking 継続
+
+### CI / fixture 構成は不変
+- `tests/e2e/playwright.config.ts` + `tests/e2e/tests/fixtures/` 不変
+- `pr-test.yml` workflow も不変、~8 min budget 内で 100 test 実行
+
+→ U-Test Code Gen Plan は構成を維持、E2E spec を 7 件追加で 5 → 12 spec に拡張、全件 PASS 確認済。

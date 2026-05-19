@@ -384,3 +384,19 @@ audit_log(
 - **Imp1** (§4.2.1): `finally` 内 DeleteObject を try/except + `logger.warning` で wrap、Lifecycle 1day fail-safe に委ねる
 - **Imp2** (§9.1): FastAPI `HTTPException(headers={"Retry-After": "2"})` で 429 応答 header 設定
 - **Imp3** (§4.1.1): Polly Engine × VoiceId 整合表、Neural+Takumi 採用、`_LANG_TO_VOICE["ja-JP"]="Takumi"` (NFR Req §5.1 も整合更新)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Important 3 / Improvements 3 の合計 6 件の NFR Design 修正点は全て継続有効**。Backend (apps/api) 側の VoiceProviderFactory 3 Strategy (Mock / WebSpeechApi / AWS Transcribe)、asyncio.timeout、Polly Neural × Takumi、Transcribe OutputKey prefix 等の Design pattern は不変。
+
+### Frontend 側の新規 Design pattern (本 unit scope 拡張)
+- **`useVoiceBackend` hook**: state `'webspeech' | 'server'` を localStorage で永続化、非対応ブラウザ判定 + auto-fallback
+- **`useWebSpeechRecognition` hook**: `webkitSpeechRecognition` の thin wrapper (lang='ja-JP'、continuous=true、interimResults=true)
+- **`useVoiceInput` composed hook**: backend に応じて Server STT path / Web Speech path を切替、共通 interface `{ recording, transcript, start, stop }` を提供
+- **VoiceMicButton state machine**: idle → recording → idle (click toggle)、recording 中は赤色 + pulse animation
+
+→ U6 NFR Design は Backend pattern を維持しつつ、Frontend に backend selector pattern を追加。

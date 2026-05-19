@@ -271,3 +271,24 @@ Construction Phase は Units Generation で **12 ユニット** (U1〜U7d + U-Pe
 - **Section 1.4**: 技術的論点を更新（コンテナ・Aurora 化を反映）
 - **Section 5 (AWS 構成)**: 推奨サービスを ECS Fargate + Aurora に更新
 - **Section 4 (推奨ユニット表)**: U1 (Infrastructure)、U2 (Storage & History) の説明を Aurora 前提に更新
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot (FR-CV / FR-PERSONA 追加分含む) を保持。以下の application-level な追加が Post-CONSTRUCTION で発生:
+
+### DecisionEngine の Dynamic Persona Routing (`07c1c78`、Closes #4)
+- `DecisionEngine._resolve_personas` が `PreferenceProfileRepository` を読むようになり、cold-start 判定 + top-3 builtin persona 推奨を実装
+- 既存 application diagram には新依存 edge: `DecisionEngine ←consume― PreferenceProfileRepository`
+- API surface (`POST /v1/decisions/request`) は不変、内部依存追加のみ
+
+### Score scorer の意味反転 (`317280b`) + history 拡張 (`2400f45`)
+- `AutonomyScorer` の `ratio` 意味: No 比率 → **Yes 比率** に反転 (用語も「主体性」→「**委任度**」)
+- `ScoreResponse` に `history: ScoreHistoryPoint[]` (30 日 trend) フィールド追加
+- application diagram の component method 表記は本注記で補足
+
+### Voice backend Strategy の frontend 側拡張 (`775f6a5`)
+- backend (apps/api) の `VoiceProviderFactory` 3 Strategy (Mock / WebSpeechApi / AWS) は不変
+- frontend (apps/web) に backend selector (`useVoiceBackend`) を新設、user が Server STT / **Web Speech API (ブラウザ内蔵)** を選択可能
+- 既存 application architecture には変更なし、frontend feature module 内に閉じている

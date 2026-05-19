@@ -100,3 +100,17 @@
 - [x] U1 NFR (PERF-U1-05, SEC-U1-09, NFR-PRIV-04, NFR-TEST-02 等) と相互参照
 - [x] FR-CV-11 (本人のみ閲覧) の構造的担保 (SEC-U2-06)
 - [x] Strategy + DI / Backend Swap で NFR-DEV-04 達成
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot を保持。
+
+**PERF-U2-01..07 / SEC-U2-01..06 / TEST-U2-01..04 の NFR 数値目標は不変**。
+
+### 軽微な追加項目 (Post-CONSTRUCTION 段階)
+- **`MOCK_SEED_DEMO_DECISIONS=true` 環境変数**: local 起動時のみ作用、prod path には影響なし。Mock store の in-memory 105 decision seed のため PERF 目標値外。
+- **CORS `allow_methods` += `PUT`**: NFR/SEC の許可 method enum を拡張するが、CSRF/preflight policy には影響なし (CONSTRUCTION 段階で既に `OPTIONS` 許可済)。
+
+→ Repository Protocol の signature 不変、contract test ベースの NFR 制約も維持。

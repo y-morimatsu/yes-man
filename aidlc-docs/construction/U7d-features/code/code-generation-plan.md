@@ -239,3 +239,44 @@ Object.defineProperty(navigator, "mediaDevices", {
 - [x] size-limit で CI bundle 検証
 - [x] tests 8 ファイル (pure function 2 + hook 4 + integration 2)
 - [x] 既存 U7a apps/web を破壊しない (placeholder 完成版置換のみ)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot を保持。Post-CONSTRUCTION で追加された主要なファイル / 変更されたファイル一覧:
+
+### 新規ファイル (Post-CONSTRUCTION 段階)
+| ファイル | commit | 役割 |
+|---|---|---|
+| `apps/web/src/features/score/ScoreRadialChart.tsx` | `2400f45` | INCEPTION screen-04 準拠の SVG 円グラフ |
+| `apps/web/src/features/score/ScoreLineChart.tsx` | `2400f45` | 30日トレンド line chart (`ScoreResponse.history` 消費) |
+| `apps/web/src/features/decision/usePrefetchedDecisions.ts` | `2b08a75` | No 連打用 2 件 prefetch buffer hook |
+| `apps/web/src/features/voice/useVoiceBackend.ts` | `775f6a5` | Server STT / Web Speech API の backend selector (localStorage 永続化) |
+| `apps/web/src/features/voice/useWebSpeechRecognition.ts` | `775f6a5` | `webkitSpeechRecognition` thin wrapper |
+
+### 主要な変更ファイル (Post-CONSTRUCTION 段階)
+| ファイル | commit | 変更内容 |
+|---|---|---|
+| `apps/web/src/features/score/scoreLevel.ts` | `317280b` | warning 閾値 反転 (`< 0.5`) |
+| `apps/web/src/features/score/strings.ts` | `317280b` | copy 「主体性スコア」→「委任度スコア」 |
+| `apps/web/src/features/score/ScorePage.tsx` | `2400f45` + `775f6a5` | radial + line + pink AI bubble 構成、footnote 削除 |
+| `apps/web/src/features/decision/reducer.ts` | `2b08a75` | `swapFromBuffer` + setInput idempotency |
+| `apps/web/src/features/decision/DecisionPage.tsx` | `2400f45` | inline persona pill + central voice button |
+| `apps/web/src/features/voice/useVoiceInput.ts` | `775f6a5` | backend 切替合成 |
+| `apps/web/src/features/profile/ProfilePage.tsx` | `775f6a5` | 🎤 backend radio セクション追加 |
+| `apps/web/src/features/persona/PersonaSelectionPage.tsx` | `07c1c78` | 💡 おすすめ pink pill badge |
+| `apps/web/src/features/preference/PreferencePage.tsx` | `2b08a75` + `1924411` | 4 セクション再設計 + h2 font-serif |
+| `apps/web/src/features/home/HomePage.tsx` | `28c8adc` | Splash 文言「→ スワイプして同意」削除 |
+
+### Phase 別の影響
+- **Phase C (voice / score)**: 5 ファイル追加 + 5 ファイル変更
+- **Phase D (decision / persona / preference)**: 6 ファイル変更
+- **Phase E (home / profile)**: 3 ファイル変更
+- **Phase F (tests)**: 8 test ファイル update + `setup.ts` 拡張 (`getUserMedia` + `MediaRecorder` mock)
+- **依存追加なし** (`@tanstack/react-query` 等は CONSTRUCTION で既に導入済)
+
+### Build / Type 検証
+- `pnpm --filter @yesman/web build` 成功
+- `pnpm --filter @yesman/web test` (Vitest 14 ファイル) 全件 PASS
+- 上記すべて 2026-05-19 時点で E2E 100/100 PASS で間接検証済

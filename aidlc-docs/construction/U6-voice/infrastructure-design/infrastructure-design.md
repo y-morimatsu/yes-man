@@ -399,3 +399,18 @@ CloudWatch Logs Insights でクエリ + Metric Filter で `duration_ms` を抽�
 - **Imp1** (§2.4): CORS 不要 = `<audio>` default、必要 = `crossorigin="anonymous"` / Web Audio API、用途別表
 - **Imp2** (§5): Pydantic 422 (`detail: list`) vs custom 422 (`detail: dict`) の応答形式差異を curl コメントで明示
 - **Imp3** (§8): U4/U5 既存 structlog + Metric Filter パターン統一、namespace `YesMan/Voice` で 5 metric 設計
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Important 3 / Improvements 3 の合計 6 件の Infra Design 修正点は全て継続有効**。VoiceBucket、Polly IAM policy、Transcribe IAM policy、OutputKey prefix、env vars (6 種) 等の Backend infra Design は不変。
+
+### Web Speech API backend (`775f6a5`)
+- **CDK / IAM への影響なし**: `useWebSpeechRecognition` は完全にブラウザ内で完結、AWS resource を消費しない
+- Server STT (AWS Transcribe) を選択した場合のみ既存の VoiceBucket + IAM が作用
+- Mock backend (`useWebSpeechApi` の test 環境) も既存設定で動作
+
+→ U6 Infrastructure Design は backend infra 不変、frontend に backend selector を追加。

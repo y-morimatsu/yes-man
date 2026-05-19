@@ -432,3 +432,45 @@ cd infra && pnpm test -- --updateSnapshot && cdk synth
   - Imp2: tests/fixtures/decision.py の具体 5 fixture 列挙
   - Imp3: pii_filter テストは tests/unit/shared/ 配下 (確認のみ、修正不要)
   - Imp4: snapshot diff 確認項目を 4 種に具体化 (environment 12 + secrets 1 + IAM 1 + Secret resource 1)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot を保持。Post-CONSTRUCTION で本 unit に加わった code レベル変更:
+
+### `domain/decision/scorer.py` 改修
+| commit | 変更 |
+|---|---|
+| `317280b` | `ratio = no_count / total` → `ratio = yes_count / total` に反転、warning 閾値も反転 |
+| `2400f45` | `_build_history(now: datetime) -> list[ScoreHistoryPoint]` メソッド追加 (30日累積 Yes-ratio) |
+
+### `domain/decision/engine.py` 改修
+| commit | 変更 |
+|---|---|
+| `07c1c78` | `_resolve_personas` に `PreferenceProfileRepository` を inject、cold-start 判定 + `persona_style_preference` 降順 top-3 推奨を実装 |
+| `07c1c78` | `__init__(self, ..., preference_repo: PreferenceProfileRepository)` を keyword-only で追加 |
+
+### `interface/http/dto/decision.py` 改修
+| commit | 変更 |
+|---|---|
+| `2400f45` | `ScoreResponse.history: list[ScoreHistoryPoint]` フィールド追加、`ScoreHistoryPoint = {date, ratio}` 新規 DTO |
+
+### `interface/deps.py` 改修
+| commit | 変更 |
+|---|---|
+| `07c1c78` | DecisionEngine factory に `preference_repo` を inject |
+
+### test 改修
+| ファイル | commit | 変更 |
+|---|---|---|
+| `apps/api/tests/unit/decision/test_scorer.py` | `317280b` + `2400f45` | Yes-ratio assertion + history shape 検証 |
+| `apps/api/tests/property/test_score_consistency.py` | `317280b` | PBT を Yes-ratio に更新 |
+| `apps/api/tests/unit/decision/test_engine.py` | `07c1c78` | fixtures patch (preference_repo inject) |
+
+### Build / Type 検証
+- AST parse all OK
+- pytest 全件 PASS
+- contract test (`apps/api/tests/contract/`) 全件 PASS で Protocol 互換性確認
+
+→ U4 / decision の Phase F (DecisionEngine + Nudge + Scorer) は Post-CONSTRUCTION で実体が増えた。NFR / Infrastructure design への影響なし。

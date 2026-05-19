@@ -78,3 +78,19 @@
 `stories.md` の **Internal/Dev セクション**（Journey F: 設定切替）でのみ登場する文脈ペルソナ。`personas.md` の正規ペルソナ（上記 3 つ）には含めない。
 
 - **YesMan の開発メンバー**: 2〜3 名のフルスタック開発者。ローカル開発時は AWS リソースを叩かずに動作確認したい、CI で永続化やLLMをモック化して高速にテストしたい、本番デプロイ時は環境変数だけで本番設定に切り替えたい。
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-09 承認時の Snapshot を保持。3 user persona (新井 / 佐藤 / 田中) の設定はすべて維持。
+
+### Dynamic Persona Routing による AI persona 推奨 (Post-CONSTRUCTION 追加)
+本ドキュメントが定義するのは **user 側の persona** (= 利用者の人物像) であり、`07c1c78` で追加された **AI 側の persona の自動推奨** (Dynamic Persona Routing) とは別概念。
+
+- AI 側の builtin persona (慎重派 / 楽観派 / 効率派 / バランス派) は U-Persona FD で定義
+- Dynamic Persona Routing は user の `PreferenceProfile.persona_style_preference` から top-3 を選ぶため、3 user persona ごとに推奨結果が異なる:
+  - 新井 (慎重型): 慎重派 > 楽観派 > 効率派 の順
+  - 佐藤 (即決型): 楽観派 > 効率派 > 慎重派 の順 (想定)
+  - 田中 (実利型): 効率派 > 楽観派 > 慎重派 の順 (想定)
+- demo 用 mock user は seed `{慎重派 0.72 / 楽観派 0.91 / 効率派 0.45}` で「楽観派 → 慎重派 → 効率派」順

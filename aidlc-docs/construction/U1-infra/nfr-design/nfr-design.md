@@ -512,3 +512,13 @@ cdk deploy --all -c imageDigest=DIGEST
 - [x] Health Check 仕様確定 (`/health` 仕様、U2 実装担当)
 - [x] Open Issues 全件解決 (NFR Req で残った 8 項目すべて確定)
 - [x] 次ステージ (Infrastructure Design) への CDK Stack 構造案を提示
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-10 承認時の Snapshot (ultrathink full 6 fixes 適用済) を保持。
+
+**Critical / Important / Improvements の合計 6 件の修正点は全て継続有効**。Post-CONSTRUCTION 期間中、ALB HTTP-only + CloudFront prefix list SG、Cognito MFA Symbol、Multi-AZ ↔ min=1 トレードオフ、CloudFront Origin Timeout 60s、Aurora Cluster Mode 表現等の NFR Design は不変。
+
+→ U1 NFR Design は CONSTRUCTION 完了状態のまま、OPERATIONS phase の `cdk deploy --all` 実機検証時に再確認予定。

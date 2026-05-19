@@ -183,3 +183,23 @@ export function QueryProvider({ children }) {
 - **Imp1** (PERF-U7d-06): cache hit rate は devtools 観察、目安値
 - **Imp2** (§7.1): React Query DevTools は `import.meta.env.DEV` で prod tree-shake
 - **Imp3** (§7.2): i18n future-proofing、`strings.ts` 集約で `t("key")` 置換容易
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-17 〜 2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 7 fixes 適用済) を保持。
+
+**Critical 1 / Important 3 / Improvements 3 の合計 7 件の NFR 修正点は全て継続有効**。Bundle splitting (manualChunks)、React Query staleTime、Suspense fallback budget 等の NFR は不変。
+
+### 機能追加に伴う NFR への波及
+- **`usePrefetchedDecisions`** (`2b08a75`): No 連打バーストの体感レイテンシを 200ms 級から < 50ms へ改善 (UX NFR の超過達成、新規 NFR 項目化は不要)
+- **`ScoreRadialChart` + `ScoreLineChart`** (`2400f45`): SVG レンダリング、Web Workers 不要、bundle size +5KB gzip 程度
+- **`useVoiceBackend` + `useWebSpeechRecognition`** (`775f6a5`): localStorage 永続化、bundle size 影響軽微
+- **Dynamic Persona Routing badge** (`07c1c78`): `usePreference` の追加読み 1 回、stale-while-revalidate でレイテンシ目標達成
+
+### Manualchunks 構成は不変
+- `react-vendor`、`amplify`、`chart` 等の chunk 構成不変
+- Largest chunk (web main) の bundle size budget 内
+
+→ U7d NFR Req は CONSTRUCTION 完了状態を維持、Post-CONSTRUCTION の機能追加は既存 NFR 枠内で吸収。

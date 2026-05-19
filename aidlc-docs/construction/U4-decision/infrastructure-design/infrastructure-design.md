@@ -504,3 +504,17 @@ uvicorn yesman_api.main:app --port 8000
   - Imp2: §9.3 EVENT_BACKEND=sync 推奨、LocalStack は将来オプション
   - Imp3: Mermaid を subgraph 階層化 (llm_providers + event_publishers をネスト)
   - Imp4: litellm 版を >=1.55 に厳格化 (Guardrails サポート)
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本ドキュメント本体は 2026-05-16 承認時の Snapshot (ultrathink full 9 fixes 適用済) を保持。
+
+**Important 5 / Improvements 4 の合計 9 件の Infra Design 修正点は全て継続有効**。SilenceHashSaltSecret、SQS / EventBridge backend、Bedrock IAM、LLM env vars (BEDROCK_REGION / MODEL_ID 等) の Design は不変。
+
+### 軽微な内部変更 (CDK / IAM レベルに影響なし)
+- **DecisionEngine が `PreferenceProfileRepository` を inject** (`07c1c78`): U5 既存の Repository を再利用、新たな DB connection / IAM permission は不要
+- **ScoreResponse.history フィールド追加** (`2400f45`): pure computation、IAM / RDS schema には影響なし
+
+→ U4 Infrastructure Design は CDK / IAM 不変、内部の DI 拡張のみ。

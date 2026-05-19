@@ -486,3 +486,15 @@ cdk synth                        # 全 stack synth 成功
 ### ultrathink レビュー (2026-05-16) 反映済 11 件
 - **Important 6**: I1 config 拡張詳細 (NFR Design §9.1 完全転載、フィールド型 + バリデーション 5 段) / I2 Alembic は PG 専用、SQLite で動作不可を明示 (§12 動作確認を Mock + PG 2 パターンに分離) / I3 MOCK_AUTO_USER テストケース追加 / I4 bypass パス 6 種網羅 + 401 reason 9 種 (≥18 ケース) / I5 CDK snapshot update コマンド + RUNBOOK 反映 (I.7 + I.8) / I6 Alembic 0003 ロックは PG 13+ fast-path で確定 (Aurora 15+ 想定)
 - **Improvements 5**: Imp1 sample_profile fixture は変更不要 + sample_profile_full 任意 / Imp2 __init__.py を U2 既存パターン (空ファイル) に統一 / Imp3 §12 動作確認に SSM ブートストラップ手順追加 / Imp4 既存テスト失敗は Integration のみ明示 / Imp5 §9 完了基準に pytest コマンド例追加
+
+---
+
+## Post-CONSTRUCTION 改修注記 (2026-05-19)
+
+本 plan 本体は 2026-05-16 承認時の Snapshot (ultrathink full 11 fixes 適用済) を保持。
+
+**Phase A〜I + U2 既存テスト更新 (新規 24 + 変更 9 + Alembic 1 + .env.example + RUNBOOK + pyproject = 37 ファイル) は全て継続有効**。
+
+Post-CONSTRUCTION 期間中、`apps/api/src/yesman_api/{domain,application,infrastructure,interface}/auth/` および `middleware/auth_middleware.py` 配下に commit による変更なし。
+
+→ U3 Code Gen Plan は CONSTRUCTION 完了状態のまま継続有効。Frontend 側の AuthBypass guard 強化 (`2400f45`) は U7a-web-shell 担当で本 plan の scope 外。
