@@ -179,7 +179,7 @@
         <mxCell id="p1_m_B5_dev" value="—" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;fontColor=#BDBDBD;fontSize=11;align=center" vertex="1" parent="1">
           <mxGeometry x="1145" y="626" width="235" height="28" as="geometry"/>
         </mxCell>
-        <mxCell id="p1_sn_B6" value="&lt;b&gt;B6&lt;/b&gt;  主体性スコアの更新と表示" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#BDBDBD;fontColor=#212121;fontSize=11;align=left;spacingLeft=12" vertex="1" parent="1">
+        <mxCell id="p1_sn_B6" value="&lt;b&gt;B6&lt;/b&gt;  委任度スコアの更新と表示" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#BDBDBD;fontColor=#212121;fontSize=11;align=left;spacingLeft=12" vertex="1" parent="1">
           <mxGeometry x="60" y="654" width="560" height="28" as="geometry"/>
         </mxCell>
         <mxCell id="p1_m_B6_tanaka" value="◎" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFCDD2;strokeColor=#B71C1C;fontColor=#B71C1C;fontStyle=1;fontSize=14;align=center;strokeWidth=2" vertex="1" parent="1">
@@ -543,7 +543,7 @@ G1 田中△ / 佐藤○ / 山田◎、G3 田中△ / 佐藤◎ / 山田△、G5
         <mxCell id="page2_s_B5" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B5&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;決定結果の永続化&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
           <mxGeometry x="714" y="514" width="320" height="90" as="geometry"/>
         </mxCell>
-        <mxCell id="page2_s_B6" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B6&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;主体性スコアの更新と表示&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
+        <mxCell id="page2_s_B6" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B6&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;委任度スコアの更新と表示&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
           <mxGeometry x="1048" y="514" width="320" height="90" as="geometry"/>
         </mxCell>
                 <mxCell id="page2_s_B7" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B7&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;合議リアルタイム表示 (SSE / FR-CV)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
@@ -644,7 +644,7 @@ G1 田中△ / 佐藤○ / 山田◎、G3 田中△ / 佐藤◎ / 山田△、G5
         <mxCell id="page3_s_B5" value="&lt;span style=&quot;color:#0D47A1;font-size:18px&quot;&gt;&lt;b&gt;○&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B5&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;決定結果の永続化&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;arcSize=6" vertex="1" parent="1">
           <mxGeometry x="714" y="514" width="320" height="90" as="geometry"/>
         </mxCell>
-        <mxCell id="page3_s_B6" value="&lt;span style=&quot;color:#0D47A1;font-size:18px&quot;&gt;&lt;b&gt;○&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B6&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;主体性スコアの更新と表示&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;arcSize=6" vertex="1" parent="1">
+        <mxCell id="page3_s_B6" value="&lt;span style=&quot;color:#0D47A1;font-size:18px&quot;&gt;&lt;b&gt;○&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B6&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;委任度スコアの更新と表示&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;arcSize=6" vertex="1" parent="1">
           <mxGeometry x="1048" y="514" width="320" height="90" as="geometry"/>
         </mxCell>
                 <mxCell id="page3_s_B7" value="&lt;span style=&quot;color:#1565C0;font-size:18px&quot;&gt;&lt;b&gt;○&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B7&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;合議リアルタイム表示 (SSE / FR-CV)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=2;arcSize=6" vertex="1" parent="1">
@@ -745,7 +745,7 @@ G1 田中△ / 佐藤○ / 山田◎、G3 田中△ / 佐藤◎ / 山田△、G5
         <mxCell id="page4_s_B5" value="&lt;span style=&quot;color:#37474F;font-size:18px&quot;&gt;&lt;b&gt;△&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B5&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;決定結果の永続化&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#90A4AE;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;dashed=1;strokeWidth=1;arcSize=6" vertex="1" parent="1">
           <mxGeometry x="714" y="514" width="320" height="90" as="geometry"/>
         </mxCell>
-        <mxCell id="page4_s_B6" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B6&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;主体性スコアの更新と表示&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
+        <mxCell id="page4_s_B6" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B6&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;委任度スコアの更新と表示&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
           <mxGeometry x="1048" y="514" width="320" height="90" as="geometry"/>
         </mxCell>
                 <mxCell id="page4_s_B7" value="&lt;span style=&quot;color:#B71C1C;font-size:18px&quot;&gt;&lt;b&gt;◎&lt;/b&gt;&lt;/span&gt; &lt;b style=&quot;font-size:13px&quot;&gt;B7&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:11px&quot;&gt;合議リアルタイム表示 (SSE / FR-CV)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#B71C1C;fontColor=#212121;fontSize=12;align=center;verticalAlign=middle;strokeWidth=3;arcSize=6" vertex="1" parent="1">
@@ -908,7 +908,7 @@ G1 田中△ / 佐藤○ / 山田◎、G3 田中△ / 佐藤◎ / 山田△、G5
         <mxCell id="p6_e_B_4" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#37474F;strokeWidth=2;endFill=1" edge="1" parent="1" source="p6_B_B4_3" target="p6_B_B5_4">
           <mxGeometry relative="1" as="geometry"/>
         </mxCell>
-        <mxCell id="p6_B_B6_5" value="&lt;b&gt;B6&lt;/b&gt;&lt;br&gt;主体性スコア&lt;br&gt;更新" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#212121;fontSize=11;align=center;verticalAlign=middle;arcSize=10;strokeWidth=2" vertex="1" parent="1">
+        <mxCell id="p6_B_B6_5" value="&lt;b&gt;B6&lt;/b&gt;&lt;br&gt;委任度スコア&lt;br&gt;更新" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1976D2;fontColor=#212121;fontSize=11;align=center;verticalAlign=middle;arcSize=10;strokeWidth=2" vertex="1" parent="1">
           <mxGeometry x="1344" y="244" width="170" height="84" as="geometry"/>
         </mxCell>
         <mxCell id="p6_e_B_5" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#37474F;strokeWidth=2;endFill=1" edge="1" parent="1" source="p6_B_B5_4" target="p6_B_B6_5">
