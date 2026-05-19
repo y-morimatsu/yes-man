@@ -135,7 +135,8 @@ export function SwipeChoice({
             ArrowLeft/Right が動作するように tabIndex + onKeyDown を残す. */}
         <div
           {...handlers}
-          className={`relative mx-auto max-w-utterance touch-pan-y select-none ${confirming ? "transition-transform duration-200 ease-out" : "transition-transform duration-150 ease-out"}`}
+          // FE-DESIGN-06: motion vocabulary 'fast' (150ms / ease-out) 統一
+          className="relative mx-auto max-w-utterance touch-pan-y select-none transition-transform duration-150 ease-out"
           style={{
             transform: `translateX(${dx}px) rotate(${rotation}deg)`,
             cursor: disabled ? "default" : "grab",

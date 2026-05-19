@@ -92,7 +92,7 @@ export default function ProfilePage() {
       </Card>
 
       <Card className="border-l-4 border-danger">
-        <h2 className="font-semibold mb-3">{t("deleteSectionTitle")}</h2>
+        <h2 className="font-serif font-semibold mb-3">{t("deleteSectionTitle")}</h2>
         <Button variant="danger" onClick={() => setModalOpen(true)}>
           {t("deleteButton")}
         </Button>

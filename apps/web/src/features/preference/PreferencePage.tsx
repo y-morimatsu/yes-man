@@ -87,7 +87,7 @@ export default function PreferencePage() {
 
       {/* 採択された傾向 — domain 別の集計 */}
       <Card>
-        <h2 className="font-semibold mb-2 text-success">
+        <h2 className="font-serif font-semibold mb-2 text-success">
           ✓ {t("labelAccepted")}
           <span className="ml-2 text-xs text-neutral-500 font-normal">
             (計 {accepted.length} 件)
@@ -114,7 +114,7 @@ export default function PreferencePage() {
 
       {/* 棄却された傾向 — domain 別の集計 */}
       <Card>
-        <h2 className="font-semibold mb-2 text-silence">
+        <h2 className="font-serif font-semibold mb-2 text-silence">
           ✕ {t("labelRejected")}
           <span className="ml-2 text-xs text-neutral-500 font-normal">
             (計 {rejected.length} 件)
@@ -141,7 +141,7 @@ export default function PreferencePage() {
 
       {/* ペルソナ嗜好 — score [-1, 1] を bar graph で */}
       <Card>
-        <h2 className="font-semibold mb-2">🎭 {t("labelPersonaStyle")}</h2>
+        <h2 className="font-serif font-semibold mb-2">🎭 {t("labelPersonaStyle")}</h2>
         {personaEntries.length === 0 ? (
           <p className="text-sm text-neutral-400 italic">まだデータがありません</p>
         ) : (
@@ -175,7 +175,7 @@ export default function PreferencePage() {
       {/* 推定タグ */}
       {inferredTags.length > 0 && (
         <Card>
-          <h2 className="font-semibold mb-2">🏷️ {t("labelInferredTags")}</h2>
+          <h2 className="font-serif font-semibold mb-2">🏷️ {t("labelInferredTags")}</h2>
           <ul className="flex flex-wrap gap-2">
             {inferredTags.map((tag, i) => (
               <li
