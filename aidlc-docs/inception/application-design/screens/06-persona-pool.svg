@@ -21,21 +21,27 @@
   <rect x="32" y="116" width="216" height="28" rx="14" fill="#F5F5F5" stroke="#BDBDBD" stroke-width="1"/>
   <text x="48" y="134" font-size="10" fill="#9E9E9E">🔍 ペルソナを 探す...</text>
 
-  <!-- card 1 -->
+  <!-- card 1 (builtin + 💡 おすすめ badge: Dynamic Persona Routing top-3) -->
   <rect x="32" y="158" width="216" height="64" rx="10" fill="#FFFFFF" stroke="#5C6BC0" stroke-width="2"/>
   <circle cx="60" cy="190" r="16" fill="#E8EAF6" stroke="#5C6BC0" stroke-width="1.5"/>
   <text x="60" y="195" text-anchor="middle" font-size="14">🛡️</text>
   <text x="86" y="180" font-size="11" font-weight="700" fill="#1A237E">慎重派 (組み込み)</text>
   <text x="86" y="194" font-size="8" fill="#9E9E9E">リスクを徹底的に検討する人格</text>
   <text x="86" y="210" font-size="8" fill="#5C6BC0">⭐ 4.8 / 利用 1,247 / 採択率 87%</text>
+  <!-- recommendation badge -->
+  <rect x="200" y="164" width="44" height="14" rx="7" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="0.8"/>
+  <text x="222" y="174" text-anchor="middle" font-size="7" font-weight="700" fill="#E8775A">💡おすすめ</text>
 
-  <!-- card 2 -->
+  <!-- card 2 (builtin + 💡 おすすめ badge) -->
   <rect x="32" y="232" width="216" height="64" rx="10" fill="#FFFFFF" stroke="#FFB74D" stroke-width="2"/>
   <circle cx="60" cy="264" r="16" fill="#FFF8E1" stroke="#FFB74D" stroke-width="1.5"/>
   <text x="60" y="269" text-anchor="middle" font-size="14">☀️</text>
   <text x="86" y="254" font-size="11" font-weight="700" fill="#E65100">楽観派 (組み込み)</text>
   <text x="86" y="268" font-size="8" fill="#9E9E9E">ポジティブに背中を押す人格</text>
   <text x="86" y="284" font-size="8" fill="#E65100">⭐ 4.6 / 利用 982 / 採択率 91%</text>
+  <!-- recommendation badge -->
+  <rect x="200" y="238" width="44" height="14" rx="7" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="0.8"/>
+  <text x="222" y="248" text-anchor="middle" font-size="7" font-weight="700" fill="#E8775A">💡おすすめ</text>
 
   <!-- card 3 (user shared) -->
   <rect x="32" y="306" width="216" height="64" rx="10" fill="#FFFFFF" stroke="#9F88C8" stroke-width="2"/>
@@ -45,16 +51,20 @@
   <text x="86" y="342" font-size="8" fill="#9E9E9E">直感と美意識で判断する</text>
   <text x="86" y="358" font-size="8" fill="#9F88C8">⭐ 4.3 / 利用 156 / 採択率 78%</text>
 
-  <!-- card 4 (with FR-PERSONA-04 note) -->
+  <!-- card 4 (builtin + 💡 おすすめ badge) -->
   <rect x="32" y="380" width="216" height="64" rx="10" fill="#FFFFFF" stroke="#66BB6A" stroke-width="2"/>
   <circle cx="60" cy="412" r="16" fill="#E8F5E9" stroke="#66BB6A" stroke-width="1.5"/>
   <text x="60" y="417" text-anchor="middle" font-size="14">⚡</text>
   <text x="86" y="402" font-size="11" font-weight="700" fill="#1B5E20">効率派 (組み込み)</text>
   <text x="86" y="416" font-size="8" fill="#9E9E9E">最短経路を最優先する人格</text>
   <text x="86" y="432" font-size="8" fill="#1B5E20">⭐ 4.9 / 利用 2,108 / 採択率 95%</text>
+  <!-- recommendation badge -->
+  <rect x="200" y="386" width="44" height="14" rx="7" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="0.8"/>
+  <text x="222" y="396" text-anchor="middle" font-size="7" font-weight="700" fill="#E8775A">💡おすすめ</text>
 
   <!-- footer hint -->
-  <text x="140" y="468" text-anchor="middle" font-size="9" fill="#9E9E9E">最大 3 個 まで 合議に組込み 可能</text>
-  <text x="140" y="484" text-anchor="middle" font-size="8" fill="#BF360C">🔒 共有はオプトイン (FR-PERSONA-04)</text>
+  <text x="140" y="464" text-anchor="middle" font-size="9" fill="#9E9E9E">最大 3 個 まで 合議に組込み 可能</text>
+  <text x="140" y="478" text-anchor="middle" font-size="8" fill="#BF360C">🔒 共有はオプトイン (FR-PERSONA-04)</text>
+  <text x="140" y="492" text-anchor="middle" font-size="7" font-style="italic" fill="#E8775A">💡 = 嗜好プロファイルに基づく自動推奨 top-3 (Dynamic Persona Routing)</text>
 
 </svg>

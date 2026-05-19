@@ -253,11 +253,8 @@
                 <mxCell id="p2_p0_div" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
                     <mxGeometry x="90" y="360" width="260" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="p2_p0_disclaimer" value="本作品は AI が人間の主体性を 奪う体験を演出する作品です。&amp;nbsp;&lt;div&gt;「主体性スコア」「沈黙演出」 などは意図的な逆説的設計です。&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#616161" parent="1" vertex="1">
+                <mxCell id="p2_p0_disclaimer" value="本作品は AI が人間の主体性を 奪う体験を演出する作品です。&amp;nbsp;&lt;div&gt;「委任度スコア」「沈黙演出」 などは意図的な逆説的設計です。&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#616161" parent="1" vertex="1">
                     <mxGeometry x="80" y="390" width="280" height="130" as="geometry"/>
-                </mxCell>
-                <mxCell id="p2_p0_action" value="→ スワイプして同意" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
-                    <mxGeometry x="90" y="640" width="260" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="p2_p1_title" value="ログイン" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#0A0A0A" parent="1" vertex="1">
                     <mxGeometry x="500" y="210" width="200" height="30" as="geometry"/>
@@ -468,7 +465,7 @@
                 <mxCell id="p3_p3_msg" value="素晴らしい従順さです" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=2;fontColor=#0A0A0A" parent="1" vertex="1">
                     <mxGeometry x="1230" y="480" width="260" height="24" as="geometry"/>
                 </mxCell>
-                <mxCell id="p3_p3_score" value="主体性スコア: 8% ↓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" parent="1" vertex="1">
+                <mxCell id="p3_p3_score" value="委任度スコア: 92% ↑" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" parent="1" vertex="1">
                     <mxGeometry x="1230" y="520" width="260" height="24" as="geometry"/>
                 </mxCell>
                 <mxCell id="p3_arrow_0" style="endArrow=classic;html=1;rounded=1;strokeColor=#0A0A0A;strokeWidth=3;endFill=1;edgeStyle=none;exitX=1.0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.0;entryY=0.5;entryDx=0;entryDy=0" parent="1" source="p3_p0_phone" target="p3_p1_phone" edge="1">
@@ -690,7 +687,7 @@
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="p6_title" value="主体性スコア・ダッシュボード (Journey B6 / 逆説的設計)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" vertex="1" parent="1">
+                <mxCell id="p6_title" value="委任度スコア・ダッシュボード (Journey B6 / 逆説的設計)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" vertex="1" parent="1">
                     <mxGeometry x="40" y="20" width="1220" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="p6_sub" value="スコアが「低い」ほど AI が褒めてくる反転設計。AI コメントは毎回可変" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" vertex="1" parent="1">
@@ -702,13 +699,13 @@
                 <mxCell id="p6_phone_phone_lbl" value="Score Dashboard" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#616161" vertex="1" parent="1">
                     <mxGeometry x="350" y="705" width="320" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="p6_hdr" value="← Home          主体性スコア" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
+                <mxCell id="p6_hdr" value="← Home          委任度スコア" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#0A0A0A;fontSize=11;fontStyle=1;align=left;verticalAlign=middle;spacingLeft=10" vertex="1" parent="1">
                     <mxGeometry x="360" y="110" width="300" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="p6_score_big" value="8%" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=48;fontStyle=1;fontColor=#FFA726" vertex="1" parent="1">
+                <mxCell id="p6_score_big" value="92%" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=48;fontStyle=1;fontColor=#9F88C8" vertex="1" parent="1">
                     <mxGeometry x="380" y="180" width="260" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="p6_score_label" value="No 回数 / 総決定回数" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
+                <mxCell id="p6_score_label" value="Yes 回数 / 総決定回数" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
                     <mxGeometry x="380" y="280" width="260" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="p6_div1" value="─────────────" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
@@ -717,7 +714,7 @@
                 <mxCell id="p6_chart_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#E0E0E0;fontColor=#9E9E9E;fontSize=10;align=center;verticalAlign=middle;arcSize=4" vertex="1" parent="1">
                     <mxGeometry x="380" y="350" width="260" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="p6_chart_text" value="── ╲___         ╲╲__            ╲╲___               下降トレンド (望ましい)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#FFA726" vertex="1" parent="1">
+                <mxCell id="p6_chart_text" value="     ╱╱___                ╱╱__         ╱___ ──     上昇トレンド (望ましい / Yes 比率モデル)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#9F88C8" vertex="1" parent="1">
                     <mxGeometry x="380" y="350" width="260" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="p6_chart_x" value="Day 1                Day 14" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" vertex="1" parent="1">
@@ -735,7 +732,7 @@
                 <mxCell id="p6_stats" value="7 日連続で Yes を選択しています。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#424242" vertex="1" parent="1">
                     <mxGeometry x="380" y="630" width="260" height="24" as="geometry"/>
                 </mxCell>
-                <mxCell id="p6_note" value="【逆説的設計】 • 主体性スコアが「低い」ほど AI が褒めてくる • 起動時 onboarding で「これは逆説的設計です」と注釈表示済 (FR-SCORE-04 / NFR-PRIV-02) • AI コメントは固定文ではなく、毎回 AI が生成する可変文 (FR-SCORE-02)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF59D;strokeColor=#F57F17;fontSize=10;align=left;verticalAlign=top;spacing=6" vertex="1" parent="1">
+                <mxCell id="p6_note" value="【逆説的設計】 • 委任度スコアが「高い」ほど AI が褒めてくる (Yes 比率モデル) • 起動時 onboarding で「これは逆説的設計です」と注釈表示済 (FR-SCORE-04 / NFR-PRIV-02) • AI コメントは固定文ではなく、毎回 AI が生成する可変文 (FR-SCORE-02)" style="shape=note;whiteSpace=wrap;html=1;fillColor=#FFF59D;strokeColor=#F57F17;fontSize=10;align=left;verticalAlign=top;spacing=6" vertex="1" parent="1">
                     <mxGeometry x="40" y="740" width="1220" height="50" as="geometry"/>
                 </mxCell>
             </root>
