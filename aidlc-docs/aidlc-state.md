@@ -27,6 +27,8 @@
 |---|---|---|
 | Security Baseline | Yes | Requirements Analysis (2026-05-09) |
 | Property-Based Testing | Yes | Requirements Analysis (2026-05-09) |
+| Construction Flow | Yes | Issue #6 implementation (2026-05-19) |
+| Frontend Design | Yes | Issue #6 implementation (2026-05-19) |
 
 ## Stage Progress
 ### 🔵 INCEPTION PHASE

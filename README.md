@@ -878,6 +878,10 @@ flowchart LR
 |---|:---:|---|
 | 🛡️ **Security Baseline** | ✅ Enabled | Cognito MFA、TLS、KMS、PII フィルタ、Bedrock Guardrails |
 | 🔬 **Property-Based Testing** | ✅ Enabled | スコア計算、スワイプ判定、LLM レスポンス、Repository ラウンドトリップ |
+| 🛠️ **Construction Flow** | ✅ Enabled | feature-dev 思想を取り込んだ Construction 用 7 ルール (CONS-FLOW-01〜07): 探索 → 多案提示 → 質問 → 並列 subagent → 確信度フィルタリングレビュー → 承認ゲート → 集約サマリ |
+| 🎨 **Frontend Design** | ✅ Enabled | frontend-design 思想 × INCEPTION 美学の 7 ルール (FE-DESIGN-01〜07): SVG canonical 継承 / Noto Serif JP / coral palette / anti-AI-default / mobile-first / motion vocabulary / composite reuse |
+
+> 💡 Construction Flow / Frontend Design は本プロジェクト独自の拡張で、Anthropic 公式 [`feature-dev`](https://github.com/anthropics/claude-code/tree/main/plugins/feature-dev) / [`frontend-design`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design) プラグインの思想を AI-DLC native (`*.opt-in.md` + ルール `.md` の 2 ファイル構成) として再表現しています。Requirements Analysis 段階で Yes / Partial / No の 3 択でオプトイン制御可能。
 
 ---
 

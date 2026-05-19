@@ -15,7 +15,16 @@ Thumbs.db
 *.iml
 
 # === AI-DLC framework (external dependency, not project source) ===
-.aidlc-rule-details/
+# 全体は ignore しつつ、YesMan 独自拡張 (Issue #6 で導入) のみ track する。
+# git negation は親ディレクトリが ignore されていると効かないため、`/*` で
+# 「中身を ignore」する形で記述し、その上で必要な subtree を `!` で復活。
+.aidlc-rule-details/*
+!.aidlc-rule-details/extensions/
+.aidlc-rule-details/extensions/*
+!.aidlc-rule-details/extensions/construction/
+!.aidlc-rule-details/extensions/construction/**
+!.aidlc-rule-details/extensions/frontend/
+!.aidlc-rule-details/extensions/frontend/**
 
 # === Claude Code session / settings ===
 .claude/
