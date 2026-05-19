@@ -25,9 +25,6 @@ export default function HomePage() {
           <strong className="font-semibold text-brand-700">逆説的設計</strong>
           です。
         </p>
-        <p className="mt-4 text-xs italic text-neutral-400">
-          → スワイプして同意
-        </p>
       </section>
 
       {/* Hub: 5 機能 nav (drawio 画面ツリー Home ハブ画面相当) */}

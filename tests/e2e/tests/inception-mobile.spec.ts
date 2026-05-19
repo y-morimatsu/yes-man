@@ -182,7 +182,7 @@ test.describe("Mobile Splash A1 (drawio 280×520)", () => {
     expect(align).toBe("center");
   });
 
-  test("Splash disclaimer + → スワイプして同意 は initial viewport 内に visible", async ({
+  test("Splash disclaimer は initial viewport 内に visible", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/");
