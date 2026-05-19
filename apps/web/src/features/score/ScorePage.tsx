@@ -69,12 +69,6 @@ export default function ScorePage() {
           >
             「{data.message}」
           </p>
-          <p
-            className="text-xs italic mt-1"
-            style={{ color: "#E8775A" }}
-          >
-            — AI 生成 可変コメント
-          </p>
         </div>
 
         {/* INCEPTION screen-04 (3): 📈 推移 (30日) 折れ線グラフ */}

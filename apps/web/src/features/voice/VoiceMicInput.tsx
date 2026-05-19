@@ -1,9 +1,9 @@
 /**
  * VoiceMicInput — VoiceMicButton wrapper、転写完了で onTranscript callback.
  *
- * ultrathink U7d Code Gen Plan Imp2: voice は optional addition、text input が default.
+ * UX: Toggle 方式. クリック → 録音開始、もう一度クリック → 停止 (PC / モバイル両対応).
  */
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { VoiceMicButton } from "@yesman/ui";
 import { useVoiceInput } from "./useVoiceInput";
 
@@ -14,19 +14,27 @@ export interface VoiceMicInputProps {
 export function VoiceMicInput({ onTranscript }: VoiceMicInputProps) {
   const { state, transcript, errorMessage, start, stop } = useVoiceInput();
 
-  // 転写完了時に caller に通知
+  // onTranscript は親で inline 関数渡しになりがちで毎レンダ新参照 → useEffect 依存に
+  // 入れると無限ループになるため、ref で常に最新を保持して useEffect の依存からは外す.
+  const onTranscriptRef = useRef(onTranscript);
   useEffect(() => {
-    if (transcript) {
-      onTranscript(transcript);
+    onTranscriptRef.current = onTranscript;
+  }, [onTranscript]);
+
+  // transcript.nonce が変化するたびに親に通知 (同じ text の連続発話でも nonce 必ず増)
+  useEffect(() => {
+    if (transcript.text) {
+      onTranscriptRef.current(transcript.text);
     }
-  }, [transcript, onTranscript]);
+  }, [transcript]);
 
   const handleClick = () => {
     if (state === "recording") {
       void stop();
-    } else {
+    } else if (state === "idle" || state === "error") {
       void start();
     }
+    // processing 中は何もしない (STT 応答待ち)
   };
 
   return (

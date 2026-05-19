@@ -33,12 +33,11 @@ export class VoiceModule {
     const form = new FormData();
     form.append("audio", audio, `audio.${_extFromContentType(contentType)}`);
     form.append("language_code", languageCode);
-    // FormData 渡し時は Content-Type を自動設定させる (client.ts で application/json 既定が
-    // 上書きされるため、明示的に削除 / 上書き不要にする)
+    // FormData は client.ts 側で Content-Type を unset 処理してブラウザに boundary を
+    // 自動付与させる (client.ts L109-115 で isFormDataBody 判定).
     return request<STTResponse>(this.client, "/v1/voice/stt", {
       method: "POST",
       body: form,
-      headers: { "Content-Type": "" }, // 空文字で削除誘導、後で fetch が自動設定
     });
   }
 }

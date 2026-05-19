@@ -1,16 +1,12 @@
 /**
  * VoiceMicButton — composite (FD §4.4 + ultrathink Imp2 state machine).
  *
- * state machine (U6 voice flow と整合):
- *   idle ──(user click)──▶ recording
- *    ▲                          │ (user stop / max duration timeout)
- *    │                          ▼
- *    │                      processing (STT API call)
- *    │                          │
- *    │                          ├──(success)──▶ idle (caller が text を受領)
- *    │                          └──(failure)──▶ error
- *    │                                           │ (click "再試行")
- *    └─────────────────────────────────────────────
+ * Toggle 方式: idle/error → クリックで recording 開始、recording → クリックで stop.
+ * push-to-talk は PC マウスでの操作互換性が悪いため非採用 (Toggle のみ).
+ *
+ * state machine:
+ *   idle ──(click)──▶ recording ──(click)──▶ processing ──(success)──▶ idle
+ *                                              └──(failure)──▶ error ──(click)──▶ idle
  */
 import { Button } from "../primitives/Button";
 import { MicIcon } from "../icons/MicIcon";
@@ -19,20 +15,26 @@ export type VoiceMicState = "idle" | "recording" | "processing" | "error";
 
 export interface VoiceMicButtonProps {
   state: VoiceMicState;
+  /** Toggle: idle/error 時のクリックで開始、recording 時のクリックで停止. */
   onClick: () => void;
   errorMessage?: string;
 }
 
 const LABELS: Record<VoiceMicState, string> = {
   idle: "話す",
-  recording: "録音中...",
+  recording: "録音中... (クリックで停止)",
   processing: "処理中...",
   error: "再試行",
 };
 
-export function VoiceMicButton({ state, onClick, errorMessage }: VoiceMicButtonProps) {
+export function VoiceMicButton({
+  state,
+  onClick,
+  errorMessage,
+}: VoiceMicButtonProps) {
   const variant =
     state === "recording" ? "danger" : state === "error" ? "secondary" : "primary";
+
   return (
     <div className="flex flex-col items-center gap-2">
       <Button

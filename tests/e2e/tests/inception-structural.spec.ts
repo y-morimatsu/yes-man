@@ -126,11 +126,12 @@ test.describe("INCEPTION Score Dashboard (drawio Score 拡張)", () => {
 
   test("AI コメント (可変文) が pink バブルで表示 (drawio B6 中央 pink badge)", async ({ page }) => {
     await gotoAuthenticated(page, "/score");
-    // INCEPTION 04-score-dashboard.svg L31-33: pink バブル (#FFD6E0 / border #FF8FAE)
-    // + 「うまく まかせられて いますね」+ italic「— AI 生成 可変コメント」
+    // INCEPTION 04-score-dashboard.svg L31-32: pink バブル (#FFD6E0 / border #FF8FAE)
+    // + AI 生成可変コメント文 (例: 「うまく まかせられて いますね」)
     const aiComment = page.getByRole("region", { name: "AI コメント" });
     await expect(aiComment).toBeVisible();
-    await expect(aiComment.getByText(/AI 生成 可変コメント/)).toBeVisible();
+    // バブル内に 1 件以上の <p> 要素 (本文) が表示されている
+    await expect(aiComment.locator("p").first()).toBeVisible();
   });
 });
 

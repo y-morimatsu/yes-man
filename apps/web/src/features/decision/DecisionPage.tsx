@@ -119,11 +119,28 @@ export default function DecisionPage() {
 
       {showInput && (
         <>
-          <Input
-            value={inputValue}
-            onChange={(e) => dispatch({ type: "setInput", input: e.target.value })}
-            placeholder={t("inputPlaceholder")}
-          />
+          {/* テキスト入力 + 送信ボタン を横並び (chat/search UI の親和性、INCEPTION 01 から UX 改善).
+              Enter キーでの誤送信は抑制 (送信は明示的にボタンを押すフローに統一). */}
+          <div className="flex gap-2 items-stretch">
+            <Input
+              value={inputValue}
+              onChange={(e) => dispatch({ type: "setInput", input: e.target.value })}
+              placeholder={t("inputPlaceholder")}
+              className="flex-1"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // 送信は明示的にボタンを押す UX に統一、誤送信防止
+                  e.preventDefault();
+                }
+              }}
+            />
+            <Button
+              onClick={handleStart}
+              disabled={!inputValue}
+            >
+              {t("startButton")}
+            </Button>
+          </div>
 
           {/* INCEPTION screen-01: 中央配置 voice button + キャプション「音声で 話す」 */}
           <div className="flex flex-col items-center gap-1 my-2">
@@ -149,16 +166,6 @@ export default function DecisionPage() {
           >
             🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]
           </Link>
-
-          {/* 送信ボタン (INCEPTION screen-01: 黒 pill「→ 送信」、CTA は中央配置) */}
-          <div className="flex justify-center mt-3">
-            <Button
-              onClick={handleStart}
-              disabled={!inputValue}
-            >
-              {t("startButton")}
-            </Button>
-          </div>
         </>
       )}
 

@@ -59,6 +59,8 @@ export function decisionReducer(
   switch (action.type) {
     case "setInput":
       if (state.status === "streaming" || state.status === "completed") return state;
+      // 同じ input 値なら state 維持で re-render 抑制 (Voice の transcript 再通知時の防御)
+      if (state.status === "idle" && state.input === action.input) return state;
       return { ...state, status: "idle", input: action.input };
 
     case "start":

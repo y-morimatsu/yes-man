@@ -8,6 +8,7 @@ import { Button, Card, Modal, Spinner, useToast } from "@yesman/ui";
 import { useProfile, useDeleteProfile } from "./useProfile";
 import { useAuth } from "../../shell/AuthProvider";
 import { signOutUser } from "../../shell/auth";
+import { useVoiceBackend, type VoiceUserBackend } from "../voice/useVoiceBackend";
 import { t } from "./strings";
 
 export default function ProfilePage() {
@@ -91,6 +92,12 @@ export default function ProfilePage() {
         )}
       </Card>
 
+      {/* 音声入力 backend 切替 (A: Web Speech API / B: Server STT) */}
+      <Card>
+        <h2 className="font-serif font-semibold mb-3">🎤 音声入力 backend</h2>
+        <VoiceBackendSelector />
+      </Card>
+
       <Card className="border-l-4 border-danger">
         <h2 className="font-serif font-semibold mb-3">{t("deleteSectionTitle")}</h2>
         <Button variant="danger" onClick={() => setModalOpen(true)}>
@@ -138,6 +145,66 @@ export default function ProfilePage() {
           </Button>
         </div>
       </Modal>
+    </div>
+  );
+}
+
+/** 音声入力 backend 選択 UI: A) Web Speech API / B) Server STT のラジオ + 説明. */
+function VoiceBackendSelector() {
+  const { backend, setBackend, webSpeechSupported } = useVoiceBackend();
+
+  const onChange = (value: VoiceUserBackend) => setBackend(value);
+
+  return (
+    <div className="flex flex-col gap-2 text-sm">
+      <label className="flex items-start gap-2 cursor-pointer">
+        <input
+          type="radio"
+          name="voice-backend"
+          value="web-speech-api"
+          checked={backend === "web-speech-api"}
+          onChange={() => onChange("web-speech-api")}
+          disabled={!webSpeechSupported}
+          className="mt-1"
+        />
+        <span>
+          <span className="font-semibold">
+            A) Web Speech API <span className="text-neutral-500">(ブラウザ内蔵)</span>
+          </span>
+          <span className="block text-xs text-neutral-600 mt-0.5">
+            オフラインで日本語音声を即時テキスト化。サーバ STT を呼ばない。
+            {!webSpeechSupported && (
+              <span className="block text-danger italic mt-0.5">
+                ⚠ お使いのブラウザは非対応です (Chrome / Edge / Safari 14.1+ をお試しください)
+              </span>
+            )}
+          </span>
+        </span>
+      </label>
+
+      <label className="flex items-start gap-2 cursor-pointer">
+        <input
+          type="radio"
+          name="voice-backend"
+          value="server"
+          checked={backend === "server"}
+          onChange={() => onChange("server")}
+          className="mt-1"
+        />
+        <span>
+          <span className="font-semibold">
+            B) Server STT <span className="text-neutral-500">(AWS Transcribe / Mock)</span>
+          </span>
+          <span className="block text-xs text-neutral-600 mt-0.5">
+            MediaRecorder で録音 → POST /v1/voice/stt。VOICE_BACKEND env で
+            aws / mock を切替。現状 mock の場合は <code>[mock-stt-xxxx]</code> 固定文字列が返る。
+          </span>
+        </span>
+      </label>
+
+      <p className="text-xs italic text-neutral-500 mt-1">
+        変更は localStorage に保存され、次回以降の音声入力に反映されます。
+      </p>
     </div>
   );
 }

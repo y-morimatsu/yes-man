@@ -106,7 +106,12 @@ export async function request<T>(
   if (init.headers) {
     new Headers(init.headers).forEach((v, k) => headers.set(k, v));
   }
-  if (!headers.has("Content-Type")) {
+  // FormData 送信時は Content-Type を unset (ブラウザが multipart/form-data; boundary=... を自動付与).
+  // 空文字 Content-Type が残ると multipart boundary 不在で server 側 422 になるため、明示的に削除。
+  const isFormDataBody = typeof FormData !== "undefined" && init.body instanceof FormData;
+  if (isFormDataBody) {
+    headers.delete("Content-Type");
+  } else if (!headers.has("Content-Type") || headers.get("Content-Type") === "") {
     headers.set("Content-Type", "application/json");
   }
   if (init.auth !== false && client.tokenProvider) {

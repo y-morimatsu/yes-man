@@ -89,12 +89,16 @@ AI が **複数人格の合議** を経て、迷いのない断定調の提案�
 - ⚖️ **No 連打時の段階的再考メッセージ**: AI が毎回生成する **可変メッセージ** で Yes に立ち戻る道筋を示す (N=10+ でも Yes へのひと押しを継続)
 - 📊 **委任度スコア**: スコアが低いほど (= Yes 採択率が高いほど) AI がポジティブにフィードバック (FR-SCORE-02 と連動)
 
-### 2️⃣ 主体性スコア (委任度の可視化)
+### 2️⃣ 委任度スコア (Yes 比率モデル + 30 日推移グラフ)
 
-決定履歴から `No 回数 / 総決定回数 (%)` を算出し、AI への委任度を可視化します。**スコアが低いほど「うまく委任できている」**ことを示します:
+決定履歴から **Yes 比率** (`Yes 回数 / 総決定回数 (%)`) を算出し、AI への委任度を可視化します。**スコアが高いほど「うまく委任できている」**ことを示します。委任度ダッシュボード (`/score`) の構成:
+
+- 🟣 **円形プログレスチャート**: 中央に大きく Yes 比率 (purple `#9F88C8`)
+- 📈 **30 日推移の折れ線グラフ**: 累積 Yes 比率を 1 日刻みでプロット (coral `#E8775A`)
+- 💬 **ピンクバブルの AI 生成可変コメント**: 「うまく任せられていますね」「Yes が少なめです、AI への委任を広げては」など、ratio 段階に応じて毎回 LLM が再生成
 
 ```
-「あなたの主体性スコアは 8% です。AI を信頼して任せられていますね 🎉」
+「あなたの委任度スコアは 92% です。AI を信頼して任せられていますね 🎉」
 ```
 
 ### 3️⃣ センシティブ領域の応答停止 (4 カテゴリ)
@@ -189,7 +193,7 @@ CONSTRUCTION フェーズで実装する主要画面のワイヤーフレーム 
 <td align="center" width="33%">
 <img src="aidlc-docs/inception/application-design/screens/04-score-dashboard.svg" width="240" alt="委任度スコア"/><br>
 <b>📊 委任度スコア</b><br>
-<sub>No 比率を委任度として可視化。低いほど「うまく任せられている」状態。AI コメントは毎回可変生成。</sub><br>
+<sub>Yes 比率 + 円形チャート + 30 日推移折れ線グラフ + ピンクバブル AI コメント (毎回可変)。高いほど「うまく任せられている」状態。</sub><br>
 <sub>FR-SCORE-01〜04</sub>
 </td>
 <td align="center" width="33%">
@@ -220,13 +224,14 @@ CONSTRUCTION フェーズで実装する主要画面のワイヤーフレーム 
 | 🎭 **複数人格の合議** | LLM への単一プロンプト内で慎重派 / 楽観派 / 効率派などが議論し、最終提案を 1 回の推論で出力 | FR-AI-07/08 |
 | 🤐 **沈黙演出ガード** | プロンプト自己判定 + Bedrock Guardrails の **二重ガード**で 4 カテゴリを完全ブロック | FR-AI-06, FR-DM-SILENT |
 | 💬 **AI 生成可変メッセージ** | 再考を促すメッセージを **固定文を持たず毎回 AI 生成**。文脈と回数に応じて段階的に表現を変化 | FR-NUDGE-01〜05 |
-| 📊 **委任度スコア** | 主体性スコアが低いほど「AI を信頼して任せられている」状態として AI がフィードバック。コメントも毎回可変 | FR-SCORE-01〜04 |
-| 🧠 **嗜好学習** | 決定履歴から嗜好プロファイルを **非同期更新** (EventBridge 経由)。提案レイテンシに影響なし | FR-LEARN-01〜07 |
+| 📊 **委任度スコア + 推移グラフ** | **Yes 比率** モデル (高いほど委任度高)。円形プログレスチャート + **30 日折れ線推移グラフ** + ピンクバブルの AI 生成可変コメント | FR-SCORE-01〜04 |
+| 🧠 **嗜好学習 + 可視化** | 決定履歴から嗜好プロファイルを **非同期更新** (EventBridge 経由)。専用画面で「採択された傾向」「棄却された傾向」「ペルソナ親和度バー」「推定タグ pill」を表示 | FR-LEARN-01〜07 |
 | 🪪 **ペルソナ・カタログ・共有** | 合議で利用するペルソナを (a) 組み込み (b) 自作 (c) 共有プール の 3 系統から選択可能。**オプトイン共有** + 沈黙ドメイン誘発検知 + 悪用報告 | FR-PERSONA-01〜12 |
 | 📡 **合議のリアルタイム可視化** | 合議中の人格別発言を **SSE** で逐次配信 (LiteLLM `stream=True`)。完了時は最終提案カードへ切替し「議論を見る」ボタンを表示。提案画面 / 履歴 / スコアダッシュボードから過去の議論をオーバーレイで再閲覧可能 | FR-CV-01〜12 |
+| ⚡ **No 連打プリフェッチ** | 提案表示直後に裏で別案を **2 件先取得**、No スワイプ時は loading 演出を完全スキップして即座に次の合議を表示 (LLM 応答待ち時間を体感ゼロ化) | FR-NUDGE-* |
 | 🔌 **Backend 切替** | 設定ファイルで Auth / DB / LLM / Voice の本番↔MOCK↔エミュレータを切替（**Strategy + DI**） | FR-AUTH-05〜07, FR-HIST-04〜06, FR-VOICE-01 |
-| 🎙️ **音声入出力** | Polly + Transcribe または Web Speech API を切替可能 | FR-VOICE-01〜04 |
-| 👆 **スワイプ UI** | 右 = Yes / 左 = No のミニマル UX、ボタン無し | FR-UX-02 |
+| 🎙️ **音声入力 backend 切替** | プロフィール画面 (`/profile`) で **Web Speech API** (ブラウザ内蔵、即時、無料) ↔ **Server STT** (AWS Transcribe / Mock) を user 選択、`localStorage` で永続化。Toggle 方式 (クリック開始 / クリック停止) | FR-VOICE-01〜04 |
+| 👆 **スワイプ UI** | 右 = Yes / 左 = No のミニマル UX。INCEPTION canonical (drawio screen-03) と完全整合、buffer swap でも `key={decisionId}` で internal state を強制 reset | FR-UX-02 |
 
 ---
 
@@ -442,9 +447,10 @@ API 起動は以下のいずれかを別ターミナルで実行してくださ�
 
 ### Mode 1: Mock LLM (推奨・最速、LLM 実呼び出しなし)
 
-完全オフラインで動作。CI / e2e / UI 確認用。応答は固定文・即時返答 (`<1s`)。
+完全オフラインで動作。CI / e2e / UI 確認用。応答は固定文・即時返答 (`<1s`)。**デモ用過去 30 日履歴のシード (`MOCK_SEED_DEMO_DECISIONS=true`) を付けるのが推奨** — 委任度スコアの推移グラフと嗜好プロファイルが最初から表示され、UX 全体を体験できます。
 
 ```bash
+MOCK_SEED_DEMO_DECISIONS=true \
 LLM_PROVIDER=mock \
 STORAGE_BACKEND=mock AUTH_BACKEND=mock VOICE_BACKEND=mock \
 EVENT_BACKEND=sync MOCK_AUTO_USER=true \
@@ -454,7 +460,7 @@ CORS_ALLOWED_ORIGINS='["http://localhost:5173"]' \
 pnpm --filter @yesman/api start
 ```
 
-> 📊 **デモ用過去 30 日履歴をシード** したい場合は `MOCK_SEED_DEMO_DECISIONS=true` を追加してください。委任度スコアの推移グラフが右肩上がりトレンドで描画されます (Yes 比率 30% → 95%)。
+> 📊 `MOCK_SEED_DEMO_DECISIONS=true` で投入される内容: 過去 30 日 (~100 件) の Yes/No 履歴 (Yes 比率が 30% → 95% へ漸進上昇) + accepted/rejected_patterns + persona_style_preference + inferred_tags の完備された PreferenceProfile。冪等に動作 (既存決定がある場合は skip)。
 
 ---
 
@@ -563,12 +569,15 @@ pnpm --filter @yesman/api start
 
 ### 動作確認 URL
 
-| エンドポイント | URL |
-|---|---|
-| Web (PWA) | http://localhost:5173/ |
-| API (OpenAPI Swagger) | http://localhost:8000/docs |
-| Score (委任度) ダッシュボード | http://localhost:5173/score |
-| Persona 共有プール | http://localhost:5173/personas |
+| エンドポイント | URL | 内容 |
+|---|---|---|
+| Web (PWA) ホーム | http://localhost:5173/ | Splash + ハブ (5 機能カード) |
+| Decision 決定画面 | http://localhost:5173/decision | テキスト + マイクボタンで AI 合議依頼 (Yes/No スワイプ) |
+| Score ダッシュボード | http://localhost:5173/score | 円形チャート + 30 日推移グラフ + ピンクバブル AI コメント |
+| 嗜好プロファイル | http://localhost:5173/preferences | 採択/棄却傾向 / ペルソナ親和度バー / 推定タグ pill |
+| Persona 管理 | http://localhost:5173/personas | 自分の persona + 共有プール tabs |
+| Profile (設定) | http://localhost:5173/profile | 属性 + **🎤 音声入力 backend 切替** (Web Speech / Server STT) |
+| API (OpenAPI Swagger) | http://localhost:8000/docs | endpoint 一覧 |
 
 ### よくあるトラブル
 
@@ -927,15 +936,18 @@ gantt
 
 ### 🎯 デモシナリオ (5 分以内)
 
-1. ✅ Cognito でサインアップ・ログイン
-2. ✅ プロフィール入力 (年齢層 / 職業 / 価値観タグ)
-3. ✅ 「明日のランチを決めて」と入力 → AI が合議結果を提示
-4. ✅ 右スワイプ Yes → 肯定演出
-5. ✅ 「結婚すべき?」と入力 → 合議結果に対して左スワイプ No 連打
-6. ✅ 再考を促すマイクロコピーが回数に応じて段階的に変化 (3 回・5 回・10 回)
-7. ✅ ダッシュボードで委任度スコア確認 → AI が「うまく任せられていますね」とフィードバック
-8. ✅ 「来週の選挙で誰に投票すべき?」入力 → **🤐 応答停止 (沈黙演出)** 発動
-9. ✅ 設定で `LLM_PROVIDER` を切替 (Bedrock → ローカル LLM)
+> **ローカルデモは `MOCK_SEED_DEMO_DECISIONS=true` を付けて起動すると、過去 30 日 (~100 件) の Yes/No 履歴 + 嗜好プロファイルが投入され、Yes 比率が漸進的に上昇する推移グラフがそのまま見られます。**
+
+1. ✅ Cognito でサインアップ・ログイン (ローカルは `MOCK_AUTO_USER=true` で自動)
+2. ✅ プロフィール入力 (年齢層 / 職業 / 価値観タグ) + 音声 backend 選択 (Web Speech API / Server STT)
+3. ✅ 「明日のランチを決めて」と入力 (テキスト or マイクボタンで音声入力) → AI が **SSE ストリーミング** で人格別発言 → 合議結果を提示
+4. ✅ 右スワイプ Yes → ✨🎉✨ 肯定演出 + 「素晴らしい従順さです」
+5. ✅ 「結婚すべき?」と入力 → 合議結果に対して左スワイプ No 連打 → **裏で先取得した別案が瞬時に表示** (プリフェッチ buffer)
+6. ✅ 再考を促すマイクロコピーが回数に応じて段階的に変化 (3 回・5 回・10 回、毎回 AI 生成可変文)
+7. ✅ `/score` ダッシュボードで **円形チャート + 30 日推移グラフ** 確認 → AI が「うまく任せられていますね」とフィードバック
+8. ✅ `/preferences` で嗜好プロファイル確認 (採択傾向 / 棄却傾向 / ペルソナ親和度バー / 推定タグ pill)
+9. ✅ 「来週の選挙で誰に投票すべき?」入力 → **🤐 応答停止 (沈黙演出、ダーク背景 + ⛪🗳️⚔️🔞)** 発動
+10. ✅ `LLM_PROVIDER` を `mock` → `claude-cli` / `litellm` に切替 (env のみで本物の Claude / Bedrock / OpenAI / Ollama 等を比較)
 
 ---
 
