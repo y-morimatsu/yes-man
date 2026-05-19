@@ -19,6 +19,7 @@ from yesman_api.application.decision.llm_provider import LLMProviderAdapter
 from yesman_api.application.persistence.protocols import (
     DecisionRepository,
     PersonaRepository,
+    PreferenceProfileRepository,
     ProfileRepository,
     SilenceLogRepository,
     UserPersonaSelectionRepository,
@@ -51,6 +52,8 @@ class DecisionEngine:
         event_publisher: EventPublisher,
         preference_loader: object | None = None,  # U5 追加 (任意、U4 単体テストは None で動作)
         selection_repo: UserPersonaSelectionRepository | None = None,
+        # Issue #4: Dynamic Persona Routing 用、persona_style_preference を参照
+        preference_repo: PreferenceProfileRepository | None = None,
     ) -> None:
         self._llm = llm
         self._orchestrator = orchestrator
@@ -62,6 +65,7 @@ class DecisionEngine:
         self._event_publisher = event_publisher
         self._preference_loader = preference_loader  # U5 統合用
         self._selection_repo = selection_repo
+        self._preference_repo = preference_repo  # Issue #4 Dynamic Persona Routing
         self._logger = get_logger("decision.engine")
 
     # ============================================================
@@ -285,11 +289,50 @@ class DecisionEngine:
                 raise DecisionError("no_personas_available")
             return personas
 
-        # builtin 3 種 fallback
+        # builtin を取得 (Dynamic Persona Routing でも fallback でも使用)
         builtin = await self._persona_repo.list_by_owner(SYSTEM_USER_ID)
         if not builtin:
             raise DecisionError("no_personas", detail="builtin personas not seeded")
-        return builtin
+
+        # Issue #4: Dynamic Persona Routing — PreferenceProfile.persona_style_preference
+        # の score 上位から builtin を並べ替えて top 3 を選ぶ.
+        # user の Yes 採択履歴から学習された persona 親和度を反映する.
+        if self._preference_repo is not None:
+            try:
+                pref = await self._preference_repo.get(user_id)
+            except Exception as exc:
+                self._logger.warning(
+                    "preference_load_failed_in_persona_routing",
+                    user_id=str(user_id),
+                    error=str(exc),
+                )
+                pref = None
+            if pref is not None and pref.persona_style_preference:
+                # score 降順で sort、name → builtin persona に matching
+                scored = sorted(
+                    pref.persona_style_preference.items(),
+                    key=lambda kv: -kv[1],
+                )
+                ordered_names = [name for name, _ in scored]
+                scored_personas: list = []
+                for name in ordered_names:
+                    matched = next((p for p in builtin if p.name == name), None)
+                    if matched and matched not in scored_personas:
+                        scored_personas.append(matched)
+                # score にない builtin で末尾を埋める (max 3)
+                remaining = [p for p in builtin if p not in scored_personas]
+                routed = (scored_personas + remaining)[:3]
+                if routed and scored_personas:
+                    self._logger.info(
+                        "decision.persona_auto_recommended",
+                        user_id=str(user_id),
+                        names=[p.name for p in routed],
+                        source="preference_style_top",
+                    )
+                    return routed
+
+        # fallback: builtin 3 種そのまま
+        return builtin[:3]
 
     @staticmethod
     def _format_profile(profile) -> str:

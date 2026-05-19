@@ -159,6 +159,8 @@ def get_decision_engine(
         event_publisher=event_publisher,
         preference_loader=preference_loader,
         selection_repo=bundle.user_persona_selection,
+        # Issue #4: Dynamic Persona Routing 用
+        preference_repo=bundle.preference,
     )
 
 
