@@ -13,6 +13,13 @@ export const STRINGS = {
   ageGroupPlaceholder: "20代 / 30代 / 40代...",
   saveButton: "保存",
   saveSuccess: "保存しました",
+  // 編集 UI (BasicAttributesCard)
+  editButton: "編集",
+  saveError: "保存に失敗しました",
+  tagAddPlaceholder: "カスタムタグを追加",
+  tagAddButton: "追加",
+  tagsFullNotice: "タグは最大 20 件までです",
+  occupationPlaceholder: "例: ソフトウェアエンジニア",
   deleteSectionTitle: "アカウント削除",
   deleteButton: "アカウント削除",
   deleteModalTitle: "アカウント削除確認",

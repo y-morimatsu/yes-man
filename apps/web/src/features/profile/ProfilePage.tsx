@@ -10,6 +10,7 @@ import { useAuth } from "../../shell/AuthProvider";
 import { signOutUser } from "../../shell/auth";
 import { useVoiceBackend, type VoiceUserBackend } from "../voice/useVoiceBackend";
 import { t } from "./strings";
+import { BasicAttributesCard } from "./BasicAttributesCard";
 
 export default function ProfilePage() {
   const { sub, email } = useAuth();
@@ -47,50 +48,16 @@ export default function ProfilePage() {
         )}
       </Card>
 
-      {/* INCEPTION A3 プロフィール初期入力: 年齢層 / 職業 / 価値観タグ / 性別 / ライフステージ */}
-      <Card>
-        <h2 className="font-serif font-semibold mb-3">基本属性</h2>
-        <dl className="grid grid-cols-[10rem_1fr] gap-2 text-sm">
-          <dt className="font-semibold">{t("fieldAgeGroup")}:</dt>
-          <dd className="text-neutral-700">
-            {data && "age_group" in data && data.age_group
-              ? String(data.age_group)
-              : <span className="italic text-neutral-400">{t("ageGroupPlaceholder")}</span>}
-          </dd>
-          <dt className="font-semibold">{t("fieldOccupation")}:</dt>
-          <dd className="text-neutral-700">
-            {data && "occupation" in data && data.occupation
-              ? String(data.occupation)
-              : <span className="italic text-neutral-400">未設定</span>}
-          </dd>
-          <dt className="font-semibold">{t("fieldValueTags")}:</dt>
-          <dd className="text-neutral-700">
-            {data && "value_tags" in data && Array.isArray(data.value_tags) && data.value_tags.length > 0
-              ? (data.value_tags as string[]).join(" / ")
-              : <span className="italic text-neutral-400">{t("valueTagsPlaceholder")}</span>}
-          </dd>
-          <dt className="font-semibold">{t("fieldGender")}:</dt>
-          <dd className="text-neutral-700">
-            {data && "gender" in data && Array.isArray(data.gender) && data.gender.length > 0
-              ? (data.gender as string[]).join(" / ")
-              : <span className="italic text-neutral-400">未設定</span>}
-          </dd>
-          <dt className="font-semibold">{t("fieldLifeStage")}:</dt>
-          <dd className="text-neutral-700">
-            {data && "life_stage" in data && data.life_stage
-              ? String(data.life_stage)
-              : <span className="italic text-neutral-400">未設定</span>}
-          </dd>
-        </dl>
-        {data !== undefined && data !== null && (
-          <details className="mt-3">
-            <summary className="cursor-pointer text-xs text-neutral-500">
-              raw data
-            </summary>
-            <pre className="text-xs mt-2 overflow-auto">{JSON.stringify(data, null, 2)}</pre>
-          </details>
-        )}
-      </Card>
+      <BasicAttributesCard profile={data ?? undefined} />
+
+      {data !== undefined && data !== null && (
+        <details className="mt-1">
+          <summary className="cursor-pointer text-xs text-neutral-500">
+            raw data
+          </summary>
+          <pre className="text-xs mt-2 overflow-auto">{JSON.stringify(data, null, 2)}</pre>
+        </details>
+      )}
 
       {/* 音声入力 backend 切替 (A: Web Speech API / B: Server STT) */}
       <Card>
