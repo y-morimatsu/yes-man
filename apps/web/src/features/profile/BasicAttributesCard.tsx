@@ -8,6 +8,9 @@ import { Button, Card, Input, useToast } from "@yesman/ui";
 import type { Profile, ProfileUpdate } from "@yesman/api-client";
 import { t } from "./strings";
 import { useUpdateProfile } from "./useProfile";
+import { useAuth } from "../../shell/AuthProvider";
+import { env } from "../../shell/env";
+import { setDisplayName as setMockDisplayName } from "../../shell/mockAuthStorage";
 import {
   AGE_GROUP_PRESETS,
   GENDER_PRESETS,
@@ -21,6 +24,7 @@ export interface BasicAttributesCardProps {
 }
 
 export interface ProfileDraft {
+  display_name: string;
   age_group: string;
   occupation: string;
   value_tags: string[];
@@ -28,8 +32,9 @@ export interface ProfileDraft {
   life_stage: string;
 }
 
-function toDraft(profile: Profile | undefined): ProfileDraft {
+function toDraft(profile: Profile | undefined, display_name: string | null): ProfileDraft {
   return {
+    display_name: display_name ?? "",
     age_group: profile?.age_group ?? "",
     occupation: profile?.occupation ?? "",
     value_tags: profile?.value_tags ?? [],
@@ -39,13 +44,16 @@ function toDraft(profile: Profile | undefined): ProfileDraft {
 }
 
 export function BasicAttributesCard({ profile }: BasicAttributesCardProps) {
+  const { display_name, email, refresh } = useAuth();
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState<ProfileDraft>(() => toDraft(profile));
+  const [draft, setDraft] = useState<ProfileDraft>(() =>
+    toDraft(profile, display_name),
+  );
   const updateProfile = useUpdateProfile();
   const { push } = useToast();
 
   const startEdit = () => {
-    setDraft(toDraft(profile));
+    setDraft(toDraft(profile, display_name));
     setEditing(true);
   };
 
@@ -55,6 +63,11 @@ export function BasicAttributesCard({ profile }: BasicAttributesCardProps) {
 
   const handleSave = async () => {
     try {
+      // display_name は localStorage (bypass mode のみ). real Cognito では編集不可で skip.
+      if (env.authBypass && email && draft.display_name !== (display_name ?? "")) {
+        setMockDisplayName(email, draft.display_name);
+        await refresh();
+      }
       await updateProfile.mutateAsync(toPayload(draft));
       push({ message: t("saveSuccess"), variant: "info" });
       setEditing(false);
@@ -74,7 +87,7 @@ export function BasicAttributesCard({ profile }: BasicAttributesCardProps) {
         )}
       </div>
       {!editing ? (
-        <ViewMode profile={profile} />
+        <ViewMode profile={profile} display_name={display_name} />
       ) : (
         <EditMode
           draft={draft}
@@ -82,15 +95,30 @@ export function BasicAttributesCard({ profile }: BasicAttributesCardProps) {
           onCancel={cancelEdit}
           onSave={handleSave}
           saving={updateProfile.isPending}
+          allowDisplayName={env.authBypass}
         />
       )}
     </Card>
   );
 }
 
-function ViewMode({ profile }: { profile: Profile | undefined }) {
+function ViewMode({
+  profile,
+  display_name,
+}: {
+  profile: Profile | undefined;
+  display_name: string | null;
+}) {
   return (
     <dl className="grid grid-cols-[10rem_1fr] gap-2 text-sm">
+      <dt className="font-semibold">{t("fieldDisplayName")}:</dt>
+      <dd className="text-neutral-700">
+        {display_name ? (
+          display_name
+        ) : (
+          <span className="italic text-neutral-400">未設定</span>
+        )}
+      </dd>
       <dt className="font-semibold">{t("fieldAgeGroup")}:</dt>
       <dd className="text-neutral-700">
         {profile?.age_group ? (
@@ -141,9 +169,18 @@ interface EditModeProps {
   onCancel: () => void;
   onSave: () => void;
   saving: boolean;
+  /** display_name の編集 input を表示するか (bypass mode only) */
+  allowDisplayName: boolean;
 }
 
-function EditMode({ draft, setDraft, onCancel, onSave, saving }: EditModeProps) {
+function EditMode({
+  draft,
+  setDraft,
+  onCancel,
+  onSave,
+  saving,
+  allowDisplayName,
+}: EditModeProps) {
   return (
     <form
       className="flex flex-col gap-3 text-sm"
@@ -152,6 +189,22 @@ function EditMode({ draft, setDraft, onCancel, onSave, saving }: EditModeProps) 
         onSave();
       }}
     >
+      {allowDisplayName && (
+        <label className="grid grid-cols-[10rem_1fr] items-center gap-2">
+          <span className="font-semibold">{t("fieldDisplayName")}:</span>
+          <Input
+            aria-label={t("fieldDisplayName")}
+            type="text"
+            placeholder={t("displayNamePlaceholder")}
+            maxLength={PROFILE_LIMITS.DISPLAY_NAME_MAX_LENGTH}
+            value={draft.display_name}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, display_name: e.target.value }))
+            }
+          />
+        </label>
+      )}
+
       <label className="grid grid-cols-[10rem_1fr] items-center gap-2">
         <span className="font-semibold">{t("fieldAgeGroup")}:</span>
         <select

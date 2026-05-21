@@ -3,6 +3,7 @@ export const STRINGS = {
   pageTitle: "プロフィール",
   fieldEmail: "Email",
   fieldSub: "Sub",
+  fieldDisplayName: "表示名",
   // INCEPTION A3: プロフィール初期入力 mockup の各フィールド
   fieldAgeGroup: "年齢層",
   fieldOccupation: "職業 (任意)",
@@ -20,6 +21,7 @@ export const STRINGS = {
   tagAddButton: "追加",
   tagsFullNotice: "タグは最大 20 件までです",
   occupationPlaceholder: "例: ソフトウェアエンジニア",
+  displayNamePlaceholder: "例: 田中 涼介",
   deleteSectionTitle: "アカウント削除",
   deleteButton: "アカウント削除",
   deleteModalTitle: "アカウント削除確認",

@@ -6,6 +6,11 @@ export default defineConfig({
   test: {
     setupFiles: ["./tests/setup.ts"],
     environment: "jsdom",
+    environmentOptions: {
+      jsdom: {
+        url: "http://localhost/",
+      },
+    },
     globals: false,
     coverage: {
       provider: "v8",

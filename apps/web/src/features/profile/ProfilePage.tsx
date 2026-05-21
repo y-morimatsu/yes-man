@@ -36,10 +36,10 @@ export default function ProfilePage() {
 
       <Card>
         <dl className="grid grid-cols-[8rem_1fr] gap-2 text-sm">
-          <dt className="font-semibold">{t("fieldSub")}:</dt>
-          <dd className="font-mono break-all">{sub ?? "-"}</dd>
           <dt className="font-semibold">{t("fieldEmail")}:</dt>
           <dd>{email ?? "-"}</dd>
+          <dt className="font-semibold">{t("fieldSub")}:</dt>
+          <dd className="font-mono break-all text-xs text-neutral-600">{sub ?? "-"}</dd>
         </dl>
         {isPending && (
           <div className="mt-3">
@@ -49,15 +49,6 @@ export default function ProfilePage() {
       </Card>
 
       <BasicAttributesCard profile={data ?? undefined} />
-
-      {data !== undefined && data !== null && (
-        <details className="mt-1">
-          <summary className="cursor-pointer text-xs text-neutral-500">
-            raw data
-          </summary>
-          <pre className="text-xs mt-2 overflow-auto">{JSON.stringify(data, null, 2)}</pre>
-        </details>
-      )}
 
       {/* 音声入力 backend 切替 (A: Web Speech API / B: Server STT) */}
       <Card>
