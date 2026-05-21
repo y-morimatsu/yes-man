@@ -75,17 +75,27 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="flex flex-col gap-4 py-4">
-      <h1 className="font-serif text-2xl font-bold text-center">
-        YesMan にサインイン
-      </h1>
-      {env.authBypass && (
-        <p className="text-sm text-neutral-600 text-center">
-          メールアドレスを入力してサインインしてください。未登録のメールは自動で登録されます。
+    <div
+      className="flex flex-col gap-4 py-4 splash-fade-in"
+      style={{ animationDelay: "0ms" }}
+    >
+      <div className="text-center mb-8">
+        <p className="font-serif text-2xl text-neutral-700/70" aria-hidden="true">
+          🪞 YesMan
         </p>
-      )}
+        <h1 className="mt-2 font-serif text-3xl font-bold text-neutral-800">
+          サインイン
+        </h1>
+        {env.authBypass && (
+          <p className="mt-2 text-sm text-neutral-600">
+            メールアドレスでサインインしてください。
+            <br />
+            未登録のメールは自動で登録されます。
+          </p>
+        )}
+      </div>
 
-      <Card>
+      <Card className="border-[#E0D5BC] shadow-[0_4px_16px_rgba(212,165,93,0.08)]">
         <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
           <label className="flex flex-col gap-1 text-sm">
             <span className="font-semibold">Email</span>
@@ -93,6 +103,7 @@ export default function SignInPage() {
               type="email"
               aria-label="Email"
               placeholder="you@example.com"
+              className="h-12 rounded-xl border-[#E0D5BC] focus:ring-2 focus:ring-[#E8775A]/40 focus:border-[#E8775A]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -104,6 +115,7 @@ export default function SignInPage() {
               <Input
                 type="text"
                 aria-label="表示名"
+                className="h-12 rounded-xl border-[#E0D5BC] focus:ring-2 focus:ring-[#E8775A]/40 focus:border-[#E8775A]"
                 maxLength={DISPLAY_NAME_MAX}
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
@@ -114,6 +126,7 @@ export default function SignInPage() {
             type="submit"
             variant="primary"
             size="lg"
+            className="h-12 rounded-xl bg-[#E8775A] hover:bg-[#D66547] shadow-[0_4px_12px_rgba(232,119,90,0.25)] hover:shadow-[0_6px_16px_rgba(232,119,90,0.35)] transition-all duration-150"
             disabled={!emailValid || submitting}
             loading={submitting}
           >
@@ -123,45 +136,52 @@ export default function SignInPage() {
       </Card>
 
       {env.authBypass && (
-        <>
-          <div className="text-center text-xs text-neutral-500">
-            ─────  または  ─────
+        <div className="mt-8">
+          <div className="flex items-center gap-3 mb-3">
+            <hr className="flex-1 border-[#E0D5BC]" />
+            <p className="text-xs text-neutral-500">前回サインインしたユーザ</p>
+            <hr className="flex-1 border-[#E0D5BC]" />
           </div>
-          <Card>
-            <h2 className="font-serif font-semibold mb-3 text-sm">
-              既存ユーザから選択
-            </h2>
-            {users.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-neutral-300 p-6 text-center">
-                <p className="italic text-neutral-500">まだ登録ユーザはいません</p>
-                <p className="text-xs text-neutral-400 mt-1">
-                  上のフォームから新規登録できます
-                </p>
-              </div>
-            ) : (
-              <ul className="flex flex-col gap-2">
-                {users.map((u) => (
-                  <li key={u.email}>
-                    <button
-                      type="button"
-                      className="w-full text-left rounded-xl border border-neutral-200 hover:border-brand-500 bg-neutral-0 px-3 py-2 flex justify-between items-center transition-colors disabled:opacity-50"
-                      onClick={() => handleRowClick(u)}
-                      disabled={submitting}
-                    >
-                      <span>
-                        <span className="font-semibold text-sm block">{u.email}</span>
-                        <span className="text-xs text-neutral-600">
-                          {u.display_name ?? <span className="italic text-neutral-400">(表示名なし)</span>}
-                        </span>
+          {users.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-neutral-300 p-6 text-center">
+              <p className="italic text-neutral-500 text-sm">まだ登録ユーザはいません</p>
+              <p className="text-xs text-neutral-400 mt-1">
+                上のフォームから新規登録できます
+              </p>
+            </div>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              {users.map((u) => (
+                <li key={u.email}>
+                  <button
+                    type="button"
+                    className="
+                      w-full text-left rounded-xl border border-neutral-200
+                      px-4 py-3 flex justify-between items-center
+                      hover:border-[#E8775A] hover:bg-neutral-50
+                      transition-colors disabled:opacity-50
+                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E8775A]/40
+                    "
+                    onClick={() => handleRowClick(u)}
+                    disabled={submitting}
+                  >
+                    <span>
+                      <span className="block text-sm font-medium text-neutral-700">
+                        {u.email}
                       </span>
-                      <span className="text-neutral-400">→</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Card>
-        </>
+                      <span className="block text-xs text-neutral-500 mt-0.5">
+                        {u.display_name ?? (
+                          <span className="italic text-neutral-400">(表示名なし)</span>
+                        )}
+                      </span>
+                    </span>
+                    <span className="text-neutral-300" aria-hidden="true">→</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   );

@@ -1,32 +1,10 @@
-/** HomePage — INCEPTION A1 Splash + Hub Dashboard (U7d 拡張). */
+/** HomePage — Hub Dashboard (Splash は /auth/splash に分離、ログイン後は機能 nav のみ). */
 import { Link } from "react-router-dom";
 import { Card } from "@yesman/ui";
 
 export default function HomePage() {
   return (
     <div className="flex flex-col gap-8">
-      {/* INCEPTION A1 Splash: 大見出し + 逆説的設計 disclaimer */}
-      <section className="text-center py-8">
-        <h1 className="font-serif font-bold text-5xl text-neutral-800 tracking-wide">
-          YESMAN
-        </h1>
-        <p className="mt-6 font-serif italic text-xl text-neutral-800">
-          人間最後の仕事は、
-        </p>
-        <p className="font-serif italic text-xl text-neutral-800">
-          YES で承認すること。
-        </p>
-        <hr className="my-6 border-neutral-200 mx-auto max-w-md" />
-        <p className="text-sm text-neutral-700 leading-relaxed">
-          本作品は AI が人間の主体性を奪う体験を演出する作品です。
-        </p>
-        <p className="text-sm text-neutral-700 leading-relaxed">
-          「委任度スコア」「沈黙演出」 などは意図的な
-          <strong className="font-semibold text-brand-700">逆説的設計</strong>
-          です。
-        </p>
-      </section>
-
       {/* Hub: 5 機能 nav (drawio 画面ツリー Home ハブ画面相当) */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         <Card>
