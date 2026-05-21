@@ -48,8 +48,9 @@ describe("ScorePage", () => {
 
   it("renders ok UI without warning when no_count low", async () => {
     setup({ no_count: 1, total: 10, ratio: 0.9, message: "OK" });
+    // ScorePage は message を 「{message}」 形式で表示 (line 70)
     await waitFor(() => {
-      expect(screen.getByText("OK")).toBeInTheDocument();
+      expect(screen.getByText(/「OK」/)).toBeInTheDocument();
     });
     expect(screen.queryByText(/No 連発を検知/)).not.toBeInTheDocument();
   });

@@ -113,6 +113,10 @@ class AppConfig(BaseSettings):
     """spec 2026-05-21 parallel-persona-consensus §6: persona 単発 LLM call の timeout."""
     decision_llm_proposal_timeout_seconds: float = 20.0
     """spec 2026-05-21 parallel-persona-consensus §6: proposal LLM call の timeout."""
+    mock_llm_persona_delay_seconds: float = 0.0
+    """e2e/dev でMock LLM の persona 完了タイミングを観測可能にするための per-persona delay.
+    0.0 (default): Mock は即時、CI で LIVE badge race が起きる。
+    > 0.0: 各 persona 完了を delay 秒間ずらす (e2e は 0.5-1.0 推奨)."""
     decision_llm_retry_count: int = 1
     nudge_generation_enabled: bool = True
     nudge_cache_ttl_seconds: float = 600.0

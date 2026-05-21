@@ -24,7 +24,7 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint src tests",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src tests",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "size": "size-limit"
@@ -47,6 +47,7 @@
   },
   "devDependencies": {
     "@size-limit/preset-small-lib": "^11.0.0",
+    "@storybook/react": "^8.6.18",
     "@storybook/react-vite": "^8.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",

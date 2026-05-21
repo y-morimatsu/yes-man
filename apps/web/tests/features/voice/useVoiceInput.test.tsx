@@ -35,7 +35,9 @@ describe("useVoiceInput", () => {
     );
     const { result } = renderHook(() => useVoiceInput(), { wrapper });
     expect(result.current.state).toBe("idle");
-    expect(result.current.transcript).toBe("");
+    // transcript は { text, nonce } の event 型 (連続同 text を distinct にするための nonce 付)
+    expect(result.current.transcript.text).toBe("");
+    expect(result.current.transcript.nonce).toBe(0);
   });
 
   it("error state when voice config unavailable initially", async () => {

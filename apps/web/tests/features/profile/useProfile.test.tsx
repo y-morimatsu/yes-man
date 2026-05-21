@@ -44,6 +44,7 @@ describe("useProfile hooks", () => {
     );
     const { result } = renderHook(() => useDeleteProfile(), { wrapper });
     await result.current.mutateAsync();
-    expect(result.current.isSuccess).toBe(true);
+    // mutateAsync の resolve 後も React state flush を待つ (isSuccess は state 経由で更新)
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
   });
 });

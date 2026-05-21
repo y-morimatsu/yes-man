@@ -37,7 +37,13 @@ class LLMProviderFactory:
 
             self._adapter = ClaudeCLIAdapter(self._cfg)
         elif backend == "mock":
-            self._adapter = MockLLMProvider()
+            # e2e で LIVE badge / chat-like timing を観測可能にするため、env config で
+            # per-persona delay を設定可能にする (default 0.0 = 即時、CI/dev は 0.5 推奨).
+            delay = self._cfg.mock_llm_persona_delay_seconds
+            persona_delays = (
+                {"慎重派": delay, "楽観派": delay, "効率派": delay} if delay > 0 else None
+            )
+            self._adapter = MockLLMProvider(persona_delays=persona_delays)
         else:
             raise RuntimeError(f"Unknown LLM_PROVIDER: {backend!r}")
         return self._adapter

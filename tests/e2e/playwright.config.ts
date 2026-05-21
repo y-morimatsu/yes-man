@@ -41,6 +41,9 @@ export default defineConfig({
         AUTH_BACKEND: "mock",
         STORAGE_BACKEND: "mock",
         LLM_PROVIDER: "mock",
+        // Mock LLM に per-persona delay を入れて LIVE badge / chat-like timing を観測可能にする.
+        // 0.5s × 3 persona + proposal = ~2s 程度の合議時間、e2e で stream 期間が assert 可能.
+        MOCK_LLM_PERSONA_DELAY_SECONDS: "0.5",
         VOICE_BACKEND: "mock",
         EVENT_BACKEND: "sync",
         LEARNING_CONSUMER_ENABLED: "false",

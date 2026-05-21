@@ -32,14 +32,15 @@ test.describe("INCEPTION tokens (color/font)", () => {
   });
 
   test("Primary text = #4A3D45 warm dark brown", async ({ page }) => {
-    await gotoAuthenticated(page, "/");
+    // INCEPTION token は Splash heading が一番代表的、Splash route に直接アクセス.
+    await page.goto("/auth/splash");
     const heading = page.getByRole("heading", { level: 1 }).first();
     await expect(heading).toBeVisible();
     await expect(heading).toHaveCSS("color", "rgb(74, 61, 69)");
   });
 
   test("Heading font に Noto Serif JP 含む", async ({ page }) => {
-    await gotoAuthenticated(page, "/");
+    await page.goto("/auth/splash");
     const heading = page.getByRole("heading", { level: 1 }).first();
     const ff = await heading.evaluate((el) => getComputedStyle(el).fontFamily);
     expect(ff).toMatch(/Noto Serif JP/);

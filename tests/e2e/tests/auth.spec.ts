@@ -5,8 +5,9 @@ import { gotoAuthenticated } from "../fixtures/auth";
 test.describe("Auth flow", () => {
   test("Home renders for authenticated user (Mock backend)", async ({ page }) => {
     await gotoAuthenticated(page, "/");
-    // INCEPTION A1 Splash: YESMAN 大見出し + 「人間最後の仕事は、YES で承認すること。」
-    await expect(page.getByRole("heading", { name: /YESMAN/ })).toBeVisible();
+    // Authenticated 時は HomePage Hub Dashboard (5 機能 nav) が表示される.
+    // Splash は PR #11 で /auth/splash に分離 (RequireAuth が unauthenticated を redirect).
+    await expect(page.getByRole("heading", { name: /合議で決定/ })).toBeVisible();
   });
 
   test("Profile page accessible after sign-in", async ({ page }) => {

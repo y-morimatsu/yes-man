@@ -76,7 +76,7 @@ test.describe("Design system tokens (U7b FD §2)", () => {
         { data: { choice: "no" } },
       );
     }
-    await page.goto("/score");
+    await gotoAuthenticated(page, "/score");
     const alert = page.getByRole("alert").first();
     await expect(alert).toBeVisible();
     // INCEPTION canonical: danger = #C62828 = rgb(198, 40, 40)

@@ -21,8 +21,8 @@ test.describe("ScorePage", () => {
         { data: { choice: "no" } },
       );
     }
-    // UI で danger 表示 verify
-    await page.goto("/score");
+    // UI で danger 表示 verify (gotoAuthenticated で localStorage seed して認証 state)
+    await gotoAuthenticated(page, "/score");
     await expect(page.getByRole("alert")).toBeVisible({ timeout: 5_000 });
   });
 });

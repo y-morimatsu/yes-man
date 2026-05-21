@@ -36,7 +36,8 @@ test.describe("Mobile viewport (drawio 280×520 phone aspect)", () => {
   });
 
   test("YESMAN 大見出し が viewport 内に収まる", async ({ page }) => {
-    await gotoAuthenticated(page, "/");
+    // PR #11 以降 Splash は /auth/splash route.
+    await page.goto("/auth/splash");
     const heading = page.getByRole("heading", { name: /YESMAN/ });
     await expect(heading).toBeVisible();
     const box = await heading.boundingBox();
@@ -175,7 +176,8 @@ test.describe("Mobile Splash A1 (drawio 280×520)", () => {
   test("YESMAN 大見出し は viewport 中央寄りに配置 (text-align center)", async ({
     page,
   }) => {
-    await gotoAuthenticated(page, "/");
+    // PR #11 以降 Splash は /auth/splash route.
+    await page.goto("/auth/splash");
     const heading = page.getByRole("heading", { name: /YESMAN/ });
     const parent = heading.locator("..").first();
     const align = await parent.evaluate((el) => getComputedStyle(el).textAlign);
@@ -185,7 +187,7 @@ test.describe("Mobile Splash A1 (drawio 280×520)", () => {
   test("Splash disclaimer は initial viewport 内に visible", async ({
     page,
   }) => {
-    await gotoAuthenticated(page, "/");
+    await page.goto("/auth/splash");
     await expect(page.getByText(/逆説的設計/).first()).toBeInViewport({
       ratio: 0.5,
     });

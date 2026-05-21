@@ -19,9 +19,11 @@ vi.mock("../../../src/shell/env", () => ({
   },
 }));
 
+import type * as ReactRouterDom from "react-router-dom";
+
 const navigateMock = vi.fn();
 vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual<typeof import("react-router-dom")>(
+  const actual = await vi.importActual<typeof ReactRouterDom>(
     "react-router-dom",
   );
   return { ...actual, useNavigate: () => navigateMock };

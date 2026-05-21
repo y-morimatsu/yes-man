@@ -2,7 +2,9 @@ import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
-  addons: ["@storybook/addon-essentials"],
+  // @storybook/addon-essentials は未 install (devDep に無し)、storybook v8 default で
+  // も最低限 controls/actions が組み込まれるので省略.
+  addons: [],
   framework: {
     name: "@storybook/react-vite",
     options: {},
