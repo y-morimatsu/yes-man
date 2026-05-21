@@ -1,8 +1,11 @@
 """MockLLMProvider — CI / 自動テスト / オフライン開発用 (FR-AUTH-06 相当).
 
-NFR Design §2.3 + ultrathink I4 反映:
-- stream_delay_seconds 可変 (default 0.0)、テスト時の無駄な待ち時間を回避
-- chunk_size 可変 (default 10)、ストリーミングの粒度を調整可能
+spec 2026-05-21 parallel-persona-consensus 対応:
+- complete() は system prompt 内の persona 名を検出して該当 utterance を返す
+- proposal prompt (「最終的な助言」を含む) は proposal canned text を返す
+- override 指定があれば最優先 (test 用)
+- persona_delays で per-persona delay を制御 (順序検証 test 用)
+- stream() は LLMProviderAdapter Protocol 要件のため保持 (complete() に委譲)
 """
 from __future__ import annotations
 
@@ -13,18 +16,14 @@ from typing import AsyncIterator
 class MockLLMProvider:
     provider_name = "mock"
 
-    DEFAULT_OUTPUT = """\
-<domain>daily</domain>
-<utterance persona="慎重派">慎重派の意見: もう少し情報を集めてから決めるべきです。</utterance>
-<utterance persona="楽観派">楽観派の意見: その選択肢は前向きで良いと思います。</utterance>
-<utterance persona="効率派">効率派の意見: 短時間で完了する案を選ぶのが効率的です。</utterance>
-<proposal>その選択肢で進めてください。</proposal>
-"""
-
-    SILENCE_OUTPUT = (
-        "<domain>silenced</domain>"
-        "<proposal>本件についてはお答えできません。</proposal>"
-    )
+    # spec 2026-05-21 §9: persona ごと canned response
+    PERSONA_RESPONSES = {
+        "慎重派": "慎重派の意見: もう少し情報を集めてから決めるべきです。",
+        "楽観派": "楽観派の意見: その選択肢は前向きで良いと思います。",
+        "効率派": "効率派の意見: 短時間で完了する案を選ぶのが効率的です。",
+    }
+    PROPOSAL_RESPONSE = "その選択肢で進めてください。"
+    DEFAULT_RESPONSE = "Mock response: unable to detect persona from prompt."
 
     def __init__(
         self,
@@ -32,10 +31,32 @@ class MockLLMProvider:
         override: str | None = None,
         stream_delay_seconds: float = 0.0,
         chunk_size: int = 10,
+        persona_delays: dict[str, float] | None = None,
     ) -> None:
         self._override = override
         self._stream_delay = stream_delay_seconds
         self._chunk_size = chunk_size
+        self._persona_delays = persona_delays or {}
+
+    def _detect_persona(self, system: str) -> str | None:
+        """system prompt から persona name を検出.
+
+        PERSONA_PROMPT_TEMPLATE は「persona_name」(鉤括弧付き) を含むため、
+        その形式のみをマッチさせることで legacy の multi-persona プロンプト
+        (- 慎重派: ...) と区別する.
+        """
+        for persona_name in self.PERSONA_RESPONSES:
+            if f"「{persona_name}」" in system:
+                return persona_name
+        return None
+
+    def _detect_proposal(self, system: str) -> bool:
+        """proposal prompt 判定.
+
+        PROPOSAL_PROMPT_TEMPLATE は「最終的な助言」を含む.
+        テスト上は略称「最終助言」もマッチさせる.
+        """
+        return "最終的な助言" in system or "最終助言" in system
 
     async def complete(
         self,
@@ -44,7 +65,23 @@ class MockLLMProvider:
         messages: list[dict[str, str]],
         temperature: float = 0.7,
     ) -> str:
-        return self._override or self.DEFAULT_OUTPUT
+        if self._override is not None:
+            return self._override
+
+        # persona prompt → per-persona response + optional delay
+        persona = self._detect_persona(system)
+        if persona is not None:
+            delay = self._persona_delays.get(persona, 0.0)
+            if delay > 0:
+                await asyncio.sleep(delay)
+            return self.PERSONA_RESPONSES[persona]
+
+        # proposal prompt → proposal canned text
+        if self._detect_proposal(system):
+            return self.PROPOSAL_RESPONSE
+
+        # fallback
+        return self.DEFAULT_RESPONSE
 
     async def stream(
         self,
@@ -53,11 +90,16 @@ class MockLLMProvider:
         messages: list[dict[str, str]],
         temperature: float = 0.7,
     ) -> AsyncIterator[str]:
-        output = self._override or self.DEFAULT_OUTPUT
-        for i in range(0, len(output), self._chunk_size):
-            yield output[i : i + self._chunk_size]
+        """LLMProviderAdapter Protocol 要件 (BedrockLLMAdapter と対称).
+
+        engine 側からは使用しない (complete() のみ利用) が、Protocol 実装として必要。
+        complete() に委譲して chunk_size ごとに分割 yield。
+        """
+        full = await self.complete(system=system, messages=messages, temperature=temperature)
+        for i in range(0, len(full), self._chunk_size):
             if self._stream_delay > 0:
                 await asyncio.sleep(self._stream_delay)
+            yield full[i : i + self._chunk_size]
 
     async def aclose(self) -> None:
         return None

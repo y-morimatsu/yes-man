@@ -10,6 +10,8 @@ from tests.fixtures.decision import builtin_personas, decision_request_factory, 
 from yesman_api.domain.decision.consensus import ConsensusOrchestrator
 from yesman_api.domain.decision.engine import DecisionEngine
 from yesman_api.domain.decision.silence_guard import SilenceGuard
+from yesman_api.infrastructure.config import AppConfig
+from yesman_api.infrastructure.decision.llm_providers.mock_adapter import MockLLMProvider
 
 
 class _FakeRepo:
@@ -122,10 +124,10 @@ class _EventPubStub:
         pass
 
 
-def _make_engine(*, llm=None, decision_repo=None):
+def _make_engine(*, llm=None, decision_repo=None, config=None):
     llm = llm or mock_llm_provider_factory()
     decision_repo = decision_repo or _FakeRepo()
-    return DecisionEngine(
+    kwargs = dict(
         llm=llm,
         orchestrator=ConsensusOrchestrator(),
         silence_guard=SilenceGuard(llm=llm, salt="x"),
@@ -135,6 +137,9 @@ def _make_engine(*, llm=None, decision_repo=None):
         profile_repo=_ProfileRepoStub(),
         event_publisher=_EventPubStub(),
     )
+    if config is not None:
+        kwargs["config"] = config
+    return DecisionEngine(**kwargs)
 
 
 @pytest.mark.asyncio
@@ -149,12 +154,20 @@ async def test_silence_path_skips_decision_persist():
 
 @pytest.mark.asyncio
 async def test_normal_path_persists_decision():
+    """spec 2026-05-21: parallel consensus → utterance 3 件 + proposal が yield + DecisionRepository に insert される."""
     repo = _FakeRepo()
     engine = _make_engine(decision_repo=repo)
-    req = decision_request_factory(user_input="今日のランチ")
-    decision_id, consensus, _ = await engine.run(req)
+    req = decision_request_factory(user_input="今日のランチを決めて")
+    decision_id = uuid4()
+    events = [e async for e in engine.run_stream(decision_id=decision_id, request=req)]
+    types = [e.type for e in events]
+    assert types.count("utterance") == 3
+    assert types.count("proposal") == 1
+    assert types[-1] == "complete"
     assert decision_id in repo.decisions
-    assert consensus.proposal_text
+    persisted = repo.decisions[decision_id]
+    assert persisted.user_input == "今日のランチを決めて"
+    assert persisted.proposal_text  # non-empty
 
 
 @pytest.mark.asyncio
@@ -179,3 +192,71 @@ async def test_apply_choice_yes_publishes_event():
     )
     assert len(pub.published) == 1
     assert pub.published[0]["choice"] == "yes"
+
+
+class TestRunStreamParallel:
+    """spec 2026-05-21 parallel-persona-consensus §11.2."""
+
+    @pytest.mark.asyncio
+    async def test_parallel_utterances_arrival(self):
+        """3 persona 並列で utterance event 3 件 + proposal + complete が yield される (順序非依存、set 比較)."""
+        repo = _FakeRepo()
+        engine = _make_engine(decision_repo=repo)
+        request = decision_request_factory(user_input="今日のランチを決めて")
+        decision_id = uuid4()
+
+        events = [e async for e in engine.run_stream(decision_id=decision_id, request=request)]
+        types = [e.type for e in events]
+
+        utterance_personas = {e.data["persona_name"] for e in events if e.type == "utterance"}
+        assert utterance_personas == {"慎重派", "楽観派", "効率派"}
+        assert types.count("proposal") == 1
+        assert types.count("complete") == 1
+        assert types[-1] == "complete"
+
+    @pytest.mark.asyncio
+    async def test_persona_arrival_order_with_delay(self):
+        """deterministic delay で慎重派 → 楽観派 → 効率派 の順に utterance event."""
+        llm = MockLLMProvider(persona_delays={"慎重派": 0.01, "楽観派": 0.05, "効率派": 0.10})
+        engine = _make_engine(llm=llm)
+        request = decision_request_factory(user_input="test")
+        decision_id = uuid4()
+
+        utterance_events = []
+        async for e in engine.run_stream(decision_id=decision_id, request=request):
+            if e.type == "utterance":
+                utterance_events.append(e.data["persona_name"])
+
+        assert utterance_events == ["慎重派", "楽観派", "効率派"]
+
+    @pytest.mark.asyncio
+    async def test_one_persona_timeout_degraded(self):
+        """1 persona timeout → 残り 2 utterance + 1 proposal が yield される."""
+        llm = MockLLMProvider(persona_delays={"慎重派": 5.0})
+        config = AppConfig(decision_llm_per_persona_timeout_seconds=0.1)
+        engine = _make_engine(llm=llm, config=config)
+        request = decision_request_factory(user_input="test")
+        decision_id = uuid4()
+
+        events = [e async for e in engine.run_stream(decision_id=decision_id, request=request)]
+        utterance_personas = {e.data["persona_name"] for e in events if e.type == "utterance"}
+        assert utterance_personas == {"楽観派", "効率派"}
+        assert sum(1 for e in events if e.type == "proposal") == 1
+        assert sum(1 for e in events if e.type == "complete") == 1
+        assert sum(1 for e in events if e.type == "error") == 0
+
+    @pytest.mark.asyncio
+    async def test_all_personas_timeout(self):
+        """全 persona timeout → error event + no proposal + no complete."""
+        llm = MockLLMProvider(persona_delays={"慎重派": 5.0, "楽観派": 5.0, "効率派": 5.0})
+        config = AppConfig(decision_llm_per_persona_timeout_seconds=0.1)
+        engine = _make_engine(llm=llm, config=config)
+        request = decision_request_factory(user_input="test")
+        decision_id = uuid4()
+
+        events = [e async for e in engine.run_stream(decision_id=decision_id, request=request)]
+        error_events = [e for e in events if e.type == "error"]
+        assert len(error_events) == 1
+        assert error_events[0].data["reason"] == "all_personas_failed"
+        assert sum(1 for e in events if e.type == "proposal") == 0
+        assert sum(1 for e in events if e.type == "complete") == 0

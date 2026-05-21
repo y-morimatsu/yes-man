@@ -109,6 +109,10 @@ class AppConfig(BaseSettings):
     decision_llm_timeout_seconds: float = 30.0
     decision_llm_stream_initial_timeout_seconds: float = 5.0
     decision_llm_stream_total_timeout_seconds: float = 120.0
+    decision_llm_per_persona_timeout_seconds: float = 30.0
+    """spec 2026-05-21 parallel-persona-consensus §6: persona 単発 LLM call の timeout."""
+    decision_llm_proposal_timeout_seconds: float = 20.0
+    """spec 2026-05-21 parallel-persona-consensus §6: proposal LLM call の timeout."""
     decision_llm_retry_count: int = 1
     nudge_generation_enabled: bool = True
     nudge_cache_ttl_seconds: float = 600.0
