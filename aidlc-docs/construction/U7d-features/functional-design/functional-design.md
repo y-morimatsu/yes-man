@@ -637,3 +637,36 @@ const PreferencePage = lazy(() => import("../features/preference/PreferencePage"
 - すべて 2026-05-19 時点で PASS
 
 → U7d / features は CONSTRUCTION 完了後の最大改修対象、Score / Decision / Voice / Persona / Preference / Home の全 6 feature に手が入ったが、`@yesman/api-client` schema の自動 propagation により breaking change は最小化された。
+
+---
+
+## Post-CONSTRUCTION 改修注記 v2 (2026-05-22) — Pack A + Decision History
+
+本ドキュメント本体および v1 改修注記は変更なし。以下の改修が 2026-05-22 に本 unit のスコープに加わった:
+
+### 8. Demo UX Polish Pack A (`a731786`、2026-05-22)
+
+4 件の UX 改善を一括実装:
+
+- **`features/score/ScorePage.tsx`** (UI 側無変更): API 側 `_format_message` の変更により pink bubble の `{data.message}` 表示が具体的な %値付きコピーに自動更新される (本ファイルへの変更なし)
+- **`features/home/HomePage.tsx`** に `SummaryCard` コンポーネントを追加。`useScore()` hook を流用し、最近の YesMan 件数 / Yes 比率 / progress bar / `data.message` を表示。データあり時は `/score` へ、履歴なし (empty state) 時は `/decision` へ動線を提供
+- **`features/decision/PersonaThinkingChips.tsx`** を新規作成し、`DecisionResult.tsx` の LIVE badge 直後に組み込み。3 persona の SSE 発話状態を chip 形式で表示 (未発話: pulse アニメ / 発話済: ✓ + persona 名)、`motion-reduce:animate-none` 対応で `prefers-reduced-motion: reduce` 時は pulse 停止
+- **`features/decision/DecisionResult.tsx`** に `canvas-confetti` を import し、Yes 採択確定時に `fireConfetti()` を発火。brand purple / coral / pink の 50 粒を 1.5 秒舞わせる。`window.matchMedia("(prefers-reduced-motion: reduce)")` を確認し、reduce 設定時は confetti をスキップ
+
+### 9. ScorePage Decision History (`bcd9a9b`〜`aa25a2e`、2026-05-22)
+
+5 件のファイルを追加 + ScorePage に 1 行 insert:
+
+- **`features/score/formatRelativeTime.ts`** 新規: ISO 8601 文字列を受け取り 5 段階フォーマットで人間可読な相対時刻を返す (`たった今` / `N 分前` / `N 時間前` / `昨日` / `N 日前` / `YYYY-MM-DD` のフォールバック)
+- **`features/score/truncate.ts`** 新規: surrogate pair (絵文字等) を安全に扱う truncate 実装 (`[...s].slice(0, maxLen).join("")` パターン)
+- **`features/score/useDecisionHistory.ts`** 新規: React Query hook。`queryKey: ["decisions", "history", "yes", limit]`、`staleTime: 30_000`。`api.decisions.history({ limit, choice: "yes" })` を呼び出し、エラーは silent fail (コンポーネント側で empty state 表示)
+- **`features/score/DecisionHistoryList.tsx`** 新規: 各 item を `✓ + 質問「…」→ 提案 + 🕒 相対時刻 ・ 採用回数 (🌟 1 回目 / 🔄 N 回目で採用)` の構成で表示。silent fail (API エラー時は非表示) / loading skeleton / empty state (「まだ Yes 採択の履歴がありません」) を実装
+- **`features/score/ScorePage.tsx`** の paradox note セクションの直後に `<DecisionHistoryList />` を 1 行 insert
+
+### 受入条件 (Post-CONSTRUCTION v2 実機検証)
+
+- API integration test 5 件 (`test_decision_flow.py` list endpoint 追加分) PASS
+- Mock seed unit test 3 件 (`test_mock_repositories.py` attempt_count バリエーション) PASS
+- Web unit test 4 件 (`DecisionHistoryList.test.tsx`: render / loading / empty / item 表示) PASS
+- Web unit test 13 件 (`formatRelativeTime.test.ts` 5 段階 × 境界値、`truncate.test.ts` surrogate pair) PASS
+- e2e Playwright 全 100/100 PASS (既存 spec の回帰なし)

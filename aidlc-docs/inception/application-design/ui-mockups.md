@@ -579,3 +579,76 @@ flowchart TD
 
 ### Persona 選択画面 (screen-06 関連)
 - builtin persona card に「💡 おすすめ」pink pill badge 追加 (`07c1c78` Dynamic Persona Routing)
+
+---
+
+## Post-CONSTRUCTION 改修注記 v2 (2026-05-22) — Pack A + Decision History
+
+本ドキュメント本体および `screens/*.svg` (6 mockup) + v1 改修注記は変更なし。以下の UI 動作変更が 2026-05-22 に実装で反映された:
+
+### 1. ScorePage に Yes 採択履歴セクション追加 (Decision History、2026-05-22)
+
+Score Card (radial + bubble + line chart + stats) の下に `📜 最近の Yes 採択 (最大 20 件)` セクションが追加された。各 item の表示構成:
+
+```
+✓  「[質問テキスト (truncate 30 字)]」
+   → [提案テキスト (truncate 40 字)]
+   🕒 [相対時刻]  ・  [🌟 1 回目で採用 / 🔄 N 回目で採用]
+```
+
+- silent fail: API エラー時はセクション全体を非表示 (エラーメッセージ表示なし)
+- loading skeleton: 3 行分の skeleton card を表示
+- empty state: 「まだ Yes 採択の履歴がありません」テキスト表示
+
+SVG mockup `screens/04-score-dashboard.svg` は viewBox 280×880 に拡張し、履歴リスト 3 件分のワイヤフレームを末尾に追加済。
+
+### 2. Score 煽り文 (Pack A、2026-05-22)
+
+pink bubble のコピーを固定マッピング文字列から **具体的な %値入り文言** に変更。
+
+```
+変更前: 「素晴らしい従順さです」(固定)
+変更後: 「過去 30 日、あなたは決定の 73% を YesMan に委ねました。…」(可変)
+```
+
+N が実測値で入ることで、自尊心への働きかけ効果を強化 (spec Pack A §3「数値による自己認識の刺激」)。UI 側は `data.message` をそのまま表示するだけで自動反映。
+
+### 3. Home Hub に Summary カード (Pack A、2026-05-22)
+
+`/` (Home Hub) の 5 nav カード上部に `📊 最近の YesMan` Summary カードを追加:
+
+```
+┌─────────────────────────────────┐
+│  📊 最近の YesMan                │
+│  12 件  ·  Yes 比率 73%          │
+│  ████████░░  73%                 │ ← progress bar
+│  「過去 30 日、73% を委ねました」  │
+└─────────────────────────────────┘
+```
+
+- データあり: クリックで `/score` へ遷移
+- 履歴なし (empty state): クリックで `/decision` へ遷移し、初回合議を促す
+- `useScore()` hook を流用、追加の API call なし
+
+### 4. SSE streaming 中の thinking chips (Pack A、2026-05-22)
+
+`02-discussion-live.svg` の LIVE badge 上部に 3 persona chips を追加:
+
+```
+  [🛡️ ✓ 慎重派]  [☀️ ✓ 楽観派]  [⚡ 考え中…]
+  ───────── LIVE ─────────
+  utterance bubble ...
+```
+
+- 未発話 persona: chip 背景 pulse アニメ (brand-purple/10 → brand-purple/30 を繰り返し)
+- 発話済 persona: ✓ マーク付き、chip 背景 solid (brand-purple/20)
+- `prefers-reduced-motion: reduce` 時: pulse 停止 (`motion-reduce:animate-none`)
+
+### 5. Yes 採択時の confetti (Pack A、2026-05-22)
+
+`canvas-confetti` による confetti アニメーションを Yes 採択確定時に追加。
+
+- 発火条件: `choice === "yes"` かつ `prefers-reduced-motion: reduce` でない場合
+- パラメータ: brand purple / coral / pink の 3 色、particleCount 50、spread 70、origin { y: 0.1 }、duration 1500ms
+- NudgeBanner 内の `✨🎉✨` celebration (テキスト演出) とは別レイヤーで動作
+- 静的 SVG mockup (`03-yes-celebration.svg`) では confetti は非表現 (dynamic animation のため)、代わりにコメントで仕様を明記

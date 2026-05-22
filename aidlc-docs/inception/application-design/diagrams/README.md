@@ -34,7 +34,35 @@ CONSTRUCTION 完了 (2026-05-16) 以降の実装変更を drawio に反映した
 - **`usePrefetchedDecisions` 動作** (No 連打 prefetch buffer、`2b08a75`) — visual difference なし
 - **ScoreLineChart 30 日 trend** (`2400f45`) — drawio の Score Dashboard page p6_chart_text で簡易表現済
 
-### 不変
+### 不変 (v1 時点)
 - `application-design.drawio` 全 11 ページ: Network / Layered / Sequence / Strategy DI / UoW / CDK / ER 図はアーキテクチャ図のため Post-CONSTRUCTION 改修の影響なし、ただし application-level な依存追加 (U4 → U5 `PreferenceProfileRepository` 読み取り、`07c1c78`) は本 README で代替表記
 
 → FE-DESIGN-01 の "drawio as Source of Truth" 原則は維持、drift を本ファイルで明示的に追跡する運用。
+
+---
+
+## Post-CONSTRUCTION 改修注記 v2 (2026-05-22) — Pack A + Decision History
+
+PR #15 (Demo UX Polish Pack A、`a731786` merged) と feature/web-score-decision-history ブランチ (Decision History 機能) の visual 仕様変更を追跡。
+
+### 新規 drawio (本 README の管轄外、spec 配下)
+
+本 v2 改修分の drawio mockup は **spec 配下に別管理** されている (AI-DLC 形式の inception drawio を肥大化させず、feature 単位で spec drawio を持つ運用):
+
+| Spec drawio | ページ数 | 内容 | commit |
+|---|---:|---|---|
+| [`docs/superpowers/specs/diagrams/2026-05-21-splash-signin-screens.drawio`](../../../../docs/superpowers/specs/diagrams/2026-05-21-splash-signin-screens.drawio) | 4 | SplashPage / SignInPage redesign mockup | `a0ea19d` (PR #11) |
+| [`docs/superpowers/specs/diagrams/2026-05-20-mock-auth-screens.drawio`](../../../../docs/superpowers/specs/diagrams/2026-05-20-mock-auth-screens.drawio) | — | Mock auth login/register/logout flow | `ce686fa` (PR #9) |
+| [`docs/superpowers/specs/diagrams/2026-05-22-score-decision-history-screens.drawio`](../../../../docs/superpowers/specs/diagrams/2026-05-22-score-decision-history-screens.drawio) | 2 | **Decision History**: ScorePage 全体 + DecisionHistoryItem 詳細 (truncate / 空状態 / 採用回数バリアント) | feature/web-score-decision-history |
+
+### ui-mockups.drawio (本 README 管轄、v2 では未反映)
+
+v2 改修の以下の visual 変更は **本 drawio に未反映** (理由: spec drawio 側に集約済、本 drawio の page を増やすメリットが薄い):
+
+- **Pack A #1 Score 煽り文**: Score Dashboard ページ (p6) の AI コメント表記が「うまく まかせられて いますね」→「過去 30 日、決定の N% を YesMan に委ねました。…」に変更 — 代替表現として `screens/04-score-dashboard.svg` に反映済
+- **Pack A #2 Home Summary カード**: Home Hub (`/`) の nav カード上部に Summary カード追加 — Home Hub mockup が本 drawio には存在しないため未追加 (将来 `07-home-hub.svg` 新規候補)
+- **Pack A #3 SSE thinking chips**: Discussion Live ページ (p9) の LIVE badge 上に 3 persona chips 追加 — `screens/02-discussion-live.svg` に反映済
+- **Pack A #4 Yes confetti**: 提案カード Yes 採択時の画面全体 confetti — dynamic animation のため static drawio では非表現
+- **Decision History**: Score Dashboard ページ (p6) の下部に履歴セクション追加 — `screens/04-score-dashboard.svg` を viewbox 280×880 に拡張済、本 drawio の Score Dashboard page は不変
+
+→ 本 v2 改修の visual reference は **spec drawio + screens SVG が Source of Truth**。`ui-mockups.drawio` は v1 時点の design snapshot として保持される (`drift` を本ファイルで追跡)。
