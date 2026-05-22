@@ -4,9 +4,14 @@
 - **Project Name**: YesMan
 - **Project Type**: Greenfield
 - **Start Date**: 2026-05-09T00:00:00Z
-- **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** + 🔁 **Post-CONSTRUCTION 改修フェーズ** (Hackathon Pragmatism 緩和ルール下で `main` 直接 commit 運用、2026-05-17 〜 進行中) / OPERATIONS phase (placeholder)
+- **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** + 🔁 **Post-CONSTRUCTION 改修フェーズ v2** (Hackathon Pragmatism + Git-Flow `feature/* → develop → main` 運用、2026-05-17 〜 進行中) / OPERATIONS phase (placeholder)
 - **Last Approved Stage**: CONSTRUCTION - Build and Test (approved 2026-05-16、CONSTRUCTION フェーズ 11 unit + Build and Test ALWAYS EXECUTE 全完了)
-- **Latest Post-CONSTRUCTION Commit**: `28c8adc style(web): Splash の "→ スワイプして同意" 文言を削除` (2026-05-19)
+- **Latest Post-CONSTRUCTION Commit**: `aa25a2e feat(web): ScorePage に DecisionHistoryList を組込` (2026-05-22、feature/web-score-decision-history)
+- **Post-CONSTRUCTION 改修フェーズ v2 主要追加** (2026-05-22):
+  - **Pack A (PR #15、`a731786` merged to develop → main v0.2.0)**: Demo UX Polish 4 件 (Score 煽り文 / Home Summary カード / SSE thinking chips / Yes confetti)
+  - **Decision History (feature/web-score-decision-history、6 task)**: `GET /v1/decisions` 履歴 endpoint + `attempt_count` (user_input_hash group) + Mock seed regenerate session + Web `DecisionHistoryList` + utilities (`formatRelativeTime` / `truncate`) + ScorePage 組込
+  - 影響ユニット: U4-decision (API endpoint + scorer) / U7d-features (Score / Home / Decision の全 UI) / U7c-api-client (history method)
+  - 全文書反映: `screens/02-discussion-live.svg` + `screens/04-score-dashboard.svg` 拡張、`screens/README.md` + `diagrams/README.md` + 各 unit `functional-design.md` に Post-CONSTRUCTION v2 改修注記を追記
 - **U1 完了**: 全 4 ステージ承認済 (Functional Design SKIP / NFR Req / NFR Design / Infrastructure Design / Code Gen Part 1+2)、`infra/` に 24 ファイル / 約 2,959 行
 - **Hackathon**: AWS Hackathon
 

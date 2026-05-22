@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif">
-  <!-- phone outer frame -->
-  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 880" width="280" height="880" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', sans-serif">
+  <!-- phone outer frame (extended height for Decision History section, 2026-05-22) -->
+  <rect x="6" y="6" width="268" height="868" rx="28" ry="28"
         fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
-  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+  <rect x="14" y="14" width="252" height="852" rx="22" ry="22"
         fill="#FFF7E8"/>
   <!-- notch -->
   <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
@@ -27,10 +27,11 @@
     <text x="0" y="22" text-anchor="middle" font-size="9" fill="#715B62">委任度 (Yes 比率)</text>
   </g>
 
-  <!-- AI comment -->
-  <rect x="32" y="278" width="216" height="40" rx="12" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="1.5"/>
-  <text x="140" y="295" text-anchor="middle" font-size="9" fill="#E8775A" font-weight="600">「うまく まかせられて いますね」</text>
-  <text x="140" y="310" text-anchor="middle" font-size="8" fill="#E8775A" font-style="italic">— AI 生成 可変コメント</text>
+  <!-- AI comment (Pack A 煽り文: 「過去 30 日、N% を YesMan に委ねました」型、2026-05-22) -->
+  <rect x="32" y="266" width="216" height="56" rx="12" fill="#FFD6E0" stroke="#FF8FAE" stroke-width="1.5"/>
+  <text x="140" y="284" text-anchor="middle" font-size="8.5" fill="#E8775A" font-weight="700">「過去 30 日、決定の 92% を YesMan に</text>
+  <text x="140" y="298" text-anchor="middle" font-size="8.5" fill="#E8775A" font-weight="700">委ねました。うまく任せられています 🎉」</text>
+  <text x="140" y="314" text-anchor="middle" font-size="7" fill="#E8775A" font-style="italic">— AI 生成 可変コメント (Pack A 煽り文)</text>
 
   <!-- mini chart (30 day trend, Yes-ratio upward 30% → 95%) -->
   <text x="32" y="346" font-size="10" font-weight="700" fill="#4A3D45">📈 推移 (30日)</text>
@@ -53,5 +54,38 @@
   <!-- summary stats -->
   <text x="32" y="458" font-size="9" fill="#715B62">総決定: <tspan font-weight="700" fill="#4A3D45">142</tspan> / Yes: <tspan font-weight="700" fill="#1B5E20">131</tspan> / No: <tspan font-weight="700" fill="#9F88C8">11</tspan></text>
   <text x="32" y="474" font-size="8" fill="#9E9E9E">スコアが たかいほど AI を信頼できています</text>
+
+  <!-- ============================================================ -->
+  <!-- NEW: Decision History section (spec 2026-05-22, attempt_count) -->
+  <!-- ============================================================ -->
+  <line x1="40" y1="498" x2="240" y2="498" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- history section header -->
+  <text x="32" y="524" font-size="12" font-weight="700" fill="#4A3D45">📜 最近の Yes 採択</text>
+  <text x="248" y="524" font-size="8" fill="#9E9E9E" text-anchor="end">(最大 20 件)</text>
+
+  <!-- Item 1: 🌟 一発採用 (attempt_count=1) -->
+  <rect x="32" y="540" width="216" height="78" rx="10" fill="#FFFFFF" stroke="#E0D5BC" stroke-width="1"/>
+  <text x="40" y="560" font-size="13" font-weight="700" fill="#22c55e">✓</text>
+  <text x="54" y="558" font-size="9" font-style="italic" font-weight="600" fill="#262626">「今日のランチどうしよう？」</text>
+  <text x="54" y="574" font-size="8.5" fill="#525252">→ コンビニのサラダチキン定食</text>
+  <text x="54" y="600" font-size="7.5" fill="#737373">🕒 5 分前 ・ 🌟 1 回目で採用</text>
+
+  <!-- Item 2: 🔄 3 回目 (regenerate session、Mock seed) -->
+  <rect x="32" y="626" width="216" height="78" rx="10" fill="#FFFFFF" stroke="#E0D5BC" stroke-width="1"/>
+  <text x="40" y="646" font-size="13" font-weight="700" fill="#22c55e">✓</text>
+  <text x="54" y="644" font-size="9" font-style="italic" font-weight="600" fill="#262626">「今夜の映画 何見よう？」</text>
+  <text x="54" y="660" font-size="8.5" fill="#525252">→ Dune: Part Two</text>
+  <text x="54" y="686" font-size="7.5" fill="#737373">🕒 昨日 ・ 🔄 3 回目で採用</text>
+
+  <!-- Item 3: 🔄 5 回目 (regenerate session) -->
+  <rect x="32" y="712" width="216" height="78" rx="10" fill="#FFFFFF" stroke="#E0D5BC" stroke-width="1"/>
+  <text x="40" y="732" font-size="13" font-weight="700" fill="#22c55e">✓</text>
+  <text x="54" y="730" font-size="9" font-style="italic" font-weight="600" fill="#262626">「週末の家族旅行どこ行く？」</text>
+  <text x="54" y="746" font-size="8.5" fill="#525252">→ 箱根 1 泊温泉プラン</text>
+  <text x="54" y="772" font-size="7.5" fill="#737373">🕒 3 日前 ・ 🔄 5 回目で採用</text>
+
+  <!-- scroll hint -->
+  <text x="140" y="816" font-size="8" fill="#9E9E9E" text-anchor="middle" font-style="italic">↓ 続きはスクロール (最大 20 件)</text>
 
 </svg>
