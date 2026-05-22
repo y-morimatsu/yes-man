@@ -156,38 +156,47 @@ class MockStore:
             day_offset = days - 1 - i  # 0 = 古い、days-1 = 今日
             # Yes 比率を 0.30 → 0.95 へ漸進的に上昇 (右肩上がりトレンド)
             target_yes_ratio = 0.30 + (i / max(days - 1, 1)) * 0.65
-            n_decisions = rng.randint(2, 5)
-            for j in range(n_decisions):
-                choice = "yes" if rng.random() < target_yes_ratio else "no"
-                created_at = now - timedelta(
+            n_inputs = rng.randint(2, 5)
+            for j in range(n_inputs):
+                domain, input_text = rng.choice(domain_inputs)
+                shared_hash = f"demo-seed-{i}-{j:02d}"
+                # 20% は regenerate session (2-5 attempts)、80% は single attempt
+                session_length = rng.randint(2, 5) if rng.random() < 0.2 else 1
+                base_created_at = now - timedelta(
                     days=day_offset,
                     hours=rng.randint(8, 22),
                     minutes=rng.randint(0, 59),
                 )
-                domain, input_text = rng.choice(domain_inputs)
-                # persona_outputs は builder._build_pattern が
-                # persona_outputs["utterances"][*]["persona_name"] を読むため、
-                # utterances リスト構造で投入する
-                utterances = [
-                    {"persona_name": name, "text": text}
-                    for name, text in persona_specs
-                ]
-                decision = Decision(
-                    id=uuid4(),
-                    user_id=user_id,
-                    domain_classification=domain,
-                    user_input=input_text,
-                    user_input_hash=f"demo-seed-{i}-{j:02d}",
-                    proposal_text="（デモ用の合議結論）",
-                    persona_outputs={"utterances": utterances},
-                    user_choice=choice,
-                    no_attempt_count=0 if choice == "yes" else rng.randint(1, 3),
-                    llm_provider="mock",
-                    selected_persona_ids=[],
-                    created_at=created_at,
-                )
-                self.decisions[decision.id] = decision
-                seeded_decisions.append(decision)
+                for attempt in range(session_length):
+                    is_last = (attempt == session_length - 1)
+                    # session 最後のみ yes 可能性あり、それ以外は必ず no
+                    if is_last:
+                        choice = "yes" if rng.random() < target_yes_ratio else "no"
+                    else:
+                        choice = "no"
+                    # persona_outputs は builder._build_pattern が
+                    # persona_outputs["utterances"][*]["persona_name"] を読むため、
+                    # utterances リスト構造で投入する
+                    utterances = [
+                        {"persona_name": name, "text": text}
+                        for name, text in persona_specs
+                    ]
+                    decision = Decision(
+                        id=uuid4(),
+                        user_id=user_id,
+                        domain_classification=domain,
+                        user_input=input_text,
+                        user_input_hash=shared_hash,  # session 内で共有
+                        proposal_text="（デモ用の合議結論）",
+                        persona_outputs={"utterances": utterances},
+                        user_choice=choice,
+                        no_attempt_count=0,  # 本フィールドは履歴 UI では使わない
+                        llm_provider="mock",
+                        selected_persona_ids=[],
+                        created_at=base_created_at + timedelta(seconds=attempt * 30),
+                    )
+                    self.decisions[decision.id] = decision
+                    seeded_decisions.append(decision)
 
         # PreferenceProfile を Decision からインクリメンタル構築
         # (実運用では非同期 learning consumer が同様の処理を行う)
