@@ -21,6 +21,12 @@ export const STRINGS = {
   noStage3Copy: "3回目の No です。 本当にこの選択肢で大丈夫?",
   noStage5PlusFallback:
     "ここまで慎重なあなただからこそ、今回は AI に任せてみませんか?",
+  // 2026-05-22 yes-no-quickstart: Quick-Start カードの文言
+  quickStartSuffix: "してみますか？",
+  quickStartYes: "✅ YES",
+  quickStartNo: "❌ NO",
+  quickStartSwitchToText: "✏️ 自分で入力する",
+  quickStartKeyboardHint: "Y キー = YES / N キー = NO",
 } as const;
 
 export type DecisionStringKey = keyof typeof STRINGS;

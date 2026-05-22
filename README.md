@@ -625,6 +625,26 @@ pnpm --filter @yesman/api start
 | `claude CLI not found` | `CLAUDE_CLI_PATH` が見つからない | `which claude` で絶対パス取得し env に指定 |
 | LiteLLM 接続失敗 | Proxy 未起動 | `litellm --config ... --port 4000` を別ターミナルで起動 |
 
+### QuickStart 質問 pool を再生成する (Bedrock build-time)
+
+`DecisionPage` の起動時 YES/NO 質問は [apps/web/src/features/decision/quickStartTemplates.generated.json](apps/web/src/features/decision/quickStartTemplates.generated.json) に checked-in されており、runtime LLM 呼び出しは行いません (cold-start 高速 / コスト 0)。
+
+質問を更新したい場合は Bedrock 経由で再生成します。
+
+```sh
+# AWS credentials (Bedrock access あり) を export 済の前提
+cd apps/api
+uv run python scripts/generate_quick_start_templates.py [--count 30] [--model anthropic.claude-sonnet-4-6-20250929-v1:0]
+```
+
+Bedrock 認証が無い環境 (CI 等) では `--seed` で決定論的な手書き seed pool を出力できます (`generatedBy: "seed-manual-v1"` でトレース可能、品質 review 後に Bedrock 経由で上書き推奨)。
+
+```sh
+uv run python scripts/generate_quick_start_templates.py --seed
+```
+
+生成された JSON は git に commit して PR レビュー時に diff 確認するワークフローを推奨します (spec: [2026-05-22-yes-no-quickstart-design.md §6.4](docs/superpowers/specs/2026-05-22-yes-no-quickstart-design.md))。
+
 ---
 
 ## 🗂️ データモデル (ER 図)
@@ -1077,6 +1097,7 @@ gantt
 
 | ファイル | 内容 |
 |---|---|
+| 📄 [2026-05-22-yes-no-quickstart-design.md](docs/superpowers/specs/2026-05-22-yes-no-quickstart-design.md) | DecisionPage の起動時 UI を「テキスト入力」から「時刻 + 曜日に応じた YES/NO クイック質問」に変更。質問 pool は Bedrock LLM で build-time 生成 + checked-in JSON。5 連続 NO で textbox fallback |
 | 📄 [2026-05-22-mobile-app-polish-design.md](docs/superpowers/specs/2026-05-22-mobile-app-polish-design.md) | Mobile App Polish (BottomNav + Safe Area + Sticky Header + Skeleton + Page Transitions + Haptic) + §14 Post-CONSTRUCTION 改修注記 (`[object Object]` fix + LIVE バッジ / 「音声で 話す」キャプション削除) |
 | 📄 [2026-05-22-score-decision-history-design.md](docs/superpowers/specs/2026-05-22-score-decision-history-design.md) | スコア画面に Yes 採択履歴 (最大 20 件) を追加、`attempt_count` で「何回目の提案で Yes 採択したか」を可視化 |
 | 📄 [2026-05-22-demo-ux-polish-pack-a-design.md](docs/superpowers/specs/2026-05-22-demo-ux-polish-pack-a-design.md) | デモ向け UX 磨き込み Pack A (4 項目): 確定演出強化 / persona thinking chips / Yes 採択煽り文 / NoBurst microcopy 強化 |

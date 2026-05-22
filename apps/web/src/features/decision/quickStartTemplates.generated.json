@@ -1,0 +1,415 @@
+{
+  "generatedAt": "2026-05-22T13:55:17.491856+00:00",
+  "generatedBy": "seed-manual-v1",
+  "schemaVersion": 1,
+  "templates": [
+    {
+      "id": "lunch-weekday",
+      "title": "今日のランチ",
+      "hours": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "dayKind": "weekday",
+      "preferenceTag": null,
+      "priority": 95
+    },
+    {
+      "id": "lunch-weekend",
+      "title": "週末のお昼ごはん",
+      "hours": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 92
+    },
+    {
+      "id": "dinner",
+      "title": "今夜の夕食",
+      "hours": [
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 90
+    },
+    {
+      "id": "morning-coffee",
+      "title": "朝のコーヒー",
+      "hours": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 85
+    },
+    {
+      "id": "morning-tea",
+      "title": "朝の紅茶",
+      "hours": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 70
+    },
+    {
+      "id": "weekend-outing",
+      "title": "週末の外出先",
+      "hours": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 88
+    },
+    {
+      "id": "weekend-movie",
+      "title": "週末に 観る 映画",
+      "hours": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 80
+    },
+    {
+      "id": "weekend-cafe",
+      "title": "午後に 行く カフェ",
+      "hours": [
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 75
+    },
+    {
+      "id": "weekend-book",
+      "title": "週末に 読む 本",
+      "hours": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 65
+    },
+    {
+      "id": "weekend-walk",
+      "title": "週末の 散歩 コース",
+      "hours": [
+        9,
+        10,
+        11,
+        15,
+        16,
+        17
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 70
+    },
+    {
+      "id": "late-snack",
+      "title": "深夜の 夜食",
+      "hours": [
+        0,
+        1,
+        22,
+        23
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 60
+    },
+    {
+      "id": "tomorrow-outfit",
+      "title": "明日 着る 服",
+      "hours": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 72
+    },
+    {
+      "id": "tomorrow-plan",
+      "title": "明日の 予定",
+      "hours": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 68
+    },
+    {
+      "id": "meeting-followup",
+      "title": "この後の 進め方",
+      "hours": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "dayKind": "weekday",
+      "preferenceTag": null,
+      "priority": 78
+    },
+    {
+      "id": "afternoon-break",
+      "title": "午後の 休憩",
+      "hours": [
+        14,
+        15,
+        16
+      ],
+      "dayKind": "weekday",
+      "preferenceTag": null,
+      "priority": 60
+    },
+    {
+      "id": "snack-time",
+      "title": "おやつ タイム",
+      "hours": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 55
+    },
+    {
+      "id": "exercise",
+      "title": "今日の 運動",
+      "hours": [
+        6,
+        7,
+        8,
+        18,
+        19,
+        20,
+        21
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 50
+    },
+    {
+      "id": "music-mood",
+      "title": "今 聴きたい 音楽",
+      "hours": [],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 45
+    },
+    {
+      "id": "weekend-trip",
+      "title": "週末の 小旅行",
+      "hours": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 73
+    },
+    {
+      "id": "weekend-cooking",
+      "title": "週末に 作る 料理",
+      "hours": [
+        10,
+        11,
+        16,
+        17,
+        18
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 67
+    },
+    {
+      "id": "night-reflection",
+      "title": "今日の 振り返り",
+      "hours": [
+        0,
+        22,
+        23
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 55
+    },
+    {
+      "id": "morning-task",
+      "title": "朝 一番に やる こと",
+      "hours": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "dayKind": "weekday",
+      "preferenceTag": null,
+      "priority": 75
+    },
+    {
+      "id": "bedtime",
+      "title": "今夜の 就寝時間",
+      "hours": [
+        0,
+        21,
+        22,
+        23
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 50
+    },
+    {
+      "id": "shopping-list",
+      "title": "今日 買う もの",
+      "hours": [
+        10,
+        11,
+        12,
+        13,
+        17,
+        18,
+        19
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 58
+    },
+    {
+      "id": "study-topic",
+      "title": "今 学びたい こと",
+      "hours": [],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 40
+    },
+    {
+      "id": "self-care",
+      "title": "今夜の セルフケア",
+      "hours": [
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 52
+    },
+    {
+      "id": "weekend-friend",
+      "title": "週末に 会う 友人",
+      "hours": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "dayKind": "weekend",
+      "preferenceTag": null,
+      "priority": 63
+    },
+    {
+      "id": "morning-stretch",
+      "title": "朝の ストレッチ",
+      "hours": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 48
+    },
+    {
+      "id": "lunch-spot",
+      "title": "ランチで 行く お店",
+      "hours": [
+        11,
+        12,
+        13
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 82
+    },
+    {
+      "id": "evening-drink",
+      "title": "今夜の 一杯",
+      "hours": [
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "dayKind": "any",
+      "preferenceTag": null,
+      "priority": 58
+    }
+  ],
+  "catchAll": {
+    "id": "anything-on-mind",
+    "title": "今 もっとも 気になっていること",
+    "hours": [],
+    "dayKind": "any",
+    "preferenceTag": null,
+    "priority": 10
+  }
+}

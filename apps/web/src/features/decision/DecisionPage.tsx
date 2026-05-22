@@ -15,6 +15,8 @@ import { useDecisionStream } from "./useDecisionStream";
 import { usePrefetchedDecisions } from "./usePrefetchedDecisions";
 import { DecisionResult } from "./DecisionResult";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
+import { QuickStartCard } from "./QuickStartCard";
+import { useQuickStart } from "./useQuickStart";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -29,6 +31,8 @@ export default function DecisionPage() {
   const [regenerating, setRegenerating] = useState(false);
   // 最後に submit した user_input を保持 (regenerate で再利用、reducer state 透過には依存しない).
   const lastInputRef = useRef<string>("");
+  // 2026-05-22 yes-no-quickstart: 起動時 YES/NO クイック質問. textbox は quick.mode === "text" 時のみ表示.
+  const quick = useQuickStart();
 
   // No 採択時の待ち時間を消すための buffer (同じ user_input で別案を先 prefetch)
   const prefetch = usePrefetchedDecisions({ bufferSize: PREFETCH_BUFFER_SIZE });
@@ -108,17 +112,44 @@ export default function DecisionPage() {
     dispatch({ type: "reset" });
   };
 
-  const showInput = state.status === "idle" || state.status === "error";
+  // idle / error 時にカード or textbox を出す。quickstart mode "quick" のときは QuickStartCard、
+  // mode "text" になったら従来 UI (textbox + voice + persona pill) に切替.
+  const showInputArea = state.status === "idle" || state.status === "error";
+  const showQuickStart = showInputArea && quick.mode === "quick" && quick.current !== null;
+  const showTextInput = showInputArea && !showQuickStart;
   const inputValue =
     state.status === "idle" || state.status === "error" || state.status === "streaming"
       ? state.input
       : "";
 
+  // QuickStart の YES = 現在質問を user_input にセットして即合議 start
+  const handleQuickYes = async () => {
+    const title = quick.accept();
+    if (!title) return;
+    dispatch({ type: "setInput", input: title });
+    lastInputRef.current = title;
+    setNoStage(0);
+    setRegenerating(false);
+    prefetch.clear();
+    dispatch({ type: "start" });
+    await startStream({ user_input: title });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
 
-      {showInput && (
+      {showQuickStart && quick.current && (
+        <QuickStartCard
+          title={quick.current.title}
+          noCount={quick.noCount}
+          onYes={handleQuickYes}
+          onNo={quick.reject}
+          onSwitchToText={quick.switchToText}
+        />
+      )}
+
+      {showTextInput && (
         <>
           {/* テキスト入力 + 送信ボタン を横並び (chat/search UI の親和性、INCEPTION 01 から UX 改善).
               Enter キーでの誤送信は抑制 (送信は明示的にボタンを押すフローに統一). */}
@@ -269,7 +300,7 @@ export default function DecisionPage() {
       )}
 
       {/* INCEPTION screen-01 bottom hint (whisper copy、決定の重さを優しく問いかける) */}
-      {showInput && (
+      {showInputArea && (
         <p className="mt-8 text-center text-xs italic text-neutral-400">
           {t("bottomHint")}
         </p>
