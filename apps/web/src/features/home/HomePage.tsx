@@ -1,10 +1,72 @@
-/** HomePage — Hub Dashboard (Splash は /auth/splash に分離、ログイン後は機能 nav のみ). */
+/** HomePage — Hub Dashboard with summary card (Pack A #2) + 5 機能 nav. */
 import { Link } from "react-router-dom";
 import { Card } from "@yesman/ui";
+import { useScore } from "../score/useScore";
+
+function SummaryCard() {
+  const { data, isPending, isError } = useScore();
+
+  if (isPending) {
+    return (
+      <Card>
+        <p className="text-sm text-neutral-500">読み込み中...</p>
+      </Card>
+    );
+  }
+  if (isError || !data) {
+    return null; // silent fail: Home itself は崩さない
+  }
+
+  if (data.total === 0) {
+    return (
+      <Link to="/decision" className="block">
+        <Card>
+          <h2 className="font-serif font-semibold text-brand-700">
+            📊 最近の YesMan
+          </h2>
+          <p className="text-sm text-neutral-600 mt-2">
+            最近の決定はまだありません。「💭 合議で決定」からどうぞ
+          </p>
+        </Card>
+      </Link>
+    );
+  }
+
+  const pct = data.ratio !== null ? Math.round(data.ratio * 100) : 0;
+
+  return (
+    <Link to="/score" className="block">
+      <Card>
+        <h2 className="font-serif font-semibold text-brand-700">
+          📊 最近の YesMan
+        </h2>
+        <p className="text-base text-neutral-800 mt-2 font-bold font-mono">
+          {data.total} 件の決定 / Yes 比率 {pct}%
+        </p>
+        <div
+          className="mt-2 h-2 rounded-full bg-neutral-100 overflow-hidden"
+          role="progressbar"
+          aria-valuenow={pct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          <div
+            className="h-full rounded-full"
+            style={{ width: `${pct}%`, background: "#9F88C8" }}
+          />
+        </div>
+        <p className="text-xs italic text-neutral-500 mt-2">{data.message}</p>
+      </Card>
+    </Link>
+  );
+}
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
+      {/* Pack A #2: Summary カード (上部) */}
+      <SummaryCard />
+
       {/* Hub: 5 機能 nav (drawio 画面ツリー Home ハブ画面相当) */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         <Card>

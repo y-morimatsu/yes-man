@@ -72,7 +72,7 @@ test.describe("INCEPTION Header (全画面共通、screens/01-06 上部)", () =>
   }) => {
     await gotoAuthenticated(page, "/");
     // ロゴテキストに 🪞 (鏡) emoji が含まれるべき (アプリ世界観の象徴)
-    const logo = page.getByRole("link", { name: /YesMan/ }).first();
+    const logo = page.getByRole("link", { name: "🪞 YesMan", exact: true });
     await expect(logo).toBeVisible();
     const text = await logo.textContent();
     expect(text).toContain("🪞");

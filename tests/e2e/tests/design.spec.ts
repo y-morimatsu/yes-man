@@ -127,7 +127,7 @@ test.describe("Design system tokens (U7b FD §2)", () => {
   }) => {
     await gotoAuthenticated(page, "/");
     // ロゴは "🪞 YesMan" (INCEPTION 仕様 mirror emoji 付き)
-    const logoLink = page.getByRole("link", { name: /YesMan/ });
+    const logoLink = page.getByRole("link", { name: "🪞 YesMan", exact: true });
     const initialColor = await logoLink.evaluate(
       (el) => getComputedStyle(el).color,
     );

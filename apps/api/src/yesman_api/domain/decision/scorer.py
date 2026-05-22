@@ -29,11 +29,26 @@ class ScoreSummary:
 
 
 _MESSAGE_HISTORY_EMPTY = "まだ意思決定の履歴がありません。"
-_MESSAGE_HIGH = "あなたは AI を信頼してくれていますね。うまく任せられています。"
-_MESSAGE_MID = "選択を AI に任せながら、あなた自身の意思も大切にされています。"
-_MESSAGE_LOW = "Yes が少なめです。AI への委任を少しずつ広げてみてはいかがでしょう。"
 
 _HISTORY_DAYS = 30
+
+
+def _format_message(yes_count: int, total: int) -> str:
+    """Yes 比率に応じたメッセージを返す。
+
+    Args:
+        yes_count: Yes 採択回数 (total - no_count)。
+        total: 採択済 (yes/no) の総数 (>= 1)。
+
+    境界値: yes_count/total >= 0.8 → HIGH tier、>= 0.5 → MID tier、それ未満 → LOW tier。
+    """
+    ratio = yes_count / total
+    pct = round(yes_count / total * 100)
+    if ratio >= 0.8:
+        return f"過去 {_HISTORY_DAYS} 日、あなたは決定の {pct}% を YesMan に委ねました。うまく任せられています 🎉"
+    if ratio >= 0.5:
+        return f"過去 {_HISTORY_DAYS} 日、あなたは決定の {pct}% を YesMan に委ねました。もう少し任せる余地がありそうです。"
+    return f"過去 {_HISTORY_DAYS} 日、あなたは決定の {pct}% だけ YesMan に委ねています。もっと任せてみては？"
 
 
 class AutonomyScorer:
@@ -48,13 +63,9 @@ class AutonomyScorer:
             return ScoreSummary(
                 no_count=0, total=0, ratio=None, message=_MESSAGE_HISTORY_EMPTY, history=[]
             )
-        yes_ratio = round((total - no_count) / total, 3)
-        if yes_ratio >= 0.8:
-            message = _MESSAGE_HIGH
-        elif yes_ratio >= 0.5:
-            message = _MESSAGE_MID
-        else:
-            message = _MESSAGE_LOW
+        yes_count = total - no_count
+        yes_ratio = round(yes_count / total, 3)
+        message = _format_message(yes_count, total)
         history = await self._build_history(user_id)
         return ScoreSummary(
             no_count=no_count, total=total, ratio=yes_ratio, message=message, history=history

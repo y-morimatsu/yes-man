@@ -20,7 +20,9 @@ import {
 import type { Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
+import { PersonaThinkingChips } from "./PersonaThinkingChips";
 import { t } from "./strings";
+import confetti from "canvas-confetti";
 
 export interface DecisionResultProps {
   utterances: Utterance[];
@@ -46,6 +48,20 @@ export function DecisionResult({
   // INCEPTION FR-CV-04: 議論を見る default closed、採択後も visible
   const [discussionOpen, setDiscussionOpen] = useState(false);
 
+  const fireConfetti = () => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    confetti({
+      particleCount: 50,
+      spread: 80,
+      origin: { y: 0.2 },
+      colors: ["#9F88C8", "#E8775A", "#FFD6E0"],
+      ticks: 150,
+      scalar: 1.1,
+    });
+  };
+
   const handleChoose = async (choice: "yes" | "no") => {
     if (!decisionId) return;
     try {
@@ -54,6 +70,7 @@ export function DecisionResult({
       if (choice === "yes") {
         setChosen("yes");
         setNoCount(count);
+        fireConfetti();
       } else {
         // INCEPTION Journey C: No → 親に regenerate 委譲
         onNoChosen?.(count);
@@ -84,6 +101,9 @@ export function DecisionResult({
           </span>
         </div>
       )}
+
+      {/* Pack A #3: 3 人格 thinking chips (streaming 中のみ表示) */}
+      {isStreaming && <PersonaThinkingChips utterances={utterances} />}
 
       {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵) */}
       {showUtterances && (
