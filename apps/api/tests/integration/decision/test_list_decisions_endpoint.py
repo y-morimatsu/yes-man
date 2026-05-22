@@ -46,7 +46,7 @@ def _make_decision(
 
 
 @pytest.fixture
-def app_with_mock(monkeypatch):
+def app_with_mock():
     """TestClient 用に decisions router を mock auth/repo と一緒に組む。"""
     config = AppConfig(
         app_env="dev",

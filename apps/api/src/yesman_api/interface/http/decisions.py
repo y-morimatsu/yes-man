@@ -15,6 +15,7 @@ from fastapi.responses import StreamingResponse
 from yesman_api.application.persistence.protocols import DecisionRepository
 from yesman_api.domain.auth.models import AuthenticatedUser
 from yesman_api.domain.decision.engine import DecisionEngine
+from yesman_api.domain.persistence.models import Decision
 from yesman_api.domain.decision.errors import DecisionError
 from yesman_api.domain.decision.models import DecisionRequest
 from yesman_api.domain.decision.nudge import NudgeCache, NudgeMessageGenerator
@@ -174,6 +175,9 @@ def _json_response(data: dict, *, status_code: int):
     return JSONResponse(content=data, status_code=status_code)
 
 
+# ============================================================
+# 履歴一覧 (FR-HIST-01)
+# ============================================================
 RAW_CAP_FOR_ATTEMPT_COUNT = 1000
 
 
@@ -194,7 +198,7 @@ async def list_decisions(
 
     # Step 2: user_input_hash で group して attempt_count を 1-indexed で計算
     attempt_idx: dict[str, int] = defaultdict(int)
-    enriched: list[tuple[object, int]] = []
+    enriched: list[tuple[Decision, int]] = []
     for d in all_raw:
         attempt_idx[d.user_input_hash] += 1
         enriched.append((d, attempt_idx[d.user_input_hash]))

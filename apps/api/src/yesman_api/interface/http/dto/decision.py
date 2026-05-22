@@ -89,6 +89,8 @@ class DecisionHistoryItemDTO(BaseModel):
 
 
 class DecisionHistoryResponse(BaseModel):
+    """履歴一覧のレスポンス DTO (FR-HIST-01)."""
+
     items: list[DecisionHistoryItemDTO]
     limit: int
 
