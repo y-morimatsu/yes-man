@@ -8,6 +8,20 @@ export type DecisionResponse = components["schemas"]["DecisionResponse"];
 export type ChoiceResponse = components["schemas"]["ChoiceResponse"];
 export type NudgeResponse = components["schemas"]["NudgeResponse"];
 
+export type DecisionHistoryItem = {
+  id: string;
+  user_input: string;
+  proposal_text: string;
+  user_choice: "yes" | "no" | "pending";
+  attempt_count: number;
+  created_at: string;
+};
+
+export type DecisionHistoryResponse = {
+  items: DecisionHistoryItem[];
+  limit: number;
+};
+
 export class DecisionsModule {
   constructor(private client: YesmanApiClient) {}
 
@@ -38,5 +52,19 @@ export class DecisionsModule {
 
   async getNudge(decisionId: string): Promise<NudgeResponse> {
     return request<NudgeResponse>(this.client, `/v1/decisions/${decisionId}/nudge`);
+  }
+
+  async history(opts?: {
+    limit?: number;
+    choice?: "yes" | "no" | "all";
+  }): Promise<DecisionHistoryResponse> {
+    const params = new URLSearchParams();
+    if (opts?.limit !== undefined) params.set("limit", String(opts.limit));
+    if (opts?.choice !== undefined) params.set("choice", opts.choice);
+    const query = params.toString();
+    return request<DecisionHistoryResponse>(
+      this.client,
+      `/v1/decisions${query ? `?${query}` : ""}`,
+    );
   }
 }
