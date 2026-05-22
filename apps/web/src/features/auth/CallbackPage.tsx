@@ -15,8 +15,10 @@ export default function CallbackPage() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      const from = sessionStorage.getItem("yesman:redirect-to") ?? "/";
+      const rawFrom = sessionStorage.getItem("yesman:redirect-to") ?? "/";
       sessionStorage.removeItem("yesman:redirect-to");
+      // SignInPage と同様、Home ではなく 合議で決定 を default landing にする。
+      const from = rawFrom === "/" ? "/decision" : rawFrom;
       navigate(from, { replace: true });
     }
   }, [status, navigate]);
