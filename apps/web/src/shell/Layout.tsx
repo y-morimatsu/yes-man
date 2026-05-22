@@ -1,11 +1,17 @@
 /**
- * Layout — global header + Suspense Outlet (FD §6.2 + ultrathink I2).
+ * Layout — global sticky header + BottomNav + Suspense Outlet.
+ *
+ * spec 2026-05-22 mobile-app-polish §3:
+ * - Sticky header (logo + Sign out のみ、nav icons は BottomNav に移行)
+ * - Safe Area Insets (env(safe-area-inset-*))
+ * - BottomNav 配置 + main の pb で BottomNav 回避
  */
 import { Suspense } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { Button, Spinner } from "@yesman/ui";
 import { signOutUser } from "./auth";
 import { useAuth } from "./AuthProvider";
+import { BottomNav } from "./BottomNav";
 
 export function Layout() {
   const { status, refresh } = useAuth();
@@ -13,54 +19,45 @@ export function Layout() {
   const handleSignOut = async () => {
     await signOutUser();
     await refresh();
-    // RequireAuth が status=unauthenticated を detect し /auth/signin redirect
   };
 
+  const isAuthed = status === "authenticated";
+
   return (
-    // INCEPTION §1.2: 背景 Light = #FFF7E8 warm cream (neutral-50 を INCEPTION で remap 済)
     <div className="min-h-screen flex flex-col bg-neutral-50 text-neutral-800">
-      {/* INCEPTION screen-01..06 共通 header: warm beige #F5E5C4 (FE-DESIGN-03 palette adherence) */}
+      {/* Sticky Header — logo + Sign out のみ簡素化、nav は BottomNav に */}
       <header
-        className="text-neutral-800 p-4"
-        style={{ background: "#F5E5C4" }}
+        className="sticky top-0 z-40 text-neutral-800"
+        style={{
+          background: "#F5E5C4",
+          paddingTop: "max(1rem, env(safe-area-inset-top))",
+          paddingBottom: "1rem",
+        }}
       >
-        <div className="flex justify-between items-center max-w-md mx-auto w-full">
-          <Link to="/" className="font-serif text-xl font-bold text-neutral-800">
+        <div className="flex justify-between items-center max-w-md mx-auto w-full px-4">
+          <Link
+            to="/"
+            className="font-serif text-xl font-bold text-neutral-800 active:opacity-70"
+          >
             🪞 YesMan
           </Link>
-          {status === "authenticated" && (
-            <nav className="flex items-center gap-3">
-              <Link
-                to="/profile"
-                aria-label="設定"
-                className="text-lg hover:opacity-70"
-              >
-                ⚙️
-              </Link>
-              <Link
-                to="/score"
-                aria-label="委任度スコア"
-                className="text-lg hover:opacity-70"
-              >
-                📊
-              </Link>
-              <Link
-                to="/profile"
-                aria-label="ユーザー"
-                className="text-lg hover:opacity-70"
-              >
-                👤
-              </Link>
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                Sign out
-              </Button>
-            </nav>
+          {isAuthed && (
+            <Button variant="ghost" size="sm" onClick={handleSignOut}>
+              Sign out
+            </Button>
           )}
         </div>
       </header>
-      {/* FE-DESIGN-05: Mobile-First Viewport — max-width: 480px に制限 (ui-mockups.md §5) */}
-      <main className="flex-1 p-4 max-w-md mx-auto w-full bg-neutral-50 text-neutral-800">
-        {/* ultrathink FD I2: lazy route の chunk 読込中 fallback */}
+
+      {/* Main content — pb で BottomNav (~88px) + safe-area-inset-bottom を回避 */}
+      <main
+        className="flex-1 px-4 pt-4 max-w-md mx-auto w-full bg-neutral-50 text-neutral-800"
+        style={{
+          paddingBottom: isAuthed
+            ? "calc(56px + env(safe-area-inset-bottom) + 1rem)"
+            : "1rem",
+        }}
+      >
         <Suspense
           fallback={
             <div className="flex justify-center p-8">
@@ -71,6 +68,9 @@ export function Layout() {
           <Outlet />
         </Suspense>
       </main>
+
+      {/* Bottom Navigation (認証時のみ) */}
+      {isAuthed && <BottomNav />}
     </div>
   );
 }
