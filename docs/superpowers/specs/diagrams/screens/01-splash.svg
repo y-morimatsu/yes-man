@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520"
+     font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Noto Serif JP', serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+  <line x1="22" y1="58" x2="258" y2="58" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- Splash content: vertically centered around y=280 -->
+
+  <!-- 🪞 emoji (text-6xl ≈ 60px) -->
+  <text x="140" y="160" text-anchor="middle" font-size="56">🪞</text>
+
+  <!-- YESMAN wordmark (serif text-5xl bold, tracking-wide) -->
+  <text x="140" y="218" text-anchor="middle" font-family="'Noto Serif JP', serif"
+        font-size="36" font-weight="700" fill="#262626" letter-spacing="5">YESMAN</text>
+
+  <!-- decorative divider (warm beige) -->
+  <line x1="116" y1="250" x2="164" y2="250" stroke="#E0D5BC" stroke-width="1"/>
+
+  <!-- Tagline 2 lines (serif italic text-xl) -->
+  <text x="140" y="282" text-anchor="middle" font-family="'Noto Serif JP', serif"
+        font-style="italic" font-size="15" fill="#404040">人間最後の仕事は、</text>
+  <text x="140" y="304" text-anchor="middle" font-family="'Noto Serif JP', serif"
+        font-style="italic" font-size="15" fill="#404040">YES で承認すること。</text>
+
+  <!-- Disclaimer (sans text-sm, neutral-600, 「逆説的設計」が brand-700) -->
+  <text x="140" y="346" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">本作品は AI が人間の主体性を奪う体験を</text>
+  <text x="140" y="362" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">演出する作品です。</text>
+  <text x="140" y="380" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">「委任度スコア」「沈黙演出」 などは意図的な</text>
+  <!-- 「逆説的設計」 brand-700 強調 -->
+  <text x="106" y="396" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">意図的な</text>
+  <text x="146" y="396" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" font-weight="700" fill="#c2410c">逆説的設計</text>
+  <text x="178" y="396" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">です。</text>
+
+  <!-- CTA button (coral, rounded-2xl, white text, shadow) -->
+  <defs>
+    <filter id="ctaShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#E8775A" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect x="80" y="424" width="120" height="44" rx="14"
+        fill="#E8775A" filter="url(#ctaShadow)"/>
+  <text x="140" y="451" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="13" font-weight="600" fill="#FFFFFF">はじめる →</text>
+
+  <!-- Secondary link (small, underline, neutral-500) -->
+  <text x="140" y="484" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="9" fill="#737373" text-decoration="underline">
+    すでにアカウントがある方は サインイン
+  </text>
+</svg>

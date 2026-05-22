@@ -1,10 +1,10 @@
 """DecisionEngine — 合議の中核オーケストレーター.
 
-FD §5 + NFR Design §8.2 (tee_chunks + best-effort background 永続化) + I6 (Yes/No 両方発火) 反映.
+FD §5 + spec 2026-05-21 parallel-persona-consensus + I6 (Yes/No 両方発火) 反映.
 
 責務:
-- run(request): 非ストリーミング合議
-- run_stream(...): ストリーミング合議 (tee_chunks で SSE と永続化を分岐)
+- run(request): 非ストリーミング合議 (parallel persona calls + proposal)
+- run_stream(...): ストリーミング合議 (parallel persona calls + proposal、SSE 配信)
 - apply_choice(...): Yes/No 採択 + EventPublisher.publish_decision_confirmed (両方発火)
 """
 from __future__ import annotations
@@ -24,16 +24,22 @@ from yesman_api.application.persistence.protocols import (
     SilenceLogRepository,
     UserPersonaSelectionRepository,
 )
-from yesman_api.domain.decision.consensus import ConsensusOrchestrator, tee_chunks
+from yesman_api.domain.decision.consensus import (
+    ConsensusOrchestrator,
+    clean_proposal_output,
+    clean_utterance_output,
+)
 from yesman_api.domain.decision.errors import DecisionError
 from yesman_api.domain.decision.models import (
     ConsensusOutput,
     DecisionRequest,
+    PersonaUtterance,
     StreamEvent,
 )
 from yesman_api.domain.decision.silence_guard import SilenceGuard
 from yesman_api.domain.persistence.constants import SYSTEM_USER_ID
 from yesman_api.domain.persistence.models import Decision, SilenceLog
+from yesman_api.infrastructure.config import AppConfig
 from yesman_api.shared.logging import audit_log, get_logger
 from yesman_api.shared.pii_filter import mask_pii
 
@@ -54,6 +60,8 @@ class DecisionEngine:
         selection_repo: UserPersonaSelectionRepository | None = None,
         # Issue #4: Dynamic Persona Routing 用、persona_style_preference を参照
         preference_repo: PreferenceProfileRepository | None = None,
+        # spec 2026-05-21 parallel-persona-consensus: per-persona / proposal timeout を参照
+        config: AppConfig | None = None,
     ) -> None:
         self._llm = llm
         self._orchestrator = orchestrator
@@ -66,18 +74,21 @@ class DecisionEngine:
         self._preference_loader = preference_loader  # U5 統合用
         self._selection_repo = selection_repo
         self._preference_repo = preference_repo  # Issue #4 Dynamic Persona Routing
+        self._config = config or AppConfig()
         self._logger = get_logger("decision.engine")
 
     # ============================================================
     # 非ストリーミング合議
     # ============================================================
     async def run(self, request: DecisionRequest) -> tuple[UUID, ConsensusOutput, int]:
-        """非ストリーミング: (decision_id, ConsensusOutput, no_attempt_count) を返す."""
-        decision_id = uuid4()
+        """非ストリーミング合議 (parallel consensus を sync 実行).
 
+        spec 2026-05-21: 並列 persona call + proposal call を await し、ConsensusOutput を構築.
+        """
         # 1. SilenceGuard
         verdict = await self._silence_guard.evaluate(user_input=request.user_input)
         if verdict.is_silenced:
+            decision_id = uuid4()
             await self._record_silence(request, verdict.domain)
             silence_output = ConsensusOutput(
                 domain_classification="silenced",
@@ -87,37 +98,59 @@ class DecisionEngine:
             # 沈黙時は Decision を保存しない (FR-DM-SILENT、SilenceLog のみ)
             return decision_id, silence_output, 0
 
-        # 2. ペルソナ取得
+        # 2. ペルソナ + masked input
         personas = await self._resolve_personas(
             selected_ids=request.selected_persona_ids,
             user_id=request.user_id,
         )
+        masked = mask_pii(request.user_input)
+        messages = [{"role": "user", "content": masked}]
 
-        # 3. プロフィール + 嗜好プロファイル取得 (None なら空文字)
-        profile = await self._profile_repo.get(request.user_id)
-        profile_yaml = await self._format_profile_with_preferences(
-            user_id=request.user_id, profile=profile
+        # 3. persona 並列 LLM call (per-persona timeout 付き)
+        per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
+
+        async def gen_p(persona):
+            try:
+                raw = await asyncio.wait_for(
+                    self._llm.complete(
+                        system=self._orchestrator.build_persona_prompt(persona),
+                        messages=messages,
+                    ),
+                    timeout=per_persona_timeout,
+                )
+                return persona, clean_utterance_output(raw)
+            except Exception:
+                return persona, ""
+
+        results = await asyncio.gather(*(gen_p(p) for p in personas))
+        utterance_outputs = [(p, t) for p, t in results if t and not t.isspace()]
+
+        if not utterance_outputs:
+            raise DecisionError("all_personas_failed", "all persona LLM calls returned empty")
+
+        # 4. proposal 生成 (timeout 付き)
+        proposal_raw = await asyncio.wait_for(
+            self._llm.complete(
+                system=self._orchestrator.build_proposal_prompt(utterance_outputs),
+                messages=messages,
+            ),
+            timeout=self._config.decision_llm_proposal_timeout_seconds,
         )
+        proposal_text = clean_proposal_output(proposal_raw)
 
-        # 4. プロンプト構築 + LLM 呼び出し
-        system = self._orchestrator.build_prompt(personas=personas, profile_yaml=profile_yaml)
-        user_msg = self._orchestrator.wrap_user_input(mask_pii(request.user_input))
-        llm_output = await self._llm.complete(
-            system=system,
-            messages=[{"role": "user", "content": user_msg}],
+        # 5. ConsensusOutput + 永続化
+        utterances_persist = [
+            PersonaUtterance(persona_id=p.id, persona_name=p.name, text=t)
+            for p, t in utterance_outputs
+        ]
+        consensus = ConsensusOutput(
+            domain_classification="daily",
+            utterances=utterances_persist,
+            proposal_text=proposal_text,
         )
-
-        # 5. parse + 永続化
-        consensus = self._orchestrator.parse(llm_output, personas=personas)
-        if not consensus.utterances:
-            audit_log(
-                "audit.decision.parse_degraded",
-                decision_id=str(decision_id),
-                user_id=str(request.user_id),
-            )
-
-        decision = await self._persist_decision(decision_id, request, consensus, personas)
-        return decision_id, consensus, decision.no_attempt_count
+        decision_id = uuid4()
+        await self._persist_decision(decision_id, request, consensus, personas)
+        return decision_id, consensus, 0
 
     # ============================================================
     # ストリーミング合議
@@ -128,10 +161,10 @@ class DecisionEngine:
         decision_id: UUID,
         request: DecisionRequest,
     ) -> AsyncIterator[StreamEvent]:
-        """ストリーミング合議 (tee_chunks + best-effort background 永続化、AVAIL-U4-07).
+        """spec 2026-05-21 parallel-persona-consensus: persona 並列 LLM call + proposal 生成.
 
-        最初に start event は handler 側で送信済 (decision_id 事前確定、Imp2).
-        ここでは domain/utterance/proposal/complete を yield.
+        start event は handler 側で送信済 (decision_id 事前確定).
+        ここでは silence / utterance × N / proposal / complete / error を yield.
         """
         # 1. SilenceGuard
         verdict = await self._silence_guard.evaluate(user_input=request.user_input)
@@ -140,57 +173,123 @@ class DecisionEngine:
             yield StreamEvent("silence", {"text": verdict.response_text or ""})
             return
 
-        # 2. ペルソナ取得 + プロフィール + 嗜好プロファイル
+        # 2. ペルソナ取得
         personas = await self._resolve_personas(
             selected_ids=request.selected_persona_ids,
             user_id=request.user_id,
         )
-        profile = await self._profile_repo.get(request.user_id)
-        profile_yaml = await self._format_profile_with_preferences(
-            user_id=request.user_id, profile=profile
-        )
 
-        # 3. プロンプト + LLM stream
-        system = self._orchestrator.build_prompt(personas=personas, profile_yaml=profile_yaml)
-        user_msg = self._orchestrator.wrap_user_input(mask_pii(request.user_input))
-        try:
-            llm_stream = self._llm.stream(
-                system=system,
-                messages=[{"role": "user", "content": user_msg}],
-            )
-        except DecisionError as exc:
-            yield StreamEvent("error", {"reason": exc.reason, "detail": exc.detail})
-            return
+        # 3. persona 並列 LLM call (per-persona timeout 付き)
+        masked_user_input = mask_pii(request.user_input)
+        user_messages = [{"role": "user", "content": masked_user_input}]
+        per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
+        proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
 
-        # 4. tee_chunks で SSE / 永続化に fan-out
-        chunks_for_sse, chunks_for_persist = tee_chunks(llm_stream, n=2)
-
-        # background: 完全な LLM 出力を蓄積 → parse → DecisionRepository.insert
-        async def consume_and_persist() -> None:
+        async def generate_persona(persona):
+            system_prompt = self._orchestrator.build_persona_prompt(persona)
             try:
-                buffer: list[str] = []
-                async for c in chunks_for_persist:
-                    buffer.append(c)
-                consensus = self._orchestrator.parse("".join(buffer), personas=personas)
-                if not consensus.utterances:
-                    audit_log(
-                        "audit.decision.parse_degraded",
-                        decision_id=str(decision_id),
-                        user_id=str(request.user_id),
-                    )
-                await self._persist_decision(decision_id, request, consensus, personas)
-            except Exception as exc:
-                self._logger.warning(
-                    "background_persist_failed",
+                raw = await asyncio.wait_for(
+                    self._llm.complete(
+                        system=system_prompt,
+                        messages=user_messages,
+                    ),
+                    timeout=per_persona_timeout,
+                )
+                return persona, clean_utterance_output(raw)
+            except asyncio.TimeoutError:
+                audit_log(
+                    "audit.decision.persona_timeout",
                     decision_id=str(decision_id),
+                    persona=persona.name,
+                    timeout_seconds=per_persona_timeout,
+                )
+                return persona, ""
+            except Exception as exc:
+                audit_log(
+                    "audit.decision.persona_error",
+                    decision_id=str(decision_id),
+                    persona=persona.name,
                     error=str(exc),
                 )
+                return persona, ""
 
-        asyncio.create_task(consume_and_persist())
+        tasks = [asyncio.create_task(generate_persona(p)) for p in personas]
 
-        # SSE 側 (フロー前で error 出すと client が即座に把握できる)
-        async for event in self._orchestrator.stream_parse(chunks_for_sse, personas=personas):
-            yield event
+        # 4. 完了順に utterance event yield
+        utterance_outputs: list[tuple] = []
+        for coro in asyncio.as_completed(tasks):
+            persona, text = await coro
+            if not text or text.isspace():
+                continue
+            utterance_outputs.append((persona, text))
+            yield StreamEvent(
+                "utterance",
+                {
+                    "persona_id": str(persona.id),
+                    "persona_name": persona.name,
+                    "text": text,
+                },
+            )
+
+        # 5. 全 persona 失敗時は error event + early return (proposal call せず)
+        if not utterance_outputs:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "all_personas_failed",
+                    "detail": "all persona LLM calls timed out or returned empty",
+                },
+            )
+            return
+
+        # 6. proposal 生成 (4 つ目の LLM call、timeout 付き)
+        proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        try:
+            raw_proposal = await asyncio.wait_for(
+                self._llm.complete(
+                    system=proposal_system,
+                    messages=user_messages,
+                ),
+                timeout=proposal_timeout,
+            )
+            proposal_text = clean_proposal_output(raw_proposal)
+        except asyncio.TimeoutError:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "proposal_timeout",
+                    "detail": f"proposal LLM call exceeded {proposal_timeout}s",
+                },
+            )
+            return
+
+        yield StreamEvent("proposal", {"proposal_text": proposal_text})
+
+        # 7. 永続化 (synchronous、complete event の前に実行)
+        utterances_persist = [
+            PersonaUtterance(
+                persona_id=p.id,
+                persona_name=p.name,
+                text=text,
+            )
+            for p, text in utterance_outputs
+        ]
+        consensus = ConsensusOutput(
+            domain_classification="daily",
+            utterances=utterances_persist,
+            proposal_text=proposal_text,
+        )
+        try:
+            await self._persist_decision(decision_id, request, consensus, personas)
+        except Exception as exc:
+            self._logger.warning(
+                "persist_failed",
+                decision_id=str(decision_id),
+                error=str(exc),
+            )
+
+        # 8. complete (success path での最後の event)
+        yield StreamEvent("complete", {"decision_id": str(decision_id)})
 
     # ============================================================
     # Yes/No 採択

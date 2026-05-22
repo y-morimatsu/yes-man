@@ -8,7 +8,14 @@ import { signOutUser } from "./auth";
 import { useAuth } from "./AuthProvider";
 
 export function Layout() {
-  const { status } = useAuth();
+  const { status, refresh } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOutUser();
+    await refresh();
+    // RequireAuth が status=unauthenticated を detect し /auth/signin redirect
+  };
+
   return (
     // INCEPTION §1.2: 背景 Light = #FFF7E8 warm cream (neutral-50 を INCEPTION で remap 済)
     <div className="min-h-screen flex flex-col bg-neutral-50 text-neutral-800">
@@ -44,7 +51,7 @@ export function Layout() {
               >
                 👤
               </Link>
-              <Button variant="ghost" size="sm" onClick={signOutUser}>
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
                 Sign out
               </Button>
             </nav>

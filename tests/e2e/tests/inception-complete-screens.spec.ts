@@ -19,7 +19,8 @@ import { gotoAuthenticated } from "../fixtures/auth";
 // ============================================================
 test.describe("Journey A: Onboarding (4 screens)", () => {
   test("A1 Splash: YESMAN 大見出し + 逆説的設計 disclaimer", async ({ page }) => {
-    await gotoAuthenticated(page, "/");
+    // PR #11 以降 Splash は /auth/splash route (RequireAuth が unauthenticated を redirect).
+    await page.goto("/auth/splash");
     // INCEPTION A1: "YESMAN" 48px Bold + "人間最後の仕事は、YES で承認すること。"
     await expect(page.getByText(/YESMAN|YesMan/).first()).toBeVisible();
     await expect(
@@ -30,7 +31,7 @@ test.describe("Journey A: Onboarding (4 screens)", () => {
   test("A1 Splash: 逆説的設計 disclaimer (主体性スコア・沈黙演出への注釈)", async ({
     page,
   }) => {
-    await gotoAuthenticated(page, "/");
+    await page.goto("/auth/splash");
     await expect(
       page.getByText(/主体性スコア|沈黙演出|逆説的設計/).first(),
     ).toBeVisible();

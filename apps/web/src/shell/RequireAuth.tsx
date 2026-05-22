@@ -20,8 +20,10 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     );
   }
   if (status === "unauthenticated") {
-    // ultrathink FD Imp2: state.from で元 page を保持、sign-in 後復帰
-    return <Navigate to="/auth/signin" state={{ from: location }} replace />;
+    // spec 2026-05-21: redirect 先を /auth/splash に変更 (Splash → SignIn の 2 段構え).
+    // location オブジェクト全体を state.from として渡すが、SplashPage では .pathname のみ
+    // 引き継ぐ (search/hash は spec §4.3 で非対応とした意図的な簡略化).
+    return <Navigate to="/auth/splash" state={{ from: location }} replace />;
   }
   return <>{children}</>;
 }

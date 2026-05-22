@@ -91,7 +91,6 @@ async def request_decision_stream(
         try:
             async for event in engine.run_stream(decision_id=decision_id, request=request):
                 yield _sse(event.type, event.data)
-            yield _sse("complete", {"decision_id": str(decision_id)})
         except DecisionError as exc:
             yield _sse("error", {"reason": exc.reason, "detail": exc.detail})
 

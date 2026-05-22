@@ -7,6 +7,7 @@ import { RequireAuth } from "./RequireAuth";
 import { Layout } from "./Layout";
 
 const HomePage = lazy(() => import("../features/home/HomePage"));
+const SplashPage = lazy(() => import("../features/auth/SplashPage"));
 const SignInPage = lazy(() => import("../features/auth/SignInPage"));
 const CallbackPage = lazy(() => import("../features/auth/CallbackPage"));
 const ProfilePage = lazy(() => import("../features/profile/ProfilePage"));
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
+      { path: "auth/splash", element: <SplashPage /> },
       { path: "auth/signin", element: <SignInPage /> },
       { path: "auth/callback", element: <CallbackPage /> },
       {

@@ -22,3 +22,46 @@ body,
   padding: 0;
   height: 100%;
 }
+
+/* Splash animations (spec 2026-05-21 §5) */
+@keyframes yesman-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes yesman-fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.splash-fade-in {
+  opacity: 0;
+  animation: yesman-fade-in-up 600ms ease-out forwards;
+}
+
+.splash-fade-in-cta {
+  opacity: 0;
+  animation: yesman-fade-in-scale 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  /* easeOutBack: 軽い overshoot (pop) */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-fade-in,
+  .splash-fade-in-cta {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

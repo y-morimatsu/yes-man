@@ -29,10 +29,10 @@ def app_with_mock_auth():
         auth_backend="mock",
         storage_backend="mock",
         mock_user_sub=_MOCK_SUB,
-        mock_user_email="test@yesman.local",
+        mock_user_email="test@example.com",
     )
     repo_factory = RepositoryFactory(config)
-    adapter = MockAuthAdapter(mock_sub=_MOCK_SUB, mock_email="test@yesman.local")
+    adapter = MockAuthAdapter(mock_sub=_MOCK_SUB, mock_email="test@example.com")
 
     app = FastAPI()
     app.state.repo_factory = repo_factory
@@ -79,7 +79,7 @@ def test_profile_lifecycle_create_update_delete(app_with_mock_auth):
     assert resp.status_code == 200
     body = resp.json()
     assert body["user_id"] == str(_MOCK_SUB)
-    assert body["email"] == "test@yesman.local"
+    assert body["email"] == "test@example.com"
     assert body["gender"] == []
     assert body["preferences"] == {}
 

@@ -1,23 +1,32 @@
-"""PBT — 任意文字列 → ConsensusOrchestrator.parse が必ず ConsensusOutput 返却、例外なし (TEST-U4-03)."""
+"""PBT — 任意文字列 → clean_utterance_output / clean_proposal_output が必ず str 返却 (spec 2026-05-21).
+
+legacy ConsensusOrchestrator.parse (XML parser) は削除済み。
+clean_utterance_output / clean_proposal_output の robustness を検証する。
+"""
 from __future__ import annotations
 
-import pytest
 from hypothesis import HealthCheck, given, settings
 from hypothesis import strategies as st
 
-from tests.fixtures.decision import builtin_personas
-from yesman_api.domain.decision.consensus import ConsensusOrchestrator
+from yesman_api.domain.decision.consensus import (
+    clean_utterance_output,
+    clean_proposal_output,
+)
 
 
 @given(llm_output=st.text(max_size=500))
 @settings(max_examples=100, suppress_health_check=[HealthCheck.function_scoped_fixture])
-def test_parse_never_raises(llm_output):
-    orch = ConsensusOrchestrator()
-    try:
-        result = orch.parse(llm_output, personas=builtin_personas())
-    except Exception as exc:
-        pytest.fail(f"Unexpected exception type {type(exc).__name__}: {exc}")
-    # 必ず ConsensusOutput が返る
-    assert result.domain_classification in ("daily", "work", "school", "major", "silenced")
-    assert isinstance(result.utterances, list)
-    assert isinstance(result.proposal_text, str)
+def test_clean_utterance_never_raises(llm_output):
+    """任意文字列を入力しても clean_utterance_output は必ず str を返し、例外を送出しない."""
+    result = clean_utterance_output(llm_output)
+    assert isinstance(result, str)
+    assert len(result) <= 200
+
+
+@given(llm_output=st.text(max_size=500))
+@settings(max_examples=100, suppress_health_check=[HealthCheck.function_scoped_fixture])
+def test_clean_proposal_never_raises(llm_output):
+    """任意文字列を入力しても clean_proposal_output は必ず str を返し、例外を送出しない."""
+    result = clean_proposal_output(llm_output)
+    assert isinstance(result, str)
+    assert len(result) <= 100

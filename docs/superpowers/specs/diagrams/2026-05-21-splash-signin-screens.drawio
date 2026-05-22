@@ -1,0 +1,398 @@
+<mxfile host="65bd71144e">
+    <diagram name="01_Splash" id="page1">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p1_title" value="SplashPage (/auth/splash) — 未認証時の hero 画面" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_sub" value="RequireAuth が unauthenticated を検知 → /auth/splash へ redirect、location.state.from を保持" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_phone_outer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=4;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="320" y="110" width="360" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_phone_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="332" y="122" width="336" height="676" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_notch" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="448" y="122" width="104" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_status" value="9:41                                                    📶 🔋" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#4A3D45" parent="1" vertex="1">
+                    <mxGeometry x="332" y="152" width="336" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_emoji" value="🪞" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=56" parent="1" vertex="1">
+                    <mxGeometry x="332" y="220" width="336" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_wordmark" value="YESMAN" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=42;fontStyle=1;fontColor=#262626;fontFamily=serif;letter-spacing=6" parent="1" vertex="1">
+                    <mxGeometry x="332" y="310" width="336" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_divider" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0D5BC;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="468" y="378" width="64" height="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_tag1" value="人間最後の仕事は、" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=2;fontColor=#404040;fontFamily=serif" parent="1" vertex="1">
+                    <mxGeometry x="332" y="396" width="336" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_tag2" value="YES で承認すること。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=2;fontColor=#404040;fontFamily=serif" parent="1" vertex="1">
+                    <mxGeometry x="332" y="424" width="336" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_disc1" value="本作品は AI が人間の主体性を奪う体験を" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="332" y="482" width="336" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_disc2" value="演出する作品です。「委任度スコア」「沈黙演出」" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="332" y="502" width="336" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_disc3a" value="などは意図的な" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="332" y="522" width="124" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_disc3b" value="逆説的設計" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="458" y="522" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_disc3c" value="です。" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="540" y="522" width="124" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_cta_shadow" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8775A;strokeColor=none;arcSize=20;opacity=20" parent="1" vertex="1">
+                    <mxGeometry x="394" y="592" width="212" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_cta" value="はじめる →" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8775A;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;align=center;verticalAlign=middle;arcSize=24" parent="1" vertex="1">
+                    <mxGeometry x="400" y="588" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_secondary" value="すでにアカウントがある方は サインイン" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#737373;fontStyle=4" parent="1" vertex="1">
+                    <mxGeometry x="332" y="662" width="336" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_logo" value="🪞 emoji + YESMAN wordmark&#xa;font-serif, text-5xl, tracking-[0.15em]&#xa;text-neutral-800 (#262626)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="240" width="240" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_tag" value="Tagline (2 lines)&#xa;font-serif italic, text-xl&#xa;text-neutral-700 (#404040)&#xa;leading-relaxed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="396" width="240" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_disc" value="Disclaimer&#xa;text-sm, text-neutral-600 (#525252)&#xa;「逆説的設計」のみ brand-700 (#c2410c)&#xa;font-semibold で強調" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="492" width="240" height="76" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_cta" value="CTA button&#xa;coral #E8775A bg, white text&#xa;rounded-2xl, px-10 py-3.5&#xa;shadow-md, hover scale 1.02&#xa;easeOutBack 500ms (overshoot pop)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontColor=#F57F17;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="580" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_sec" value="Secondary link&#xa;text-xs, underline-offset-4&#xa;text-neutral-500&#xa;CTA と同じく /auth/signin へ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontColor=#4A148C;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="690" width="240" height="74" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#01579B;strokeWidth=2;endFill=1" parent="1" source="p1_anno_logo" target="p1_wordmark" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow2" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#E65100;strokeWidth=2;endFill=1" parent="1" source="p1_anno_tag" target="p1_tag1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow3" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#880E4F;strokeWidth=2;endFill=1" parent="1" source="p1_anno_disc" target="p1_disc1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow4" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#F57F17;strokeWidth=2;endFill=1" parent="1" source="p1_anno_cta" target="p1_cta" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow5" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#4A148C;strokeWidth=2;endFill=1" parent="1" source="p1_anno_sec" target="p1_secondary" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="02_SignInPage_Redesign" id="page2">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1050" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p2_title" value="SignInPage (/auth/signin) — Visual Polish" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_sub" value="ロジックは触らず visual のみ刷新: 小ロゴ + 太字見出し + Card に warm beige border + 既存ユーザ list を控えめに" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_phone_outer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=4;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="320" y="110" width="360" height="900" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_phone_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=4" parent="1" vertex="1">
+                    <mxGeometry x="332" y="122" width="336" height="876" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_notch" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="448" y="122" width="104" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_topgrad" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=none;opacity=40;gradientColor=none" parent="1" vertex="1">
+                    <mxGeometry x="332" y="152" width="336" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_logo" value="🪞 YesMan" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=16;fontColor=#404040;fontFamily=serif;opacity=70" parent="1" vertex="1">
+                    <mxGeometry x="332" y="170" width="336" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_h1" value="サインイン" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#262626;fontFamily=serif" parent="1" vertex="1">
+                    <mxGeometry x="332" y="206" width="336" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_desc1" value="メールアドレスでサインインしてください。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="332" y="248" width="336" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_desc2" value="未登録のメールは自動で登録されます。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="332" y="266" width="336" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="352" y="300" width="296" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_email_lbl" value="Email" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="372" y="320" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_email" value="you@example.com" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;fontColor=#9E9E9E;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="372" y="342" width="256" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_dn_lbl" value="表示名 (新規登録時のみ・任意)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="372" y="400" width="256" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_dn" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;fontColor=#9E9E9E;fontSize=12;align=left;verticalAlign=middle;spacingLeft=12;arcSize=12" parent="1" vertex="1">
+                    <mxGeometry x="372" y="422" width="256" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_btn" value="サインイン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8775A;strokeColor=none;fontColor=#FFFFFF;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;arcSize=18" parent="1" vertex="1">
+                    <mxGeometry x="372" y="486" width="256" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_div_l" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0D5BC;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="352" y="620" width="84" height="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_div_label" value="前回サインインしたユーザ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="436" y="610" width="128" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_div_r" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0D5BC;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="564" y="620" width="84" height="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E5E5E5;strokeWidth=1;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="352" y="646" width="296" height="62" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row1_email" value="y-morimatsu@nec.com" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#404040" parent="1" vertex="1">
+                    <mxGeometry x="368" y="654" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row1_dn" value="32183218Kokoa" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="368" y="676" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row1_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=18;fontColor=#D4D4D4" parent="1" vertex="1">
+                    <mxGeometry x="600" y="664" width="40" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E5E5E5;strokeWidth=1;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="352" y="720" width="296" height="62" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row2_email" value="taro@example.com" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#404040" parent="1" vertex="1">
+                    <mxGeometry x="368" y="728" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row2_dn" value="(表示名なし)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="368" y="750" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_row2_arrow" value="→" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=18;fontColor=#D4D4D4" parent="1" vertex="1">
+                    <mxGeometry x="600" y="738" width="40" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_top" value="上部 warm beige グラデーション overlay (h-200, opacity 40%)&#xa;Splash の余韻を残し連続性を演出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="170" width="240" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_head" value="ヘッダー (新規)&#xa;• 🪞 YesMan (text-2xl, opacity 70%)&#xa;• サインイン (text-3xl bold serif)&#xa;• 説明文 2 行 (text-sm neutral-600)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="240" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_card" value="form Card&#xa;border #E0D5BC (warm beige)&#xa;shadow soft warm tone&#xa;Input h-12, rounded-xl, focus ring coral" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="350" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_btn" value="[サインイン] button&#xa;coral #E8775A, white text&#xa;h-12, rounded-xl, shadow-md&#xa;hover scale 1.02 + bg darker" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontColor=#F57F17;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="470" width="240" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_list" value="既存ユーザ list (控えめ化)&#xa;見出し: 「前回サインインしたユーザ」&#xa;dividers で控えめに区切る&#xa;矢印 → を neutral-300 (薄く)&#xa;hover で coral 縁取り" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#388E3C;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="640" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_anim" value="マウント時 fade-in 600ms (staged なし)&#xa;Splash と違い task-oriented なので簡素" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontColor=#4A148C;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="170" width="240" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_a1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#E65100;strokeWidth=2;endFill=1" parent="1" source="p2_anno_top" target="p2_topgrad" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_a2" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#01579B;strokeWidth=2;endFill=1" parent="1" source="p2_anno_head" target="p2_h1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_a3" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#880E4F;strokeWidth=2;endFill=1" parent="1" source="p2_anno_card" target="p2_card" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_a4" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#F57F17;strokeWidth=2;endFill=1" parent="1" source="p2_anno_btn" target="p2_btn" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_a5" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#1B5E20;strokeWidth=2;endFill=1" parent="1" source="p2_anno_list" target="p2_row1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="03_Animation_Timeline" id="page3">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p3_title" value="Splash アニメーション・タイムライン (staged fade-in, 2100ms 合計)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_sub" value="各要素を delay 違いで順次 fade-in。@keyframes yesman-fade-in-up + yesman-fade-in-scale (CTA only)。prefers-reduced-motion 時は全 animation off。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_axis" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="180" y="700" width="1440" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t0" value="0ms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="180" y="708" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t1" value="500ms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="500" y="708" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t2" value="1000ms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="820" y="708" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t3" value="1500ms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="708" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t4" value="2000ms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="1460" y="708" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t5" value="2100ms" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="1530" y="708" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_logo" value="🪞 emoji" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="130" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_logo" value="600ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="180" y="132" width="180" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_word" value="YESMAN" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="170" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_word" value="delay 200ms / dur 600ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="248" y="172" width="180" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_div" value="装飾線" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="210" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_div" value="delay 500ms / dur 400ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="500" y="212" width="120" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_tag1" value="Tagline 1" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="250" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_tag1" value="delay 700ms / dur 600ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="628" y="252" width="180" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_tag2" value="Tagline 2" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="290" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_tag2" value="delay 800ms / dur 600ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="692" y="292" width="180" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_disc" value="Disclaimer" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="330" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_disc" value="delay 1100ms / dur 600ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="884" y="332" width="180" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_cta" value="CTA button (pop)" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="20" y="370" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_cta" value="delay 1400ms / dur 500ms / easeOutBack" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8775A;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="1076" y="372" width="220" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_lbl_sec" value="Secondary link" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="410" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_bar_sec" value="delay 1700ms / dur 400ms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;arcSize=20" parent="1" vertex="1">
+                    <mxGeometry x="1268" y="412" width="120" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_legend_title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="500" width="80" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_legend_a" value="orange = fade-in-up (ease-out)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FB8C00;strokeColor=none;fontColor=#FFFFFF;fontSize=11;align=center;verticalAlign=middle;arcSize=14" parent="1" vertex="1">
+                    <mxGeometry x="40" y="530" width="240" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_legend_b" value="coral = fade-in-scale (easeOutBack / pop)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8775A;strokeColor=none;fontColor=#FFFFFF;fontSize=11;align=center;verticalAlign=middle;arcSize=14" parent="1" vertex="1">
+                    <mxGeometry x="300" y="530" width="280" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_legend_c" value="prefers-reduced-motion: reduce → 全 animation off、即時表示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=11;align=center;verticalAlign=middle;arcSize=14" parent="1" vertex="1">
+                    <mxGeometry x="600" y="530" width="380" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_keyframe_title" value="CSS keyframes 定義 (apps/web/src/index.css に追加)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="580" width="500" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_keyframe_box" value="@keyframes yesman-fade-in-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }&#xa;@keyframes yesman-fade-in-scale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }&#xa;.splash-fade-in { opacity: 0; animation: yesman-fade-in-up 600ms ease-out forwards; }&#xa;.splash-fade-in-cta { opacity: 0; animation: yesman-fade-in-scale 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=1;fontColor=#262626;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=12;spacingTop=8;fontFamily=Courier New" parent="1" vertex="1">
+                    <mxGeometry x="40" y="610" width="1580" height="80" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="04_Flow" id="page4">
+        <mxGraphModel dx="1400" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p4_title" value="ルーティング・フロー: 未認証 → Splash → SignIn → 元 page 復帰" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1620" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_sub" value="RequireAuth の redirect 先を /auth/signin → /auth/splash に変更、CTA / Skip link で /auth/signin へ繋ぐ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="1620" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_start" value="🌐 User visits /score&#xa;(未認証)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="180" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_req" value="🛡️ RequireAuth&#xa;status detect: unauthenticated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#FB8C00;fontColor=#E65100;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="320" y="180" width="220" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_splash" value="🪞 SplashPage&#xa;/auth/splash&#xa;&#xa;state.from = /score 保持" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=#4A3D45;strokeWidth=3;fontColor=#262626;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="600" y="160" width="260" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_signin" value="🔐 SignInPage&#xa;/auth/signin&#xa;&#xa;state.from = /score 引継ぎ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=#4A3D45;strokeWidth=3;fontColor=#262626;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="940" y="160" width="260" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_home" value="🏠 /score へ復帰&#xa;(元の page)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#C8E6C9;strokeColor=#388E3C;fontColor=#1B5E20;fontSize=13;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1280" y="180" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_signout" value="🚪 Sign out (Layout)&#xa;clearCurrent + refresh" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="1280" y="500" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#01579B;strokeWidth=2;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF" parent="1" source="p4_start" target="p4_req" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e1_lbl" value="GET /score" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=10;fontColor=#01579B" parent="1" vertex="1">
+                    <mxGeometry x="265" y="210" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e2" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FB8C00;strokeWidth=3;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF" parent="1" source="p4_req" target="p4_splash" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e2_lbl" value="Navigate(splash,&#xa;state={from:/score})" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=10;fontColor=#E65100" parent="1" vertex="1">
+                    <mxGeometry x="540" y="200" width="124" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e3" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#E8775A;strokeWidth=3;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF" parent="1" source="p4_splash" target="p4_signin" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e3_lbl" value="[はじめる →] click&#xa;or [サインイン] link click" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#E8775A" parent="1" vertex="1">
+                    <mxGeometry x="860" y="200" width="124" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e4" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#388E3C;strokeWidth=3;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF" parent="1" source="p4_signin" target="p4_home" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e4_lbl" value="email + サインイン&#xa;or 既存 user row click" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=10;fontColor=#1B5E20" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="200" width="120" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_e5" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#C2185B;strokeWidth=3;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;curved=1" parent="1" source="p4_signout" target="p4_splash" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="730" y="540"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="p4_e5_lbl" value="status → unauthenticated&#xa;→ RequireAuth → Navigate(splash)&#xa;(一貫した経路で再 sign-in)" style="text;html=1;strokeColor=none;fillColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=10;fontColor=#880E4F" parent="1" vertex="1">
+                    <mxGeometry x="800" y="510" width="220" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_changes_title" value="主要変更ファイル" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="60" y="640" width="200" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_changes" value="新規  apps/web/src/features/auth/SplashPage.tsx&#xa;新規  apps/web/tests/features/auth/SplashPage.test.tsx&#xa;編集  apps/web/src/index.css                          @keyframes 追加&#xa;編集  apps/web/src/shell/routes.tsx                    /auth/splash route (lazy)&#xa;編集  apps/web/src/shell/RequireAuth.tsx               redirect 先を splash に&#xa;編集  apps/web/src/features/auth/SignInPage.tsx        visual polish (header/Card/list)&#xa;編集  apps/web/tests/shell/RequireAuth.test.tsx        新 redirect 先 test" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=1;fontColor=#262626;fontSize=11;align=left;verticalAlign=top;arcSize=8;spacingLeft=12;spacingTop=8;fontFamily=Courier New" parent="1" vertex="1">
+                    <mxGeometry x="60" y="670" width="780" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_constraint_title" value="ルーティング詳細" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="880" y="640" width="200" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_constraint" value="• RequireAuth.tsx&#xa;    OLD: Navigate to=&#39;/auth/signin&#39;&#xa;    NEW: Navigate to=&#39;/auth/splash&#39;  (state={from} 保持)&#xa;&#xa;• SplashPage.tsx の CTA / link onClick&#xa;    navigate(&#39;/auth/signin&#39;, { state: { from } })&#xa;&#xa;• replace: false (Back ボタンで Splash に戻れる UX)&#xa;&#xa;• SignInPage は変更不要 (既存の from 引継ぎロジック維持)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=1;fontColor=#262626;fontSize=11;align=left;verticalAlign=top;arcSize=8;spacingLeft=12;spacingTop=8;fontFamily=Courier New" parent="1" vertex="1">
+                    <mxGeometry x="880" y="670" width="780" height="180" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -34,7 +34,15 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('tests/e2e/package.json') }}
 
       - run: pnpm install --frozen-lockfile
-      - run: pip install -e apps/api[dev]
+
+      # apps/api venv を作成 (Playwright webServer の pnpm start が .venv/bin/uvicorn を参照).
+      # local dev cycle と CI を統一するため venv を必須化.
+      - name: Setup apps/api venv
+        working-directory: apps/api
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -e ".[dev]"
 
       # workspace build (api-client + ui を web 用に build)
       - run: pnpm --filter @yesman/api-client build
@@ -49,10 +57,10 @@ jobs:
           CI: "true"
 
       # Integration (pytest)
-      - run: pytest tests/integration -v
+      - run: apps/api/.venv/bin/pytest tests/integration -v
 
       # PBT (既存 + 新規)
-      - run: pytest apps/api/tests/property -v
+      - run: apps/api/.venv/bin/pytest apps/api/tests/property -v
 
       # Smoke (Mock backend で起動後想定、Playwright webServer が残っていれば実行可)
       - run: bash tests/smoke/smoke.sh

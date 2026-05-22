@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 700" width="280" height="700"
+     font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Noto Serif JP', serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="688" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="672" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+  <line x1="22" y1="58" x2="258" y2="58" stroke="#E0D5BC" stroke-width="0.5"/>
+
+  <!-- subtle warm beige gradient overlay at top (cream rectangle) -->
+  <defs>
+    <linearGradient id="topGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5E5C4" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFF7E8" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="14" y="58" width="252" height="120" fill="url(#topGrad)"/>
+
+  <!-- Small logo (serif text-2xl, neutral-700 opacity 0.7) -->
+  <text x="140" y="98" text-anchor="middle" font-family="'Noto Serif JP', serif"
+        font-size="16" fill="#404040" opacity="0.7">🪞 YesMan</text>
+
+  <!-- Page title (serif text-3xl bold) -->
+  <text x="140" y="138" text-anchor="middle" font-family="'Noto Serif JP', serif"
+        font-size="24" font-weight="700" fill="#262626">サインイン</text>
+
+  <!-- Description -->
+  <text x="140" y="162" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">メールアドレスでサインインしてください。</text>
+  <text x="140" y="176" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="10" fill="#525252">未登録のメールは自動で登録されます。</text>
+
+  <!-- Form Card (warm beige border + soft shadow) -->
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#D4A55D" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect x="22" y="200" width="236" height="220" rx="14"
+        fill="#FFFFFF" stroke="#E0D5BC" stroke-width="1" filter="url(#cardShadow)"/>
+
+  <!-- Email label + input -->
+  <text x="36" y="226" font-family="-apple-system, sans-serif"
+        font-size="11" font-weight="600" fill="#262626">Email</text>
+  <rect x="36" y="234" width="208" height="38" rx="10"
+        fill="#FFFFFF" stroke="#E0D5BC" stroke-width="1"/>
+  <text x="46" y="259" font-family="-apple-system, sans-serif"
+        font-size="11" fill="#9E9E9E">you@example.com</text>
+
+  <!-- 表示名 label + input -->
+  <text x="36" y="296" font-family="-apple-system, sans-serif"
+        font-size="11" font-weight="600" fill="#262626">表示名 (新規登録時のみ・任意)</text>
+  <rect x="36" y="304" width="208" height="38" rx="10"
+        fill="#FFFFFF" stroke="#E0D5BC" stroke-width="1"/>
+
+  <!-- Sign in button (coral, h-12 ≈ 40px, rounded-xl, with subtle shadow) -->
+  <defs>
+    <filter id="btnShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#E8775A" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect x="36" y="362" width="208" height="40" rx="12"
+        fill="#E8775A" filter="url(#btnShadow)"/>
+  <text x="140" y="387" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="13" font-weight="600" fill="#FFFFFF">サインイン</text>
+
+  <!-- Existing user list separator with text in middle -->
+  <line x1="22" y1="458" x2="98" y2="458" stroke="#E0D5BC" stroke-width="1"/>
+  <text x="140" y="462" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="9" fill="#737373">前回サインインしたユーザ</text>
+  <line x1="182" y1="458" x2="258" y2="458" stroke="#E0D5BC" stroke-width="1"/>
+
+  <!-- User row 1 -->
+  <rect x="22" y="476" width="236" height="56" rx="10"
+        fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="34" y="498" font-family="-apple-system, sans-serif"
+        font-size="11" font-weight="500" fill="#404040">y-morimatsu@nec.com</text>
+  <text x="34" y="516" font-family="-apple-system, sans-serif"
+        font-size="9" fill="#737373">32183218Kokoa</text>
+  <text x="246" y="510" text-anchor="end" font-family="-apple-system, sans-serif"
+        font-size="14" fill="#D4D4D4">→</text>
+
+  <!-- User row 2 -->
+  <rect x="22" y="540" width="236" height="56" rx="10"
+        fill="#FFFFFF" stroke="#E5E5E5" stroke-width="1"/>
+  <text x="34" y="562" font-family="-apple-system, sans-serif"
+        font-size="11" font-weight="500" fill="#404040">taro@example.com</text>
+  <text x="34" y="580" font-family="-apple-system, sans-serif"
+        font-size="9" font-style="italic" fill="#9E9E9E">(表示名なし)</text>
+  <text x="246" y="574" text-anchor="end" font-family="-apple-system, sans-serif"
+        font-size="14" fill="#D4D4D4">→</text>
+
+  <!-- Footer hint -->
+  <text x="140" y="630" text-anchor="middle" font-family="-apple-system, sans-serif"
+        font-size="9" font-style="italic" fill="#9E9E9E">未登録のメールは自動登録されます</text>
+</svg>

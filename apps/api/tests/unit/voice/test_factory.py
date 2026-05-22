@@ -31,6 +31,7 @@ async def test_factory_creates_web_speech_api_adapter():
 
 
 async def test_factory_creates_aws_adapter():
+    pytest.importorskip("aioboto3", reason="aws backend は optional dep、未 install 時は skip")
     factory = VoiceProviderFactory(_config("aws"))
     adapter = await factory.create()
     # PollyTranscribeAdapter は aioboto3 import を要するため、attribute 検査で代替

@@ -8,6 +8,7 @@ import { Amplify } from "aws-amplify";
 import { fetchAuthSession, signInWithRedirect, signOut } from "aws-amplify/auth";
 import type { TokenProvider } from "@yesman/api-client";
 import { env } from "./env";
+import * as mockAuthStorage from "./mockAuthStorage";
 
 export function configureAuth(): void {
   // bypass mode (e2e / dev) では Amplify を初期化しない (fake Cognito domain で接続試行を回避)
@@ -31,26 +32,48 @@ export function configureAuth(): void {
   });
 }
 
+/** bypass mode で API に送る Bearer を構築する.
+ *  `mock-user:<base64url(JSON{sub, email})>` 形式。API MockAuthAdapter が token を解釈し
+ *  含まれる sub/email をそのまま AuthenticatedUser として返す → multi-user 化が成立.
+ *  未サインインなら null (middleware が MOCK_AUTO_USER で env 固定 user に fallback).
+ */
+function buildBypassToken(): string | null {
+  const user = mockAuthStorage.getCurrentUser();
+  if (!user) return null;
+  const json = JSON.stringify({ sub: user.sub, email: user.email });
+  // base64url (no padding) — API 側 `base64.urlsafe_b64decode` と整合
+  const b64 = btoa(json).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return `mock-user:${b64}`;
+}
+
 export class CognitoTokenProvider implements TokenProvider {
   async getToken(): Promise<string | null> {
-    if (env.authBypass) return null;
+    if (env.authBypass) return buildBypassToken();
     const session = await fetchAuthSession();
     return session.tokens?.idToken?.toString() ?? null;
   }
 
   async refresh(): Promise<string | null> {
-    if (env.authBypass) return null;
+    if (env.authBypass) return buildBypassToken();
     const session = await fetchAuthSession({ forceRefresh: true });
     return session.tokens?.idToken?.toString() ?? null;
   }
 }
 
-export async function signIn(): Promise<void> {
-  if (env.authBypass) return;
+export async function signIn(email?: string): Promise<void> {
+  if (env.authBypass) {
+    if (!email) return; // SignInPage は email 必須で呼ぶ
+    mockAuthStorage.registerUser(email);
+    mockAuthStorage.setCurrentEmail(email);
+    return;
+  }
   await signInWithRedirect();
 }
 
 export async function signOutUser(): Promise<void> {
-  if (env.authBypass) return;
+  if (env.authBypass) {
+    mockAuthStorage.clearCurrent();
+    return;
+  }
   await signOut({ global: false });
 }

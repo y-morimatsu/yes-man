@@ -3,6 +3,7 @@ import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastProvider } from "@yesman/ui";
 import { ApiProvider } from "../../../src/shell/ApiProvider";
 import { AuthProvider } from "../../../src/shell/AuthProvider";
 import PreferencePage from "../../../src/features/preference/PreferencePage";
@@ -29,7 +30,9 @@ function setup(payload: PreferencePayload) {
     <AuthProvider>
       <ApiProvider>
         <QueryClientProvider client={qc}>
-          <PreferencePage />
+          <ToastProvider>
+            <PreferencePage />
+          </ToastProvider>
         </QueryClientProvider>
       </ApiProvider>
     </AuthProvider>,
@@ -71,7 +74,8 @@ describe("PreferencePage", () => {
     await waitFor(() => {
       expect(screen.getByText("慎重派")).toBeInTheDocument();
     });
-    expect(screen.getByText("0.50")).toBeInTheDocument();
+    // PreferencePage renders score with sign prefix: `+0.50` / `-0.25`
+    expect(screen.getByText("+0.50")).toBeInTheDocument();
     expect(screen.getByText("-0.25")).toBeInTheDocument();
   });
 });

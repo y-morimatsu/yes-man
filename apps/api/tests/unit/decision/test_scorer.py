@@ -34,7 +34,8 @@ async def test_high_yes_ratio_message():
     scorer = AutonomyScorer(decision_repo=_StubRepo(no_count=1, total=10))
     result = await scorer.compute(uuid4())
     assert result.ratio == 0.9
-    assert "信頼" in result.message
+    assert "90%" in result.message
+    assert "委ねました" in result.message
 
 
 @pytest.mark.asyncio
@@ -42,4 +43,23 @@ async def test_low_yes_ratio_message():
     scorer = AutonomyScorer(decision_repo=_StubRepo(no_count=7, total=10))
     result = await scorer.compute(uuid4())
     assert result.ratio == 0.3
-    assert "Yes" in result.message
+    assert "30%" in result.message
+    assert "委ねています" in result.message
+
+
+@pytest.mark.asyncio
+async def test_mid_yes_ratio_message():
+    scorer = AutonomyScorer(decision_repo=_StubRepo(no_count=4, total=10))
+    result = await scorer.compute(uuid4())
+    assert result.ratio == 0.6
+    assert "60%" in result.message
+    assert "委ねました" in result.message
+
+
+@pytest.mark.asyncio
+async def test_percentage_rounded_correctly():
+    # 7/30 = 0.233... → ratio=0.233 → 23% (round to integer)
+    scorer = AutonomyScorer(decision_repo=_StubRepo(no_count=23, total=30))
+    result = await scorer.compute(uuid4())
+    assert "23%" in result.message
+    assert "委ねています" in result.message  # LOW tier 確認
