@@ -238,4 +238,61 @@ test.describe("BottomNav (Mobile App Polish §4)", () => {
       page.getByRole("navigation", { name: "メインナビゲーション" }),
     ).not.toBeVisible();
   });
+
+  test("Sticky Header — scroll しても画面上部に固定される", async ({ page }) => {
+    await gotoAuthenticated(page, "/score");
+    const header = page.locator("header");
+    // 初期表示で header が visible
+    await expect(header).toBeVisible();
+    const initialBox = await header.boundingBox();
+    expect(initialBox).not.toBeNull();
+    // 下方向に 400px scroll
+    await page.evaluate(() => window.scrollTo(0, 400));
+    await page.waitForTimeout(200);  // sticky reflow 待ち
+    // header が依然 visible + viewport 上部に維持
+    await expect(header).toBeVisible();
+    const scrolledBox = await header.boundingBox();
+    expect(scrolledBox).not.toBeNull();
+    // sticky header の y 座標は scroll しても 0 付近 (safe-area-inset-top 込み)
+    expect(scrolledBox!.y).toBeLessThanOrEqual(initialBox!.y + 5);
+    // brand logo + Sign out が依然 visible
+    await expect(page.getByText(/🪞 YesMan/)).toBeVisible();
+    await expect(page.getByRole("button", { name: /Sign out/ })).toBeVisible();
+  });
+
+  test("/score で 📊 スコア tab が active", async ({ page }) => {
+    await gotoAuthenticated(page, "/score");
+    const scoreLink = page.getByText("スコア", { exact: true }).locator("..");
+    await expect(scoreLink).toHaveAttribute("aria-current", "page");
+    // active class (text-brand-700) が適用される
+    const className = (await scoreLink.getAttribute("class")) ?? "";
+    expect(className).toContain("text-brand-700");
+    // 他 tab は inactive
+    for (const label of ["Home", "決定", "プロフィール"]) {
+      const link = page.getByText(label, { exact: true }).locator("..");
+      await expect(link).not.toHaveAttribute("aria-current", "page");
+    }
+  });
+
+  test("/personas で BottomNav 全 tab が inactive (Persona は nav 除外)", async ({ page }) => {
+    await gotoAuthenticated(page, "/personas");
+    // BottomNav は visible
+    await expect(page.getByRole("navigation", { name: "メインナビゲーション" })).toBeVisible();
+    // 4 tab 全て inactive
+    for (const label of ["Home", "決定", "スコア", "プロフィール"]) {
+      const link = page.getByText(label, { exact: true }).locator("..");
+      await expect(link).not.toHaveAttribute("aria-current", "page");
+    }
+  });
+
+  test("/preferences で BottomNav 全 tab が inactive (Preference は nav 除外)", async ({ page }) => {
+    await gotoAuthenticated(page, "/preferences");
+    // BottomNav は visible
+    await expect(page.getByRole("navigation", { name: "メインナビゲーション" })).toBeVisible();
+    // 4 tab 全て inactive
+    for (const label of ["Home", "決定", "スコア", "プロフィール"]) {
+      const link = page.getByText(label, { exact: true }).locator("..");
+      await expect(link).not.toHaveAttribute("aria-current", "page");
+    }
+  });
 });
