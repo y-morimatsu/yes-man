@@ -37,6 +37,7 @@ export function Layout() {
         <div className="flex justify-between items-center max-w-md mx-auto w-full px-4">
           <Link
             to="/"
+            viewTransition
             className="font-serif text-xl font-bold text-neutral-800 active:opacity-70"
           >
             🪞 YesMan

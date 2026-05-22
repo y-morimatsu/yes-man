@@ -45,6 +45,7 @@ export function BottomNav() {
               )}
               <Link
                 to={tab.to}
+                viewTransition
                 aria-current={active ? "page" : undefined}
                 className={
                   "flex flex-col items-center justify-center gap-0.5 min-h-[56px] active:opacity-70 " +
