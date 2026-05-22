@@ -532,3 +532,59 @@ Cold-start でない user で `selected_ids` が空かつ `UserPersonaSelection`
 ### NFR / Infrastructure / Code Gen への波及
 - NFR Requirements / NFR Design / Infrastructure Design は本体不変、本注記が記述根拠
 - code-generation-plan.md の Phase F (DecisionEngine + Scorer) は実装結果として更新済
+
+---
+
+## Post-CONSTRUCTION 改修注記 v2 (2026-05-22) — Pack A + Decision History
+
+本ドキュメント本体および v1 改修注記は変更なし。以下の改修が 2026-05-22 に本 unit のスコープに加わった:
+
+### 4. Score 煽り文 (Pack A、`a731786`、2026-05-22)
+
+**変更ファイル**: `apps/api/src/yesman_api/domain/decision/scorer.py`
+
+- **`_format_message(yes_count, total)`** メソッドを新規実装。従来の固定マッピング文字列から、Yes 比率の **具体的な %値** を埋め込む形式に変更
+- 生成文例: `"過去 {_HISTORY_DAYS} 日、あなたは決定の {pct}% を YesMan に委ねました。…"` (`_HISTORY_DAYS` 定数を f-string で参照)
+- `pct = round(yes_count / total * 100)` で整数化、`total == 0` 時は既存の「まだ履歴がありません」パスを維持
+- AI 生成 NudgeMessageGenerator への委譲方針は変更なし。スコア endpoint (`GET /v1/scores/me`) の `message` フィールドが可変テキストになることで、UI 側の pink bubble は `data.message` をそのまま表示するだけで自動反映 (UI 側無変更)
+
+**影響範囲**:
+- API surface: `GET /v1/scores/me` の `message` 文字列に %値が入るようになる (型・フィールド名は不変)
+- `tests/unit/decision/test_scorer.py`: `_format_message` の出力に具体的な %値が含まれるよう期待値を更新
+
+### 5. GET /v1/decisions 履歴 endpoint (Decision History、`bcd9a9b` + `3d64c45`、2026-05-22)
+
+**変更ファイル**:
+- `apps/api/src/yesman_api/interface/http/decisions.py` — `@router.get("")` で list endpoint を新設 (`list_decisions`)
+- `apps/api/src/yesman_api/interface/http/dto/decision.py` — `DecisionHistoryItemDTO` / `DecisionHistoryResponse` を追加
+
+**仕様**:
+- `GET /v1/decisions?limit=20&choice=yes`
+  - query param: `limit (int, 1-100, default=20)` / `choice (Literal["yes","no","all"], default="all")`
+  - 認証必須 (`request.state.user.sub`)
+- Application 層で `user_input_hash` によるグルーピングを実施し、`attempt_count` (1-indexed) を算出
+  - 定数 `RAW_CAP_FOR_ATTEMPT_COUNT = 1000` で DB から取得する raw 件数の上限を制御
+  - 同一 `user_input_hash` を持つ decisions を時刻昇順で並べ、各 decision に何回目の attempt かを付与
+- DTO 定義:
+  ```
+  DecisionHistoryItemDTO { decision_id, user_input, proposal_text,
+                            choice, created_at, attempt_count }
+  DecisionHistoryResponse { items: list[DecisionHistoryItemDTO], total: int }
+  ```
+
+**影響範囲**:
+- API surface: 新規 GET endpoint 追加 (既存 POST endpoints は不変)
+- `tests/integration/decision/test_decision_flow.py` に list endpoint テストを追加 (API integration test 5 件)
+
+### 6. Mock seed — attempt_count バリエーション化 (`35b1832` + `2bde513`、2026-05-22)
+
+**変更ファイル**: `apps/api/src/yesman_api/infrastructure/persistence/mock_repositories.py`
+
+- `seed_demo_decisions()` で生成する 20 件の decision のうち **約 20% (4 件程度)** を 2-5 attempts の session として生成
+  - session 化した group は全 attempt を `no` → **最後の 1 attempt のみ `yes` or `no`** にすることで `attempt_count` バリエーション (🌟 1 回目 / 🔄 2-5 回目で採用) がデモ時に視認できる
+  - 同一 group の decisions は `user_input_hash` を共有 (salt = `user_id || user_input` の hash)
+- session 化されない残り 80% は従来通り 1 attempt で即 `yes` または `no`
+
+**影響範囲**:
+- Mock mode のみ影響 (本番 repository は不変)
+- `tests/unit/decision/test_mock_repositories.py` に `attempt_count` バリエーション検証を追加 (seed unit test 3 件)

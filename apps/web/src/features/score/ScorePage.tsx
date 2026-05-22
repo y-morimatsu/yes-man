@@ -14,6 +14,7 @@ import { useScore } from "./useScore";
 import { getScoreLevel } from "./scoreLevel";
 import { ScoreRadialChart } from "./ScoreRadialChart";
 import { ScoreLineChart } from "./ScoreLineChart";
+import { DecisionHistoryList } from "./DecisionHistoryList";
 import { t } from "./strings";
 
 export default function ScorePage() {
@@ -98,6 +99,9 @@ export default function ScorePage() {
       <p className="text-center text-xs italic text-neutral-500">
         {t("paradoxNote")}
       </p>
+
+      {/* spec 2026-05-22-score-decision-history: Yes 採択履歴 (最大 20 件) */}
+      <DecisionHistoryList />
     </div>
   );
 }

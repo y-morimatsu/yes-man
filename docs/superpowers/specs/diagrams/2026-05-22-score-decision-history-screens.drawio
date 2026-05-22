@@ -1,0 +1,234 @@
+<mxfile host="65bd71144e">
+    <diagram name="01_ScorePage_with_History" id="page1">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p1_title" value="ScorePage (/score) — 既存スコア表示 + DecisionHistoryList (Yes 採択のみ)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_sub" value="Yes 採択した決定のみ最新順 20 件表示。各 item に「何回目で採用したか (attempt_count: 同 user_input_hash 内の試行順)」も併記。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_phone_outer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=4;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="320" y="110" width="360" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_phone_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="332" y="122" width="336" height="676" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_notch" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="448" y="122" width="104" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_status" value="9:41                                                    📶 🔋" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#4A3D45" parent="1" vertex="1">
+                    <mxGeometry x="332" y="152" width="336" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_h1" value="委任度 スコア" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=20;fontStyle=1;fontColor=#262626;fontFamily=serif;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="332" y="180" width="336" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_score_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="340" y="220" width="320" height="195" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_radial_ring" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#9F88C8;strokeWidth=6" parent="1" vertex="1">
+                    <mxGeometry x="440" y="232" width="80" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_radial_pct" value="92%" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#9F88C8;fontFamily=serif" parent="1" vertex="1">
+                    <mxGeometry x="440" y="252" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_radial_label" value="委任度 (Yes 比率)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="400" y="318" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_pink_bubble" value="「過去 30 日、決定の 92% を YesMan に委ねました…」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD6E0;strokeColor=#FF8FAE;strokeWidth=1;arcSize=20;fontColor=#E8775A;fontSize=9;fontStyle=1;align=center;verticalAlign=middle;spacingLeft=8;spacingRight=8" parent="1" vertex="1">
+                    <mxGeometry x="352" y="342" width="296" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_line_chart" value="📈 推移 (30日) — line chart" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#E0E0E0;arcSize=8;fontSize=9;fontColor=#9E9E9E;align=center;verticalAlign=middle;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="352" y="382" width="296" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_stats" value="総決定: 12 / Yes: 11 / No 回数: 1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="352" y="400" width="296" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_divider" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0D5BC;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="380" y="436" width="240" height="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_hist_header" value="📜 最近の Yes 採択" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626;fontFamily=serif;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="332" y="448" width="220" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_hist_caption" value="(最大 20 件)" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=9;fontColor=#737373;spacingRight=12" parent="1" vertex="1">
+                    <mxGeometry x="500" y="450" width="160" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item1_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="340" y="478" width="320" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item1_check" value="✓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#43A047" parent="1" vertex="1">
+                    <mxGeometry x="346" y="484" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item1_q" value="「今日のランチどうしよう？」" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#262626;fontFamily=serif;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="484" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item1_p" value="→ コンビニのサラダチキン定食" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#525252;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="506" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item1_t" value="🕒 5 分前　・　🌟 1 回目で採用" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#737373;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="530" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item2_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="340" y="564" width="320" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item2_check" value="✓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#43A047" parent="1" vertex="1">
+                    <mxGeometry x="346" y="570" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item2_q" value="「今夜の映画 何見よう？」" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#262626;fontFamily=serif;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="570" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item2_p" value="→ Dune: Part Two" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#525252;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="592" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item2_t" value="🕒 昨日　・　🔄 3 回目で採用" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#737373;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="616" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item3_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="340" y="650" width="320" height="78" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item3_check" value="✓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#43A047" parent="1" vertex="1">
+                    <mxGeometry x="346" y="656" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item3_q" value="「週末の家族旅行どこ行く？」" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#262626;fontFamily=serif;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="656" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item3_p" value="→ 箱根 1 泊温泉プラン" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontColor=#525252;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="678" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_item3_t" value="🕒 3 日前　・　🔄 5 回目で採用" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#737373;spacingLeft=4" parent="1" vertex="1">
+                    <mxGeometry x="368" y="702" width="280" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_scroll_hint" value="↓ 続きはスクロール (最大 20 件)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontStyle=2;fontColor=#9E9E9E" parent="1" vertex="1">
+                    <mxGeometry x="332" y="740" width="336" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_existing" value="既存の Score Card (Pack A 煽り文 + 円形 + 折れ線)&#xa;変更なし、そのまま据え置き&#xa;font-bold purple #9F88C8 で 92% を中央に大きく表示&#xa;※ Yes/No 比率は引き続き集計対象 (Score 計算には No も必要)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontColor=#4A148C;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="270" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_header" value="📜 最近の Yes 採択 (最大 20 件)&#xa;font-serif font-semibold text-base&#xa;text-brand-700 / spacing-left 12px&#xa;セクション名で「Yes 採択のみ」を明示&#xa;= バッジ不要 (すべて Yes だから)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="425" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_item" value="DecisionHistoryItem (Card primitive)&#xa;rounded-xl border border-neutral-200, p-3 mb-2&#xa;✓ 緑チェック (success-700 #43A047) を左端に subtle 表示&#xa;質問 (font-serif italic, max 60 chars + …)&#xa;提案 (text-sm, max 60 chars + …)&#xa;相対時刻 (text-xs text-neutral-500)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="540" width="240" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_time" value="時刻 ・ 採用回数 (1 行)&#xa;&#xa;◆ 相対時刻 (formatRelativeTime)&#xa;  &lt; 1h:  「N 分前」/ &lt; 24h: 「N 時間前」&#xa;  &lt; 2d:  「昨日」/ &lt; 7d:  「N 日前」&#xa;  ≥ 7d:  「YYYY-MM-DD」&#xa;&#xa;◆ 採用回数 (attempt_count: API で計算)&#xa;  = 同 user_input_hash 内の created_at 順 index&#xa;  = 1: 🌟 1 回目で採用 (一発採用)&#xa;  ≥ 2: 🔄 N 回目で採用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="470" width="240" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_api" value="Data source&#xa;GET /v1/decisions?limit=20&amp;choice=yes&#xa;Filter: user_choice = &apos;yes&apos; のみ&#xa;        (no / pending は除外)&#xa;Order: created_at DESC&#xa;Backend: user_input_hash で group &amp;&#xa;        attempt_count を 1-indexed で算出&#xa;Fields: id, user_input, proposal_text,&#xa;        created_at, attempt_count&#xa;React Query: useDecisionHistory()&#xa;staleTime: 30s" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="640" width="240" height="135" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_anno_no" value="No (棄却) は履歴に残さない&#xa;ユーザーが No した提案は「無かったこと」に。&#xa;= デモ的にも YesMan の世界観 (Yes を称える) に合致&#xa;※ ただし DB には保存される (Score 計算用)。&#xa;  あくまで履歴 UI からのみ非表示。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;fontColor=#B71C1C;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="690" width="240" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#7B1FA2;strokeWidth=2;endFill=1" parent="1" source="p1_anno_existing" target="p1_score_card" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow2" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#43A047;strokeWidth=2;endFill=1" parent="1" source="p1_anno_header" target="p1_hist_header" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow3" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#0288D1;strokeWidth=2;endFill=1" parent="1" source="p1_anno_item" target="p1_item1_bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow4" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FB8C00;strokeWidth=2;endFill=1" parent="1" source="p1_anno_time" target="p1_item2_t" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow5" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#C2185B;strokeWidth=2;endFill=1" parent="1" source="p1_anno_api" target="p1_item3_bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_arrow6" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#C62828;strokeWidth=2;endFill=1;dashed=1" parent="1" source="p1_anno_no" target="p1_scroll_hint" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="02_DecisionHistoryItem_Detail" id="page2">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="p2_title" value="DecisionHistoryItem — 詳細仕様 (Yes 採択のみ / truncate / 空状態)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_sub" value="リスト 1 行の詳細構造、要素の役割、採用回数表示、長文 truncate、空状態 (No は表示しない / バッジなし)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_item_label" value="Yes 採択 1 行 — 拡大表示" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#43A047" parent="1" vertex="1">
+                    <mxGeometry x="320" y="110" width="360" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_item_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=2;arcSize=8;shadow=1" parent="1" vertex="1">
+                    <mxGeometry x="300" y="150" width="400" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_item_check" value="✓" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=18;fontStyle=1;fontColor=#43A047" parent="1" vertex="1">
+                    <mxGeometry x="312" y="160" width="24" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_item_q" value="「今日のランチどうしよう？」" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontStyle=2;fontColor=#262626;fontFamily=serif;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="340" y="160" width="340" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_item_p" value="→ コンビニのサラダチキン定食" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=13;fontColor=#525252;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="340" y="198" width="340" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_item_t" value="🕒 5 分前　・　🔄 3 回目で採用 (No 2 件 → Yes ✓)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#737373;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="340" y="234" width="340" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_check" value="✓ チェックアイコン&#xa;text-success-700 (#43A047)&#xa;font-bold, text-base&#xa;Yes 採択を控えめに示す indicator&#xa;= 採用バッジの代わり (タイトルで「Yes」を明示済)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="150" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_q" value="質問 (user_input)&#xa;font-serif italic, text-base&#xa;「…」で囲む (鍵括弧)&#xa;60 chars 超 → 末尾 …&#xa;line-clamp-1 (CSS で 1 行制限)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="150" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_p" value="提案 (proposal_text)&#xa;text-sm text-neutral-700&#xa;「→ 」プレフィックス&#xa;60 chars 超 → 末尾 …&#xa;line-clamp-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="720" y="290" width="240" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_anno_t" value="時刻 ・ 採用回数 (1 行)&#xa;text-xs text-neutral-500&#xa;🕒 + 相対時刻 + 　・　 + 採用回数&#xa;&#xa;採用回数 = attempt_count (API で計算)&#xa;= 同 user_input_hash 内の created_at 順 index&#xa;・1 回目: 🌟 1 回目で採用&#xa;・2+ 回目: 🔄 N 回目で採用&#xa;　 (任意で「No N-1 件 → Yes ✓」を併記)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="280" width="240" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_arrow_check" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#43A047;strokeWidth=2;endFill=1" parent="1" source="p2_anno_check" target="p2_item_check" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_arrow_q" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#0288D1;strokeWidth=2;endFill=1" parent="1" source="p2_anno_q" target="p2_item_q" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_arrow_p" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FB8C00;strokeWidth=2;endFill=1" parent="1" source="p2_anno_p" target="p2_item_p" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_arrow_t" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#C2185B;strokeWidth=2;endFill=1" parent="1" source="p2_anno_t" target="p2_item_t" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_trunc_label" value="長文 truncate 例 (60 chars 超)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="120" y="440" width="400" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_trunc_before_label" value="Before (元データ)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#9E9E9E;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="120" y="468" width="400" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_trunc_before" value="user_input = 「来週末の友達の結婚式の二次会で着る服が決まらないんですけど、ジャケットスタイルとカジュアルどっちが…」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#E0E0E0;strokeWidth=1;arcSize=4;fontSize=10;fontColor=#525252;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8" parent="1" vertex="1">
+                    <mxGeometry x="120" y="486" width="760" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_trunc_after_label" value="After (表示)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#9E9E9E;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="120" y="540" width="400" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_trunc_after" value="「来週末の友達の結婚式の二次会で着る服が決まらないんですけど、ジャケットスタイル…」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=2;arcSize=4;fontSize=11;fontStyle=2;fontColor=#262626;fontFamily=serif;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8" parent="1" vertex="1">
+                    <mxGeometry x="120" y="558" width="760" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_trunc_anno" value="JS 側で truncate&#xa;function truncate(s, n=60) =&#xa;  [...s].length &gt; n ? [...s].slice(0, n).join(&apos;&apos;) + &apos;…&apos; : s&#xa;絵文字 surrogate pair 対応のため [...s] で count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="120" y="610" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_empty_label" value="空状態 (Yes 採択 0 件)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#262626;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="540" y="610" width="240" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_empty_bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0D5BC;strokeWidth=2;dashed=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="540" y="638" width="340" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_empty_emoji" value="📭" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24" parent="1" vertex="1">
+                    <mxGeometry x="540" y="648" width="340" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_empty_text" value="まだ Yes 採択の履歴がありません" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="540" y="682" width="340" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_summary" value="🧩 サマリー: Yes 採択のみ表示 (No は履歴に残さない、Score 計算には引き続き利用)。1 行 = ✓ + 質問 + 提案 + 時刻 + 採用回数 (attempt_count: 同一 user_input_hash 内での試行順)。バッジなし、タイトル「📜 最近の Yes 採択」で示す。一発採用は 🌟 / 複数回後の採用は 🔄 で差別化。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=11;align=left;verticalAlign=middle;arcSize=8;spacingLeft=12;spacingRight=12;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="740" width="920" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
