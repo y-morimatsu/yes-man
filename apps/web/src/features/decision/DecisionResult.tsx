@@ -61,6 +61,10 @@ export function DecisionResult({
       ticks: 150,
       scalar: 1.1,
     });
+    // Mobile App Polish §9: Haptic feedback (Android 動作、iOS no-op)
+    if ("vibrate" in navigator) {
+      navigator.vibrate(50);
+    }
   };
 
   const handleChoose = async (choice: "yes" | "no") => {
