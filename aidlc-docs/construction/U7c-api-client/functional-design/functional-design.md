@@ -509,3 +509,46 @@ const server = setupServer(
 - msw v2 setupFiles + 8 test ファイルの構成も不変
 
 → U7c / api-client は module 構成を維持したまま、schema 自動再生成と STT 422 fix の 2 点を反映。
+
+---
+
+## Post-CONSTRUCTION 改修注記 v2 (2026-05-22) — Decision History
+
+本ドキュメント本体および v1 改修注記は変更なし。以下の改修が 2026-05-22 に本 unit のスコープに加わった:
+
+### 1. DecisionsModule.history() (`404c90e`、2026-05-22)
+
+**変更ファイル**: `packages/api-client/src/modules/decisions.ts`
+
+- `DecisionsModule` クラスに `history({ limit?, choice? }): Promise<DecisionHistoryResponse>` メソッドを追加
+- 型定義を手動で追加 (openapi-gen 自動化は別 issue 扱い):
+  ```typescript
+  export interface DecisionHistoryItem {
+    decision_id: string;
+    user_input: string;
+    proposal_text: string;
+    choice: "yes" | "no";
+    created_at: string;   // ISO 8601
+    attempt_count: number; // 1-indexed
+  }
+
+  export interface DecisionHistoryResponse {
+    items: DecisionHistoryItem[];
+    total: number;
+  }
+  ```
+- query string は `URLSearchParams` で構築 (`limit` / `choice` を条件付きで append):
+  ```typescript
+  async history({ limit = 20, choice }: { limit?: number; choice?: "yes" | "no" | "all" } = {})
+      : Promise<DecisionHistoryResponse> {
+    const params = new URLSearchParams();
+    params.set("limit", String(limit));
+    if (choice) params.set("choice", choice);
+    return request(this.client, `/v1/decisions?${params.toString()}`);
+  }
+  ```
+
+**影響範囲**:
+- `DecisionsModule` の public interface 追加のみ (既存メソッドは不変)
+- `tests/modules/decisions.test.ts` に `history()` の path / query param 整合テストを追加
+- `openapi.json` + `src/generated/schema.ts` は `GET /v1/decisions` endpoint 追加に伴い再生成 (CI drift 検知が通ることを確認)
