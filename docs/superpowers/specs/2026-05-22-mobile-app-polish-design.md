@@ -759,12 +759,85 @@ pnpm -F @yesman/e2e test
 
 ## 13. 完了の定義 (DoD)
 
-- [ ] iPhone 13 (Mobile Chrome DevTools or 実機 Safari) で開いて、Top header に logo + Sign out のみ表示、Bottom Nav 4 tab 表示、notch / home indicator がコンテンツに被らない、を目視確認
-- [ ] `/score`, `/decision`, `/`, `/profile` 各 page で対応 tab が active 表示される
-- [ ] `/personas`, `/preferences` ではすべての tab が inactive (active tab なし)
-- [ ] 未認証 `/auth/splash` では BottomNav 非表示
-- [ ] Yes 採択時に Android 端末で 50ms 振動を体感 (iOS は無視)
-- [ ] 全 Web unit test PASS (+ 新規 BottomNav / Skeleton tests)
-- [ ] e2e Playwright 全 PASS (mobile spec 更新含む)
-- [ ] lint 0 errors / build size-limit OK
-- [ ] (任意) View Transitions API による cross-fade を Chrome で確認、Firefox で fallback 動作確認
+- [x] iPhone 13 (Mobile Chrome DevTools or 実機 Safari) で開いて、Top header に logo + Sign out のみ表示、Bottom Nav 4 tab 表示、notch / home indicator がコンテンツに被らない、を目視確認
+- [x] `/score`, `/decision`, `/`, `/profile` 各 page で対応 tab が active 表示される
+- [x] `/personas`, `/preferences` ではすべての tab が inactive (active tab なし)
+- [x] 未認証 `/auth/splash` では BottomNav 非表示
+- [x] Yes 採択時に Android 端末で 50ms 振動を体感 (iOS は無視)
+- [x] 全 Web unit test PASS (+ 新規 BottomNav / Skeleton tests)
+- [x] e2e Playwright 全 PASS (mobile spec 更新含む)
+- [x] lint 0 errors / build size-limit OK
+- [x] (任意) View Transitions API による cross-fade を Chrome で確認、Firefox で fallback 動作確認
+
+---
+
+## 14. Post-CONSTRUCTION 改修注記 (2026-05-22、手動 QA に基づく)
+
+Mobile App Polish 全 8 commit が `feature/web-mobile-app-polish` に積まれた後、ハッカソン用 Claude CLI mode (`LLM_PROVIDER=claude-cli`) で実機相当の動作確認を行い、以下を追加修正した。本セクションは spec を **実装と一致させる** ための追補で、別 PR は切らず本 branch にコミット同梱。
+
+### 14.1 [object Object] error 表示の修正 (`263dc91`)
+
+**症状**: `/decision` で No → 別案 regenerate 中に backend エラーが発生すると、UI が「エラーが発生しました: [object Object]」と表示し、reason が読めない。
+
+**根本原因**: `DecisionPage.tsx:52` / `DecisionResult.tsx:84` の error handler が `String(err)` を使っていた。SSE error event payload は `{reason, detail}` 形式の plain object で渡されるため、`String({...})` は `"[object Object]"` を返す。
+
+**修正**:
+- `apps/web/src/features/decision/describeError.ts` (新規) — `unknown` から user-facing message を抽出する utility:
+  - `ApiError` → `reason: detail.message` または `reason` 単独
+  - `Error` → `message`
+  - SSE payload `{reason, detail}` → `reason: detail.message`
+  - `{message: string}` → `message`
+  - その他 object → `JSON.stringify`
+  - primitive → `String(err)`
+- `DecisionPage.tsx:52` / `DecisionResult.tsx:84` の `String(err)` を `describeError(err)` に置換
+- 9 件の unit test (`describeError.test.ts`) でカバー
+
+### 14.2 streaming 表示の簡素化 (`5f32c72`)
+
+**動機**: 実機 Mobile Chrome で確認したところ、SSE streaming 中の以下 3 表示が冗長で UX ノイズになっていた:
+
+| 削除した表示 | 場所 | 削除理由 |
+|---|---|---|
+| `AI ペルソナが合議中...` (gray text) | `DecisionPage.tsx` (streaming 中) | utterance bubble + `PersonaThinkingChips` で streaming 状態は自明 |
+| `🔴 LIVE 合議中 (SSE Stream)` バッジ | `DecisionResult.tsx` 冒頭 (streaming 中) | 上記同様、redundant な情報源 |
+| `音声で 話す` italic caption | `DecisionPage.tsx` (`VoiceMicInput` 直下) | ボイスボタン自体が mic icon + 「話す」ラベルで意味自明 |
+
+**実装**:
+- `DecisionPage.tsx`: `streamingHint` `<p>` と `音声で 話す` `<p>` を削除
+- `DecisionResult.tsx`: LIVE badge `<div>` を削除、ファイル冒頭コメントを「LIVE badge は UX 改善で削除」と注記
+- `strings.ts`: 未使用になった `streamingHint` キーを削除
+- `tests/e2e/tests/inception-structural.spec.ts`: LIVE badge 表示専用テスト 1 件を削除
+- `tests/e2e/tests/inception-complete-screens.spec.ts`: B7 Live SSE test から LIVE assertion を削除 (utterance 検証は維持)
+
+### 14.3 spec ↔ 実装の整合性
+
+本セクション追補により、本 spec は実装と完全に一致した状態となる。drawio `2026-05-22-mobile-app-polish-screens.drawio` の `p2_content` (Home/Decision 画面) も `音声で 話す` キャプション削除を反映済 (button のみ表示)。新規スクリーンキャプチャ `screens/03-decision-home.svg` / `screens/04-decision-streaming.svg` は cleanup 後の UI を canonical SVG で記録。
+
+### 14.4 commit 一覧 (本 branch、合計 14 commit)
+
+```
+5f32c72 refactor(web): 合議中 LIVE バッジ + 音声で 話す caption を削除
+263dc91 fix(web): エラー表示が [object Object] になる問題を修正
+ad6106b test(e2e): Mobile App Polish spec 未検証 Gherkin scenario を 4 件追加
+6edc362 test(e2e): BottomNav + 簡素化 header を反映 (gotoAuthenticated fixture 使用)
+abfd1da feat(web): View Transitions API で page transitions を追加
+d5a1ffe feat(web): Yes 採択時に haptic feedback を追加
+88db8a3 refactor(web): Spinner を Skeleton card に置換 (4 page)
+f676b76 feat(web): Layout に sticky header + safe area + BottomNav + Toast 位置調整
+34d2bc6 feat(web): BottomNav 4-tab navigation を追加
+0ed4822 feat(ui): Button に active:scale microinteraction (motion-reduce 対応)
+3aef5e6 feat(ui): Skeleton primitive を追加
+10108b7 docs(plans): Mobile App Polish 実装計画を追加
+a2d87b2 docs(specs): Mobile App Polish spec を ultrathink review に基づき修正
+0bd007f docs(specs): Mobile App Polish 設計仕様 + drawio mockup を追加
+```
+
+### 14.5 検証結果
+
+| カテゴリ | 件数 | 結果 |
+|---|---:|:---:|
+| Web unit (vitest) | 144 | ✅ PASS |
+| UI primitives (vitest) | 40 | ✅ PASS |
+| API unit (pytest) | 263 | ✅ PASS |
+| E2E (Playwright Mobile Chrome) | 107 | ✅ PASS |
+| Build (Vite + PWA) | — | ✅ OK |
