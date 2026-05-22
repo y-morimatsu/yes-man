@@ -14,7 +14,7 @@ import { truncate } from "./truncate";
 const DEFAULT_LIMIT = 20;
 
 function renderAdoptionCount(attemptCount: number): string {
-  if (attemptCount === 1) return `🌟 1 回目で採用`;
+  if (attemptCount <= 1) return `🌟 1 回目で採用`;
   return `🔄 ${attemptCount} 回目で採用`;
 }
 
@@ -36,7 +36,7 @@ export function DecisionHistoryList(): JSX.Element | null {
           <div
             key={i}
             className="rounded-xl border border-neutral-200 bg-white p-3 mb-2 h-20 animate-pulse motion-reduce:animate-none"
-            aria-hidden
+            aria-hidden="true"
           />
         ))}
       </section>
@@ -57,7 +57,7 @@ export function DecisionHistoryList(): JSX.Element | null {
       </h2>
       {data.items.length === 0 ? (
         <div className="rounded-xl border-2 border-dashed border-neutral-300 p-6 text-center">
-          <div className="text-2xl mb-2" aria-hidden>📭</div>
+          <div className="text-2xl mb-2" aria-hidden="true">📭</div>
           <p className="text-sm italic text-neutral-500">
             まだ Yes 採択の履歴がありません
           </p>
@@ -69,7 +69,7 @@ export function DecisionHistoryList(): JSX.Element | null {
               <article className="rounded-xl border border-neutral-200 bg-white p-3 flex gap-2">
                 <span
                   className="text-success font-bold text-base flex-shrink-0"
-                  aria-hidden
+                  aria-hidden="true"
                 >
                   ✓
                 </span>
