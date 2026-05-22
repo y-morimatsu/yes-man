@@ -22,6 +22,7 @@ import type { Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
 import { PersonaThinkingChips } from "./PersonaThinkingChips";
+import { describeError } from "./describeError";
 import { t } from "./strings";
 import confetti from "canvas-confetti";
 
@@ -81,7 +82,7 @@ export function DecisionResult({
         onNoChosen?.(count);
       }
     } catch (err) {
-      push({ message: `${t("errorDefault")}: ${String(err)}`, variant: "error" });
+      push({ message: `${t("errorDefault")}: ${describeError(err)}`, variant: "error" });
     }
   };
 

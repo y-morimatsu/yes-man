@@ -15,6 +15,7 @@ import { useDecisionStream } from "./useDecisionStream";
 import { usePrefetchedDecisions } from "./usePrefetchedDecisions";
 import { DecisionResult } from "./DecisionResult";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
+import { describeError } from "./describeError";
 import { t } from "./strings";
 
 const PREFETCH_BUFFER_SIZE = 2;
@@ -49,7 +50,7 @@ export default function DecisionPage() {
     },
     onSilence: (message) => dispatch({ type: "onSilence", message }),
     onError: (err) => {
-      dispatch({ type: "onError", error: String(err) });
+      dispatch({ type: "onError", error: describeError(err) });
       setRegenerating(false);
     },
   });
