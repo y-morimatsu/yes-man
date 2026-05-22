@@ -11,3 +11,5 @@ export type { ToastItem, ToastProps, ToastVariant } from "./Toast";
 export { ToastProvider, useToastContext } from "./ToastProvider";
 export { Modal } from "./Modal";
 export type { ModalProps } from "./Modal";
+export { Skeleton } from "./Skeleton";
+export type { SkeletonProps } from "./Skeleton";

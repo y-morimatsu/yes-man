@@ -2,7 +2,7 @@
  * DecisionResult — INCEPTION drawio B4 + B7 + Journey C 完全準拠.
  *
  * 構造:
- * 1. SSE streaming 中: 🔴 LIVE badge + utterance bubbles (議論を見るで toggle)
+ * 1. SSE streaming 中: utterance bubbles (議論を見るで toggle) — LIVE badge は UX 改善で削除
  * 2. proposal 完了: 3-line proposal card + SwipeChoice (swipe / fallback button)
  * 3. Yes 採択: NudgeBanner で ✨🎉✨ celebration (final state)
  * 4. No 採択: onNoChosen callback で親に regenerate を委譲 (drawio Journey C)
@@ -14,6 +14,7 @@
 import { useState } from "react";
 import {
   DecisionUtteranceBubble,
+  Skeleton,
   SwipeChoice,
   useToast,
 } from "@yesman/ui";
@@ -21,6 +22,7 @@ import type { Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
 import { PersonaThinkingChips } from "./PersonaThinkingChips";
+import { describeError } from "./describeError";
 import { t } from "./strings";
 import confetti from "canvas-confetti";
 
@@ -60,6 +62,10 @@ export function DecisionResult({
       ticks: 150,
       scalar: 1.1,
     });
+    // Mobile App Polish §9: Haptic feedback (Android 動作、iOS no-op)
+    if ("vibrate" in navigator) {
+      navigator.vibrate(50);
+    }
   };
 
   const handleChoose = async (choice: "yes" | "no") => {
@@ -76,7 +82,7 @@ export function DecisionResult({
         onNoChosen?.(count);
       }
     } catch (err) {
-      push({ message: `${t("errorDefault")}: ${String(err)}`, variant: "error" });
+      push({ message: `${t("errorDefault")}: ${describeError(err)}`, variant: "error" });
     }
   };
 
@@ -86,24 +92,17 @@ export function DecisionResult({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* INCEPTION B7: 🔴 LIVE badge during SSE streaming */}
-      {isStreaming && (
-        <div className="flex items-center gap-2">
-          <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger text-neutral-0 text-xs font-bold"
-            role="status"
-            aria-live="polite"
-          >
-            🔴 LIVE
-          </span>
-          <span className="text-xs text-neutral-400 italic">
-            合議中 (SSE Stream)
-          </span>
-        </div>
-      )}
-
       {/* Pack A #3: 3 人格 thinking chips (streaming 中のみ表示) */}
       {isStreaming && <PersonaThinkingChips utterances={utterances} />}
+
+      {/* Skeleton bubbles for unreceived utterances during streaming */}
+      {isStreaming && utterances.length < 3 && (
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 3 - utterances.length }).map((_, i) => (
+            <Skeleton key={`utterance-skel-${i}`} className="h-16 w-full" />
+          ))}
+        </div>
+      )}
 
       {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵) */}
       {showUtterances && (

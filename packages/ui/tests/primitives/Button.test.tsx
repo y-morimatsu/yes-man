@@ -46,4 +46,23 @@ describe("Button", () => {
     fireEvent.click(screen.getByRole("button"));
     expect(onClick).not.toHaveBeenCalled();
   });
+
+  it("has active:scale-[0.98] for tap feedback", () => {
+    render(<Button>Tap</Button>);
+    const btn = screen.getByRole("button", { name: "Tap" });
+    expect(btn.className).toContain("active:scale-[0.98]");
+  });
+
+  it("has motion-reduce:active:scale-100 for a11y", () => {
+    render(<Button>Reduced</Button>);
+    const btn = screen.getByRole("button", { name: "Reduced" });
+    expect(btn.className).toContain("motion-reduce:active:scale-100");
+  });
+
+  it("preserves existing font-medium and transition-colors", () => {
+    render(<Button>Existing</Button>);
+    const btn = screen.getByRole("button", { name: "Existing" });
+    expect(btn.className).toContain("font-medium");
+    expect(btn.className).toContain("transition-colors");
+  });
 });

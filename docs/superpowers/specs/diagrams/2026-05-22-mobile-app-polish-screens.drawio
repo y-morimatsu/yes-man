@@ -1,0 +1,490 @@
+<mxfile host="65bd71144e">
+    <diagram name="01_Layout_Before_After" id="page1">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Layout 全体構造 — Before / After 比較" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sub" value="Top nav icons (⚙️📊👤) を削除し、Bottom Nav に 4 tab を全集約。Top は logo + Sign out のみに簡素化。Sticky header + Safe Area Insets 対応で「アプリ感」を獲得。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="before_label" value="Before (現状)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#C62828" parent="1" vertex="1">
+                    <mxGeometry x="80" y="100" width="360" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="after_label" value="After (Mobile App Polish)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#1B5E20" parent="1" vertex="1">
+                    <mxGeometry x="560" y="100" width="360" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=4;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="120" y="140" width="280" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="130" y="150" width="260" height="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_notch" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="210" y="150" width="100" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_header" value="🪞 YesMan          ⚙️ 📊 👤   Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=#E0D5BC;strokeWidth=1;fontColor=#4A3D45;fontSize=10;fontStyle=1;align=left;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="130" y="180" width="260" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_header_problem" value="❌ icons 4 種 + Sign out で混雑、Sign out が押しにくい、icons の意味不明瞭" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#C62828;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="130" y="226" width="260" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_content" value="( main content )&#xa;Score / Decision / Home..." style="text;html=1;strokeColor=#9E9E9E;fillColor=#FAFAFA;dashed=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="130" y="244" width="260" height="450" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_bottom_indicator" value="(no bottom nav)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#9E9E9E;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="130" y="700" width="260" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_homeind" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40;opacity=30" parent="1" vertex="1">
+                    <mxGeometry x="200" y="720" width="120" height="4" as="geometry"/>
+                </mxCell>
+                <mxCell id="b_notch_warn" value="❌ home indicator にコンテンツ被る可能性" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#C62828;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="130" y="725" width="260" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=4;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="600" y="140" width="280" height="600" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="610" y="150" width="260" height="580" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_notch" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="690" y="150" width="100" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_safe_top" value="env(safe-area-inset-top) ↕" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#0288D1;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="610" y="170" width="260" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_header" value="🪞 YesMan                          Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=#E0D5BC;strokeWidth=1;fontColor=#4A3D45;fontSize=11;fontStyle=1;align=left;spacingLeft=10" parent="1" vertex="1">
+                    <mxGeometry x="610" y="186" width="260" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_header_label" value="🔒 sticky top:0 / nav 役を bottom に委譲" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#1B5E20;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="610" y="228" width="260" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_content" value="( main content )&#xa;Score / Decision / Home...&#xa;&#xa;pb-[calc(56px+env(safe-area-inset-bottom)+1rem)]&#xa;で bottom nav に被らない" style="text;html=1;strokeColor=#43A047;fillColor=#FAFAFA;dashed=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#1B5E20;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="610" y="244" width="260" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_bottomnav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
+                    <mxGeometry x="610" y="630" width="260" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_tab1" value="🏠&#10;Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="610" y="634" width="65" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_tab2_active_bar" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="688" y="632" width="40" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_tab2" value="💭&#10;決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#c2410c;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="675" y="634" width="65" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_tab3" value="📊&#10;スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="740" y="634" width="65" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_tab4" value="👤&#10;プロフィール" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="805" y="634" width="65" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_safe_bottom" value="env(safe-area-inset-bottom) ↕" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#0288D1;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="610" y="700" width="260" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_homeind" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40;opacity=30" parent="1" vertex="1">
+                    <mxGeometry x="680" y="720" width="120" height="4" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_top" value="✓ Top header 簡素化&#xa;🪞 YesMan logo + Sign out のみ&#xa;sticky top:0、z-40&#xa;safe-area-inset-top で notch 配慮" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="40" y="780" width="280" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_bottom" value="✓ Bottom Navigation Bar&#xa;4 tab: 🏠 / 💭 / 📊 / 👤&#xa;Active = brand-700 + 2px underline&#xa;Inactive = neutral-500&#xa;tap target ≥ 44×44px (height 56px)&#xa;safe-area-inset-bottom で home indicator 回避" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="350" y="780" width="320" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_persona_pref" value="🟡 Persona / Preferences は Home Hub の nav card 経由でアクセス&#xa;(bottom nav 4 tab に絞り「親指リーチ + 学習容易性」を優先)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontColor=#F57F17;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="690" y="780" width="270" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_arrow_header" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#0288D1;strokeWidth=2;endFill=1" parent="1" source="anno_top" target="a_header" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_arrow_bottom" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#43A047;strokeWidth=2;endFill=1" parent="1" source="anno_bottom" target="a_bottomnav_bg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="02_BottomNav_Detail" id="page2">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Bottom Navigation Bar — 詳細仕様 (active / inactive 状態 + safe-area + tap target)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sub" value="4 tabs を横に等分配。active tab は brand-700 太字 + 上 2px underline、inactive は neutral-500。tap area 全体 56px height で 44px+ 確保。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="zoom_label" value="拡大表示 (実寸 2x)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="200" y="110" width="600" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_outer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=3;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="200" y="150" width="600" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=2" parent="1" vertex="1">
+                    <mxGeometry x="206" y="156" width="588" height="168" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_top_border" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0E0E0;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="206" y="156" width="588" height="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab1_area" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E1F5FE;strokeWidth=1;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="206" y="156" width="147" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab1_icon" value="🏠" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28" parent="1" vertex="1">
+                    <mxGeometry x="206" y="170" width="147" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab1_label" value="Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="206" y="226" width="147" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab2_active_underline" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="375" y="156" width="110" height="4" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab2_icon" value="💭" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=30" parent="1" vertex="1">
+                    <mxGeometry x="353" y="172" width="147" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab2_label" value="決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="353" y="226" width="147" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab3_icon" value="📊" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28" parent="1" vertex="1">
+                    <mxGeometry x="500" y="170" width="147" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab3_label" value="スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="500" y="226" width="147" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab4_icon" value="👤" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28" parent="1" vertex="1">
+                    <mxGeometry x="647" y="170" width="147" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_tab4_label" value="プロフィール" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="647" y="226" width="147" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_safe_area_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;strokeWidth=1;dashed=1;opacity=30" parent="1" vertex="1">
+                    <mxGeometry x="206" y="276" width="588" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_safe_label" value="↕ env(safe-area-inset-bottom) → iPhone home indicator 領域" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#01579B;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="206" y="284" width="588" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="z_homeind" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40;opacity=40" parent="1" vertex="1">
+                    <mxGeometry x="430" y="306" width="140" height="6" as="geometry"/>
+                </mxCell>
+                <mxCell id="dim_h" value="↕ 56px (tap target 44px+ 確保)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=11;fontColor=#0288D1;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="810" y="180" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="dim_h_arrow1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#0288D1;strokeWidth=2;endFill=1;startArrow=classic;startFill=1" parent="1" source="z_safe_label" target="dim_h" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="states_label" value="状態定義" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#262626;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="40" y="370" width="200" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_active_label" value="Active tab (現在のページ)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#c2410c;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="60" y="404" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_active_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="428" width="180" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_active_underline" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="92" y="432" width="116" height="3" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_active_icon" value="💭" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28" parent="1" vertex="1">
+                    <mxGeometry x="60" y="450" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_active_text" value="決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="60" y="498" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_active_props" value="• text-brand-700 (#c2410c)&#xa;• font-bold&#xa;• 上 2px underline (brand-700)&#xa;• 背景は不変 (text/border 強調のみ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="260" y="428" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_inactive_label" value="Inactive tab (他のページ)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#737373;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="60" y="560" width="280" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_inactive_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="584" width="180" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_inactive_icon" value="📊" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=28" parent="1" vertex="1">
+                    <mxGeometry x="60" y="604" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_inactive_text" value="スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="60" y="654" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="state_inactive_props" value="• text-neutral-500 (#737373)&#xa;• font-normal&#xa;• underline なし&#xa;• tap で navigate + active 状態に切替&#xa;• active:opacity-70 で tap feedback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;fontColor=#525252;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="260" y="584" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="impl_label" value="実装方針" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="540" y="370" width="200" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="impl_box" value="• 新規 component: apps/web/src/shell/BottomNav.tsx&#xa;• Active 判定: useLocation() + pathname.startsWith(tab.to)&#xa;• 認証時のみ表示 (status === &quot;authenticated&quot;)&#xa;• auth/* route では非表示&#xa;• z-40 (Modal は z-50)&#xa;• fixed bottom-0 inset-x-0&#xa;• bg-white + border-t border-neutral-200&#xa;• 4 tab を flex-1 で等分配" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="540" y="400" width="420" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="tabs_def_label" value="Tab 定義 (順序固定)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="540" y="595" width="280" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="tabs_def_box" value="1. 🏠 Home    → / (Hub Dashboard)&#xa;2. 💭 決定    → /decision (合議で決定)&#xa;3. 📊 スコア → /score (委任度スコア + 履歴)&#xa;4. 👤 プロフィール → /profile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6;fontFamily=monospace" parent="1" vertex="1">
+                    <mxGeometry x="540" y="625" width="420" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="not_in_nav" value="🟡 Persona (/personas) / Preferences (/preferences) は bottom nav に含まない&#xa;→ Home Hub の nav card からアクセス。「主要 4 動線」に絞り親指リーチ最適化と学習負荷低減を両立。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontColor=#F57F17;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="540" y="725" width="420" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="03_Screens_With_Nav" id="page3">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="各画面 — Bottom Nav の active tab 切替" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sub" value="4 画面の例示 — それぞれ対応する bottom tab が active 状態 (brand-700 太字 + underline) で表示される。" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_label" value="🏠 Home (/)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="40" y="100" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=3;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="124" width="180" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="66" y="130" width="168" height="368" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_header" value="🪞 YesMan        Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=none;fontColor=#4A3D45;fontSize=8;fontStyle=1;align=left;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="66" y="138" width="168" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_content" value="📊 最近の YesMan&#xa;( Summary card )&#xa;&#xa;[💭 合議で決定]&#xa;[🎭 Persona 管理]&#xa;[📊 委任度 スコア]&#xa;[🧠 嗜好プロファイル]&#xa;[👤 プロフィール]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#4A3D45" parent="1" vertex="1">
+                    <mxGeometry x="66" y="170" width="168" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_nav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
+                    <mxGeometry x="66" y="458" width="168" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_t1_under" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="74" y="458" width="26" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_t1" value="🏠&#xa;Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#c2410c;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="66" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_t2" value="💭&#xa;決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="108" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_t3" value="📊&#xa;スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="150" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1_t4" value="👤&#xa;プロフ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="192" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_label" value="💭 Decision (/decision)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="290" y="100" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=3;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="310" y="124" width="180" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="316" y="130" width="168" height="368" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_header" value="🪞 YesMan        Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=none;fontColor=#4A3D45;fontSize=8;fontStyle=1;align=left;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="316" y="138" width="168" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_content" value="何を きめますか？&#xa;&#xa;[ 入力 ]    [送信]&#xa;&#xa;[ 🎙 話す ]&#xa;-------- ペルソナ --------&#xa;🛡️ 慎重派 ・ ☀️ ・ ⚡&#xa;&#xa;「決められない」を 委ねよう" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#4A3D45" parent="1" vertex="1">
+                    <mxGeometry x="316" y="170" width="168" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_nav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
+                    <mxGeometry x="316" y="458" width="168" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_t1" value="🏠&#xa;Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="316" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_t2_under" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="366" y="458" width="26" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_t2" value="💭&#xa;決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#c2410c;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="358" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_t3" value="📊&#xa;スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="400" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2_t4" value="👤&#xa;プロフ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="442" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_label" value="📊 Score (/score)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="540" y="100" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=3;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="560" y="124" width="180" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="566" y="130" width="168" height="368" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_header" value="🪞 YesMan        Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=none;fontColor=#4A3D45;fontSize=8;fontStyle=1;align=left;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="566" y="138" width="168" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_content" value="委任度 スコア&#xa;&#xa;     ◯ 92%&#xa;  ( radial )&#xa;&#xa;「過去 30 日…」&#xa;📈 (line chart)&#xa;&#xa;📜 最近の Yes 採択&#xa;✓ ランチ - 5 分前&#xa;✓ 映画 - 昨日 (🔄3)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=6.5;fontColor=#4A3D45" parent="1" vertex="1">
+                    <mxGeometry x="566" y="170" width="168" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_nav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
+                    <mxGeometry x="566" y="458" width="168" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t1" value="🏠&#xa;Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="566" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t2" value="💭&#xa;決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="608" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t3_under" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="658" y="458" width="26" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t3" value="📊&#xa;スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#c2410c;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="650" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p3_t4" value="👤&#xa;プロフ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="692" y="462" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_label" value="👤 Profile (/profile)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=1;fontColor=#c2410c" parent="1" vertex="1">
+                    <mxGeometry x="40" y="540" width="220" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#4A3D45;strokeWidth=3;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="60" y="564" width="180" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_inner" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=6" parent="1" vertex="1">
+                    <mxGeometry x="66" y="570" width="168" height="308" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_header" value="🪞 YesMan        Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=none;fontColor=#4A3D45;fontSize=8;fontStyle=1;align=left;spacingLeft=6" parent="1" vertex="1">
+                    <mxGeometry x="66" y="578" width="168" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_content" value="プロフィール&#xa;&#xa;email: test@…&#xa;👤 基本属性&#xa;🎤 音声 backend&#xa;&#xa;[ 削除 (二段階) ]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#4A3D45" parent="1" vertex="1">
+                    <mxGeometry x="66" y="610" width="168" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_nav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
+                    <mxGeometry x="66" y="838" width="168" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_t1" value="🏠&#xa;Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="66" y="842" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_t2" value="💭&#xa;決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="108" y="842" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_t3" value="📊&#xa;スコア" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="150" y="842" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_t4_under" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                    <mxGeometry x="200" y="838" width="26" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="p4_t4" value="👤&#xa;プロフ" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#c2410c;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="192" y="842" width="42" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="excluded_label" value="🟡 Bottom Nav に含まない (Home Hub の nav card 経由)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#F57F17;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="290" y="540" width="700" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="excluded_box" value="🎭 Persona (/personas) — Home Hub の「🎭 Persona 管理」card からアクセス&#xa;🧠 Preference (/preferences) — Home Hub の「🧠 嗜好プロファイル」card からアクセス&#xa;&#xa;[判断根拠]&#xa;・「親指で届く 4 動線」が UX 業界標準 (5 tab は親指リーチ悪化)&#xa;・Persona/Preference は使用頻度が低めの「設定的」機能&#xa;・必要時に Home Hub 経由でアクセス可能 (動線は途切れない)&#xa;&#xa;[将来拡張]&#xa;ユーザーフィードバックで頻度高ければ Tab 5 化 or FAB 化を検討 (決勝以降)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontColor=#F57F17;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="290" y="570" width="680" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="footnote" value="🔍 全画面共通: Sticky header (Top brand) + Bottom Nav (主動線 4 つ) で、main content が縦スクロールでも brand 識別 + nav 即時アクセスが常時可能" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#525252" parent="1" vertex="1">
+                    <mxGeometry x="40" y="790" width="920" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="04_Safe_Area_iPhone" id="page4">
+        <mxGraphModel dx="529" dy="785" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Safe Area Insets + Sticky Header + Microinteractions" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="920" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sub" value="iPhone notch / home indicator 対応 + scroll 中の Sticky Header 挙動 + Active state + Skeleton + Page transitions + Haptic feedback の Package A+B 全要素" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#616161" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="920" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_label" value="iPhone 実機での見え方" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#262626" parent="1" vertex="1">
+                    <mxGeometry x="40" y="100" width="320" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_outer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=#4A3D45;strokeWidth=4;arcSize=10" parent="1" vertex="1">
+                    <mxGeometry x="100" y="140" width="200" height="540" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_screen" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF7E8;strokeColor=none;arcSize=8" parent="1" vertex="1">
+                    <mxGeometry x="106" y="146" width="188" height="528" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_notch_real" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#000000;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="160" y="146" width="80" height="22" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_safe_top_area" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;strokeWidth=1;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="106" y="146" width="188" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_safe_top_label" value="env(safe-area-inset-top) = ~44px" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#0288D1;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="106" y="170" width="188" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_header" value="🪞 YesMan     Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F5E5C4;strokeColor=#E0D5BC;strokeWidth=1;fontColor=#4A3D45;fontSize=9;fontStyle=1;align=left;spacingLeft=8" parent="1" vertex="1">
+                    <mxGeometry x="106" y="190" width="188" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_header_lock" value="🔒 sticky top:0" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=7;fontColor=#1B5E20;fontStyle=2;spacingRight=4" parent="1" vertex="1">
+                    <mxGeometry x="106" y="228" width="188" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_main" value="( main content )&#xa;&#xa;scroll area&#xa;&#xa;pb-[calc(56px&#xa;+ env(safe-area-inset-bottom)&#xa;+ 1rem)]" style="text;html=1;strokeColor=#43A047;fillColor=#FAFAFA;dashed=1;align=center;verticalAlign=middle;fontSize=8;fontColor=#1B5E20;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="106" y="244" width="188" height="332" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_nav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
+                    <mxGeometry x="106" y="582" width="188" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_nav_label" value="🏠 💭 📊 👤" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;fontColor=#737373" parent="1" vertex="1">
+                    <mxGeometry x="106" y="590" width="188" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_safe_bottom_area" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;strokeWidth=1;dashed=1" parent="1" vertex="1">
+                    <mxGeometry x="106" y="630" width="188" height="44" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_safe_bottom_label" value="env(safe-area-inset-bottom) = ~34px" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=8;fontColor=#0288D1;fontStyle=2" parent="1" vertex="1">
+                    <mxGeometry x="106" y="638" width="188" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="iphone_homeind_real" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4A3D45;strokeColor=none;arcSize=40" parent="1" vertex="1">
+                    <mxGeometry x="155" y="658" width="90" height="5" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_top_arrow" value="↑ Notch 領域&#xa;safe-area-inset-top&#xa;で header padding 確保" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="380" y="146" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_arrow1" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#0288D1;strokeWidth=2;endFill=1" parent="1" source="anno_top_arrow" target="iphone_safe_top_area" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_sticky" value="🔒 Sticky Header (top:0)&#xa;scroll しても brand 常時表示&#xa;z-40 (Modal は z-50 で上書き)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="380" y="220" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_arrow2" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#43A047;strokeWidth=2;endFill=1" parent="1" source="anno_sticky" target="iphone_header" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_main_pad" value="📐 main の pb (padding-bottom)&#xa;= 56px (BottomNav 高さ)&#xa;  + env(safe-area-inset-bottom)&#xa;  + 1rem (余裕)&#xa;で BottomNav に被らない" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="380" y="320" width="240" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_arrow3" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#FB8C00;strokeWidth=2;endFill=1" parent="1" source="anno_main_pad" target="iphone_main" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_bottom_safe" value="↓ Home indicator 領域&#xa;safe-area-inset-bottom&#xa;で BottomNav padding 確保" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="380" y="610" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="anno_arrow4" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;strokeColor=#0288D1;strokeWidth=2;endFill=1" parent="1" source="anno_bottom_safe" target="iphone_safe_bottom_area" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="micro_title" value="Microinteractions (Package B)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#262626;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="640" y="100" width="320" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="b1_box" value="B-1 ✓ Active States 全 button/link&#xa;&#xa;Tap 時に active:scale-[0.98] active:opacity-80&#xa;hover: は維持 (デスクトップ互換)&#xa;@yesman/ui Button + Card primitive で一括適用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#C2185B;fontColor=#880E4F;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="640" y="130" width="320" height="86" as="geometry"/>
+                </mxCell>
+                <mxCell id="b2_box" value="B-2 🦴 Skeleton Loader 統一&#xa;&#xa;Spinner → Skeleton card 置換&#xa;packages/ui/src/primitives/Skeleton.tsx 新規&#xa;ScorePage / DecisionPage streaming / PersonaList / PreferencePage で利用&#xa;animate-pulse + motion-reduce:animate-none" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#FBC02D;fontColor=#F57F17;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="640" y="226" width="320" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="b3_box" value="B-3 ⏩ Page Transitions&#xa;&#xa;View Transitions API (document.startViewTransition)&#xa;Chrome 111+ / Safari TP で動作、Firefox は instant fallback&#xa;依存ゼロ、~0 KB&#xa;route 切替時に自動 cross-fade" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;fontColor=#4A148C;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="640" y="336" width="320" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="b4_box" value="B-4 📳 Haptic Feedback (Yes 採択時)&#xa;&#xa;navigator.vibrate?.(50)  // 50ms 短振動&#xa;Android Chrome: 動作 / iOS Safari: 無視&#xa;DecisionResult.tsx の Yes 採択 path に挿入&#xa;prefers-reduced-motion 尊重 (skip)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;fontColor=#1B5E20;fontSize=10;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="640" y="442" width="320" height="96" as="geometry"/>
+                </mxCell>
+                <mxCell id="risk_title" value="リスク / オープン論点" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#C62828;spacingLeft=12" parent="1" vertex="1">
+                    <mxGeometry x="640" y="555" width="320" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="risk_box" value="O1 View Transitions API は Firefox 未対応 → fallback で即時遷移 (許容)&#xa;O2 iOS Safari の navigator.vibrate 無視 → Android 限定で振動&#xa;O3 sticky header + bottom nav で main 領域が縮む → 実機検証必要&#xa;O4 INCEPTION drawio (top nav icons) からの乖離 → Post-CONSTRUCTION v3 改修注記で明示&#xa;O5 bottom nav から persona/preference にアクセス不可 → Home Hub 経由維持" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;fontColor=#B71C1C;fontSize=9;align=left;verticalAlign=top;arcSize=8;spacingLeft=8;spacingTop=6" parent="1" vertex="1">
+                    <mxGeometry x="640" y="582" width="320" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="summary" value="🧩 サマリ: Sticky Header + Bottom Nav (4 tab) + Safe Area Insets (env(safe-area-inset-*)) でモバイル UX を「Web」→「App」に転換。Microinteractions (active/skeleton/transition/haptic) で触感を強化。新規依存ゼロ (canvas-confetti は Pack A の既存依存)、CSS / 標準 Web API のみで実現。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FB8C00;fontColor=#E65100;fontSize=11;align=left;verticalAlign=middle;arcSize=8;spacingLeft=12;spacingRight=12;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="40" y="730" width="920" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

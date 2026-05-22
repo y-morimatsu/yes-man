@@ -218,6 +218,39 @@ CONSTRUCTION フェーズで実装する主要画面のワイヤーフレーム 
 >
 > 📖 サービスの全体像をストーリー仕立てで体感したい場合は **[コンセプト絵本](https://morimatsutemp.blob.core.windows.net/workshare/concept-storybook.html)** を開いてください
 
+### 📱 実装スクリーン (Post-CONSTRUCTION: Mobile App Polish + UX 改修)
+
+CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → ネイティブアプリ感** へのブラッシュアップを実施 (`feature/web-mobile-app-polish`、14 commit)。Sticky header 簡素化 / Bottom Navigation 4-tab / Safe Area Insets / Skeleton loader / Page transitions / Haptic feedback + 同 branch 内で `[object Object]` エラー表示の修正と冗長表示 (LIVE バッジ / 「AI ペルソナが合議中...」 / 「音声で 話す」キャプション) の削除を実施。
+
+<table>
+<tr>
+<td align="center" width="33%">
+<img src="docs/superpowers/specs/diagrams/screens/01-splash.svg" width="220" alt="Splash"/><br>
+<b>🪞 Splash</b><br>
+<sub>逆説的設計の明示 + CTA + サインインリンク (2026-05-21 リデザイン)</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/superpowers/specs/diagrams/screens/02-signin.svg" width="220" alt="Sign in"/><br>
+<b>🔐 Sign in</b><br>
+<sub>Mock auth (email/password、即時 redirect to Home)</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/superpowers/specs/diagrams/screens/03-decision-home.svg" width="220" alt="Decision Home"/><br>
+<b>💭 Decision Home (cleanup 後)</b><br>
+<sub>簡素化 sticky header + 中央 voice button (caption なし) + persona pill + Bottom Nav 4-tab (決定 active)</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="33%" colspan="3">
+<img src="docs/superpowers/specs/diagrams/screens/04-decision-streaming.svg" width="220" alt="Decision Streaming"/><br>
+<b>📡 Decision Streaming (cleanup 後)</b><br>
+<sub>3 persona thinking chips + utterance bubbles + Skeleton card。<b>🔴 LIVE バッジと「AI ペルソナが合議中...」hint は UX 冗長性を理由に削除</b>（5f32c72)、状態は thinking chips と utterance で十分自明</sub>
+</td>
+</tr>
+</table>
+
+> 💡 Mobile App Polish 全体の設計 (Layout + BottomNav + Safe Area + Skeleton + View Transitions + Haptic) と Post-CONSTRUCTION 改修注記 (LIVE バッジ削除 / describeError fix) は **[2026-05-22-mobile-app-polish-design.md](docs/superpowers/specs/2026-05-22-mobile-app-polish-design.md)** + **[mobile-app-polish-screens.drawio](docs/superpowers/specs/diagrams/2026-05-22-mobile-app-polish-screens.drawio)** (4 ページ) を参照
+
 ---
 
 ## 🚀 主要機能
@@ -235,6 +268,7 @@ CONSTRUCTION フェーズで実装する主要画面のワイヤーフレーム 
 | 🔌 **Backend 切替** | 設定ファイルで Auth / DB / LLM / Voice の本番↔MOCK↔エミュレータを切替（**Strategy + DI**） | FR-AUTH-05〜07, FR-HIST-04〜06, FR-VOICE-01 |
 | 🎙️ **音声入力 backend 切替** | プロフィール画面 (`/profile`) で **Web Speech API** (ブラウザ内蔵、即時、無料) ↔ **Server STT** (AWS Transcribe / Mock) を user 選択、`localStorage` で永続化。Toggle 方式 (クリック開始 / クリック停止) | FR-VOICE-01〜04 |
 | 👆 **スワイプ UI** | 右 = Yes / 左 = No のミニマル UX。INCEPTION canonical (drawio screen-03) と完全整合、buffer swap でも `key={decisionId}` で internal state を強制 reset | FR-UX-02 |
+| 📱 **Mobile App Polish** | Sticky header (logo + Sign out のみに簡素化) + **Bottom Navigation 4-tab** (🏠 Home / 💭 決定 / 📊 スコア / 👤 プロフィール) + **Safe Area Insets** (iPhone notch / home indicator 対応) + **Skeleton loader** (4 page で Spinner 置換) + **View Transitions API** (Chrome 111+/Safari TP で cross-fade) + **Haptic feedback** (Yes 採択時 50ms 振動、Android 限定) + Button `active:scale-[0.98]` microinteraction (`motion-reduce` 対応) | — (Post-CONSTRUCTION UX 改修) |
 
 ---
 
@@ -778,64 +812,89 @@ sequenceDiagram
 
 ## 📂 リポジトリ構成
 
+CONSTRUCTION フェーズ完了後の実構成 (2026-05-22 時点):
+
 ```
 yesman/
 ├── 📄 README.md                      # 本ファイル
-├── 📄 CLAUDE.md                      # AI-DLC ワークフロー指示
+├── 📄 CLAUDE.md                      # AI-DLC ワークフロー指示 + Git-Flow 規約
+├── 📄 package.json                   # pnpm workspace root
+├── 📄 pnpm-workspace.yaml            # apps/* + packages/* + tests/* マッピング
 ├── 📖 concept-storybook.html         # コンセプト絵本 (12 場面の童謡風紙芝居)
 │
-├── 📂 aidlc-docs/                    # AI-DLC で生成された設計成果物
+├── 📂 apps/                          # 🏗️ 実装コード
+│   ├── 📂 web/                       # React 18 + Vite + Tailwind v4 + PWA
+│   │   └── src/
+│   │       ├── shell/                # Layout / BottomNav / AuthProvider / usePageTransition
+│   │       ├── features/
+│   │       │   ├── decision/         # DecisionPage / DecisionResult / describeError
+│   │       │   ├── score/            # ScorePage + decision history (Yes 採択 max 20件)
+│   │       │   ├── persona/          # PersonaListPage + PersonaSelectionPage
+│   │       │   ├── preference/       # PreferencePage
+│   │       │   ├── profile/          # ProfilePage (音声 backend 切替)
+│   │       │   ├── voice/            # VoiceMicInput (Web Speech / Server STT)
+│   │       │   └── auth/             # Splash / SignIn / SignUp (Mock auth)
+│   │       └── ...
+│   └── 📂 api/                       # FastAPI + Python 3.12 (uv) + SQLModel + Pydantic v2
+│       └── src/yesman_api/
+│           ├── routers/              # /v1/decisions/* /v1/scores/* /v1/personas/* /v1/preferences/* /v1/voice/*
+│           ├── services/             # DecisionEngine / SilenceGuard / LearningService / ScoreCalculator
+│           ├── adapters/llm/         # LiteLLM / Claude CLI / Mock (Strategy + DI)
+│           ├── adapters/auth/        # Cognito / Mock
+│           ├── adapters/storage/     # SQLModel / Mock (in-memory)
+│           └── adapters/voice/       # AWS Transcribe / Mock
+│
+├── 📂 packages/                      # 🧱 共有パッケージ
+│   ├── ui/                           # primitives (Button / Skeleton / Input / Toast) + composites (SwipeChoice / DecisionUtteranceBubble / PersonaCard etc.)
+│   └── api-client/                   # OpenAPI 自動生成 TypeScript クライアント + ApiError
+│
+├── 📂 tests/                         # 🧪 テストハーネス
+│   ├── e2e/                          # Playwright Mobile Chrome (Pixel 5) — 107 tests
+│   ├── integration/                  # API integration (storage 切替時に DB 必要)
+│   ├── smoke/                        # 起動時 smoke checks
+│   ├── load/                         # 負荷試験 placeholder
+│   └── fixtures/                     # 共通 fixture
+│
+├── 📂 infra/                         # 🏗️ AWS CDK (TypeScript) placeholder (ハッカソンは Local 起動が中心)
+│
+├── 📂 docs/                          # 📐 Post-INCEPTION ドキュメント (feature 単位)
+│   └── superpowers/
+│       ├── plans/                    # 実装計画書 (TDD step-by-step)
+│       │   ├── 2026-05-20-mock-auth.md
+│       │   ├── 2026-05-20-profile-edit.md
+│       │   ├── 2026-05-21-parallel-persona-consensus.md
+│       │   ├── 2026-05-21-splash-signin.md
+│       │   ├── 2026-05-22-demo-ux-polish-pack-a.md
+│       │   ├── 2026-05-22-score-decision-history.md
+│       │   └── 2026-05-22-mobile-app-polish.md
+│       ├── specs/                    # 設計仕様 (brainstorming 確定版 + Post-CONSTRUCTION 改修注記)
+│       │   ├── 2026-05-20-mock-auth-design.md
+│       │   ├── 2026-05-20-profile-edit-design.md
+│       │   ├── 2026-05-21-parallel-persona-consensus.md
+│       │   ├── 2026-05-21-splash-signin-design.md
+│       │   ├── 2026-05-22-demo-ux-polish-pack-a-design.md
+│       │   ├── 2026-05-22-mobile-app-polish-design.md  # §14 Post-CONSTRUCTION 改修注記
+│       │   ├── 2026-05-22-score-decision-history-design.md
+│       │   └── diagrams/
+│       │       ├── *.drawio          # 各 feature の画面 mockup
+│       │       └── screens/          # ハンドドロー SVG (実装スクリーン)
+│       │           ├── 01-splash.svg
+│       │           ├── 02-signin.svg
+│       │           ├── 03-decision-home.svg       # Mobile App Polish 後の Decision Home
+│       │           └── 04-decision-streaming.svg  # Streaming 状態 (LIVE バッジ削除版)
+│       └── research/                 # 競合分析 etc.
+│           └── 2026-05-22-hackathon-competitive-analysis.md
+│
+├── 📂 aidlc-docs/                    # 🤖 AI-DLC で生成された設計成果物 (INCEPTION canonical)
 │   ├── 📄 audit.md                   # 全ユーザー入力・AI応答の監査ログ
 │   ├── 📄 aidlc-state.md             # ワークフロー状態トラッキング
-│   └── 📂 inception/                 # INCEPTION フェーズ
-│       ├── 📂 requirements/          # ✅ 要件定義
-│       │   └── requirements.md
-│       ├── 📂 user-stories/          # ✅ ユーザーストーリー (34個 × Gherkin AC)
-│       │   ├── personas.md
-│       │   ├── stories.md
-│       │   └── 📂 diagrams/
-│       │       └── persona-story-map.drawio  # 6 ページ
-│       ├── 📂 application-design/    # ✅ アプリ設計 (5 + 3 + UI = 9 ドキュメント)
-│       │   ├── components.md
-│       │   ├── component-methods.md
-│       │   ├── services.md
-│       │   ├── component-dependency.md
-│       │   ├── application-design.md
-│       │   ├── ui-mockups.md
-│       │   ├── unit-of-work.md
-│       │   ├── unit-of-work-dependency.md
-│       │   ├── unit-of-work-story-map.md
-│       │   └── 📂 diagrams/
-│       │       ├── application-design.drawio  # 11 ページ
-│       │       └── ui-mockups.drawio          # 9 ページ
-│       └── 📂 plans/                 # ✅ 各種計画書 + Q&A
-│           ├── execution-plan.md
-│           ├── application-design-plan.md
-│           ├── unit-of-work-plan.md
-│           ├── ... (各種 clarification-questions.md)
-│           └── 📂 diagrams/
-│               └── plans.drawio       # 6 ページ
+│   ├── 📂 inception/                 # ✅ requirements / user-stories / application-design / plans
+│   └── 📂 construction/              # ✅ functional-design / nfr / infrastructure / code-generation-plan (U1〜U7d + U-Persona + U-Test の 12 ユニット)
 │
 └── 📂 .aidlc-rule-details/           # AI-DLC ルールセット (CLAUDE.md 参照)
 ```
 
-### 📋 今後追加されるディレクトリ (CONSTRUCTION フェーズ)
-
-```
-yesman/
-├── 📂 apps/
-│   ├── web/                          # React + Vite PWA
-│   └── api/                          # FastAPI コンテナ (DDD/Hexagonal)
-├── 📂 packages/
-│   ├── ui/                           # 共有 UI コンポーネント
-│   ├── api-client/                   # OpenAPI 自動生成 TS クライアント
-│   └── shared-types/
-├── 📂 infra/                         # AWS CDK (TypeScript)
-├── 📂 tests/                         # Playwright E2E + Hypothesis PBT
-├── 📄 docker-compose.yml             # ローカル PostgreSQL + cognito-local
-├── 📄 pnpm-workspace.yaml
-└── 📄 turbo.json
-```
+> 💡 **設計書の階層化**: `aidlc-docs/` は INCEPTION〜CONSTRUCTION の AI-DLC canonical (フェーズ承認時点で凍結)、`docs/superpowers/` は feature 単位の brainstorming → spec → plan → 実装の継続ドキュメント。Post-CONSTRUCTION の UX 改修は対応する spec の末尾に「Post-CONSTRUCTION 改修注記」セクションを追記して実装との整合を保つ。
 
 ---
 
@@ -998,8 +1057,35 @@ gantt
 | 📐 [application-design.drawio](aidlc-docs/inception/application-design/diagrams/application-design.drawio) | 11 | ネットワーク / 階層 / シーケンス (B/C/D/G/FR-CV) / ER / Strategy+DI / UoW / CDK |
 | 📐 [ui-mockups.drawio](aidlc-docs/inception/application-design/diagrams/ui-mockups.drawio) | 9 | 画面ツリー / Onboarding / Decision / NoBurst / Silence / Score / Persona / Design System / Discussion View |
 | 📐 [plans.drawio](aidlc-docs/inception/plans/diagrams/plans.drawio) | 6 | 計画書マップ / ワークフロー状況 / Per-Unit ループ / Gantt / 判断ツリー / リスクマトリクス |
+| 📐 [mobile-app-polish-screens.drawio](docs/superpowers/specs/diagrams/2026-05-22-mobile-app-polish-screens.drawio) | 4 | Layout Before/After / BottomNav 詳細 / 3 画面 with Nav / Safe Area iPhone (Post-CONSTRUCTION UX 改修) |
+| 📐 [score-decision-history-screens.drawio](docs/superpowers/specs/diagrams/2026-05-22-score-decision-history-screens.drawio) | — | スコア画面に Yes 採択履歴 (最大 20 件、🌟/🔄 採用回数バッジ) を追加 |
+| 📐 [splash-signin-screens.drawio](docs/superpowers/specs/diagrams/2026-05-21-splash-signin-screens.drawio) | — | Splash + SignIn の逆説的設計版リデザイン |
+| 📐 [mock-auth-screens.drawio](docs/superpowers/specs/diagrams/2026-05-20-mock-auth-screens.drawio) | — | Mock auth (email/password、即時 redirect) |
 
 > 💡 drawio ファイルは **diagrams.net** または VS Code の **Draw.io Integration 拡張**で開けます
+
+### 🖼️ 画面キャプチャ SVG (ハンドドロー、実装相当)
+
+| ファイル | 内容 |
+|---|---|
+| 🖼️ [01-splash.svg](docs/superpowers/specs/diagrams/screens/01-splash.svg) | 🪞 Splash (逆説的設計の明示 + CTA + サインインリンク) |
+| 🖼️ [02-signin.svg](docs/superpowers/specs/diagrams/screens/02-signin.svg) | 🔐 Sign in (Mock auth) |
+| 🖼️ [03-decision-home.svg](docs/superpowers/specs/diagrams/screens/03-decision-home.svg) | 💭 Decision Home (Mobile App Polish 後: sticky header 簡素化 + voice button caption 削除 + Bottom Nav 4-tab) |
+| 🖼️ [04-decision-streaming.svg](docs/superpowers/specs/diagrams/screens/04-decision-streaming.svg) | 📡 Decision Streaming (Mobile App Polish 後: 3 persona thinking chips + utterance bubbles + Skeleton card、**🔴 LIVE バッジ削除版**) |
+
+### 📋 Feature 単位の設計仕様 (docs/superpowers/specs)
+
+| ファイル | 内容 |
+|---|---|
+| 📄 [2026-05-22-mobile-app-polish-design.md](docs/superpowers/specs/2026-05-22-mobile-app-polish-design.md) | Mobile App Polish (BottomNav + Safe Area + Sticky Header + Skeleton + Page Transitions + Haptic) + §14 Post-CONSTRUCTION 改修注記 (`[object Object]` fix + LIVE バッジ / 「音声で 話す」キャプション削除) |
+| 📄 [2026-05-22-score-decision-history-design.md](docs/superpowers/specs/2026-05-22-score-decision-history-design.md) | スコア画面に Yes 採択履歴 (最大 20 件) を追加、`attempt_count` で「何回目の提案で Yes 採択したか」を可視化 |
+| 📄 [2026-05-22-demo-ux-polish-pack-a-design.md](docs/superpowers/specs/2026-05-22-demo-ux-polish-pack-a-design.md) | デモ向け UX 磨き込み Pack A (4 項目): 確定演出強化 / persona thinking chips / Yes 採択煽り文 / NoBurst microcopy 強化 |
+| 📄 [2026-05-21-splash-signin-design.md](docs/superpowers/specs/2026-05-21-splash-signin-design.md) | Splash + SignIn の逆説的設計リデザイン |
+| 📄 [2026-05-21-parallel-persona-consensus.md](docs/superpowers/specs/2026-05-21-parallel-persona-consensus.md) | LLM 問い合わせを persona 単位に並列化 (chat-like real-time streaming) |
+| 📄 [2026-05-20-profile-edit-design.md](docs/superpowers/specs/2026-05-20-profile-edit-design.md) | Profile 基本属性のインライン編集 |
+| 📄 [2026-05-20-mock-auth-design.md](docs/superpowers/specs/2026-05-20-mock-auth-design.md) | Mock auth (login / register / logout、開発機専用) |
+
+> 💡 各 spec の対応実装計画は `docs/superpowers/plans/` の同名 (拡張子 `.md` のみ) ファイル参照。
 
 ### 📖 コンセプト絵本 (HTML)
 

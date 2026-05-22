@@ -6,7 +6,7 @@
  *
  * 仕様参照: aidlc-docs/inception/application-design/diagrams/ui-mockups.drawio
  * - B2 home-input: persona inline selector
- * - B7 discussion-live: 🔴 LIVE badge + 🛡️/☀️/⚡ icons + progress dots
+ * - B7 discussion-live: 🛡️/☀️/⚡ icons + progress dots (LIVE badge は UX 改善で削除)
  * - B4 proposal-card: 3-line (prefix/main/suffix) + 議論を見る + pink nudge
  * - Yes 確定: ✨🎉✨ + 主体性スコア参照
  * - C1-C3+ No 連打: 段階的 microcopy
@@ -17,16 +17,6 @@ import { expect, test } from "@playwright/test";
 import { gotoAuthenticated } from "../fixtures/auth";
 
 test.describe("INCEPTION B7: Discussion Live (drawio: SSE 合議中)", () => {
-  test("合議中に 🔴 LIVE badge 表示 (drawio B7、FR-CV-01〜03)", async ({ page }) => {
-    await gotoAuthenticated(page, "/decision");
-    await page.getByPlaceholder(/今日/).fill("LIVE バッジ検証");
-    await page.getByRole("button", { name: /送信/ }).click();
-    // SSE streaming 中に "LIVE" 文字が表示される
-    await expect(page.getByText(/🔴 LIVE|LIVE/).first()).toBeVisible({
-      timeout: 60_000,
-    });
-  });
-
   test("Utterance bubble に persona icon (🛡️/☀️/⚡) が表示", async ({ page }) => {
     await gotoAuthenticated(page, "/decision");
     await page.getByPlaceholder(/今日/).fill("icon マッピング検証");
