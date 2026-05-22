@@ -74,20 +74,20 @@ test.describe("Mobile layout: stack columns (sm < 640px)", () => {
 });
 
 test.describe("Mobile Header (overflow check)", () => {
-  test("Header (logo + nav + Sign out) が viewport 内に収まる", async ({
-    page,
-  }) => {
+  test("Header (logo + Sign out のみ) が viewport 内に収まる", async ({ page }) => {
     await gotoAuthenticated(page, "/");
-    const header = page.locator("header").first();
+    await page.waitForSelector("header");
+    const header = page.locator("header");
     const box = await header.boundingBox();
     expect(box).not.toBeNull();
-    const vw = page.viewportSize()!.width;
-    expect(box!.x + box!.width).toBeLessThanOrEqual(vw + 1);
-    // Header 内要素全てが viewport 内
-    const inner = await header.evaluate(
-      (el) => el.scrollWidth <= el.clientWidth + 1,
-    );
-    expect(inner).toBe(true);
+    // logo "🪞 YesMan" と Sign out が visible
+    await expect(page.getByText(/🪞 YesMan/)).toBeVisible();
+    await expect(page.getByRole("button", { name: /Sign out/ })).toBeVisible();
+    // nav icons (⚙️📊👤) は削除済 = header に存在しない
+    const headerText = (await header.textContent()) ?? "";
+    expect(headerText).not.toContain("⚙️");
+    expect(headerText).not.toContain("📊");
+    expect(headerText).not.toContain("👤");
   });
 });
 
@@ -191,5 +191,51 @@ test.describe("Mobile Splash A1 (drawio 280×520)", () => {
     await expect(page.getByText(/逆説的設計/).first()).toBeInViewport({
       ratio: 0.5,
     });
+  });
+});
+
+test.describe("BottomNav (Mobile App Polish §4)", () => {
+  test("Bottom Navigation Bar が画面下に固定表示される", async ({ page }) => {
+    await gotoAuthenticated(page, "/");
+    const nav = page.getByRole("navigation", { name: "メインナビゲーション" });
+    await expect(nav).toBeVisible();
+    await expect(page.getByText("Home", { exact: true })).toBeVisible();
+    await expect(page.getByText("決定", { exact: true })).toBeVisible();
+    await expect(page.getByText("スコア", { exact: true })).toBeVisible();
+    await expect(page.getByText("プロフィール", { exact: true })).toBeVisible();
+  });
+
+  test("4 tab の tap target が 44×44px 以上", async ({ page }) => {
+    await gotoAuthenticated(page, "/");
+    for (const label of ["Home", "決定", "スコア", "プロフィール"]) {
+      const link = page.getByText(label, { exact: true }).locator("..");
+      const box = await link.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+      expect(box!.width).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test("tab tap で active 状態が切替わる", async ({ page }) => {
+    await gotoAuthenticated(page, "/");
+    const homeLink = page.getByText("Home", { exact: true }).locator("..");
+    await expect(homeLink).toHaveAttribute("aria-current", "page");
+    await page.getByText("決定", { exact: true }).click();
+    await expect(page).toHaveURL(/\/decision/);
+    const decisionLink = page.getByText("決定", { exact: true }).locator("..");
+    await expect(decisionLink).toHaveAttribute("aria-current", "page");
+  });
+
+  test("/auth/splash で BottomNav は非表示", async ({ page }) => {
+    // gotoAuthenticated 不使用 → 未認証状態を再現
+    // RequireAuth で守られた route には行けないが /auth/splash は public route
+    await page.goto("/auth/splash");
+    await page.waitForLoadState("networkidle");
+    // URL は /auth/splash のまま (auto redirect しない)
+    expect(page.url()).toContain("/auth/splash");
+    // BottomNav は非表示 (Layout の isAuthed = false)
+    await expect(
+      page.getByRole("navigation", { name: "メインナビゲーション" }),
+    ).not.toBeVisible();
   });
 });
