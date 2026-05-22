@@ -4954,3 +4954,11 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 **Context**: Post-CONSTRUCTION - aidlc-docs 全面更新 (~30 ファイル変更)
 
 ---
+
+## DecisionPage YES/NO Quick-Start (post-CONSTRUCTION 改修 v3、新規 spec session 開始)
+**Timestamp**: 2026-05-22T13:30:00Z
+**User Input**: "ai-dlcにて仕様を変更。\"合議で決定\"の画面は議論内容をテキストボックスに入力するものが初期表示になっているが、めんどうくさい人間のために、時間やシチュエーションに応じた質問内容を想定してYES/NOから始めたい。５回ぐらい質問内容が確定できない場合にテキストボックスを表示させる。"
+**AI Response**: AI-DLC workflow を発動 (post-CONSTRUCTION 改修 v3 spec session)。Workspace detection → resume mode (既存 brownfield、aidlc-state.md 既存 → CONSTRUCTION 完了 + 改修フェーズ v2 進行中)。次工程: Requirements Analysis (standard depth) → User Stories → Application Design → Code Generation。Welcome message 表示は post-CONSTRUCTION 改修 pragmatism に従い省略。
+**Context**: INCEPTION - Workspace Detection / 新規 spec session 開始
+
+---
