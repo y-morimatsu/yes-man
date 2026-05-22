@@ -14,6 +14,7 @@
 import { useState } from "react";
 import {
   DecisionUtteranceBubble,
+  Skeleton,
   SwipeChoice,
   useToast,
 } from "@yesman/ui";
@@ -104,6 +105,15 @@ export function DecisionResult({
 
       {/* Pack A #3: 3 人格 thinking chips (streaming 中のみ表示) */}
       {isStreaming && <PersonaThinkingChips utterances={utterances} />}
+
+      {/* Skeleton bubbles for unreceived utterances during streaming */}
+      {isStreaming && utterances.length < 3 && (
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 3 - utterances.length }).map((_, i) => (
+            <Skeleton key={`utterance-skel-${i}`} className="h-16 w-full" />
+          ))}
+        </div>
+      )}
 
       {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵) */}
       {showUtterances && (

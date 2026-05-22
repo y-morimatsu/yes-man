@@ -7,7 +7,7 @@
  * inferred_tags は string list、tag UI として表示。
  */
 import { useState } from "react";
-import { Button, Card, Modal, Spinner, useToast } from "@yesman/ui";
+import { Button, Card, Modal, Skeleton, useToast } from "@yesman/ui";
 import { usePreference, useResetPreference } from "./usePreference";
 import { t } from "./strings";
 
@@ -54,7 +54,14 @@ export default function PreferencePage() {
     }
   };
 
-  if (isPending) return <Spinner />;
+  if (isPending) return (
+    <div className="flex flex-col gap-3">
+      <Skeleton className="h-6 w-40" />
+      <Skeleton className="h-32 w-full" />
+      <Skeleton className="h-20 w-full" />
+      <Skeleton className="h-20 w-full" />
+    </div>
+  );
   if (!data) return <p className="text-neutral-500">{t("empty")}</p>;
 
   const profile = data as ProfileShape;

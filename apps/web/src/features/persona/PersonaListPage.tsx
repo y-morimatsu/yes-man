@@ -3,7 +3,7 @@
  */
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Input, PersonaCard, Spinner } from "@yesman/ui";
+import { Button, Input, PersonaCard, Skeleton } from "@yesman/ui";
 import type { SharedSort } from "@yesman/api-client";
 import { useMyPersonas, useSharedPersonas } from "./usePersona";
 import { PersonaCreateModal } from "./PersonaCreateModal";
@@ -71,7 +71,14 @@ export default function PersonaListPage() {
 
 function MyTab({ query }: { query: string }) {
   const { data, isPending } = useMyPersonas();
-  if (isPending) return <Spinner />;
+  if (isPending) return (
+    <div className="flex flex-col gap-3">
+      <Skeleton className="h-6 w-32" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
+      <Skeleton className="h-24 w-full" />
+    </div>
+  );
   const filtered =
     query.trim() === ""
       ? data ?? []
@@ -120,7 +127,12 @@ function SharedTab({
         <option value="acceptance">{t("sortAcceptance")}</option>
       </select>
       {isPending ? (
-        <Spinner />
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
       ) : filtered.length === 0 ? (
         <p className="text-neutral-500">{t("emptyShared")}</p>
       ) : (
