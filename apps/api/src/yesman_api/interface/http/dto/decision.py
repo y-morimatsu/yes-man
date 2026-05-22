@@ -6,6 +6,7 @@ NFR Req I2 反映 + ultrathink Imp1 (ConsensusOutput vs DecisionResponse 分離)
 """
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
@@ -73,6 +74,25 @@ class ScoreResponse(BaseModel):
     history: list[ScoreHistoryPointResponse] = []
 
 
+class DecisionHistoryItemDTO(BaseModel):
+    """履歴 1 件の表示用 DTO (FR-HIST-01)."""
+
+    id: str  # UUID 文字列
+    user_input: str  # 質問 (生、本人にしか返さない)
+    proposal_text: str  # AI 提案
+    user_choice: Literal["yes", "no", "pending"]
+    attempt_count: int = Field(
+        ge=1,
+        description="同一 user_input_hash 内での created_at 順 1-indexed (何回目の提案で採用したか)",
+    )
+    created_at: datetime
+
+
+class DecisionHistoryResponse(BaseModel):
+    items: list[DecisionHistoryItemDTO]
+    limit: int
+
+
 __all__ = [
     "DecisionRequestDTO",
     "ChoiceRequest",
@@ -82,4 +102,6 @@ __all__ = [
     "NudgeResponse",
     "ScoreResponse",
     "ScoreHistoryPointResponse",
+    "DecisionHistoryItemDTO",
+    "DecisionHistoryResponse",
 ]
