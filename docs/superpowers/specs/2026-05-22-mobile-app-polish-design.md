@@ -7,9 +7,10 @@
   - `apps/web/src/shell/Layout.tsx` (sticky header 簡素化 + safe area + BottomNav 配置 + main padding 調整)
   - `apps/web/src/shell/BottomNav.tsx` (新規 4-tab navigation)
   - `apps/web/src/shell/usePageTransition.ts` (新規 View Transitions API hook)
-  - `packages/ui/src/primitives/Button.tsx` (active state 追加)
+  - `packages/ui/src/primitives/Button.tsx` (active state 追加 — base string に append)
   - `packages/ui/src/primitives/Skeleton.tsx` (新規)
   - `packages/ui/src/primitives/index.ts` (Skeleton export)
+  - `packages/ui/src/primitives/ToastProvider.tsx` (Toast 位置を BottomNav 回避に調整)
   - `apps/web/src/features/score/ScorePage.tsx` (Spinner → Skeleton)
   - `apps/web/src/features/decision/DecisionResult.tsx` (haptic vibrate + streaming skeleton)
   - `apps/web/src/features/persona/PersonaListPage.tsx` (Spinner → Skeleton)
@@ -300,11 +301,32 @@ export function BottomNav() {
 
 - BottomNav: `z-40`
 - Sticky Header: `z-40` (top と bottom で衝突なし)
-- Modal (PersonaCreateModal): `z-50` (BottomNav 上書き)
+- Modal (PersonaCreateModal): `<dialog>` HTML 要素 + `showModal()` で **browser native top-layer** を使用 ([Modal.tsx:18-26](../../packages/ui/src/primitives/Modal.tsx))、z-index 無視で常に最前面 (BottomNav 上書き、衝突なし)
+- Toast: `z-50` (BottomNav z-40 より上)、ただし **位置の物理重なり対策** が必要 — 下記 §4.X 参照
 
----
+### 4.X Toast 位置調整 (BottomNav 物理重なり回避)
 
-## 5. 設計 3: Safe Area Insets
+**問題**: 既存 [ToastProvider.tsx:41](../../packages/ui/src/primitives/ToastProvider.tsx#L41) は `fixed bottom-4 right-4 z-50`。BottomNav (`fixed bottom-0 inset-x-0` で高さ ~88px = 56px tab + safe-area-inset-bottom) の上に **Toast が右下から被さる** (👤 プロフィール tab を一時的に覆う)。z-index 上は Toast が手前だが、tab 操作の邪魔になる。
+
+**修正**:
+
+```tsx
+// Before [ToastProvider.tsx:41]
+<div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+
+// After (BottomNav 高さ + safe-area + 余裕分上に持ち上げる)
+<div
+  className="fixed right-4 flex flex-col gap-2 z-50"
+  style={{ bottom: "calc(72px + env(safe-area-inset-bottom) + 0.5rem)" }}
+>
+```
+
+- `72px` = BottomNav 高さ約 64px (`min-h-[56px] + py-2`) + 余裕 8px (実測微調整可)
+- `+ env(safe-area-inset-bottom)` で home indicator 領域を加算
+- `+ 0.5rem` で BottomNav border との視覚的余白
+- **未認証時** (BottomNav 非表示) でも余白が大きめになるが許容 (Toast は基本 authed UX で利用)
+
+
 
 ### 適用箇所
 
@@ -341,28 +363,28 @@ spacing: { "safe-top": "env(safe-area-inset-top)", "safe-bottom": "env(safe-area
 
 ### 変更内容
 
-既存の Button variant に `active:scale-[0.98]` を追加 (現状 primary/success のみ `active:` あり):
+**既存の `buttonVariants` cva の base string に `active:scale-[0.98] motion-reduce:active:scale-100` を末尾 append のみ** (replace ではない、既存スタイルを保持する):
 
 ```tsx
-const buttonStyles = cva(
-  "rounded-xl font-bold transition-all active:scale-[0.98]",  // ← active:scale-[0.98] を base に追加
-  {
-    variants: {
-      variant: {
-        primary: "bg-brand-600 text-neutral-0 hover:bg-brand-700 active:bg-brand-700",
-        secondary: "bg-neutral-100 text-neutral-800 hover:bg-neutral-200 active:bg-neutral-300",
-        ghost: "bg-transparent text-neutral-700 hover:bg-neutral-100 active:bg-neutral-200",
-        success: "bg-success text-neutral-0 hover:opacity-90 active:opacity-90",
-        muted: "bg-silence text-neutral-0 hover:opacity-90 active:opacity-90",
-      },
-      // size 等は変更なし
-    },
-  },
+// Before (現状コード [Button.tsx:14-15])
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-500",
+  { variants: { ... } },
+);
+
+// After (末尾に 2 token append のみ)
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-500 active:scale-[0.98] motion-reduce:active:scale-100",
+  //                                                                                                                                                                          ↑ 追加              ↑ 追加
+  { variants: { ... } },  // variant / size は無変更
 );
 ```
 
-- `transition-all` で smooth animation
-- `prefers-reduced-motion: reduce` ユーザーは Tailwind の動作で自動緩和される (`transition` は残るが scale の差分はわずか)
+**重要**:
+- 既存の `font-medium` / `transition-colors` / `disabled:*` / `focus:ring-*` は **保持**
+- `transition-colors` で scale 変化も含めて smoothly transition される (Tailwind の `transition-colors` は実装上 transform もカバー)
+- **`motion-reduce:active:scale-100` 必須** — Tailwind の `motion-reduce:` は `transform` を自動緩和**しない** (`transition-*`/`animate-*` のみ)。明示的に scale-100 で打ち消す
+- 既存 variant 内の `active:bg-brand-700` 等 (色変化) は維持
 
 ### Card primitive
 
@@ -441,6 +463,14 @@ if (isPending) {
 | `apps/web/src/features/persona/PersonaListPage.tsx` | 全ページ skeleton |
 | `apps/web/src/features/preference/PreferencePage.tsx` | 全ページ skeleton |
 | `apps/web/src/features/home/HomePage.tsx` | (既に skeleton 実装済、変更なし) |
+
+### 対象外
+
+- **Layout の `<Suspense fallback={<Spinner />}>` (lazy route loading fallback)** は **Skeleton 置換対象外**。理由:
+  - route の content サイズ予測不能 (skeleton 形状を決められない)
+  - lazy load fallback は 100-500ms の短時間表示、Skeleton にする ROI が薄い
+  - Spinner で十分の established pattern
+- 同様に Modal 内部 (`<Suspense>` 経由) も対象外
 
 ---
 
@@ -526,9 +556,53 @@ React Router v6 の lifecycle は View Transitions API と完全に integrate �
 - Firefox / 未対応ブラウザは silent no-op
 - 効果が薄ければ削除 (後段で判断)
 
+### React Router v6.4+ 公式 `unstable_viewTransition` (推奨)
+
+自前 hook 実装より、**React Router v6.4+ の公式 `unstable_viewTransition` API** を使う方が安全:
+
+```tsx
+// apps/web/src/shell/routes.tsx
+import { createBrowserRouter, Link } from "react-router-dom";
+
+// router 自体には特別な設定不要
+export const router = createBrowserRouter([...]);
+
+// 各 navigation に viewTransition prop を付与 (Link / NavLink で対応)
+<Link to="/score" viewTransition>...</Link>
+```
+
+または BottomNav の Link でも:
+```tsx
+<Link to={tab.to} viewTransition aria-current={...}>...</Link>
+```
+
+**メリット**:
+- React Router 公式 (v6.4 から `unstable_*` prefix で利用可、v7 で安定化予定)
+- 自前 hook 不要
+- View Transitions API 未対応ブラウザは自動 fallback (transition なしで navigate)
+- prefers-reduced-motion: reduce 時の制御は CSS `@media` で実装 (`@view-transition` rules で disable)
+
+**修正方針**: 自前 `usePageTransition.ts` は作らず、BottomNav と Splash CTA 等の主要 `<Link>` に `viewTransition` prop を付与。CSS には `@view-transition` ルールで cross-fade と reduced-motion 対応のみ書く。
+
+```css
+/* apps/web/src/styles/main.css に追加 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+```
+
 ### YAGNI 判断
 
-実装が React Router v6 の API と相性が悪く、効果も微妙な可能性があれば **本機能はスキップ** して、Active states (B-1) + Skeleton (B-2) + Haptic (B-4) のみで microinteractions を完成させる選択肢もある。Plan 段階で実装難度を再評価し、必要なら scope から外す。
+`unstable_viewTransition` 採用でも、効果が薄ければ削除可能 (Link prop 削除 + CSS rule 削除のみ)。Plan 段階で実装難度・効果を再評価し、不要なら scope から外す。
 
 ---
 
@@ -602,6 +676,13 @@ const fireConfetti = () => {
     - `tab tap で active 状態が切替わる`
     - `/auth/splash で BottomNav は非表示`
 
+- **`tests/e2e/tests/inception-design.spec.ts` (修正必須)**:
+  - 既存テスト `"Header に nav icons (⚙️ 📊 👤) が存在 (INCEPTION header 右側 3 アクション)"` (line ~81) は **必ず FAIL** する (Header から ⚙️📊👤 削除のため)
+  - 対応: 以下のいずれかを選択:
+    - (a) **削除** — 本機能で nav は BottomNav に移行、INCEPTION の前提 (top 右 3 アクション) が変わったため
+    - (b) **書き換え** — `"Header に brand logo + Sign out が存在"` に test 内容を更新
+  - 推奨: (a) **削除** + BottomNav 側の e2e test で代替
+
 ### 既存テストへの回帰チェック
 
 - `tests/e2e/tests/inception-mobile.spec.ts` の他のテスト (viewport / scroll / cards) は影響なし
@@ -631,13 +712,13 @@ pnpm -F @yesman/e2e test
 | Step | 設計 | 内容 | コミット |
 |:----:|:----:|------|---------|
 | 1 | #5 | Skeleton primitive 新規 + export + test | `feat(ui): Skeleton primitive を追加` |
-| 2 | #6 | Button primitive に `active:scale-[0.98]` 追加 | `feat(ui): Button に active:scale-[0.98] microinteraction 追加` |
+| 2 | #6 | Button primitive base に `active:scale-[0.98] motion-reduce:active:scale-100` を append | `feat(ui): Button に active:scale microinteraction (motion-reduce 対応)` |
 | 3 | #2 | BottomNav component 新規 + test | `feat(web): BottomNav 4-tab navigation を追加` |
-| 4 | #1 + #3 | Layout 改修 (sticky header + safe area + BottomNav 配置) + test | `feat(web): Layout に sticky header + safe area + BottomNav を統合` |
+| 4 | #1 + #3 + #4.X | Layout 改修 (sticky header + safe area + BottomNav 配置) + ToastProvider 位置調整 + test | `feat(web): Layout に sticky header + safe area + BottomNav + Toast 位置調整を統合` |
 | 5 | #7 | ScorePage / PersonaList / PreferencePage / DecisionResult を Spinner → Skeleton 置換 | `refactor(web): Spinner を Skeleton card に置換 (4 page)` |
 | 6 | #9 | DecisionResult に `navigator.vibrate(50)` 追加 | `feat(web): Yes 採択時に haptic feedback を追加` |
-| 7 | #8 | usePageTransition hook + Layout 適用 (or skip 判断) | `feat(web): View Transitions API で page transitions を追加` |
-| 8 | テスト | e2e mobile spec 更新 + 新規 4 tab tap target test | `test(e2e): BottomNav + 簡素化 header を反映` |
+| 7 | #8 | React Router `viewTransition` prop + CSS `::view-transition-*` rules (or skip 判断) | `feat(web): View Transitions API で page transitions を追加` |
+| 8 | テスト | e2e mobile spec 更新 + design.spec.ts の nav icons test 削除 + 新規 BottomNav e2e | `test(e2e): BottomNav + 簡素化 header を反映 (inception-design.spec.ts nav icons test 削除)` |
 
 各 commit は単独で動作 / テスト PASS の状態を保つ (機能トグル不要、漸進的に effects 追加)。
 
@@ -670,6 +751,9 @@ pnpm -F @yesman/e2e test
 | O7 | BottomNav の z-index と既存 Modal/Toast との衝突 | BottomNav `z-40`、Modal `z-50`、Toast `z-50`。Modal 表示中は BottomNav 上書きされる (期待動作) |
 | O8 | 既存の HomePage nav cards は冗長になるか? | いいえ。Home Hub は「全機能の入口」として保持、bottom nav は「常時 4 動線」。重複ではなく階層的設計 |
 | O9 | Sign out が header 右上に残ると、誤タップ事故が増えないか | size=sm + 文字色 neutral で目立たせない。深刻な誤タップは現状もなく許容 |
+| O10 | Toast (fixed bottom-4) と BottomNav (fixed bottom-0 ~88px) の物理重なり | §4.X で Toast の `bottom` を `calc(72px + env(safe-area-inset-bottom) + 0.5rem)` に調整 |
+| O11 | `motion-reduce` ユーザーに `active:scale-[0.98]` がそのまま掛かる (Tailwind 自動緩和は transform 対象外) | `motion-reduce:active:scale-100` を明示併記 (Section 6 修正済) |
+| O12 | inception-design.spec.ts の Header nav icons test が必ず FAIL | Step 8 で削除 (BottomNav e2e で代替) |
 
 ---
 

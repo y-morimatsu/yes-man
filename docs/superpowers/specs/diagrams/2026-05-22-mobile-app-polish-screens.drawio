@@ -290,13 +290,10 @@
                 <mxCell id="p2_nav_bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#E0E0E0;strokeWidth=1" parent="1" vertex="1">
                     <mxGeometry x="316" y="458" width="168" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="p2_t2_under" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
-                    <mxGeometry x="116" y="458" width="26" height="2" as="geometry"/>
-                </mxCell>
                 <mxCell id="p2_t1" value="🏠&#xa;Home" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#737373" parent="1" vertex="1">
                     <mxGeometry x="316" y="462" width="42" height="34" as="geometry"/>
                 </mxCell>
-                <mxCell id="p2_t2_under_real" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
+                <mxCell id="p2_t2_under" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c2410c;strokeColor=none" parent="1" vertex="1">
                     <mxGeometry x="366" y="458" width="26" height="2" as="geometry"/>
                 </mxCell>
                 <mxCell id="p2_t2" value="💭&#xa;決定" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=7;fontColor=#c2410c;fontStyle=1" parent="1" vertex="1">
