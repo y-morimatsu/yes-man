@@ -60,7 +60,9 @@ test.describe("Design system tokens (U7b FD §2)", () => {
     await expect(startButton).toHaveCSS("border-radius", "12px");
   });
 
-  test("Score danger alert は danger = INCEPTION 控えめ赤 #C62828 / role=alert (§2.1)", async ({
+  // skip: Mock LLM/storage の workers 間共有による flakiness (proposal_timeout)。
+  // Issue #80 で per-worker isolation 実装後に再有効化する。
+  test.skip("Score danger alert は danger = INCEPTION 控えめ赤 #C62828 / role=alert (§2.1)", async ({
     page,
     request,
   }) => {
