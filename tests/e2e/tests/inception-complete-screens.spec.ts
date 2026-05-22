@@ -72,15 +72,12 @@ test.describe("Journey B: Decision Experience (5 screens)", () => {
     await expect(page.getByText(/「決められない」を 委ねよう/)).toBeVisible();
   });
 
-  test("B7 Live SSE: 🔴 LIVE badge + persona icon utterances", async ({
+  test("B7 Live SSE: persona icon utterances (LIVE badge は UX 改善で削除)", async ({
     page,
   }) => {
     await gotoAuthenticated(page, "/decision");
-    await page.getByPlaceholder(/今日/).fill("B7 LIVE 検証");
+    await page.getByPlaceholder(/今日/).fill("B7 utterance 検証");
     await page.getByRole("button", { name: /送信/ }).click();
-    await expect(page.getByText(/LIVE/).first()).toBeVisible({
-      timeout: 90_000,
-    });
     await page.waitForSelector('[role="article"]', { timeout: 90_000 });
     // proposal 到着待ち → 議論を見る で utterance を確実に表示
     await expect(

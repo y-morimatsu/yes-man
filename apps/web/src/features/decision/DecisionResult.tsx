@@ -2,7 +2,7 @@
  * DecisionResult — INCEPTION drawio B4 + B7 + Journey C 完全準拠.
  *
  * 構造:
- * 1. SSE streaming 中: 🔴 LIVE badge + utterance bubbles (議論を見るで toggle)
+ * 1. SSE streaming 中: utterance bubbles (議論を見るで toggle) — LIVE badge は UX 改善で削除
  * 2. proposal 完了: 3-line proposal card + SwipeChoice (swipe / fallback button)
  * 3. Yes 採択: NudgeBanner で ✨🎉✨ celebration (final state)
  * 4. No 採択: onNoChosen callback で親に regenerate を委譲 (drawio Journey C)
@@ -92,22 +92,6 @@ export function DecisionResult({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* INCEPTION B7: 🔴 LIVE badge during SSE streaming */}
-      {isStreaming && (
-        <div className="flex items-center gap-2">
-          <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger text-neutral-0 text-xs font-bold"
-            role="status"
-            aria-live="polite"
-          >
-            🔴 LIVE
-          </span>
-          <span className="text-xs text-neutral-400 italic">
-            合議中 (SSE Stream)
-          </span>
-        </div>
-      )}
-
       {/* Pack A #3: 3 人格 thinking chips (streaming 中のみ表示) */}
       {isStreaming && <PersonaThinkingChips utterances={utterances} />}
 

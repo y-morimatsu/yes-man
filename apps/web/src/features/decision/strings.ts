@@ -5,7 +5,6 @@ export const STRINGS = {
   startButton: "→ 送信",
   resetButton: "もう一度",
   bottomHint: "「決められない」を 委ねよう",
-  streamingHint: "AI ペルソナが合議中...",
   proposalLabel: "提案",
   proposalPrefixCopy: "あなたに最適化された結論です",
   nudgeBannerLine1: "合議された結論です。",
