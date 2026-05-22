@@ -116,6 +116,8 @@ class MockStore:
 
         Yes 比率が時間と共に漸進的に上昇する (30% → 95%) パターンで、
         ScoreLineChart の右肩上がりトレンドを可視化する用途。
+        20% の input は 2-5 回の再生成セッション (同一 user_input_hash 共有、
+        最後の attempt のみ yes 判定) で、attempt_count 多様性を ScorePage で視認可能にする。
         seed は固定 (random.Random(42)) で再現可能。
         既に当該 user_id の decision が存在する場合は冪等に skip。
         PreferenceProfile は builder.apply_yes/no を流用して構築。

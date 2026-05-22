@@ -4,10 +4,8 @@
 """
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, defaultdict
 from uuid import UUID
-
-import pytest
 
 from yesman_api.infrastructure.persistence.mock_repositories import MockStore
 
@@ -34,7 +32,6 @@ def test_seed_session_ends_with_yes_or_no():
     store.seed_demo_decisions(user_id=user_id, days=30)
 
     # hash 別 group + created_at 順 sort
-    from collections import defaultdict
     hash_groups: dict[str, list] = defaultdict(list)
     for d in store.decisions.values():
         hash_groups[d.user_input_hash].append(d)
