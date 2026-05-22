@@ -140,7 +140,11 @@ export default function DecisionPage() {
       <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
 
       {showQuickStart && quick.current && (
+        // key={current.id}: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐため
+        // QuickStartCard 全体を remount。reject 時に SwipeChoice の動的 state が
+        // 持ち越されると、新題目で「すでに左にスワイプされた」状態から始まってしまう.
         <QuickStartCard
+          key={quick.current.id}
           title={quick.current.title}
           noCount={quick.noCount}
           onYes={handleQuickYes}

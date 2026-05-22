@@ -27,12 +27,14 @@ describe("DecisionPage", () => {
   beforeEach(() => clearRecentYes());
   afterEach(() => clearRecentYes());
 
-  it("初期 render: title + QuickStartCard が表示、textbox は出ない (mode=quick)", () => {
+  it("初期 render: title + QuickStartCard (SwipeChoice 内包) が表示、textbox は出ない", () => {
     setup();
     expect(screen.getByRole("heading", { name: /何を きめますか/ })).toBeInTheDocument();
     expect(screen.getByTestId("quickstart-card")).toBeInTheDocument();
-    expect(screen.getByTestId("quickstart-yes")).toBeInTheDocument();
-    expect(screen.getByTestId("quickstart-no")).toBeInTheDocument();
+    expect(screen.getByTestId("swipe-choice")).toBeInTheDocument();
+    // SwipeChoice fallback button
+    expect(screen.getByRole("button", { name: /Yes、提案を採択/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /No、提案を拒否/ })).toBeInTheDocument();
     // textbox は QuickStart モードでは非表示
     expect(screen.queryByPlaceholderText(/今日/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /送信/ })).not.toBeInTheDocument();

@@ -6,14 +6,15 @@
 - **Start Date**: 2026-05-09T00:00:00Z
 - **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** + 🔁 **Post-CONSTRUCTION 改修フェーズ v3** (Hackathon Pragmatism + Git-Flow `feature/* → develop → main` 運用、2026-05-17 〜 進行中) / OPERATIONS phase (placeholder)
 - **Last Approved Stage**: CONSTRUCTION - Build and Test (approved 2026-05-16、CONSTRUCTION フェーズ 11 unit + Build and Test ALWAYS EXECUTE 全完了)
-- **Latest Post-CONSTRUCTION Commit**: `feature/quick-start-yes-no` (in-flight、2026-05-22)
+- **Latest Post-CONSTRUCTION Commit**: `feature/quick-start-swipe-ui` (in-flight、2026-05-22 / spec v3)
 - **Post-CONSTRUCTION 改修フェーズ v3 主要追加** (2026-05-22):
-  - **YES/NO Quick-Start (`feature/quick-start-yes-no`、spec `2026-05-22-yes-no-quickstart-design.md`)**: DecisionPage の起動時 UI を 「テキスト入力」から「時刻×曜日に応じた YES/NO クイック質問」に置換。質問 pool は Bedrock LLM で **build-time 生成 + checked-in JSON** (runtime LLM ゼロ)。5 連続 NO で textbox に fallback。
+  - **YES/NO Quick-Start (`feature/quick-start-yes-no` → PR #78 merged、spec `2026-05-22-yes-no-quickstart-design.md` v2)**: DecisionPage の起動時 UI を 「テキスト入力」から「時刻×曜日に応じた YES/NO クイック質問」に置換。質問 pool は Bedrock LLM で **build-time 生成 + checked-in JSON** (runtime LLM ゼロ)。5 連続 NO で textbox に fallback。
     - 新規 script: `apps/api/scripts/generate_quick_start_templates.py` (Sonnet 4.6、Pydantic schema validate、max 3 retry、`--seed` で deterministic fallback pool)
     - 新規 schema: `apps/api/src/yesman_api/application/quick_start/schema.py`
     - 新規 web module: `quickStartTemplates.ts` / `quickStartHistory.ts` / `useQuickStart.ts` / `QuickStartCard.tsx`
     - 影響ユニット: U4-decision (script) / U7d-features (DecisionPage UI 改修)
     - tests: api 7 件 + web 24 件 = 31 件 PASS / e2e は `gotoAuthenticated` helper に `skipQuickStart` option を追加して既存 spec 互換
+  - **Quick-Start UI を SwipeChoice 統一 (`feature/quick-start-swipe-ui`、spec v3)**: 上記 v2 の YES/NO 操作を **合議結果 (DecisionResult) と同じ左右スワイプ UX** に統一。`SwipeChoice` component を再利用し、独自 Y/N ボタンと keyboard hint を撤廃。`DecisionPage` 側で `<QuickStartCard key={quick.current.id} ...>` 形で re-key し、SwipeChoice の confirming/dx 残留を防止。tests: web unit 170 PASS / quick-start e2e 7/7 PASS (swipe fallback button + ArrowLeft/Right + SSE 統合) / build OK。
 - **Post-CONSTRUCTION 改修フェーズ v2 主要追加** (2026-05-22):
   - **Pack A (PR #15、`a731786` merged to develop → main v0.2.0)**: Demo UX Polish 4 件 (Score 煽り文 / Home Summary カード / SSE thinking chips / Yes confetti)
   - **Decision History (feature/web-score-decision-history、6 task)**: `GET /v1/decisions` 履歴 endpoint + `attempt_count` (user_input_hash group) + Mock seed regenerate session + Web `DecisionHistoryList` + utilities (`formatRelativeTime` / `truncate`) + ScorePage 組込
