@@ -26,7 +26,10 @@ export default function SignInPage() {
   const [users, setUsers] = useState<MockUser[]>(() => listUsers());
   const [submitting, setSubmitting] = useState(false);
 
-  const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? "/";
+  const rawFrom = (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? "/";
+  // 「ログイン後の着地は Home ではなく 合議で決定」が default 体験。
+  // 未認証で /score など特定 page にアクセスして redirect されたケースは元 path を尊重する。
+  const from = rawFrom === "/" ? "/decision" : rawFrom;
   const emailValid = EMAIL_REGEX.test(email.trim());
 
   const proceedAfterSignIn = async () => {

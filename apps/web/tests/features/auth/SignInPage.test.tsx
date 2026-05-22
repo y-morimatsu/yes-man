@@ -73,7 +73,7 @@ describe("SignInPage — bypass mode", () => {
     expect(screen.getByRole("button", { name: "サインイン" })).toBeDisabled();
   });
 
-  it("有効な email 入力 + [サインイン] click で自動登録 + navigate", async () => {
+  it("有効な email 入力 + [サインイン] click で自動登録 + navigate (/decision)", async () => {
     const user = userEvent.setup();
     renderPage();
     await user.type(screen.getByRole("textbox", { name: /email/i }), "taro@example.com");
@@ -86,10 +86,11 @@ describe("SignInPage — bypass mode", () => {
       expect(listUsers()[0].display_name).toBe("Taro");
       expect(getCurrentEmail()).toBe("taro@example.com");
     });
-    expect(navigateMock).toHaveBeenCalledWith("/", { replace: true });
+    // from 未指定 (default "/") は /decision に振替される
+    expect(navigateMock).toHaveBeenCalledWith("/decision", { replace: true });
   });
 
-  it("既存 user row click で setCurrentEmail + navigate", async () => {
+  it("既存 user row click で setCurrentEmail + navigate (/decision)", async () => {
     registerUser("hanako@example.com", "Hanako");
     const user = userEvent.setup();
     renderPage();
@@ -100,7 +101,7 @@ describe("SignInPage — bypass mode", () => {
     await waitFor(() => {
       expect(getCurrentEmail()).toBe("hanako@example.com");
     });
-    expect(navigateMock).toHaveBeenCalledWith("/", { replace: true });
+    expect(navigateMock).toHaveBeenCalledWith("/decision", { replace: true });
   });
 
   it("registerUser 後に list が UI に反映される", () => {
