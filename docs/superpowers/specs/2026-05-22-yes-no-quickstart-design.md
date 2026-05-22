@@ -2,9 +2,14 @@
 
 **Spec ID**: 2026-05-22-yes-no-quickstart
 **Phase**: Post-CONSTRUCTION 改修 v3
-**Status**: 🟡 Requirements Analysis (Revised draft v2 — AI pre-generation 仕様追加、awaiting approval)
+**Status**: 🟢 v3 — Swipe UI 化 (合議結果と同じ SwipeChoice を再利用、2026-05-22 追加要求)
 **Author**: y-morimatsu (AI-assisted, Claude Opus 4.7)
 **Related units**: U4-decision (Pre-generation script) / U7d-features (DecisionPage UI + generated JSON consumer)
+
+**改訂履歴**:
+- v1 (2026-05-22): 静的 template + ボタン UI 初版
+- v2 (2026-05-22): AI pre-generation 仕様 (Bedrock build-time + checked-in JSON) を追加 → user OK
+- **v3 (2026-05-22)**: YES/NO 操作を **合議結果 (DecisionResult) と同じ左右スワイプ UX** に統一。`SwipeChoice` component を再利用し、片手操作で「YES = 右へスワイプ / NO = 左へスワイプ」の体験を入口から提供。WCAG fallback button + キーボード代替は SwipeChoice 既存実装で担保。
 
 ---
 
@@ -33,10 +38,12 @@
 - 候補は優先度順に 1 件ずつ提示。
 - 直近 24h 以内に「YES」採択された質問 id は候補から除外し、繰り返し提案を防ぐ。
 
-### FR-QS-02: YES / NO 操作の semantics
+### FR-QS-02: YES / NO 操作の semantics (v3: スワイプ統一)
 
-- **YES**: 表示中の質問を `decision.user_input` として確定し、既存の合議フロー (`/v1/decisions/stream` SSE) を起動する。以後は既存 `DecisionResult` フローに合流。
-- **NO**: 「この質問じゃない」を意味し、次の候補質問を提示する。NO カウンタを +1 する。
+- **YES (右スワイプ / `Yes →` button / ArrowRight キー)**: 表示中の質問を `decision.user_input` として確定し、既存の合議フロー (`/v1/decisions/stream` SSE) を起動する。以後は既存 `DecisionResult` フローに合流。
+- **NO (左スワイプ / `← No` button / ArrowLeft キー)**: 「この質問じゃない」を意味し、次の候補質問を提示する。NO カウンタを +1 する。
+- 操作系は `SwipeChoice` component (合議結果と完全同一) を再利用。スワイプ閾値 / 確定アニメーション / haptic feedback / WCAG 2.5.1 fallback button / ArrowLeft-Right キーボード代替はすべて既存実装で担保。
+- v2 で導入した独自 YES/NO ボタンと Y/N キーボード shortcut は **撤廃** (合議結果との操作不整合を解消)。
 
 ### FR-QS-03: テキスト fallback (5 回 NO ルール)
 
@@ -60,11 +67,14 @@ YES 確定後の挙動 (proposal 生成 / utterance bubbles / Yes/No 採択 / Sc
 
 - 初期質問表示は **API 呼び出しなし** で実現する (`<150ms` 描画)。Template は client-side embedded で OK。
 
-### NFR-QS-02: アクセシビリティ
+### NFR-QS-02: アクセシビリティ (v3 更新)
 
-- YES/NO ボタンは min-height 48px、両者の色コントラスト ≥ 4.5:1。
-- 質問カードは `aria-live="polite"` で screen reader にも変更を通知。
-- キーボード操作: Y キー = YES、N キー = NO の shortcut を提供 (`<kbd>` hint 併記)。
+- 操作系は `SwipeChoice` の既存実装に委譲し、合議結果と完全同一の a11y を継承:
+  - WCAG 2.5.1 Pointer Gestures: `Yes →` / `← No` fallback button (single-pointer 操作可)
+  - WCAG 2.1.1 Keyboard: ArrowRight = YES / ArrowLeft = NO
+  - haptic feedback (navigator.vibrate 20ms) で確定感を提供
+- 質問カード本体は `aria-live="polite"` で title 変更を SR に通知。
+- 旧 Y/N キーボード shortcut は撤廃 (合議結果との不整合解消)。
 
 ### NFR-QS-03: テスタビリティ
 
@@ -194,20 +204,21 @@ interface QuickStartTemplatePool {
 - ファイル top に LLM 生成 metadata を含むので、PR レビュー時に diff から品質 review 可能
 - 再生成手順は `README.md` に追記
 
-## 7. UI 設計 (Mockup)
+## 7. UI 設計 (Mockup, v3: SwipeChoice 統一)
 
 ```
 +--------------------------------------------------+
 | 何を きめますか？                                |
 |                                                  |
+|  ← No                                    Yes →  |  ← swipe indicator (drag 中フェードイン)
 |  +--------------------------------------------+  |
-|  | 💭 今日のランチ                            |  |
-|  |    してみますか？                          |  |
-|  |                                            |  |
-|  |  [  ❌ NO  ]      [  ✅ YES  ]            |  |
-|  |                                            |  |
-|  |  Y キー = YES / N キー = NO                |  |
+|  |               💭                           |  |
+|  |          今日のランチ                       |  |  ← swipe card (drag で translateX + 6deg)
+|  |          してみますか？                     |  |
 |  +--------------------------------------------+  |
+|             👆 スワイプして決定                  |
+|                                                  |
+|       [ ← No ]            [ Yes → ]              |  ← WCAG fallback (SwipeChoice 既存)
 |                                                  |
 |         ✏️ 自分で入力する                        |
 |                                                  |
@@ -215,10 +226,11 @@ interface QuickStartTemplatePool {
 +--------------------------------------------------+
 ```
 
-- カード: rounded-2xl border-2 brand-600、bg-cream
-- YES: coral `#E8775A` solid (既存 primary button と統一)
-- NO: white + border (negative なので押しやすく)
-- 進捗 indicator: NO 1〜4 は薄く `▼ NO 1/5` 表示、5 で fallback 切替
+- 外側 section: rounded-2xl border-2 brand-600、bg-cream (v2 と同じ)
+- スワイプ操作 = `SwipeChoice` を内包、children に「💭 + title + してみますか?」を渡す
+- 確定アニメ / haptic / threshold / fallback button / ArrowLeft-Right キー は全部 SwipeChoice の既存実装で担保 (DecisionResult と完全同一)
+- `key={current.id}` で SwipeChoice を題目ごとに remount → reject 後の confirming/dx 残留を防止
+- 進捗 indicator: NO 1〜4 は薄く `▼ NO 1/5` 表示、5 で fallback 切替 (v2 と同じ)
 
 ## 8. Data Model 影響
 
@@ -272,15 +284,15 @@ interface QuickStartTemplatePool {
 
 ## 13. Acceptance Criteria (本仕様完成時の verification)
 
-### UI / 挙動
+### UI / 挙動 (v3 反映)
 - [ ] 起動時に「~~してみますか?」形式の YES/NO カードが表示される
-- [ ] YES で既存合議 SSE が走り、DecisionResult に proposal が出る
-- [ ] NO で次候補に切替、4 回目までは Quick-Start 維持
+- [ ] **右スワイプ または `Yes →` button または ArrowRight キー** で YES → 既存合議 SSE が走り、DecisionResult に proposal が出る
+- [ ] **左スワイプ または `← No` button または ArrowLeft キー** で NO → 次候補に切替、4 回目までは Quick-Start 維持
 - [ ] 5 回連続 NO で textbox に切替、reload まで Quick-Start 非表示
 - [ ] 「✏️ 自分で入力する」 link でいつでも textbox に切替可
 - [ ] 11-14 時の平日に「今日のランチ」相当の template が最初に出る (template 選定 pure function test、template 名は AI 生成済 JSON 依存)
 - [ ] 過去 24h に YES 採択した template.id は再提示されない
-- [ ] Y/N キーボード shortcut で YES/NO を選択できる
+- [ ] 操作系 (スワイプ / fallback button / Arrow キー) は **DecisionResult の SwipeChoice と完全同一**
 
 ### Pre-Generation Script
 - [ ] `uv run python apps/api/scripts/generate_quick_start_templates.py --count 30` が正常終了し、JSON が出力される

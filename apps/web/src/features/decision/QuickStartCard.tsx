@@ -1,12 +1,16 @@
 /**
  * QuickStartCard — 起動時 idle 状態の YES/NO 質問カード.
- * spec: docs/superpowers/specs/2026-05-22-yes-no-quickstart-design.md §7
+ * spec: docs/superpowers/specs/2026-05-22-yes-no-quickstart-design.md §7 (v3: SwipeChoice 統一)
  *
- * - 「{title} してみますか？」を提示、YES で title 確定 / NO で次候補
- * - keyboard shortcut Y / N (active mount 中のみ listen)
- * - aria-live="polite" で title 変更を SR に通知
+ * - 操作系 (右スワイプ / 左スワイプ / `Yes →` button / `← No` button / Arrow キー /
+ *   haptic feedback / 確定アニメ) は @yesman/ui の SwipeChoice を再利用、
+ *   合議結果 (DecisionResult) と完全同一 UX。
+ * - title 表示と「自分で入力する」link / NO 進捗 indicator のみ本コンポネ責務。
+ * - aria-live="polite" で SR に title 変更通知。
+ * - `key={title}` 相当の挙動は親側 (DecisionPage) で QuickStartCard を current.id で
+ *   re-key することにより SwipeChoice の confirming/dx 残留を防ぐ。
  */
-import { useEffect } from "react";
+import { SwipeChoice } from "@yesman/ui";
 import { t } from "./strings";
 
 export interface QuickStartCardProps {
@@ -26,25 +30,6 @@ export function QuickStartCard({
   onNo,
   onSwitchToText,
 }: QuickStartCardProps) {
-  // Y / N キーボード shortcut. textbox など他 input が active なら無視.
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      const tag = (e.target as HTMLElement | null)?.tagName?.toLowerCase();
-      if (tag === "input" || tag === "textarea" || (e.target as HTMLElement | null)?.isContentEditable) {
-        return;
-      }
-      if (e.key === "y" || e.key === "Y") {
-        e.preventDefault();
-        onYes();
-      } else if (e.key === "n" || e.key === "N") {
-        e.preventDefault();
-        onNo();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onYes, onNo]);
-
   return (
     <section
       className="rounded-2xl border-2 px-4 py-5 flex flex-col gap-4"
@@ -52,59 +37,27 @@ export function QuickStartCard({
       aria-label="クイック質問"
       data-testid="quickstart-card"
     >
-      <div
-        className="flex flex-col items-center gap-1 text-center"
-        aria-live="polite"
-        aria-atomic="true"
+      {/* SwipeChoice 内に title card を children として渡す。
+          fallback button (← No / Yes →) と Arrow キー操作は SwipeChoice 既存実装. */}
+      <SwipeChoice
+        proposalText={title}
+        onYes={onYes}
+        onNo={onNo}
       >
-        <p className="text-2xl" aria-hidden="true">💭</p>
-        <p className="font-serif text-xl font-bold text-neutral-800">
-          {title}
-        </p>
-        <p className="font-serif text-base text-neutral-700">
-          {t("quickStartSuffix")}
-        </p>
-      </div>
-
-      <div className="flex justify-center gap-3">
-        <button
-          type="button"
-          onClick={onNo}
-          data-testid="quickstart-no"
-          className="
-            min-h-[48px] min-w-[120px] rounded-xl border-2 px-4 py-2.5
-            bg-white text-neutral-700 font-bold text-base
-            hover:bg-neutral-50 active:scale-95 transition-transform
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400
-          "
-          style={{ borderColor: "#C4B8DC" }}
+        <div
+          className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 px-6 py-8 text-center flex flex-col items-center gap-1 shadow-md"
+          aria-live="polite"
+          aria-atomic="true"
         >
-          {t("quickStartNo")}
-        </button>
-        <button
-          type="button"
-          onClick={onYes}
-          data-testid="quickstart-yes"
-          className="
-            min-h-[48px] min-w-[120px] rounded-xl px-4 py-2.5
-            text-white font-bold text-base
-            shadow-[0_4px_12px_rgba(232,119,90,0.3)]
-            hover:shadow-[0_6px_16px_rgba(232,119,90,0.4)]
-            active:scale-95 transition-transform
-            focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#E8775A]/40
-          "
-          style={{ background: "#E8775A" }}
-        >
-          {t("quickStartYes")}
-        </button>
-      </div>
-
-      <p className="text-center text-xs text-neutral-500">
-        <kbd className="rounded border border-neutral-300 px-1.5 py-0.5 text-[10px] font-mono">Y</kbd>{" "}
-        = YES /{" "}
-        <kbd className="rounded border border-neutral-300 px-1.5 py-0.5 text-[10px] font-mono">N</kbd>{" "}
-        = NO
-      </p>
+          <p className="text-3xl" aria-hidden="true">💭</p>
+          <p className="font-serif text-xl font-bold text-neutral-900">
+            {title}
+          </p>
+          <p className="font-serif text-base text-neutral-700">
+            {t("quickStartSuffix")}
+          </p>
+        </div>
+      </SwipeChoice>
 
       <button
         type="button"

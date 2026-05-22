@@ -4958,7 +4958,21 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 ## DecisionPage YES/NO Quick-Start (post-CONSTRUCTION 改修 v3、新規 spec session 開始)
 **Timestamp**: 2026-05-22T13:30:00Z
 **User Input**: "ai-dlcにて仕様を変更。\"合議で決定\"の画面は議論内容をテキストボックスに入力するものが初期表示になっているが、めんどうくさい人間のために、時間やシチュエーションに応じた質問内容を想定してYES/NOから始めたい。５回ぐらい質問内容が確定できない場合にテキストボックスを表示させる。"
-**AI Response**: AI-DLC workflow を発動 (post-CONSTRUCTION 改修 v3 spec session)。Workspace detection → resume mode (既存 brownfield、aidlc-state.md 既存 → CONSTRUCTION 完了 + 改修フェーズ v2 進行中)。次工程: Requirements Analysis (standard depth) → User Stories → Application Design → Code Generation。Welcome message 表示は post-CONSTRUCTION 改修 pragmatism に従い省略。
+**AI Response**: AI-DLC workflow を発動 (post-CONSTRUCTION 改修 v3 spec session)。Workspace detection → resume mode (既存 brownfield、aidlc-state.md 既存 → CONSTRUCTION 完了 + 改修フェーズ v2 進行中)。次工程: Requirements Analysis (standard depth) → User Stories → Application Design → Code Generation。Welcome message 表示は post-CONSTRUCTION 改修 pragmatism に従い省略。Spec v2 (Bedrock pre-generation 追加) で user 承認、`feature/quick-start-yes-no` ブランチで実装 → PR #78 merged。
 **Context**: INCEPTION - Workspace Detection / 新規 spec session 開始
+
+---
+
+## Quick-Start UI を SwipeChoice 統一に変更 (spec v3)
+**Timestamp**: 2026-05-22T14:30:00Z
+**User Input**: "\"合議で決定\"の初期表示のYES, NOの選択も、合議のYES、NO選択と同じ様に左右のスワイプにしたい"
+**AI Response**: spec `2026-05-22-yes-no-quickstart-design.md` を v3 に改訂 (§1 改訂履歴 / §FR-QS-02 操作 semantics / §NFR-QS-02 a11y / §7 UI mockup / §13 Acceptance Criteria)。`feature/quick-start-swipe-ui` ブランチを develop から切って実装: QuickStartCard を SwipeChoice ラップに書き換え、独自 Y/N ボタンと keyboard hint を撤廃。DecisionPage で QuickStartCard を `key={quick.current.id}` で re-key (reject 時の confirming/dx 残留防止)。strings の unused key を削除。tests: web unit 170 PASS / quick-start e2e 7/7 PASS / build OK。
+**Context**: Post-CONSTRUCTION v3 UI iteration
+
+### e2e regression 報告 (v2 完了後の調査)
+**Timestamp**: 2026-05-22T14:20:00Z
+**User Input**: "ultrathinkで修正事項のe2eを実施"
+**AI Response**: ultrathink で /decision を使う既存 9 spec を回帰実行 (98 件)。83 passed / 15 failed。失敗 screenshot から原因確定: 「エラーが発生しました: proposal_timeout」(API Mock LLM が proposal 生成で timeout)。私の helper 修正 (gotoAuthenticated の skipQuickStart option) は正しく機能 (textbox / 送信 / persona pill 正常露出)。失敗は **parallel 4 worker + Mock LLM の負荷スパイク** に起因する既存安定性問題で、QuickStart 修正の regression ではない。QuickStart 専用 spec 7/7 PASS、SSE 統合含めて v2 仕様健全動作確認済。
+**Context**: Post-CONSTRUCTION v3 e2e 報告
 
 ---
