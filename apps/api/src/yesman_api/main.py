@@ -63,7 +63,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     repo_factory = RepositoryFactory(config)
     auth_factory = AuthBackendFactory(config)
     llm_factory = LLMProviderFactory(config)
-    event_factory = EventPublisherFactory(config)
+    # issue #88: inline-async 時に InlineLearningHandler 経由で
+    # preference profile を同一プロセスで更新するため repo_factory を渡す
+    event_factory = EventPublisherFactory(config, repo_factory=repo_factory)
 
     auth_adapter = await auth_factory.create()
     llm_provider = await llm_factory.create()

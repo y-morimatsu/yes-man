@@ -5029,3 +5029,15 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 
 **Context**: `ai-dlcで進める` 指示 + UX 確認回答後の自走 (Auto Mode Active)。
 ---
+
+## Post-CONSTRUCTION 改修 v3 - 嗜好プロファイル反映 fix (issue #88)
+**Timestamp**: 2026-05-23T01:15:00Z
+**User Input**: "嗜好プロファイルが反映されない原因を調査して issue を作成して対応"
+**AI Response**:
+- branch: `bugfix/issue-88-preference-inline-handler` (develop 起点)
+- issue: #88 (bug、root cause + 対応方針記載)
+- 根本原因: `EVENT_BACKEND=sync` で SyncPublisher が no-op、apply_yes/no が呼ばれず preference 空のまま
+- 修正: `InlineLearningHandler` 新設 + `EventPublisherFactory` に repo_factory 注入口 + `.env` を `inline-async` に切替
+- E2E smoke OK (POST /decisions/stream → /choice yes → GET /preferences/me で accepted_patterns 反映確認)
+- api pytest 278 PASS / 14 SKIP (新 unit 4 + integration 3)
+---
