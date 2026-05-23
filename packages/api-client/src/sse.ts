@@ -15,6 +15,10 @@ export type DecisionRequestPayload = components["schemas"]["DecisionRequestDTO"]
 
 export type DecisionStreamEvent =
   | { type: "start"; data: { decision_id: string } }
+  // Post-CONSTRUCTION v3 (2026-05-23): personas pre-fill - delta 到着前から bubble header を可視化
+  | { type: "personas"; data: { personas: { id: string; name: string }[] } }
+  // Post-CONSTRUCTION v3 (2026-05-23): token streaming - text は LLM chunk
+  | { type: "utterance_delta"; data: { persona_id: string; persona_name: string; text: string } }
   | { type: "utterance"; data: { persona_id: string; persona_name: string; text: string } }
   | { type: "proposal"; data: { proposal_text: string } }
   | { type: "complete"; data: { decision_id: string } }

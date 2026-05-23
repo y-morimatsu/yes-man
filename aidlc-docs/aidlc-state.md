@@ -392,6 +392,7 @@ CONSTRUCTION 全完了 (2026-05-16) 以降に発生した実装/仕様変更を�
 | 2026-05-19 | `c44e032` | CLAUDE.md += Git-Flow Branching Model | `CLAUDE.md` (リポジトリ root)、本セクション |
 | 2026-05-19 | `07c1c78` | **Dynamic Persona Routing** (Closes #4) — `DecisionEngine._resolve_personas` 拡張、嗜好プロファイルから top-3 builtin persona を自動推奨、`PersonaSelectionPage` 「💡おすすめ」pink pill badge | `construction/U4-decision/functional-design`、`construction/U-Persona/functional-design`、`construction/U5-learning/functional-design`、`construction/U7d-features/functional-design` |
 | 2026-05-19 | `28c8adc` | Splash の「→ スワイプして同意」削除 | `construction/U7d-features/functional-design` (Splash 文言) |
+| 2026-05-23 | `feature/realtime-discussion-chat-display` (in-flight) | **議論チャット token streaming** — `engine.run_stream` を `_llm.stream()` ベースに refactor (`asyncio.Queue` fan-in)、新 SSE event `utterance_delta` + 既存 `utterance` (最終 cleaned) を併用。frontend reducer + `useDecisionStream` + `DecisionResult` + `PersonaThinkingChips` で delta accumulate + 「考え中→発言中→✓」3-state chip 化。Hackathon Pragmatism + Auto Mode で実装。 | `construction/U4-decision/functional-design`、`construction/U7d-features/functional-design`、`construction/U7c-api-client/functional-design` |
 
 ### Extension Configuration (Post-CONSTRUCTION 追加)
 | Extension | Enabled | 適用方針 |

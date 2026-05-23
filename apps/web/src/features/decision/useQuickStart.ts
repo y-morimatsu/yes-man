@@ -8,6 +8,7 @@
  */
 import { useMemo, useState, useCallback } from "react";
 import {
+  pool,
   selectQuickStartQueue,
   type QuickStartTemplate,
 } from "./quickStartTemplates";
@@ -38,8 +39,12 @@ export interface UseQuickStartResult {
 
 export function useQuickStart({ now = () => new Date() }: UseQuickStartOptions = {}): UseQuickStartResult {
   // init: hook mount 時に 1 回だけ queue を構築. Date / localStorage 依存はここに閉じる.
+  // 2026-05-23: VITE_QUICKSTART_DEDUPE=off (demo / dev) で recent-yes 除外を無効化。
+  // 同じ template を繰り返し触りたいユースケースに対応。default は dedupe ON。
   const initialQueue = useMemo<QuickStartTemplate[]>(() => {
-    const excluded = getRecentYesIds(now());
+    const dedupeEnabled =
+      (import.meta.env.VITE_QUICKSTART_DEDUPE ?? "on") !== "off";
+    const excluded = dedupeEnabled ? getRecentYesIds(now()) : new Set<string>();
     return selectQuickStartQueue(now(), excluded);
     // mount 時にのみ評価。`now` が differ する test では別 useQuickStart instance を使う想定.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,7 +56,11 @@ export function useQuickStart({ now = () => new Date() }: UseQuickStartOptions =
     initialQueue.length > 0 ? "quick" : "text",
   );
 
-  const current = mode === "quick" ? queue[0] ?? null : null;
+  // 2026-05-23 修正: queue が drained (例えば catchAll を accept した後) でも、
+  // "quick" mode の間は catchAll を fallback として常に表示する。
+  // (以前は queue 空 → current=null → 同一 session で textbox に降格するバグが発生)
+  const current =
+    mode === "quick" ? (queue[0] ?? pool.catchAll) : null;
 
   const accept = useCallback((): string => {
     if (!current) return "";

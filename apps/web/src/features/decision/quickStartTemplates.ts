@@ -64,9 +64,9 @@ export function selectQuickStartQueue(
     return a.id.localeCompare(b.id);
   });
 
-  // catchAll は除外フィルタを通過していなければ末尾に追加 (priority が低いので位置を強制する)
-  if (!excludeIds.has(source.catchAll.id)) {
-    matched.push(source.catchAll);
-  }
+  // catchAll は spec §6「常に最後の候補」のため、recent-yes 除外を通さず必ず末尾に追加。
+  // (以前は excludeIds.has() を見て除外していたが、user が catchAll に YES した直後に
+  //  全 template + catchAll が除外され queue 空 → mode=text に転落するバグを引き起こしていた)
+  matched.push(source.catchAll);
   return matched;
 }

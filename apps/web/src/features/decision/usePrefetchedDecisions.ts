@@ -79,7 +79,7 @@ export function usePrefetchedDecisions(
                 decisionId = event.data.decision_id;
                 break;
               case "utterance":
-                utterances.push(event.data);
+                utterances.push({ ...event.data, done: true });
                 break;
               case "proposal":
                 proposal = event.data.proposal_text;

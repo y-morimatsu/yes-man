@@ -52,4 +52,23 @@ describe("useQuickStart", () => {
     expect(result.current.mode).toBe("text");
     expect(result.current.current).toBeNull();
   });
+
+  // 2026-05-23 修正: queue 完全 drained でも catchAll を fallback で表示し続ける
+  it("queue を全 accept で drain しても current は catchAll fallback で non-null", () => {
+    const { result } = renderHook(() => useQuickStart({ now: fri12 }));
+    // 安全のため大きめの上限で drain ループ
+    for (let i = 0; i < 100; i++) {
+      if (result.current.current === null) break;
+      const prev = result.current.current.id;
+      act(() => {
+        result.current.accept();
+      });
+      // catchAll fallback に達した後は current.id が固定される
+      if (result.current.current?.id === prev) break;
+    }
+    expect(result.current.mode).toBe("quick");
+    expect(result.current.current).not.toBeNull();
+    // catchAll の id (quickStartTemplates.generated.json) と一致
+    expect(result.current.current?.id).toBe("anything-on-mind");
+  });
 });

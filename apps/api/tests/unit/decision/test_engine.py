@@ -239,11 +239,70 @@ class TestRunStreamParallel:
         decision_id = uuid4()
 
         events = [e async for e in engine.run_stream(decision_id=decision_id, request=request)]
-        utterance_personas = {e.data["persona_name"] for e in events if e.type == "utterance"}
-        assert utterance_personas == {"楽観派", "効率派"}
+        # Post-CONSTRUCTION v3 (2026-05-23): utterance event は失敗 persona も含めて 3 件 emit
+        # (frontend bubble の「発言中…」状態解除のため)。本物の text を持つのは 2 件。
+        utterance_events = [e for e in events if e.type == "utterance"]
+        assert {e.data["persona_name"] for e in utterance_events} == {
+            "慎重派", "楽観派", "効率派",
+        }
+        successful = [e for e in utterance_events if e.data["text"]]
+        assert {e.data["persona_name"] for e in successful} == {"楽観派", "効率派"}
         assert sum(1 for e in events if e.type == "proposal") == 1
         assert sum(1 for e in events if e.type == "complete") == 1
         assert sum(1 for e in events if e.type == "error") == 0
+
+    @pytest.mark.asyncio
+    async def test_utterance_delta_events_emitted(self):
+        """Post-CONSTRUCTION v3 (2026-05-23): token streaming.
+
+        各 persona について utterance_delta event が 1 件以上、
+        最後の delta の後に utterance event が yield される。
+        delta を順に結合した raw text と utterance event の text (cleaned) が
+        whitespace 差以外で一致する。
+        """
+        llm = MockLLMProvider(chunk_size=5)  # 短 chunk で複数 delta を強制
+        engine = _make_engine(llm=llm)
+        request = decision_request_factory(user_input="今日のランチを決めて")
+        decision_id = uuid4()
+
+        events = [
+            e async for e in engine.run_stream(decision_id=decision_id, request=request)
+        ]
+
+        # utterance_delta が各 persona ごとに >= 1 件
+        delta_by_persona: dict[str, list[str]] = {}
+        for e in events:
+            if e.type == "utterance_delta":
+                delta_by_persona.setdefault(e.data["persona_name"], []).append(
+                    e.data["text"]
+                )
+        assert set(delta_by_persona.keys()) == {"慎重派", "楽観派", "効率派"}
+        for chunks in delta_by_persona.values():
+            assert len(chunks) >= 2, "chunk_size=5 で複数 delta が emit されるはず"
+
+        # 各 persona について最後の delta の後に utterance が来る
+        for persona_name in delta_by_persona:
+            indices = [
+                i
+                for i, e in enumerate(events)
+                if (e.type == "utterance_delta" or e.type == "utterance")
+                and e.data["persona_name"] == persona_name
+            ]
+            assert events[indices[-1]].type == "utterance", (
+                f"{persona_name}: last event should be utterance (final), got "
+                f"{events[indices[-1]].type}"
+            )
+
+        # final utterance の text と delta 結合結果 (raw) は cleaned 差を除き一致
+        for e in events:
+            if e.type != "utterance":
+                continue
+            raw = "".join(delta_by_persona[e.data["persona_name"]])
+            # clean_utterance_output は prefix 除去 + strip + 200字制限のみ。
+            # raw に含まれる「{name}の意見:」prefix を除去後、strip して一致するはず。
+            from yesman_api.domain.decision.consensus import clean_utterance_output
+
+            assert e.data["text"] == clean_utterance_output(raw)
 
     @pytest.mark.asyncio
     async def test_all_personas_timeout(self):

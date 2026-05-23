@@ -6,10 +6,13 @@
  */
 
 // Utterance 型 (api-client Type-only import 想定、依存 cycle 回避で local 定義)
+// Post-CONSTRUCTION v3 (2026-05-23): `done` で streaming 中 vs 確定済を区別。
+// false = utterance_delta accumulate 中 / true = 最終 utterance event 到着済。
 export interface Utterance {
   persona_id: string;
   persona_name: string;
   text: string;
+  done: boolean;
 }
 
 export type DecisionState =
@@ -36,6 +39,18 @@ export type DecisionAction =
   | { type: "setInput"; input: string }
   | { type: "start" }
   | { type: "onStart"; decisionId: string }
+  // Post-CONSTRUCTION v3 (2026-05-23): personas pre-fill - bubble を delta 到着前から表示
+  | {
+      type: "onPersonasResolved";
+      personas: { id: string; name: string }[];
+    }
+  // Post-CONSTRUCTION v3 (2026-05-23): token streaming chunk
+  | {
+      type: "onUtteranceDelta";
+      personaId: string;
+      personaName: string;
+      chunk: string;
+    }
   | { type: "onUtterance"; utterance: Utterance }
   | { type: "onProposal"; proposal: string }
   | { type: "onComplete" }
@@ -77,9 +92,64 @@ export function decisionReducer(
       if (state.status !== "streaming") return state;
       return { ...state, decisionId: action.decisionId };
 
-    case "onUtterance":
+    case "onPersonasResolved": {
+      // Post-CONSTRUCTION v3 (2026-05-23): 既存 entry にない persona を text="" / done=false で
+      // pre-fill する。delta 到着前から bubble header (icon + name) を可視化。
       if (state.status !== "streaming") return state;
-      return { ...state, utterances: [...state.utterances, action.utterance] };
+      const existing = new Set(state.utterances.map((u) => u.persona_id));
+      const newEntries: Utterance[] = action.personas
+        .filter((p) => !existing.has(p.id))
+        .map((p) => ({
+          persona_id: p.id,
+          persona_name: p.name,
+          text: "",
+          done: false,
+        }));
+      if (newEntries.length === 0) return state;
+      return { ...state, utterances: [...state.utterances, ...newEntries] };
+    }
+
+    case "onUtteranceDelta": {
+      // Post-CONSTRUCTION v3: 既存 persona に append、無ければ insert (done=false)。
+      if (state.status !== "streaming") return state;
+      const existingIdx = state.utterances.findIndex(
+        (u) => u.persona_id === action.personaId,
+      );
+      if (existingIdx === -1) {
+        return {
+          ...state,
+          utterances: [
+            ...state.utterances,
+            {
+              persona_id: action.personaId,
+              persona_name: action.personaName,
+              text: action.chunk,
+              done: false,
+            },
+          ],
+        };
+      }
+      const current = state.utterances[existingIdx]!;
+      const updated = state.utterances.slice();
+      updated[existingIdx] = { ...current, text: current.text + action.chunk };
+      return { ...state, utterances: updated };
+    }
+
+    case "onUtterance": {
+      // Post-CONSTRUCTION v3: 既存 streaming entry を最終 cleaned text で確定 (done=true)。
+      // delta 受信前に utterance が来た場合 (fast path) は新規 push。
+      if (state.status !== "streaming") return state;
+      const finalU: Utterance = { ...action.utterance, done: true };
+      const existingIdx = state.utterances.findIndex(
+        (u) => u.persona_id === finalU.persona_id,
+      );
+      if (existingIdx === -1) {
+        return { ...state, utterances: [...state.utterances, finalU] };
+      }
+      const updated = state.utterances.slice();
+      updated[existingIdx] = finalU;
+      return { ...state, utterances: updated };
+    }
 
     case "onProposal":
       if (state.status !== "streaming") return state;
