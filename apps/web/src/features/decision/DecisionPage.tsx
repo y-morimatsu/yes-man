@@ -18,6 +18,7 @@ import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
 import { QuickStartCard } from "./QuickStartCard";
 import { useQuickStart } from "./useQuickStart";
 import { useYesNudge } from "./useYesNudge";
+import { YesManMascot, type MascotState } from "./YesManMascot";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -40,6 +41,12 @@ export default function DecisionPage() {
 
   // issue #93: No 採択 → 別案到着後に Yes 採択を後押しする LLM 動的 microcopy.
   const yesNudge = useYesNudge();
+  // Hackathon: 直近の Yes/No 採択を mascot 用に保持 (1.6s で自動 clear).
+  const [recentChoice, setRecentChoice] = useState<"yes" | "no" | null>(null);
+  const handleChoiceMade = (choice: "yes" | "no") => {
+    setRecentChoice(choice);
+    window.setTimeout(() => setRecentChoice(null), 1600);
+  };
 
   const { startStream } = useDecisionStream({
     onStart: (id) => dispatch({ type: "onStart", decisionId: id }),
@@ -248,6 +255,7 @@ export default function DecisionPage() {
           decisionId={state.status === "completed" ? state.decisionId : null}
           onComplete={handleFullReset}
           onNoChosen={handleNoChosen}
+          onChoiceMade={handleChoiceMade}
         />
       )}
 
@@ -340,6 +348,22 @@ export default function DecisionPage() {
           {t("bottomHint")}
         </p>
       )}
+
+      {/* Hackathon: YesMan マスコット (右下 fixed、Portal 風)、状況に応じて吹き出し */}
+      <YesManMascot state={resolveMascotState(state.status, recentChoice)} />
     </div>
   );
+}
+
+/** mascot 表示状態を state.status + recentChoice から導出. */
+function resolveMascotState(
+  status: "idle" | "streaming" | "completed" | "silenced" | "error",
+  recentChoice: "yes" | "no" | null,
+): MascotState {
+  if (recentChoice === "yes") return "yes";
+  if (recentChoice === "no") return "no";
+  if (status === "silenced") return "silenced";
+  if (status === "streaming") return "streaming";
+  if (status === "completed") return "proposing";
+  return "hidden";
 }

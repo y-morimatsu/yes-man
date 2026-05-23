@@ -35,6 +35,8 @@ export interface DecisionResultProps {
   /** No 採択時に parent へ no_attempt_count を通知し、別案 regenerate を依頼.
    *  INCEPTION Journey C: No → 自動再生成 + 段階的 microcopy. */
   onNoChosen?: (noAttemptCount: number) => void;
+  /** Hackathon: 親 (DecisionPage) で mascot 状態を切り替えるための callback. */
+  onChoiceMade?: (choice: "yes" | "no") => void;
 }
 
 export function DecisionResult({
@@ -43,6 +45,7 @@ export function DecisionResult({
   decisionId,
   onComplete,
   onNoChosen,
+  onChoiceMade,
 }: DecisionResultProps) {
   const choose = useChooseMutation();
   const { push } = useToast();
@@ -146,8 +149,10 @@ export function DecisionResult({
         setChosen("yes");
         setNoCount(count);
         fireConfetti(newCombo);
+        onChoiceMade?.("yes");
       } else {
         combo.recordNo();
+        onChoiceMade?.("no");
         // INCEPTION Journey C: No → 親に regenerate 委譲
         onNoChosen?.(count);
       }
