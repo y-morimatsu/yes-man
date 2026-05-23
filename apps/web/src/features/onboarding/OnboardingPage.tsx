@@ -128,12 +128,13 @@ export default function OnboardingPage() {
         </div>
       </div>
 
-      {/* 質問カード — SwipeChoice 再利用 */}
+      {/* 質問カード — SwipeChoice 再利用 (連続出題で hint は非表示) */}
       <SwipeChoice
         key={q.id} // 質問変わる度に internal state を強制 reset
         proposalText={q.text}
         onYes={handleYes}
         onNo={handleNo}
+        showSwipeHint={false}
       >
         <article
           className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 p-6 shadow-md flex flex-col items-center gap-3"
