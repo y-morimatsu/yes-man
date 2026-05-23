@@ -13,6 +13,8 @@ export interface UtteranceBubbleProps {
   personaName: string;
   text: string;
   variant?: UtteranceBubbleVariant;
+  /** Post-CONSTRUCTION v3 (2026-05-23): token streaming 中フラグ. true で「発言中…」を header に併記. */
+  streaming?: boolean;
 }
 
 /** INCEPTION drawio B7 / G2 仕様の persona icon マッピング. */
@@ -27,6 +29,7 @@ export function DecisionUtteranceBubble({
   personaName,
   text,
   variant = "default",
+  streaming = false,
 }: UtteranceBubbleProps) {
   const bg =
     variant === "highlighted"
@@ -36,14 +39,24 @@ export function DecisionUtteranceBubble({
 
   return (
     <div
-      className={`p-3 rounded-2xl max-w-utterance ${bg}`}
+      className={`p-3 rounded-2xl max-w-utterance ${bg} min-h-16`}
       role="article"
-      aria-label={`発話 by ${personaName}`}
+      aria-label={`発話 by ${personaName}${streaming ? " (発言中)" : ""}`}
     >
-      <span className="text-xs font-medium text-brand-700 dark:text-brand-300">
-        <span aria-hidden className="mr-1">{icon}</span>
-        {personaName}
-      </span>
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-brand-700 dark:text-brand-300">
+          <span aria-hidden className="mr-1">{icon}</span>
+          {personaName}
+        </span>
+        {streaming && (
+          <span
+            className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 animate-pulse motion-reduce:animate-none"
+            aria-hidden
+          >
+            発言中…
+          </span>
+        )}
+      </div>
       <p className="text-base mt-1 leading-relaxed">{text}</p>
     </div>
   );

@@ -39,7 +39,17 @@ export default function DecisionPage() {
 
   const { startStream } = useDecisionStream({
     onStart: (id) => dispatch({ type: "onStart", decisionId: id }),
-    onUtterance: (u) => dispatch({ type: "onUtterance", utterance: u }),
+    onPersonasResolved: (personas) =>
+      dispatch({ type: "onPersonasResolved", personas }),
+    onUtteranceDelta: (d) =>
+      dispatch({
+        type: "onUtteranceDelta",
+        personaId: d.persona_id,
+        personaName: d.persona_name,
+        chunk: d.text,
+      }),
+    onUtterance: (u) =>
+      dispatch({ type: "onUtterance", utterance: { ...u, done: true } }),
     onProposal: (text) => dispatch({ type: "onProposal", proposal: text }),
     onComplete: () => {
       dispatch({ type: "onComplete" });

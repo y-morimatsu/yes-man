@@ -4976,3 +4976,56 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 **Context**: Post-CONSTRUCTION v3 e2e 報告
 
 ---
+
+## Post-CONSTRUCTION 改修 v3 - 議論チャット文字列の token-streaming 表示 (Inception 開始)
+**Timestamp**: 2026-05-23T00:00:00Z
+**User Input**: "ai-dlcで進める
+
+画像部の議論のチャットについて、ペルソナ単位で議論の結果が終わるまで議論全体の文字列が表示されない。文字をパラパラと表示するようにする"
+
+**Attachment**: スクリーンショット — DecisionPage の議論中 UI、3 ペルソナ chip がすべて「考え中...」、本文 3 box は skeleton 状態
+**AI Response**: AI-DLC workflow 開始、feature branch `feature/realtime-discussion-chat-display` (develop 起点) で作業。Hackathon Pragmatism (Post-CONSTRUCTION v3 と同じ流儀) で軽量 Requirements Analysis → 実装に進む。
+**Context**: Post-CONSTRUCTION 改修フェーズ v3、対象 unit は U7d-features (DecisionPage / useDecisionStream / Result 周辺)。
+---
+
+## Post-CONSTRUCTION 改修 v3 - 議論チャット文字列の token-streaming 表示 (実装完了)
+**Timestamp**: 2026-05-23T00:30:00Z
+**AI Response**:
+- branch: `feature/realtime-discussion-chat-display` (develop 起点)
+- Hackathon Pragmatism + 軽量 AI-DLC workflow で実装完了
+- UX 確認: token を pass-through で UI 描画 (Recommended、user 確定)
+
+### 変更ファイル (7 ファイル)
+**Backend**:
+- `apps/api/src/yesman_api/domain/decision/engine.py` (`run_stream` を `self._llm.stream()` ベースに refactor、`asyncio.Queue` fan-in で 3 persona 並列 stream + `utterance_delta` event + 最終 `utterance` event)
+
+**api-client**:
+- `packages/api-client/src/sse.ts` (discriminated union に `utterance_delta` event 追加)
+
+**Frontend (apps/web)**:
+- `src/features/decision/reducer.ts` (`Utterance.done` 必須化、`onUtteranceDelta` action 追加、`onUtterance` で merge-by-persona_id 化)
+- `src/features/decision/useDecisionStream.ts` (`onUtteranceDelta` callback + `utterance_delta` dispatch、`utterance` 経由は `done=true` 付与)
+- `src/features/decision/DecisionPage.tsx` (`onUtteranceDelta` dispatch 追加)
+- `src/features/decision/DecisionResult.tsx` (bubble + skeleton を同一 container に統合、bubble 描画優先・残数だけ skeleton 化)
+- `src/features/decision/PersonaThinkingChips.tsx` (3 state: 考え中 / 発言中 / ✓ に拡張)
+- `src/features/decision/usePrefetchedDecisions.ts` (`done: true` 付与で型適合)
+
+### tests (4 ファイル)
+- `apps/api/tests/unit/decision/test_engine.py`: `test_utterance_delta_events_emitted` 追加 (chunk_size=5 で multi-delta + 結合一致を verify)
+- `apps/web/tests/features/decision/reducer.test.ts`: `onUtteranceDelta` 5 ケース追加 (insert/append/replace/multi-persona/no-op)
+- `apps/web/tests/property/decision_reducer.test.ts`: `onUtteranceDelta` PBT action 追加、`silenced` status 追記
+- `apps/web/tests/features/decision/PersonaThinkingChips.test.tsx`: 発言中 / 状態遷移 test 追加
+
+### 検証結果
+- api pytest: 271 PASS / 14 SKIP (DB integration + aws optional)
+- web vitest: 177 PASS / 32 test files
+- TypeScript `tsc --noEmit`: src/ + decision test 群 OK (Layout/SignInPage の既存型エラーは本 PR と無関係)
+- Backend SSE smoke (curl `/v1/decisions/request/stream`): `start 1 / utterance_delta 433 / utterance 3 / proposal 1 / complete 1` (Azure GPT 経由、3 persona 並列 token stream 動作確認)
+
+### UX
+- delta は LLM token のまま pass-through (raw)、最終 `utterance` event で cleaned text に置換 (prefix 除去 + 200 字 truncate)
+- PersonaThinkingChips: 考え中… (idle) → 発言中… (delta accumulate 中、amber) → ✓ {persona名} (final 到着)
+- bubble 表示: 受信 delta が即座に bubble に append、未到着 persona は skeleton 残数のみ表示
+
+**Context**: `ai-dlcで進める` 指示 + UX 確認回答後の自走 (Auto Mode Active)。
+---

@@ -11,7 +11,7 @@ import fc from "fast-check";
 import { decisionReducer, initialState } from "../../src/features/decision/reducer";
 import type { DecisionAction, DecisionState } from "../../src/features/decision/reducer";
 
-const validStatuses = ["idle", "streaming", "completed", "error"] as const;
+const validStatuses = ["idle", "streaming", "completed", "silenced", "error"] as const;
 
 describe("decisionReducer PBT invariants", () => {
   it("status is always one of 4 valid values", () => {
@@ -21,7 +21,9 @@ describe("decisionReducer PBT invariants", () => {
           { type: "setInput", input: "x" },
           { type: "start" },
           { type: "onStart", decisionId: "d1" },
-          { type: "onUtterance", utterance: { persona_id: "p", persona_name: "n", text: "t" } },
+          { type: "onUtterance", utterance: { persona_id: "p", persona_name: "n", text: "t", done: true } },
+          { type: "onUtteranceDelta", personaId: "p", personaName: "n", chunk: "x" },
+          { type: "onPersonasResolved", personas: [{ id: "p", name: "n" }] },
           { type: "onProposal", proposal: "p" },
           { type: "onComplete" },
           { type: "onError", error: "e" },

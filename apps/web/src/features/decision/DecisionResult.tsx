@@ -21,7 +21,6 @@ import {
 import type { Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
-import { PersonaThinkingChips } from "./PersonaThinkingChips";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 import confetti from "canvas-confetti";
@@ -92,19 +91,13 @@ export function DecisionResult({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Pack A #3: 3 人格 thinking chips (streaming 中のみ表示) */}
-      {isStreaming && <PersonaThinkingChips utterances={utterances} />}
+      {/* Post-CONSTRUCTION v3 (2026-05-23): 旧 PersonaThinkingChips は廃止。
+          persona 名・発言中 status は bubble header に統合 (重複排除)。 */}
 
-      {/* Skeleton bubbles for unreceived utterances during streaming */}
-      {isStreaming && utterances.length < 3 && (
-        <div className="flex flex-col gap-2">
-          {Array.from({ length: 3 - utterances.length }).map((_, i) => (
-            <Skeleton key={`utterance-skel-${i}`} className="h-16 w-full" />
-          ))}
-        </div>
-      )}
-
-      {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵) */}
+      {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵).
+          Post-CONSTRUCTION v3 (2026-05-23): bubble は streaming 中の delta も
+          そのまま render (text が空文字でも自動増分するので box が「パラパラ」と埋まる).
+          未到着 persona 分の skeleton は bubble の下に残数だけ表示。 */}
       {showUtterances && (
         <div
           className="flex flex-col gap-2"
@@ -112,13 +105,19 @@ export function DecisionResult({
           aria-label="議論 (utterance 一覧)"
           id="discussion-region"
         >
-          {utterances.map((u, i) => (
+          {utterances.map((u) => (
             <DecisionUtteranceBubble
-              key={`${u.persona_id}-${i}`}
+              key={u.persona_id}
               personaName={u.persona_name}
               text={u.text}
+              streaming={!u.done}
             />
           ))}
+          {isStreaming &&
+            utterances.length < 3 &&
+            Array.from({ length: 3 - utterances.length }).map((_, i) => (
+              <Skeleton key={`utterance-skel-${i}`} className="h-16 w-full" />
+            ))}
         </div>
       )}
 
