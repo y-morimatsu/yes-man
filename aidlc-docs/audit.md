@@ -5074,3 +5074,18 @@ YESを選択したら、次の候補を考えて出したい、
 
 **Context**: ハッカソン後の差別化、コア体験 (YES を押し続けて深堀り) の延長。NudgeBanner 終端固定の現状を「最終決定まで chain する」UX へ変更。
 ---
+
+## アイデア検証 v3-β - 新規登録時 嗜好把握 onboarding (Inception 開始)
+**Timestamp**: 2026-05-23T11:00:00Z
+**User Input**: "ai-dlcを利用してこのブランチに次のアイデアを実装する。
+ユーザ新規登録時にユーザ嗜好把握(YES-NOで50問ぐらい)をする"
+
+**AI Response**:
+- アイデア検証フェーズ第 2 弾 (`feature/next-spec-ideas` 上で実装)
+- 想定: signup 直後に YES/NO ~50 問の onboarding カードを表示、PreferenceProfile を cold-start 状態から埋める
+- v0.4.0 で持っている YES-nudge LLM / drill-down chain / PreferenceProfile 学習 と整合
+- 影響範囲: U7d-features (新 OnboardingPage)、U2-storage (Profile に onboarding_completed flag)、U7c-api-client (新 endpoint method)、おそらく新 application/onboarding/ 配下
+- memory `project-ideation-phase-no-auto-merge` 適用 (PR は作成可、merge は user 承認まで)
+
+**Context**: Cold-start user の Persona Selection 自動推奨 (`Dynamic Persona Routing`) や drill-down service 紐付けが、空 PreferenceProfile では効きづらいため、onboarding で初期データを取る。
+---

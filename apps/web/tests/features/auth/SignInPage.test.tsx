@@ -73,7 +73,7 @@ describe("SignInPage — bypass mode", () => {
     expect(screen.getByRole("button", { name: "サインイン" })).toBeDisabled();
   });
 
-  it("有効な email 入力 + [サインイン] click で自動登録 + navigate (/decision)", async () => {
+  it("有効な email 入力 + [サインイン] click で自動登録 + navigate (新規ユーザは /onboarding)", async () => {
     const user = userEvent.setup();
     renderPage();
     await user.type(screen.getByRole("textbox", { name: /email/i }), "taro@example.com");
@@ -82,12 +82,12 @@ describe("SignInPage — bypass mode", () => {
 
     await waitFor(() => {
       expect(listUsers()).toHaveLength(1);
-      expect(listUsers()[0].email).toBe("taro@example.com");
-      expect(listUsers()[0].display_name).toBe("Taro");
+      expect(listUsers()[0]!.email).toBe("taro@example.com");
+      expect(listUsers()[0]!.display_name).toBe("Taro");
       expect(getCurrentEmail()).toBe("taro@example.com");
     });
-    // from 未指定 (default "/") は /decision に振替される
-    expect(navigateMock).toHaveBeenCalledWith("/decision", { replace: true });
+    // v3-β: 新規ユーザは default flow で /onboarding に redirect (嗜好把握)
+    expect(navigateMock).toHaveBeenCalledWith("/onboarding", { replace: true });
   });
 
   it("既存 user row click で setCurrentEmail + navigate (/decision)", async () => {

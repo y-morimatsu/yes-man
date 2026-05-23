@@ -50,13 +50,23 @@ export default function SignInPage() {
       }
       // bypass: email を渡して自動登録 + サインイン (display_name は新規時のみ後追いセット)
       const normalizedEmail = email.trim().toLowerCase();
+      // v3-β onboarding: signIn 前に存在判定して new-user かどうかを記憶
+      const isNewUser = !listUsers().some((u) => u.email === normalizedEmail);
       await signIn(email);
       if (displayName.trim()) {
         // registerUser は idempotent で display_name を上書きしない設計のため、
         // 別 API (updateDisplayName) で「未設定のときだけ埋める」
         updateDisplayName(normalizedEmail, displayName);
       }
-      await proceedAfterSignIn();
+      // 新規ユーザかつ default flow (rawFrom = "/") の場合は嗜好把握 onboarding にリダイレクト.
+      // location.state.from が明示的に指定されていれば、新規ユーザでもそれを尊重 (例: /score 経由)
+      if (isNewUser && rawFrom === "/") {
+        await refresh();
+        setUsers(listUsers());
+        navigate("/onboarding", { replace: true });
+      } else {
+        await proceedAfterSignIn();
+      }
     } catch (err) {
       push({ message: `サインインに失敗しました: ${String(err)}`, variant: "error" });
     } finally {

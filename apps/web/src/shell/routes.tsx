@@ -17,6 +17,8 @@ const PersonaListPage = lazy(() => import("../features/persona/PersonaListPage")
 const PersonaSelectionPage = lazy(() => import("../features/persona/PersonaSelectionPage"));
 const ScorePage = lazy(() => import("../features/score/ScorePage"));
 const PreferencePage = lazy(() => import("../features/preference/PreferencePage"));
+// アイデア検証 v3-β: 新規登録時 嗜好把握 onboarding
+const OnboardingPage = lazy(() => import("../features/onboarding/OnboardingPage"));
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,14 @@ export const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <PreferencePage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "onboarding",
+        element: (
+          <RequireAuth>
+            <OnboardingPage />
           </RequireAuth>
         ),
       },
