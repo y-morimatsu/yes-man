@@ -1,459 +1,18 @@
 {
-  "generatedAt": "2026-05-23T12:58:06.849241+00:00",
+  "generatedAt": "2026-05-23T13:16:47.042011+00:00",
   "generatedBy": "fallback-handcurated-v1",
   "schemaVersion": 1,
   "questions": [
     {
-      "id": "svc-movie-001",
-      "text": "週末は家で映画やドラマを観るのが好きだ",
-      "kind": "service",
-      "category": "movie",
-      "yes_signal": {
-        "accepted_pattern_domain": "movie",
-        "inferred_tag": "movie"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "movie"
-      }
-    },
-    {
-      "id": "svc-movie-002",
-      "text": "ホラー映画は楽しめる方だ",
-      "kind": "service",
-      "category": "movie",
-      "yes_signal": {
-        "accepted_pattern_domain": "movie",
-        "inferred_tag": "movie"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "movie"
-      }
-    },
-    {
-      "id": "svc-movie-003",
-      "text": "話題の新作映画は公開後すぐ観たい",
-      "kind": "service",
-      "category": "movie",
-      "yes_signal": {
-        "accepted_pattern_domain": "movie",
-        "inferred_tag": "movie"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "movie"
-      }
-    },
-    {
-      "id": "svc-movie-004",
-      "text": "字幕より吹替の方が観やすい",
-      "kind": "service",
-      "category": "movie",
-      "yes_signal": {
-        "accepted_pattern_domain": "movie",
-        "inferred_tag": "movie"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "movie"
-      }
-    },
-    {
-      "id": "svc-food_delivery-005",
-      "text": "宅配サービスをよく利用する",
-      "kind": "service",
-      "category": "food_delivery",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_delivery",
-        "inferred_tag": "food_delivery"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_delivery"
-      }
-    },
-    {
-      "id": "svc-food_delivery-006",
-      "text": "ピザは食べたくなる方だ",
-      "kind": "service",
-      "category": "food_delivery",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_delivery",
-        "inferred_tag": "food_delivery"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_delivery"
-      }
-    },
-    {
-      "id": "svc-food_delivery-007",
-      "text": "Uber Eats などのデリバリーは便利だと思う",
-      "kind": "service",
-      "category": "food_delivery",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_delivery",
-        "inferred_tag": "food_delivery"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_delivery"
-      }
-    },
-    {
-      "id": "svc-food_delivery-008",
-      "text": "外食より宅配で家で食べる方が好きだ",
-      "kind": "service",
-      "category": "food_delivery",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_delivery",
-        "inferred_tag": "food_delivery"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_delivery"
-      }
-    },
-    {
-      "id": "svc-food_restaurant-009",
-      "text": "外食でレストランを開拓するのが好きだ",
-      "kind": "service",
-      "category": "food_restaurant",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_restaurant",
-        "inferred_tag": "food_restaurant"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_restaurant"
-      }
-    },
-    {
-      "id": "svc-food_restaurant-010",
-      "text": "新しい店を Google Maps で探す方だ",
-      "kind": "service",
-      "category": "food_restaurant",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_restaurant",
-        "inferred_tag": "food_restaurant"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_restaurant"
-      }
-    },
-    {
-      "id": "svc-food_restaurant-011",
-      "text": "ランチは外で食べる方が多い",
-      "kind": "service",
-      "category": "food_restaurant",
-      "yes_signal": {
-        "accepted_pattern_domain": "food_restaurant",
-        "inferred_tag": "food_restaurant"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "food_restaurant"
-      }
-    },
-    {
-      "id": "svc-shopping-012",
-      "text": "Amazon でよく買い物をする",
-      "kind": "service",
-      "category": "shopping",
-      "yes_signal": {
-        "accepted_pattern_domain": "shopping",
-        "inferred_tag": "shopping"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "shopping"
-      }
-    },
-    {
-      "id": "svc-shopping-013",
-      "text": "ポイント還元やセールは気になる方だ",
-      "kind": "service",
-      "category": "shopping",
-      "yes_signal": {
-        "accepted_pattern_domain": "shopping",
-        "inferred_tag": "shopping"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "shopping"
-      }
-    },
-    {
-      "id": "svc-shopping-014",
-      "text": "ネット通販で物を買うことに抵抗はない",
-      "kind": "service",
-      "category": "shopping",
-      "yes_signal": {
-        "accepted_pattern_domain": "shopping",
-        "inferred_tag": "shopping"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "shopping"
-      }
-    },
-    {
-      "id": "svc-shopping-015",
-      "text": "メルカリなどフリマアプリを使う",
-      "kind": "service",
-      "category": "shopping",
-      "yes_signal": {
-        "accepted_pattern_domain": "shopping",
-        "inferred_tag": "shopping"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "shopping"
-      }
-    },
-    {
-      "id": "svc-fashion-016",
-      "text": "服を買うのが好きだ",
-      "kind": "service",
-      "category": "fashion",
-      "yes_signal": {
-        "accepted_pattern_domain": "fashion",
-        "inferred_tag": "fashion"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "fashion"
-      }
-    },
-    {
-      "id": "svc-fashion-017",
-      "text": "ユニクロや GU でよく服を買う",
-      "kind": "service",
-      "category": "fashion",
-      "yes_signal": {
-        "accepted_pattern_domain": "fashion",
-        "inferred_tag": "fashion"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "fashion"
-      }
-    },
-    {
-      "id": "svc-fashion-018",
-      "text": "シーズン毎に新しい服を揃えたい",
-      "kind": "service",
-      "category": "fashion",
-      "yes_signal": {
-        "accepted_pattern_domain": "fashion",
-        "inferred_tag": "fashion"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "fashion"
-      }
-    },
-    {
-      "id": "svc-music-019",
-      "text": "毎日音楽を聴く",
-      "kind": "service",
-      "category": "music",
-      "yes_signal": {
-        "accepted_pattern_domain": "music",
-        "inferred_tag": "music"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "music"
-      }
-    },
-    {
-      "id": "svc-music-020",
-      "text": "Spotify などのストリーミング音楽サービスを使っている",
-      "kind": "service",
-      "category": "music",
-      "yes_signal": {
-        "accepted_pattern_domain": "music",
-        "inferred_tag": "music"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "music"
-      }
-    },
-    {
-      "id": "svc-music-021",
-      "text": "プレイリストを作るのが好きだ",
-      "kind": "service",
-      "category": "music",
-      "yes_signal": {
-        "accepted_pattern_domain": "music",
-        "inferred_tag": "music"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "music"
-      }
-    },
-    {
-      "id": "svc-books-022",
-      "text": "本や漫画を読むのが好きだ",
-      "kind": "service",
-      "category": "books",
-      "yes_signal": {
-        "accepted_pattern_domain": "books",
-        "inferred_tag": "books"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "books"
-      }
-    },
-    {
-      "id": "svc-books-023",
-      "text": "Kindle や電子書籍を使う方だ",
-      "kind": "service",
-      "category": "books",
-      "yes_signal": {
-        "accepted_pattern_domain": "books",
-        "inferred_tag": "books"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "books"
-      }
-    },
-    {
-      "id": "svc-books-024",
-      "text": "ノンフィクションや学術書を読むことがある",
-      "kind": "service",
-      "category": "books",
-      "yes_signal": {
-        "accepted_pattern_domain": "books",
-        "inferred_tag": "books"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "books"
-      }
-    },
-    {
-      "id": "svc-travel-025",
-      "text": "旅行に行くのが好きだ",
-      "kind": "service",
-      "category": "travel",
-      "yes_signal": {
-        "accepted_pattern_domain": "travel",
-        "inferred_tag": "travel"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "travel"
-      }
-    },
-    {
-      "id": "svc-travel-026",
-      "text": "国内より海外旅行に興味がある",
-      "kind": "service",
-      "category": "travel",
-      "yes_signal": {
-        "accepted_pattern_domain": "travel",
-        "inferred_tag": "travel"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "travel"
-      }
-    },
-    {
-      "id": "svc-travel-027",
-      "text": "計画を立てるよりも行き当たりばったりの旅が好き",
-      "kind": "service",
-      "category": "travel",
-      "yes_signal": {
-        "accepted_pattern_domain": "travel",
-        "inferred_tag": "travel"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "travel"
-      }
-    },
-    {
-      "id": "svc-games-028",
-      "text": "ゲームをよくする方だ",
-      "kind": "service",
-      "category": "games",
-      "yes_signal": {
-        "accepted_pattern_domain": "games",
-        "inferred_tag": "games"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "games"
-      }
-    },
-    {
-      "id": "svc-games-029",
-      "text": "スマホアプリゲームより据え置き機でゲームしたい",
-      "kind": "service",
-      "category": "games",
-      "yes_signal": {
-        "accepted_pattern_domain": "games",
-        "inferred_tag": "games"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "games"
-      }
-    },
-    {
-      "id": "svc-games-030",
-      "text": "RPG / ストーリー重視のゲームが好きだ",
-      "kind": "service",
-      "category": "games",
-      "yes_signal": {
-        "accepted_pattern_domain": "games",
-        "inferred_tag": "games"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "games"
-      }
-    },
-    {
-      "id": "svc-exercise-031",
-      "text": "週に 1 回以上は運動する",
-      "kind": "service",
-      "category": "exercise",
-      "yes_signal": {
-        "accepted_pattern_domain": "exercise",
-        "inferred_tag": "exercise"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "exercise"
-      }
-    },
-    {
-      "id": "svc-exercise-032",
-      "text": "ジムやヨガなど屋内運動が好きだ",
-      "kind": "service",
-      "category": "exercise",
-      "yes_signal": {
-        "accepted_pattern_domain": "exercise",
-        "inferred_tag": "exercise"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "exercise"
-      }
-    },
-    {
-      "id": "svc-exercise-033",
-      "text": "ランニングやウォーキングが好きだ",
-      "kind": "service",
-      "category": "exercise",
-      "yes_signal": {
-        "accepted_pattern_domain": "exercise",
-        "inferred_tag": "exercise"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "exercise"
-      }
-    },
-    {
-      "id": "svc-exercise-034",
-      "text": "筋トレや自宅トレーニングを習慣にしている",
-      "kind": "service",
-      "category": "exercise",
-      "yes_signal": {
-        "accepted_pattern_domain": "exercise",
-        "inferred_tag": "exercise"
-      },
-      "no_signal": {
-        "rejected_pattern_domain": "exercise"
-      }
-    },
-    {
-      "id": "persona-careful-035",
+      "id": "persona-careful-001",
       "text": "新しいことを始める前にしっかり調べる方だ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "careful",
       "yes_signal": {
         "persona_boost": {
           "慎重派": 0.15
-        }
+        },
+        "inferred_tag": "careful"
       },
       "no_signal": {
         "persona_boost": {
@@ -462,14 +21,15 @@
       }
     },
     {
-      "id": "persona-careful-036",
+      "id": "persona-careful-002",
       "text": "重要な決断には時間をかけたい",
-      "kind": "persona",
+      "kind": "personality",
       "category": "careful",
       "yes_signal": {
         "persona_boost": {
           "慎重派": 0.15
-        }
+        },
+        "inferred_tag": "careful"
       },
       "no_signal": {
         "persona_boost": {
@@ -478,14 +38,15 @@
       }
     },
     {
-      "id": "persona-careful-037",
+      "id": "persona-careful-003",
       "text": "リスクは避けたい性格だ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "careful",
       "yes_signal": {
         "persona_boost": {
           "慎重派": 0.15
-        }
+        },
+        "inferred_tag": "careful"
       },
       "no_signal": {
         "persona_boost": {
@@ -494,14 +55,15 @@
       }
     },
     {
-      "id": "persona-careful-038",
+      "id": "persona-careful-004",
       "text": "メリットとデメリットを書き出して比較するタイプだ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "careful",
       "yes_signal": {
         "persona_boost": {
           "慎重派": 0.15
-        }
+        },
+        "inferred_tag": "careful"
       },
       "no_signal": {
         "persona_boost": {
@@ -510,14 +72,15 @@
       }
     },
     {
-      "id": "persona-careful-039",
+      "id": "persona-careful-005",
       "text": "失敗を予測してから動く方だ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "careful",
       "yes_signal": {
         "persona_boost": {
           "慎重派": 0.15
-        }
+        },
+        "inferred_tag": "careful"
       },
       "no_signal": {
         "persona_boost": {
@@ -526,14 +89,15 @@
       }
     },
     {
-      "id": "persona-optimistic-040",
+      "id": "persona-optimistic-006",
       "text": "未知のことでもまず試してみる方だ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "optimistic",
       "yes_signal": {
         "persona_boost": {
           "楽観派": 0.15
-        }
+        },
+        "inferred_tag": "optimistic"
       },
       "no_signal": {
         "persona_boost": {
@@ -542,14 +106,15 @@
       }
     },
     {
-      "id": "persona-optimistic-041",
+      "id": "persona-optimistic-007",
       "text": "失敗してもなんとかなると思える",
-      "kind": "persona",
+      "kind": "personality",
       "category": "optimistic",
       "yes_signal": {
         "persona_boost": {
           "楽観派": 0.15
-        }
+        },
+        "inferred_tag": "optimistic"
       },
       "no_signal": {
         "persona_boost": {
@@ -558,14 +123,15 @@
       }
     },
     {
-      "id": "persona-optimistic-042",
-      "text": "新しい店や場所を見つけたらすぐ行きたくなる",
-      "kind": "persona",
+      "id": "persona-optimistic-008",
+      "text": "新しい場所を見つけたらすぐ行きたくなる",
+      "kind": "personality",
       "category": "optimistic",
       "yes_signal": {
         "persona_boost": {
           "楽観派": 0.15
-        }
+        },
+        "inferred_tag": "optimistic"
       },
       "no_signal": {
         "persona_boost": {
@@ -574,14 +140,15 @@
       }
     },
     {
-      "id": "persona-optimistic-043",
+      "id": "persona-optimistic-009",
       "text": "ポジティブな気分でいることが多い",
-      "kind": "persona",
+      "kind": "personality",
       "category": "optimistic",
       "yes_signal": {
         "persona_boost": {
           "楽観派": 0.15
-        }
+        },
+        "inferred_tag": "optimistic"
       },
       "no_signal": {
         "persona_boost": {
@@ -590,14 +157,15 @@
       }
     },
     {
-      "id": "persona-optimistic-044",
+      "id": "persona-optimistic-010",
       "text": "明るい話題の方が好きだ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "optimistic",
       "yes_signal": {
         "persona_boost": {
           "楽観派": 0.15
-        }
+        },
+        "inferred_tag": "optimistic"
       },
       "no_signal": {
         "persona_boost": {
@@ -606,14 +174,15 @@
       }
     },
     {
-      "id": "persona-efficient-045",
+      "id": "persona-efficient-011",
       "text": "時間を無駄にしたくない方だ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "efficient",
       "yes_signal": {
         "persona_boost": {
           "効率派": 0.15
-        }
+        },
+        "inferred_tag": "efficient"
       },
       "no_signal": {
         "persona_boost": {
@@ -622,14 +191,15 @@
       }
     },
     {
-      "id": "persona-efficient-046",
+      "id": "persona-efficient-012",
       "text": "ToDo リストや手帳でタスク管理する",
-      "kind": "persona",
+      "kind": "personality",
       "category": "efficient",
       "yes_signal": {
         "persona_boost": {
           "効率派": 0.15
-        }
+        },
+        "inferred_tag": "efficient"
       },
       "no_signal": {
         "persona_boost": {
@@ -638,14 +208,15 @@
       }
     },
     {
-      "id": "persona-efficient-047",
+      "id": "persona-efficient-013",
       "text": "短時間で複数のことを並行処理するのが得意だ",
-      "kind": "persona",
+      "kind": "personality",
       "category": "efficient",
       "yes_signal": {
         "persona_boost": {
           "効率派": 0.15
-        }
+        },
+        "inferred_tag": "efficient"
       },
       "no_signal": {
         "persona_boost": {
@@ -654,14 +225,15 @@
       }
     },
     {
-      "id": "persona-efficient-048",
+      "id": "persona-efficient-014",
       "text": "コスパや費用対効果を重視する",
-      "kind": "persona",
+      "kind": "personality",
       "category": "efficient",
       "yes_signal": {
         "persona_boost": {
           "効率派": 0.15
-        }
+        },
+        "inferred_tag": "efficient"
       },
       "no_signal": {
         "persona_boost": {
@@ -670,20 +242,549 @@
       }
     },
     {
-      "id": "persona-efficient-049",
+      "id": "persona-efficient-015",
       "text": "最短ルートで目的を達成したい",
-      "kind": "persona",
+      "kind": "personality",
       "category": "efficient",
       "yes_signal": {
         "persona_boost": {
           "効率派": 0.15
-        }
+        },
+        "inferred_tag": "efficient"
       },
       "no_signal": {
         "persona_boost": {
           "効率派": -0.05
         }
       }
+    },
+    {
+      "id": "persona-social-016",
+      "text": "人と会って話すと元気になる方だ",
+      "kind": "personality",
+      "category": "social",
+      "yes_signal": {
+        "persona_boost": {
+          "社交派": 0.15
+        },
+        "inferred_tag": "social"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "社交派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-social-017",
+      "text": "大人数の集まりに行くのは楽しい",
+      "kind": "personality",
+      "category": "social",
+      "yes_signal": {
+        "persona_boost": {
+          "社交派": 0.15
+        },
+        "inferred_tag": "social"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "社交派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-social-018",
+      "text": "初対面の人ともすぐ仲良くなれる",
+      "kind": "personality",
+      "category": "social",
+      "yes_signal": {
+        "persona_boost": {
+          "社交派": 0.15
+        },
+        "inferred_tag": "social"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "社交派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-social-019",
+      "text": "誰かと一緒に過ごす時間が好きだ",
+      "kind": "personality",
+      "category": "social",
+      "yes_signal": {
+        "persona_boost": {
+          "社交派": 0.15
+        },
+        "inferred_tag": "social"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "社交派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-social-020",
+      "text": "SNS や チャットで人とよく繋がる",
+      "kind": "personality",
+      "category": "social",
+      "yes_signal": {
+        "persona_boost": {
+          "社交派": 0.15
+        },
+        "inferred_tag": "social"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "社交派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-creative-021",
+      "text": "アート / 音楽 / 文章を創るのが好きだ",
+      "kind": "personality",
+      "category": "creative",
+      "yes_signal": {
+        "persona_boost": {
+          "創造派": 0.15
+        },
+        "inferred_tag": "creative"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "創造派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-creative-022",
+      "text": "決まったやり方より自分なりのやり方を試す",
+      "kind": "personality",
+      "category": "creative",
+      "yes_signal": {
+        "persona_boost": {
+          "創造派": 0.15
+        },
+        "inferred_tag": "creative"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "創造派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-creative-023",
+      "text": "新しいアイデアを思いつくのが楽しい",
+      "kind": "personality",
+      "category": "creative",
+      "yes_signal": {
+        "persona_boost": {
+          "創造派": 0.15
+        },
+        "inferred_tag": "creative"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "創造派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-creative-024",
+      "text": "「もし◯◯だったら」と空想することが多い",
+      "kind": "personality",
+      "category": "creative",
+      "yes_signal": {
+        "persona_boost": {
+          "創造派": 0.15
+        },
+        "inferred_tag": "creative"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "創造派": -0.05
+        }
+      }
+    },
+    {
+      "id": "persona-creative-025",
+      "text": "見たことのない作品に強く惹かれる",
+      "kind": "personality",
+      "category": "creative",
+      "yes_signal": {
+        "persona_boost": {
+          "創造派": 0.15
+        },
+        "inferred_tag": "creative"
+      },
+      "no_signal": {
+        "persona_boost": {
+          "創造派": -0.05
+        }
+      }
+    },
+    {
+      "id": "life-morning_night-026",
+      "text": "朝起きるのは比較的得意だ",
+      "kind": "lifestyle",
+      "category": "morning_night",
+      "yes_signal": {
+        "inferred_tag": "morning-person",
+        "persona_boost": {
+          "楽観派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "night-owl"
+      }
+    },
+    {
+      "id": "life-morning_night-027",
+      "text": "午前中の方が集中力が高い",
+      "kind": "lifestyle",
+      "category": "morning_night",
+      "yes_signal": {
+        "inferred_tag": "morning-person",
+        "persona_boost": {
+          "楽観派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "night-owl"
+      }
+    },
+    {
+      "id": "life-morning_night-028",
+      "text": "夜更かしより早寝早起きを好む",
+      "kind": "lifestyle",
+      "category": "morning_night",
+      "yes_signal": {
+        "inferred_tag": "morning-person",
+        "persona_boost": {
+          "楽観派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "night-owl"
+      }
+    },
+    {
+      "id": "life-morning_night-029",
+      "text": "休日の朝も普段と同じ時間に起きる",
+      "kind": "lifestyle",
+      "category": "morning_night",
+      "yes_signal": {
+        "inferred_tag": "morning-person",
+        "persona_boost": {
+          "楽観派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "night-owl"
+      }
+    },
+    {
+      "id": "life-indoor_outdoor-030",
+      "text": "週末は外に出かけたい派だ",
+      "kind": "lifestyle",
+      "category": "indoor_outdoor",
+      "yes_signal": {
+        "inferred_tag": "outdoor-lover",
+        "persona_boost": {
+          "楽観派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "indoor-cocoon"
+      }
+    },
+    {
+      "id": "life-indoor_outdoor-031",
+      "text": "自然の中にいると気分が落ち着く",
+      "kind": "lifestyle",
+      "category": "indoor_outdoor",
+      "yes_signal": {
+        "inferred_tag": "outdoor-lover",
+        "persona_boost": {
+          "楽観派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "indoor-cocoon"
+      }
+    },
+    {
+      "id": "life-indoor_outdoor-032",
+      "text": "散歩や旅をすると元気が出る",
+      "kind": "lifestyle",
+      "category": "indoor_outdoor",
+      "yes_signal": {
+        "inferred_tag": "outdoor-lover",
+        "persona_boost": {
+          "楽観派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "indoor-cocoon"
+      }
+    },
+    {
+      "id": "life-indoor_outdoor-033",
+      "text": "室内に長くいると窮屈に感じる",
+      "kind": "lifestyle",
+      "category": "indoor_outdoor",
+      "yes_signal": {
+        "inferred_tag": "outdoor-lover",
+        "persona_boost": {
+          "楽観派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "indoor-cocoon"
+      }
+    },
+    {
+      "id": "life-planner_impulsive-034",
+      "text": "予定を立ててから動くタイプだ",
+      "kind": "lifestyle",
+      "category": "planner_impulsive",
+      "yes_signal": {
+        "inferred_tag": "planner",
+        "persona_boost": {
+          "慎重派": 0.08,
+          "効率派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "impulsive"
+      }
+    },
+    {
+      "id": "life-planner_impulsive-035",
+      "text": "旅行も calendar に書き込んで進める方だ",
+      "kind": "lifestyle",
+      "category": "planner_impulsive",
+      "yes_signal": {
+        "inferred_tag": "planner",
+        "persona_boost": {
+          "慎重派": 0.08,
+          "効率派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "impulsive"
+      }
+    },
+    {
+      "id": "life-planner_impulsive-036",
+      "text": "計画通りに事が進むと安心する",
+      "kind": "lifestyle",
+      "category": "planner_impulsive",
+      "yes_signal": {
+        "inferred_tag": "planner",
+        "persona_boost": {
+          "慎重派": 0.08,
+          "効率派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "impulsive"
+      }
+    },
+    {
+      "id": "life-planner_impulsive-037",
+      "text": "段取りを考えるのは苦にならない",
+      "kind": "lifestyle",
+      "category": "planner_impulsive",
+      "yes_signal": {
+        "inferred_tag": "planner",
+        "persona_boost": {
+          "慎重派": 0.08,
+          "効率派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "impulsive"
+      }
+    },
+    {
+      "id": "life-experience_material-038",
+      "text": "モノを買うより体験にお金を使いたい",
+      "kind": "lifestyle",
+      "category": "experience_material",
+      "yes_signal": {
+        "inferred_tag": "experience-seeker",
+        "persona_boost": {
+          "創造派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "material-collector"
+      }
+    },
+    {
+      "id": "life-experience_material-039",
+      "text": "旅行や ライブ など 思い出に残ることを優先する",
+      "kind": "lifestyle",
+      "category": "experience_material",
+      "yes_signal": {
+        "inferred_tag": "experience-seeker",
+        "persona_boost": {
+          "創造派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "material-collector"
+      }
+    },
+    {
+      "id": "life-experience_material-040",
+      "text": "物欲はあまり強い方ではない",
+      "kind": "lifestyle",
+      "category": "experience_material",
+      "yes_signal": {
+        "inferred_tag": "experience-seeker",
+        "persona_boost": {
+          "創造派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "material-collector"
+      }
+    },
+    {
+      "id": "life-experience_material-041",
+      "text": "経験のためなら遠出も気にならない",
+      "kind": "lifestyle",
+      "category": "experience_material",
+      "yes_signal": {
+        "inferred_tag": "experience-seeker",
+        "persona_boost": {
+          "創造派": 0.05
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "material-collector"
+      }
+    },
+    {
+      "id": "life-energy_solo_crowd-042",
+      "text": "1 人の時間でエネルギーを回復する方だ",
+      "kind": "lifestyle",
+      "category": "energy_solo_crowd",
+      "yes_signal": {
+        "inferred_tag": "solo-recharge",
+        "persona_boost": {
+          "創造派": 0.04,
+          "慎重派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "crowd-energy"
+      }
+    },
+    {
+      "id": "life-energy_solo_crowd-043",
+      "text": "静かなカフェや図書館で過ごすのが好きだ",
+      "kind": "lifestyle",
+      "category": "energy_solo_crowd",
+      "yes_signal": {
+        "inferred_tag": "solo-recharge",
+        "persona_boost": {
+          "創造派": 0.04,
+          "慎重派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "crowd-energy"
+      }
+    },
+    {
+      "id": "life-energy_solo_crowd-044",
+      "text": "大勢といると疲れてしまう方だ",
+      "kind": "lifestyle",
+      "category": "energy_solo_crowd",
+      "yes_signal": {
+        "inferred_tag": "solo-recharge",
+        "persona_boost": {
+          "創造派": 0.04,
+          "慎重派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "crowd-energy"
+      }
+    },
+    {
+      "id": "life-energy_solo_crowd-045",
+      "text": "深く考えごとをする時間が必要だ",
+      "kind": "lifestyle",
+      "category": "energy_solo_crowd",
+      "yes_signal": {
+        "inferred_tag": "solo-recharge",
+        "persona_boost": {
+          "創造派": 0.04,
+          "慎重派": 0.03
+        }
+      },
+      "no_signal": {
+        "inferred_tag": "crowd-energy"
+      }
+    },
+    {
+      "id": "int-reading-046",
+      "text": "本や記事を読むのが日常の一部だ",
+      "kind": "interest",
+      "category": "reading",
+      "yes_signal": {
+        "inferred_tag": "reading"
+      },
+      "no_signal": {}
+    },
+    {
+      "id": "int-music-047",
+      "text": "音楽は毎日のように聴いている",
+      "kind": "interest",
+      "category": "music",
+      "yes_signal": {
+        "inferred_tag": "music"
+      },
+      "no_signal": {}
+    },
+    {
+      "id": "int-exercise-048",
+      "text": "体を動かす習慣がある",
+      "kind": "interest",
+      "category": "exercise",
+      "yes_signal": {
+        "inferred_tag": "exercise"
+      },
+      "no_signal": {}
+    },
+    {
+      "id": "int-cooking-049",
+      "text": "料理を楽しむ方だ",
+      "kind": "interest",
+      "category": "cooking",
+      "yes_signal": {
+        "inferred_tag": "cooking"
+      },
+      "no_signal": {}
+    },
+    {
+      "id": "int-travel-050",
+      "text": "旅をして新しい土地を見るのが好きだ",
+      "kind": "interest",
+      "category": "travel",
+      "yes_signal": {
+        "inferred_tag": "travel"
+      },
+      "no_signal": {}
     }
   ]
 }

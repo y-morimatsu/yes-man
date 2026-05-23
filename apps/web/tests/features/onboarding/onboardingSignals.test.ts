@@ -6,16 +6,18 @@ import { computeProfilePatch } from "../../../src/features/onboarding/onboarding
 import type { OnboardingAnswer } from "../../../src/features/onboarding/useOnboarding";
 
 // 注: ID は generated JSON の実 ID と一致させる必要あり (fallback 版が svc-* / persona-* 形式)
+type AnswerKind = OnboardingAnswer["kind"];
+
 function answer(
   id: string,
   category: string,
-  kind: "service" | "persona",
+  kind: AnswerKind,
   choice: "yes" | "no",
 ): OnboardingAnswer {
   return { id, category, kind, choice, at: 1_700_000_000_000 };
 }
 
-describe("computeProfilePatch", () => {
+describe("computeProfilePatch (v3-β rev2: 性格 + 生活)", () => {
   it("空 answers から空 patch", () => {
     const patch = computeProfilePatch([]);
     expect(patch.accepted_patterns).toEqual([]);
@@ -24,82 +26,80 @@ describe("computeProfilePatch", () => {
     expect(patch.inferred_tags).toEqual([]);
   });
 
-  it("service YES → accepted_patterns + inferred_tags に追加", () => {
+  it("personality YES → persona_style_preference + inferred_tag", () => {
     const patch = computeProfilePatch([
-      answer("svc-movie-001", "movie", "service", "yes"),
+      answer("persona-careful-001", "careful", "personality", "yes"),
     ]);
-    expect(patch.accepted_patterns).toHaveLength(1);
-    expect(patch.accepted_patterns[0]!.domain).toBe("movie");
-    expect(patch.accepted_patterns[0]!.source).toBe("onboarding");
-    expect(patch.inferred_tags).toContain("movie");
-    expect(patch.rejected_patterns).toEqual([]);
+    expect(patch.persona_style_preference["慎重派"]).toBeCloseTo(0.15, 5);
+    expect(patch.inferred_tags).toContain("careful");
   });
 
-  it("service NO → rejected_patterns に追加、inferred_tags に追加しない", () => {
+  it("personality NO → 負の boost、tag は無し", () => {
     const patch = computeProfilePatch([
-      answer("svc-food_delivery-005", "food_delivery", "service", "no"),
+      answer("persona-optimistic-006", "optimistic", "personality", "no"),
     ]);
-    expect(patch.rejected_patterns).toHaveLength(1);
-    expect(patch.rejected_patterns[0]!.domain).toBe("food_delivery");
-    expect(patch.accepted_patterns).toEqual([]);
+    expect(patch.persona_style_preference["楽観派"]).toBeCloseTo(-0.05, 5);
     expect(patch.inferred_tags).toEqual([]);
   });
 
-  it("persona YES → persona_style_preference に boost", () => {
+  it("lifestyle YES → yes 側 tag (+ 弱い persona signal)", () => {
     const patch = computeProfilePatch([
-      answer("persona-careful-036", "careful", "persona", "yes"),
+      answer("life-morning_night-026", "morning_night", "lifestyle", "yes"),
     ]);
-    expect(patch.persona_style_preference["慎重派"]).toBeCloseTo(0.15, 5);
+    expect(patch.inferred_tags).toContain("morning-person");
+    expect(patch.persona_style_preference["楽観派"]).toBeCloseTo(0.03, 5);
   });
 
-  it("persona NO → persona_style_preference に負の boost", () => {
+  it("lifestyle NO → no 側 tag (反対ラベル)", () => {
     const patch = computeProfilePatch([
-      answer("persona-optimistic-041", "optimistic", "persona", "no"),
+      answer("life-morning_night-026", "morning_night", "lifestyle", "no"),
     ]);
-    expect(patch.persona_style_preference["楽観派"]).toBeCloseTo(-0.05, 5);
+    expect(patch.inferred_tags).toContain("night-owl");
+    expect(patch.persona_style_preference).toEqual({});
+  });
+
+  it("interest YES → tag のみ", () => {
+    const patch = computeProfilePatch([
+      answer("int-music-047", "music", "interest", "yes"),
+    ]);
+    expect(patch.inferred_tags).toContain("music");
+    expect(patch.persona_style_preference).toEqual({});
+    expect(patch.accepted_patterns).toEqual([]);
   });
 
   it("persona_style_preference は累積 + [-1.0, 1.0] clip", () => {
-    // 7 回 YES で 7 * 0.15 = 1.05、clip で 1.0 になることを確認
-    const answers = Array.from({ length: 7 }, (_, i) =>
-      answer(`persona-careful-${36 + i}`, "careful", "persona", "yes"),
-    );
-    // 注: ID が pool に存在しない 7 件目以降は無視されるので、known IDs だけ使う
-    const knownIds = [
-      "persona-careful-036",
-      "persona-careful-037",
-      "persona-careful-038",
-      "persona-careful-039",
-      "persona-careful-040",
-    ];
-    const validAnswers = knownIds.map((id) =>
-      answer(id, "careful", "persona", "yes"),
-    );
+    // careful 5 問の YES で 5 * 0.15 = 0.75
+    const validAnswers = [
+      "persona-careful-001",
+      "persona-careful-002",
+      "persona-careful-003",
+      "persona-careful-004",
+      "persona-careful-005",
+    ].map((id) => answer(id, "careful", "personality", "yes"));
+    // 3 回繰り返して累積 (clip 確認)
     const patch = computeProfilePatch([
       ...validAnswers,
       ...validAnswers,
       ...validAnswers,
-    ]); // 15 回 yes → 2.25 → clip 1.0
-    void answers; // shadowed but not used
+    ]);
     expect(patch.persona_style_preference["慎重派"]).toBeLessThanOrEqual(1.0);
     expect(patch.persona_style_preference["慎重派"]).toBeGreaterThan(0.5);
   });
 
   it("inferred_tags は重複排除", () => {
     const patch = computeProfilePatch([
-      answer("svc-movie-001", "movie", "service", "yes"),
-      answer("svc-movie-002", "movie", "service", "yes"),
-      answer("svc-movie-003", "movie", "service", "yes"),
+      answer("persona-careful-001", "careful", "personality", "yes"),
+      answer("persona-careful-002", "careful", "personality", "yes"),
+      answer("persona-careful-003", "careful", "personality", "yes"),
     ]);
-    expect(patch.inferred_tags.filter((t) => t === "movie")).toHaveLength(1);
-    expect(patch.accepted_patterns).toHaveLength(3);
+    expect(patch.inferred_tags.filter((t) => t === "careful")).toHaveLength(1);
   });
 
   it("unknown ID は無視 (壊れた answers でも crash しない)", () => {
     const patch = computeProfilePatch([
-      answer("nonexistent-id", "movie", "service", "yes"),
+      answer("nonexistent-id", "movie", "personality", "yes"),
     ]);
-    expect(patch.accepted_patterns).toEqual([]);
+    expect(patch.persona_style_preference).toEqual({});
     expect(patch.inferred_tags).toEqual([]);
   });
 });

@@ -11,10 +11,19 @@
 import { useCallback, useMemo, useState } from "react";
 import payload from "./onboardingQuestions.generated.json";
 
+// 2026-05-23 rev2: kind を 性格/生活/興味 に拡張 (旧 service/persona は deprecated だが
+// JSON が古い場合に備えて union で両対応)
+export type OnboardingKind =
+  | "personality"
+  | "lifestyle"
+  | "interest"
+  | "service" // legacy (旧 JSON 互換)
+  | "persona"; // legacy
+
 export interface OnboardingQuestion {
   id: string;
   text: string;
-  kind: "service" | "persona";
+  kind: OnboardingKind;
   category: string;
   yes_signal: Record<string, unknown>;
   no_signal: Record<string, unknown>;
@@ -32,7 +41,7 @@ const POOL = payload as unknown as OnboardingPayload;
 export interface OnboardingAnswer {
   id: string;
   category: string;
-  kind: "service" | "persona";
+  kind: OnboardingKind;
   choice: "yes" | "no";
   /** answered_at timestamp (ms) */
   at: number;

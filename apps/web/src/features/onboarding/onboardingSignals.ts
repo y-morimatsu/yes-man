@@ -1,12 +1,14 @@
 /**
  * onboardingSignals.ts — answers から PreferenceProfile patch を計算する純粋関数.
  *
- * - service YES → accepted_patterns に {domain, source:"onboarding", timestamp} を append、
- *   inferred_tags にも category を追加 (重複排除)
- * - service NO → rejected_patterns に同上を append
- * - persona answer → persona_style_preference[persona名] += yes_signal.persona_boost
- *   (NO の場合は no_signal.persona_boost、通常 -0.05 等)
- * - persona_style_preference は [-1.0, 1.0] clip + max 50 key
+ * 2026-05-23 rev2: 性格 + 生活面 中心の question pool に対応.
+ *  各 question の yes_signal / no_signal に含まれる field を読み取り、対応する
+ *  PreferenceProfile field に反映する。signal field 仕様:
+ *    - "persona_boost": Record<string, number>       → persona_style_preference に加算 + [-1,1] clip
+ *    - "inferred_tag":  string                       → inferred_tags に追加 (重複排除)
+ *    - "accepted_pattern_domain": string (legacy)    → accepted_patterns に追加
+ *    - "rejected_pattern_domain": string (legacy)    → rejected_patterns に追加
+ *  上記以外の key は無視 (将来拡張用)。
  */
 import type { OnboardingAnswer, OnboardingQuestion } from "./useOnboarding";
 import payload from "./onboardingQuestions.generated.json";
@@ -50,29 +52,43 @@ export function computeProfilePatch(
     const q = QUESTIONS.get(a.id);
     if (!q) continue;
     const signal = a.choice === "yes" ? q.yes_signal : q.no_signal;
+    if (!signal || typeof signal !== "object") continue;
 
-    if (q.kind === "service") {
-      const entry = {
-        domain: q.category,
-        source: "onboarding",
-        at: a.at,
-      };
-      if (a.choice === "yes") {
-        accepted.push(entry);
-        const tag =
-          (signal as { inferred_tag?: string }).inferred_tag ?? q.category;
-        tagSet.add(tag);
-      } else {
-        rejected.push(entry);
-      }
-    } else if (q.kind === "persona") {
-      const boostMap = (signal as { persona_boost?: Record<string, number> })
-        .persona_boost;
-      if (boostMap) {
-        for (const [name, delta] of Object.entries(boostMap)) {
+    // 1) persona_boost field → persona_style_preference に加算
+    const boostMap = (signal as { persona_boost?: Record<string, number> })
+      .persona_boost;
+    if (boostMap && typeof boostMap === "object") {
+      for (const [name, delta] of Object.entries(boostMap)) {
+        if (typeof delta === "number") {
           persona[name] = (persona[name] ?? 0) + delta;
         }
       }
+    }
+
+    // 2) inferred_tag field → inferred_tags に追加
+    const tag = (signal as { inferred_tag?: string }).inferred_tag;
+    if (typeof tag === "string" && tag.length > 0) {
+      tagSet.add(tag);
+    }
+
+    // 3) accepted/rejected_pattern_domain field (legacy + interest 系で利用しうる)
+    const acceptedDomain = (signal as { accepted_pattern_domain?: string })
+      .accepted_pattern_domain;
+    if (typeof acceptedDomain === "string" && acceptedDomain.length > 0) {
+      accepted.push({
+        domain: acceptedDomain,
+        source: "onboarding",
+        at: a.at,
+      });
+    }
+    const rejectedDomain = (signal as { rejected_pattern_domain?: string })
+      .rejected_pattern_domain;
+    if (typeof rejectedDomain === "string" && rejectedDomain.length > 0) {
+      rejected.push({
+        domain: rejectedDomain,
+        source: "onboarding",
+        at: a.at,
+      });
     }
   }
 
