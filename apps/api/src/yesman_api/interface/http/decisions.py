@@ -35,6 +35,8 @@ from yesman_api.interface.http.dto.decision import (
     DecisionResponse,
     NudgeResponse,
     UtteranceDTO,
+    YesNudgeRequest,
+    YesNudgeResponse,
 )
 
 router = APIRouter(prefix="/v1/decisions", tags=["decisions"])
@@ -145,6 +147,35 @@ async def choose(
 # ============================================================
 # Nudge polling
 # ============================================================
+# ============================================================
+# issue #93: YES nudge microcopy (No 採択 → 別案到着後の Yes 後押し)
+# ============================================================
+@router.post(
+    "/{decision_id}/yes-nudge",
+    response_model=YesNudgeResponse,
+)
+async def generate_yes_nudge(
+    decision_id: UUID,
+    payload: YesNudgeRequest,
+    user: AuthenticatedUser = Depends(get_current_user),
+    decision_repo: DecisionRepository = Depends(get_decision_repo),
+    nudge_gen: NudgeMessageGenerator = Depends(get_nudge_generator),
+) -> YesNudgeResponse:
+    """No 採択 → 新 proposal 到着直後に呼ばれる同期 endpoint。
+
+    decision_id は **新 proposal** の decision_id。stage は frontend が把握する No 累積回数。
+    LLM で <= 30 字の Yes nudge microcopy を生成、2s timeout 超過や失敗時は stage 別 fallback。
+    """
+    decision = await decision_repo.get(decision_id)
+    if decision is None or decision.user_id != UUID(user.sub):
+        raise HTTPException(status_code=404, detail="decision not found")
+    message = await nudge_gen.generate_yes_microcopy(
+        proposal_text=decision.proposal_text,
+        stage=payload.stage,
+    )
+    return YesNudgeResponse(message=message)
+
+
 @router.get("/{decision_id}/nudge")
 async def get_nudge(
     decision_id: UUID,
