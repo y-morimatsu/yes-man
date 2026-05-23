@@ -17,6 +17,8 @@ import { Button, SwipeChoice, useToast } from "@yesman/ui";
 import { useApi } from "../../shell/ApiProvider";
 import { useOnboarding } from "./useOnboarding";
 import { computeProfilePatch } from "./onboardingSignals";
+import { markOnboarded } from "./onboardingStorage";
+import { getCurrentUser } from "../../shell/mockAuthStorage";
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
@@ -32,15 +34,6 @@ export default function OnboardingPage() {
       const patch = computeProfilePatch(onboarding.answers);
       // 既存 PATCH /v1/preferences/me を再利用 (新規 endpoint 追加なし)
       await api.preferences.updateMe(patch);
-      // 完了フラグを localStorage にも残しておく (signin 後の再リダイレクト防止)
-      try {
-        window.localStorage.setItem(
-          "yesman:onboarding:completed-at",
-          new Date().toISOString(),
-        );
-      } catch {
-        // ignore
-      }
     } catch (err) {
       // backend が落ちていても localStorage には残す + 通知
       try {
@@ -58,6 +51,11 @@ export default function OnboardingPage() {
         variant: "info",
       });
     } finally {
+      // v3-β rev3: 成否に関わらず per-user の onboarding 完了フラグを立てる
+      // (skip でも user は明示的に「もう聞かないで」を選んでいるため、次回 sign-in で
+      //  再度 /onboarding にリダイレクトされないようにする)
+      const current = getCurrentUser();
+      if (current?.sub) markOnboarded(current.sub);
       setSubmitting(false);
       navigate("/", { replace: true });
     }

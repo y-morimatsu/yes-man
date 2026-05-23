@@ -32,6 +32,7 @@ vi.mock("react-router-dom", async () => {
 import { AuthProvider } from "../../../src/shell/AuthProvider";
 import SignInPage from "../../../src/features/auth/SignInPage";
 import { registerUser, listUsers, getCurrentEmail } from "../../../src/shell/mockAuthStorage";
+import { markOnboarded } from "../../../src/features/onboarding/onboardingStorage";
 
 function renderPage() {
   return render(
@@ -91,7 +92,9 @@ describe("SignInPage — bypass mode", () => {
   });
 
   it("既存 user row click で setCurrentEmail + navigate (/decision)", async () => {
-    registerUser("hanako@example.com", "Hanako");
+    const hanako = registerUser("hanako@example.com", "Hanako");
+    // v3-β rev3: 既存ユーザは onboarding 完了済として扱う
+    markOnboarded(hanako.sub);
     const user = userEvent.setup();
     renderPage();
     // 行内の email がクリック可能 button として表示される
