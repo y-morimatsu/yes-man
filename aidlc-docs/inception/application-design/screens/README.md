@@ -94,3 +94,67 @@ Home Hub (`/`) には新たに `📊 最近の YesMan` Summary カード (件数
 - `03-proposal-card.svg`: confetti は dynamic animation のため SVG mockup には反映しない。
 
 → FE-DESIGN-01 の "screens as Source of Truth" 原則は維持、v2 改修は本 README で明示的に追跡。
+
+---
+
+## Post-CONSTRUCTION 改修注記 v3 (2026-05-23) — token streaming + Yes nudge LLM + gamification
+
+PR #86 (token streaming) / #89 (preference inline handler) / #94 (Yes nudge LLM) / #95 + #97 (gamification + mascot) の実装内容を SVG / 本 README に追跡。
+
+### 02-discussion-live.svg — 演出が DOM-only に移行 (SVG 不変)
+
+**変更なし** (静的 SVG では下記の dynamic 演出を表現できないため)。
+
+実装側 (`apps/web/src/features/decision/`) に v3 で以下が追加されている (PR #86 / #95):
+
+| 演出 | 実装 |
+|---|---|
+| **chips の廃止** | 上記 v2 で追加した `PersonaThinkingChips` は v3 で **廃止** (重複情報のため)、bubble header に persona icon + 「発言中…」 amber pill を統合 (`packages/ui/src/composites/DecisionUtteranceBubble.tsx`) |
+| **persona pre-fill** | 新 SSE event `personas` で 3 persona 分の bubble を delta 到着前から `text=""` で render、`min-h-16` で skeleton 同等の height 維持 |
+| **token streaming** | `utterance_delta` event 毎に bubble の text を append、bubble 末尾に typing dots (●●● blink、CSS `ym-typing-dot`) を表示 |
+| **bubble slide-in** | 新発話登場時に `ym-bubble-slide-in` (240ms ease-out) |
+
+→ Source of Truth は SVG ではなく実装 (chips 廃止 + 動的 streaming は SVG で表現困難)。
+
+### 03-proposal-card.svg — Yes 誘導演出が SVG 外 (SVG 不変)
+
+**変更なし** (animation + dynamic confetti のため SVG では表現外)。
+
+実装側 (`packages/ui/src/composites/SwipeChoice.tsx` + `apps/web/src/features/decision/`) に v3 で以下が追加 (PR #95 + #97):
+
+| 演出 | 実装 |
+|---|---|
+| **swipe card 右辺 green glow pulse** | `dx=0` 時に `ym-yes-edge-glow` (inset box-shadow 2.2s loop)、Yes 方向を passive 誘導 |
+| **「→ → → Yes」 marching arrows** | swipe hint テキストを 3 stagger chevron animation (`ym-swipe-hint-arrow` 1.4s) + success color の `Yes` ラベル |
+| **proposal 到着 notification** | proposal 初到着で `📨 合議が完了しました` slide-down banner (2.4s で fade out) |
+| **Yes 連続採択 combo badge** | `YesComboBadge` tier 別 🔥/🌟/⚡/🏆 + pop-in animation (`ym-combo-pop`) |
+| **tier 別 confetti 強度** | 1: 50 粒子 / 3+: 70 + 黄色 / 5+: 90 + 紫 / 10+: 3 wave 大爆発 + 金 |
+| **コンボ break** | No 採択直後 (combo>0) で `💔 コンボ break` shake 演出 (`ym-combo-break` 1.4s) |
+| **No 後 microcopy LLM 動的生成** | `POST /v1/decisions/{id}/yes-nudge` で stage 別 tone の Yes nudge を 30 字以内で生成、`NoMicroCopyBanner.dynamicMessage` で優先表示 |
+
+### 全画面共通 — YesMan マスコット (新 component)
+
+**新規**: `apps/web/src/features/decision/YesManMascot.tsx`。
+
+| state | message | bubble 配色 |
+|---|---|---|
+| `streaming` | じっくり 考え中… | amber |
+| `proposing` | 迷ったら 任せて! | pink |
+| `yes` (1.6s) | やった! いいね! | green |
+| `no` (1.6s) | 次は うまくいくよ! | gray |
+| `silenced` | あなたが 決める領域 | dark |
+| `hidden` | (非表示) | — |
+
+- 位置: `fixed top-20 right-4` (header 直下、右上)
+- レイアウト: bubble 左 / 🤵 右、tail は右向き
+- bobbing (`ym-mascot-bob` 2.4s) + pop-in (`ym-mascot-bubble-in` 240ms)
+- `pointer-events-none` で操作妨害なし
+- `prefers-reduced-motion: reduce` で全 animation 無効化
+
+将来的に専用 SVG `07-mascot.svg` を追加する候補 (本 release では skip)。
+
+### 不変
+- `01-home-input.svg` / `04-score-dashboard.svg` / `05-silence-domain.svg` / `06-persona-pool.svg`: v3 時点で変更なし。
+- (`02-discussion-live.svg` の v2 PersonaThinkingChips 描画は v3 実装と乖離するが、Source of Truth が実装 / 設計判断に移行したため SVG は据え置き)
+
+→ v3 改修は **動的 UX 演出が主体** のため SVG では表現困難、`packages/ui/src/styles/globals.css` の `@keyframes` 群 + composites + decision feature 配下に Source of Truth が分散。

@@ -581,3 +581,42 @@ export function useMediaQuery(query: string): boolean {
 - Storybook 6 stories + 9 test ファイルは構成不変 (assertion のみ update)
 
 → U7b / ui は token / primitive を維持したまま、composite の 2 件改修 (SwipeChoice + VoiceMicButton) と FE-DESIGN 準拠の typography 統一を実施。
+
+---
+
+## Post-CONSTRUCTION 改修注記 v3 (2026-05-23)
+
+### `DecisionUtteranceBubble` 拡張 (PR #86 + #95)
+- `streaming?: boolean` prop 追加 (PR #86): true で persona 名の右に **発言中…** amber pill (pulse animation、motion-reduce 対応)
+- typing dots ●●● blink (PR #95): bubble 末尾に 3 dot stagger animation (`ym-typing-dot` 1.2s)
+- slide-in animation: bubble 登場時に `ym-bubble-slide-in` (240ms ease-out)
+- `min-h-16`: skeleton と同等高さ確保 (persona pre-fill 時の薄バブル対策)
+- aria-label に「(発言中)」を含めて AT 通知 (旧 PersonaThinkingChips の役割を吸収)
+
+### `SwipeChoice` 演出追加 (PR #95 + #97)
+- proposal card 右辺 **green glow pulse** (`ym-yes-edge-glow` 2.2s inset box-shadow、Yes 方向 passive 誘導)
+  - `dx === 0 && !disabled && !confirming` 時のみ有効
+- ガイドテキストを 「→ → → Yes」 **marching arrows** に置換 (3 stagger `ym-swipe-hint-arrow` 1.4s)
+  - success color (`text-success`)、`dx === 0` 時のみ表示
+
+### `packages/ui/src/styles/globals.css` の keyframes 群 (PR #95 + #97)
+
+`@keyframes` 9 種を追加:
+
+| keyframe | 用途 |
+|---|---|
+| `ym-typing-dot` | 3 dot blink (chat typing indicator) |
+| `ym-bubble-slide-in` | 新発話到着時の bubble 登場 |
+| `ym-notification-slide-down` | proposal 到着 banner |
+| `ym-combo-pop` | combo badge 出現 (scale + rotate) |
+| `ym-combo-break` | コンボ break shake |
+| `ym-swipe-hint-arrow` | 右方向 marching chevron |
+| `ym-yes-edge-glow` | swipe card 右辺グロー pulse |
+| `ym-mascot-bob` | YesMan マスコット bobbing |
+| `ym-mascot-bubble-in` | マスコット speech bubble pop-in |
+
+すべて `data-ym-anim` 属性を付け、`@media (prefers-reduced-motion: reduce)` で一括無効化。
+
+### 旧 `PersonaThinkingChips` 廃止 (PR #86)
+- v2 で追加した `apps/web/src/features/decision/PersonaThinkingChips.tsx` (3 人格 chip の「考え中 / ✓」可視化) を **削除**
+- 情報は `DecisionUtteranceBubble` header に統合し画面情報密度を改善 (重複排除)

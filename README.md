@@ -251,6 +251,22 @@ CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → �
 
 > 💡 Mobile App Polish 全体の設計 (Layout + BottomNav + Safe Area + Skeleton + View Transitions + Haptic) と Post-CONSTRUCTION 改修注記 (LIVE バッジ削除 / describeError fix) は **[2026-05-22-mobile-app-polish-design.md](docs/superpowers/specs/2026-05-22-mobile-app-polish-design.md)** + **[mobile-app-polish-screens.drawio](docs/superpowers/specs/diagrams/2026-05-22-mobile-app-polish-screens.drawio)** (4 ページ) を参照
 
+### 🎮 Post-CONSTRUCTION v3 (v0.4.0): ゲーミフィケーション + token streaming + LLM Yes nudge
+
+2026-05-23 リリース。動的演出が主体のため **SVG mockup ではなく実装が Source of Truth**。
+
+| 場面 | 演出 / 機能 |
+|---|---|
+| 議論中 | bubble に **typing dots (●●●)** + slide-in、persona pre-fill (delta 到着前から bubble header 表示)、`personas` SSE event 経由 |
+| Proposal 到着 | 「📨 合議が完了しました」 slide-down notification banner (2.4s) |
+| Yes 連続採択 | **🔥 2 連 → 🌟 3 連 → ⚡ 5 連 → 🏆 10 連** の tier badge + tier 別 confetti (10 連で **3 wave 大爆発 + 金色**) |
+| No (combo>0 時) | 💔 「コンボ break」 shake 演出 (1.4s fade) |
+| Swipe card | 右辺 **green glow pulse** + 「→ → → Yes」 **marching arrows** で Yes 方向を passive 誘導 |
+| Yes nudge microcopy | **LLM 動的生成** で stage 別 tone (軽い前向き / 共感 / 不安吸い上げ / 委ねる)、≤30 字 |
+| 全画面共通 | **YesMan マスコット 🤵** (右上 fixed) + 状況別 speech bubble (考え中 / 任せて / やった / 次は… / 沈黙) + bobbing animation |
+
+すべて `prefers-reduced-motion: reduce` で無効化可能、 a11y 維持。詳細は [`aidlc-docs/inception/application-design/screens/README.md`](aidlc-docs/inception/application-design/screens/README.md#post-construction-改修注記-v3-2026-05-23--token-streaming--yes-nudge-llm--gamification) と各 unit の `functional-design.md` Post-CONSTRUCTION 改修注記 v3 セクション参照。
+
 ---
 
 ## 🚀 主要機能
@@ -269,6 +285,10 @@ CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → �
 | 🎙️ **音声入力 backend 切替** | プロフィール画面 (`/profile`) で **Web Speech API** (ブラウザ内蔵、即時、無料) ↔ **Server STT** (AWS Transcribe / Mock) を user 選択、`localStorage` で永続化。Toggle 方式 (クリック開始 / クリック停止) | FR-VOICE-01〜04 |
 | 👆 **スワイプ UI** | 右 = Yes / 左 = No のミニマル UX。INCEPTION canonical (drawio screen-03) と完全整合、buffer swap でも `key={decisionId}` で internal state を強制 reset | FR-UX-02 |
 | 📱 **Mobile App Polish** | Sticky header (logo + Sign out のみに簡素化) + **Bottom Navigation 4-tab** (🏠 Home / 💭 決定 / 📊 スコア / 👤 プロフィール) + **Safe Area Insets** (iPhone notch / home indicator 対応) + **Skeleton loader** (4 page で Spinner 置換) + **View Transitions API** (Chrome 111+/Safari TP で cross-fade) + **Haptic feedback** (Yes 採択時 50ms 振動、Android 限定) + Button `active:scale-[0.98]` microinteraction (`motion-reduce` 対応) | — (Post-CONSTRUCTION UX 改修) |
+| 💬 **議論チャット token streaming** | LLM 出力を **token (delta) 単位で SSE 配信**、新 event `utterance_delta` で 3 persona 並列に bubble がパラパラ埋まる。`personas` event で delta 到着前から bubble header (icon + name) を pre-fill 表示。`asyncio.Queue` fan-in で per-persona timeout 制御。 | FR-CV-01〜12 (Post-CONSTRUCTION v3 拡張) |
+| 🎯 **No 後 microcopy を LLM 動的生成** | No 採択 → 別案到着で stage 別 tone (1 軽い前向き / 2 共感 / 3 不安吸い上げ / 5+ 委ねる) の Yes nudge を 30 字以内で生成。新 endpoint `POST /v1/decisions/{id}/yes-nudge` (同期返却、2s timeout + stage 別 fallback)。 | FR-NUDGE-01〜05 (Post-CONSTRUCTION v3 拡張) |
+| 🎮 **合議 / Yes-No 演出ゲーミフィケーション** | **chat 風 typing dots** + bubble slide-in + 「📨 合議完了」 notification banner。**Yes 連続採択 combo** (`useYesCombo` 日次 reset、tier 🔥/🌟/⚡/🏆) + tier 別 confetti 強度 (10 連で **3 wave 大爆発 + 金色**)。**YesMan マスコット** (🤵 右上 fixed + 5 状況別 speech bubble、bobbing + pop-in)。 | — (Post-CONSTRUCTION v3、ハッカソン差別化) |
+| 👆 **Yes 誘導演出** | swipe card 右辺 green glow pulse + 「→ → → Yes」 marching arrows で Yes 方向を passive 誘導。`prefers-reduced-motion: reduce` で全 animation 無効化、a11y 維持。 | FR-UX-02 (Post-CONSTRUCTION v3 拡張) |
 
 ---
 
