@@ -1,0 +1,5 @@
+# 演出 webm + 高 quality GIF は容量大 (3-10MB) のため git には含めず、
+# convert.sh で随時生成する。mp4 (~1MB) のみ commit して動画を共有。
+output/*.webm
+output/*.gif
+output/*.png
