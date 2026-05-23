@@ -70,16 +70,26 @@ export function YesManMascot({ state }: YesManMascotProps) {
 
   return (
     <div
-      className="fixed bottom-4 right-4 z-50 flex items-end gap-2 pointer-events-none"
+      className="fixed top-20 left-4 z-50 flex items-start gap-2 pointer-events-none"
       role="status"
       aria-label={`YesMan: ${look.message}`}
       data-testid="yesman-mascot"
       data-ym-mascot-state={state}
     >
-      {/* speech bubble (left of mascot) */}
+      {/* mascot (絵文字、bobbing animation) — 左 */}
+      <div
+        aria-hidden
+        className="text-4xl select-none"
+        style={{ animation: "ym-mascot-bob 2.4s ease-in-out infinite" }}
+        data-ym-anim
+      >
+        🤵
+      </div>
+
+      {/* speech bubble (mascot の右側、tail は左向き) */}
       <div
         key={state} // state 変化のたびに pop-in 再生
-        className="relative max-w-[14rem] rounded-2xl border-2 px-3 py-2 text-xs font-bold shadow-sm"
+        className="relative max-w-[14rem] rounded-2xl border-2 px-3 py-2 text-xs font-bold shadow-sm mt-2"
         style={{
           background: look.bubbleBg,
           borderColor: look.bubbleBorder,
@@ -89,35 +99,25 @@ export function YesManMascot({ state }: YesManMascotProps) {
         data-ym-anim
       >
         {look.message}
-        {/* speech tail (右向き三角、bubble の右下から mascot に向かう) */}
+        {/* speech tail (左向き三角、bubble の左上から mascot に向かう) */}
         <span
           aria-hidden
-          className="absolute -right-2 bottom-2 w-0 h-0"
+          className="absolute -left-2 top-2 w-0 h-0"
           style={{
             borderTop: "6px solid transparent",
             borderBottom: "6px solid transparent",
-            borderLeft: `8px solid ${look.bubbleBorder}`,
+            borderRight: `8px solid ${look.bubbleBorder}`,
           }}
         />
         <span
           aria-hidden
-          className="absolute -right-[6px] bottom-[9px] w-0 h-0"
+          className="absolute -left-[6px] top-[9px] w-0 h-0"
           style={{
             borderTop: "4px solid transparent",
             borderBottom: "4px solid transparent",
-            borderLeft: `6px solid ${look.bubbleBg}`,
+            borderRight: `6px solid ${look.bubbleBg}`,
           }}
         />
-      </div>
-
-      {/* mascot (絵文字、bobbing animation) */}
-      <div
-        aria-hidden
-        className="text-4xl select-none"
-        style={{ animation: "ym-mascot-bob 2.4s ease-in-out infinite" }}
-        data-ym-anim
-      >
-        🤵
       </div>
     </div>
   );
