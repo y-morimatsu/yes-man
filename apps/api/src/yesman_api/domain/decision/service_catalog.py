@@ -18,8 +18,9 @@ class ExternalService:
 # カテゴリ別 service. 各カテゴリの先頭が default (proposal 文字列に固有 service 名がない場合).
 SERVICE_CATALOG: dict[str, list[ExternalService]] = {
     "movie": [
+        # User 希望: 映画は Amazon Prime を first preference に
+        ExternalService("Amazon Prime Video", "https://www.amazon.co.jp/Amazon-Video", "📺"),
         ExternalService("Netflix", "https://www.netflix.com/jp/", "🎬"),
-        ExternalService("Prime Video", "https://www.amazon.co.jp/Amazon-Video", "📺"),
         ExternalService("U-NEXT", "https://video.unext.jp/", "🎞️"),
         ExternalService("YouTube", "https://www.youtube.com/", "▶️"),
     ],
@@ -37,10 +38,11 @@ SERVICE_CATALOG: dict[str, list[ExternalService]] = {
         ExternalService("メルカリ", "https://jp.mercari.com/", "💱"),
     ],
     "fashion": [
-        ExternalService("ZOZOTOWN", "https://zozo.jp/", "👕"),
+        # User 希望: 洋服はユニクロ or Amazon Fashion を first preference に
         ExternalService("ユニクロ", "https://www.uniqlo.com/jp/ja/", "👖"),
-        ExternalService("GU", "https://www.gu-global.com/jp/ja/", "👗"),
         ExternalService("Amazon Fashion", "https://www.amazon.co.jp/fashion", "👔"),
+        ExternalService("GU", "https://www.gu-global.com/jp/ja/", "👗"),
+        ExternalService("ZOZOTOWN", "https://zozo.jp/", "👕"),
     ],
     "music": [
         ExternalService("Spotify", "https://open.spotify.com/", "🎵"),
@@ -81,13 +83,18 @@ SERVICE_CATALOG: dict[str, list[ExternalService]] = {
 
 # カテゴリ判定のキーワード (proposal text + chain history に対するマッチ).
 # 最初に match した category を採用 (順序が優先度).
+#
+# 2026-05-23 fix: books キーワードから「本」を削除 (「1本」「5本」など counter
+# 用法で誤マッチ、全 category が books → Kindle に流れていたバグ修正)。
+# 書籍は明示的キーワード (読書/漫画/小説/Kindle) のみで検出。
+# また movie / fashion を books より優先 (より specific な category を先に).
 CATEGORY_KEYWORDS: list[tuple[str, list[str]]] = [
     ("food_delivery", ["ピザ", "宅配", "デリバリー", "Uber", "出前", "ウォルト", "wolt"]),
     ("food_restaurant", ["レストラン", "外食", "ランチに行", "ディナー", "食べに行"]),
-    ("movie", ["映画", "シネマ", "ホラー", "アニメ映画", "Netflix", "Prime Video", "YouTube映画"]),
-    ("music", ["音楽", "曲", "プレイリスト", "Spotify", "アーティスト"]),
-    ("books", ["本", "読書", "漫画", "マンガ", "小説", "Kindle"]),
-    ("fashion", ["ジーパン", "ジーンズ", "服", "シャツ", "ワンピース", "ユニクロ", "ZOZO", "コーディネート"]),
+    ("movie", ["映画", "シネマ", "ホラー", "アニメ映画", "Netflix", "Prime Video", "Amazon Prime", "U-NEXT", "YouTube映画", "ドラマ"]),
+    ("music", ["音楽", "曲", "プレイリスト", "Spotify", "アーティスト", "アルバム"]),
+    ("fashion", ["ジーパン", "ジーンズ", "Tシャツ", "T シャツ", "シャツ", "洋服", "服を", "服が", "ワンピース", "ユニクロ", "ZOZO", "GU", "Amazon Fashion", "ファッション", "コーディネート", "メンズ", "レディース", "デニム", "スカート", "ニット"]),
+    ("books", ["読書", "漫画", "マンガ", "小説", "Kindle", "Audible", "ebookjapan"]),
     ("travel", ["旅行", "ホテル", "宿", "温泉", "観光", "新幹線", "じゃらん"]),
     ("games", ["ゲーム", "Steam", "Nintendo", "Switch", "RPG"]),
     ("exercise", ["筋トレ", "運動", "ジム", "ヨガ", "ストレッチ", "ランニング"]),
@@ -102,32 +109,43 @@ def detect_category(text: str) -> str | None:
 
     複数候補がヒットしても優先度順 (CATEGORY_KEYWORDS の順) で最初に match した
     カテゴリを採用。1 件も match しなければ None (= service 未紐付け)。
+    Case-insensitive (例: "AMAZON Fashion" / "amazon fashion" 両方マッチ)。
     """
     if not text:
         return None
+    text_lower = text.lower()
     for category, keywords in CATEGORY_KEYWORDS:
         for kw in keywords:
-            if kw in text:
+            if kw.lower() in text_lower:
                 return category
     return None
 
 
 def pick_service(text: str) -> ExternalService | None:
-    """text からカテゴリを判定し、該当 service の先頭 (default) を返す。
+    """text からカテゴリを判定し、該当 service を返す。
 
-    text 内に固有 service 名 (例: "Netflix" / "Amazon" / "ピザハット") があれば
-    優先的にその service を返す。なければ category の default service を返す。
+    優先順:
+      1. 完全 service 名が text に含まれる (例: "Netflix", "ピザハット")
+      2. ブランド頭部単語の case-insensitive 部分一致
+         (例: "AMAZON Basic" → "Amazon Fashion" / "Amazon Prime Video")
+      3. category default (リスト先頭)
     無 category なら None。
     """
     category = detect_category(text)
     if category is None:
         return None
     services = SERVICE_CATALOG[category]
-    # 固有 service 名マッチを先に試す
+    text_lower = text.lower()
+    # 1. 完全 service 名マッチ (case-insensitive)
     for svc in services:
-        if svc.name in text:
+        if svc.name.lower() in text_lower:
             return svc
-    # default
+    # 2. ブランド頭部単語 partial match (例: "Amazon" → "Amazon Fashion")
+    for svc in services:
+        first_word = svc.name.split()[0].lower()
+        if len(first_word) >= 3 and first_word in text_lower:
+            return svc
+    # 3. default
     return services[0]
 
 
