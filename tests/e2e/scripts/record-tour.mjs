@@ -30,14 +30,8 @@ const DEMO_USER = {
   displayName: "ハッカソン デモ",
 };
 
-/** Login 前 / Login 直後の localStorage を初期化 (前回のセッション残置を消去). */
-async function clearStorage(page) {
-  await page.addInitScript(() => {
-    try {
-      localStorage.clear();
-    } catch {}
-  });
-}
+// 注: fresh context は元々 localStorage 空。
+// addInitScript で clear() を仕込むと page.goto() ごとに auth state が消える bug の原因になるため使わない。
 
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -56,8 +50,6 @@ async function main() {
   });
 
   const page = await context.newPage();
-  await clearStorage(page);
-
   // ============================================================
   // §1 Splash (~4s)
   // ============================================================
@@ -91,13 +83,13 @@ async function main() {
   }
   await page.getByRole("button", { name: /^サインイン$/ }).click();
   await page.waitForLoadState("networkidle");
-  await pause(1500);
+  await pause(2500);
 
   // ============================================================
   // §3 Home メニュー (~6s)
   // ============================================================
   console.log("▶ §3: Home メニュー");
-  // sign-in が /auth/callback → / に redirect される想定。直接 / に飛ばすこともある
+  // sign-in 後は /decision に redirect されるので、明示的に Home (/) へ navigate
   await page.goto(`${BASE_URL}/`);
   await page.waitForLoadState("networkidle");
   await pause(5500);
