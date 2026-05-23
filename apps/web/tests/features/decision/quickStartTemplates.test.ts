@@ -40,18 +40,29 @@ describe("selectQuickStartQueue", () => {
     expect(queue[queue.length - 1]?.id).toBe(pool.catchAll.id);
   });
 
-  it("excludeIds の template はスキップされ、catchAll が exclude されたら末尾に出ない", () => {
+  it("excludeIds の template はスキップされる (catchAll は spec §6 で除外対象外、常に末尾に残る)", () => {
     const queue1 = selectQuickStartQueue(
       at(2026, 5, 22, 12),
       new Set(["lunch-weekday"]),
     );
     expect(queue1.find((t) => t.id === "lunch-weekday")).toBeUndefined();
 
+    // 2026-05-23 修正: catchAll は recent-yes に含まれていても常に末尾に存在 (queue 空転落バグの修正)
     const queue2 = selectQuickStartQueue(
       at(2026, 5, 22, 12),
       new Set([pool.catchAll.id]),
     );
-    expect(queue2.find((t) => t.id === pool.catchAll.id)).toBeUndefined();
+    expect(queue2[queue2.length - 1]?.id).toBe(pool.catchAll.id);
+  });
+
+  it("全 template + catchAll が excludeIds に含まれても queue は catchAll を末尾に持つ (queue 空転落しない)", () => {
+    const allIds = new Set([
+      ...pool.templates.map((t) => t.id),
+      pool.catchAll.id,
+    ]);
+    const queue = selectQuickStartQueue(at(2026, 5, 22, 12), allIds);
+    expect(queue.length).toBe(1);
+    expect(queue[0]?.id).toBe(pool.catchAll.id);
   });
 
   it("hours = [] の template (例: music-mood) はどの時刻でもマッチする", () => {
