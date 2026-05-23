@@ -18,6 +18,22 @@ from yesman_api.shared.pii_filter import mask_pii
 _FALLBACK_MESSAGE = "再考の余地がありますね。"
 
 
+# issue #93: No 採択後の YES nudge microcopy fallback (stage 別、LLM 失敗時)
+_YES_NUDGE_FALLBACKS: dict[int, str] = {
+    0: "もう一案 どうぞ",  # stage>=1 fallback (no=1 はここ)
+    2: "今度は ご納得 いただけるかも",
+    3: "ここまでの こだわり、 大切にしながら一案 どうぞ",
+    5: "ここまで考えた あなたなら、 任せてみる勇気を",
+}
+
+
+def _yes_nudge_fallback(stage: int) -> str:
+    for threshold in sorted(_YES_NUDGE_FALLBACKS.keys(), reverse=True):
+        if stage >= threshold:
+            return _YES_NUDGE_FALLBACKS[threshold]
+    return _YES_NUDGE_FALLBACKS[0]
+
+
 @dataclass(frozen=True, slots=True)
 class CachedNudge:
     message: str
@@ -117,6 +133,58 @@ class NudgeMessageGenerator:
         except Exception as exc:
             self._logger.warning("nudge_generation_failed", decision_id=decision_id, error=str(exc))
             self._cache.set_failed(decision_id, _FALLBACK_MESSAGE)
+
+    async def generate_yes_microcopy(
+        self,
+        *,
+        proposal_text: str,
+        stage: int,
+    ) -> str:
+        """issue #93: No 採択 → 別案到着後の YES nudge microcopy を同期返却.
+
+        stage (no_attempt_count) に応じてトーンが軽い前向き → 共感 → 委ねるに変化。
+        existing generate() の background+cache pattern と異なり同期返却 (短 prompt + 2s timeout)、
+        失敗時は _yes_nudge_fallback(stage) を返す。
+        """
+        if not self._enabled:
+            return _yes_nudge_fallback(stage)
+        masked = mask_pii(proposal_text)
+        system = (
+            "ユーザーは AI に意思決定を任せるサービスを使っています。"
+            "Yes を選びやすくする、自然で押し付けがましくない日本語を 1 行 30 字以内で生成してください。"
+            "装飾記号や絵文字、感嘆符は不要。提案内容を直接繰り返さずトーンで導く。"
+        )
+        prompt = (
+            f"新しい提案: {masked}\n"
+            f"ユーザーは前まで No を {stage} 回続けています。\n"
+            f"トーン: {self._yes_nudge_tone(stage)}"
+        )
+        try:
+            async with asyncio.timeout(2.0):
+                text = await self._llm.complete(
+                    system=system,
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.7,
+                )
+            cleaned = text.strip().replace("\n", " ")[:60]
+            if not cleaned:
+                return _yes_nudge_fallback(stage)
+            return cleaned
+        except Exception as exc:
+            self._logger.warning(
+                "yes_microcopy_failed", stage=stage, error=str(exc)
+            )
+            return _yes_nudge_fallback(stage)
+
+    @staticmethod
+    def _yes_nudge_tone(stage: int) -> str:
+        if stage >= 5:
+            return "委ねる安心。「ここまで考えた あなただからこそ、 今回は AI に任せてみませんか」"
+        if stage >= 3:
+            return "不安を吸い上げる共感。「ここまで悩んだ あなたの選択を 大切にしつつ、 一度 これで進んでみませんか」"
+        if stage >= 2:
+            return "共感を込めた、「今度は ご納得 いただけるかも」"
+        return "軽い前向き、「もう一案 どうぞ、 これなら きっと」"
 
     @staticmethod
     def _build_prompt(proposal: str, choice: Literal["yes", "no"], no_streak: int) -> str:

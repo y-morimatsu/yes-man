@@ -6,7 +6,7 @@
  * - noStage state (DecisionPage scope) で No 連続採択の累積回数を保持
  * - 別案 streaming 中も NoMicroCopyBanner は持続、Yes 採択時のみ hide
  */
-import { useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Input } from "@yesman/ui";
 import { VoiceMicInput } from "../voice/VoiceMicInput";
@@ -17,6 +17,7 @@ import { DecisionResult } from "./DecisionResult";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
 import { QuickStartCard } from "./QuickStartCard";
 import { useQuickStart } from "./useQuickStart";
+import { useYesNudge } from "./useYesNudge";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -36,6 +37,9 @@ export default function DecisionPage() {
 
   // No 採択時の待ち時間を消すための buffer (同じ user_input で別案を先 prefetch)
   const prefetch = usePrefetchedDecisions({ bufferSize: PREFETCH_BUFFER_SIZE });
+
+  // issue #93: No 採択 → 別案到着後に Yes 採択を後押しする LLM 動的 microcopy.
+  const yesNudge = useYesNudge();
 
   const { startStream } = useDecisionStream({
     onStart: (id) => dispatch({ type: "onStart", decisionId: id }),
@@ -117,10 +121,21 @@ export default function DecisionPage() {
   const handleFullReset = () => {
     setNoStage(0);
     setRegenerating(false);
+    yesNudge.clear();
     lastInputRef.current = "";
     prefetch.clear();
     dispatch({ type: "reset" });
   };
+
+  // issue #93: state.status==="completed" && noStage>0 で yes-nudge を fetch。
+  // decisionId が変わる度に (buffer-swap / 新 stream complete) re-fetch。
+  useEffect(() => {
+    if (state.status === "completed" && noStage > 0 && state.decisionId) {
+      yesNudge.fetchOne(state.decisionId, noStage);
+    }
+    // yesNudge.fetchOne / .clear は useCallback で安定。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.status, state.status === "completed" ? state.decisionId : null, noStage]);
 
   // idle / error 時にカード or textbox を出す。quickstart mode "quick" のときは QuickStartCard、
   // mode "text" になったら従来 UI (textbox + voice + persona pill) に切替.
@@ -214,10 +229,16 @@ export default function DecisionPage() {
         </>
       )}
 
-      {/* INCEPTION Journey C: No 連打 microcopy banner (regenerate を跨いで持続) */}
+      {/* INCEPTION Journey C: No 連打 microcopy banner (regenerate を跨いで持続)
+          issue #93: LLM 動的 microcopy (yesNudge.message) を優先表示、
+          未到着/失敗時は stage 別 static fallback (NoMicroCopyBanner 内) */}
       {noStage > 0 &&
         (state.status === "streaming" || state.status === "completed") && (
-          <NoMicroCopyBanner stage={noStage} regenerating={regenerating} />
+          <NoMicroCopyBanner
+            stage={noStage}
+            regenerating={regenerating}
+            dynamicMessage={yesNudge.message}
+          />
         )}
 
       {(state.status === "streaming" || state.status === "completed") && (
