@@ -670,3 +670,35 @@ const PreferencePage = lazy(() => import("../features/preference/PreferencePage"
 - Web unit test 4 件 (`DecisionHistoryList.test.tsx`: render / loading / empty / item 表示) PASS
 - Web unit test 13 件 (`formatRelativeTime.test.ts` 5 段階 × 境界値、`truncate.test.ts` surrogate pair) PASS
 - e2e Playwright 全 100/100 PASS (既存 spec の回帰なし)
+
+---
+
+## Post-CONSTRUCTION 改修注記 v3 (2026-05-23)
+
+### Token streaming + persona pre-fill UI (PR #86、`e791650`)
+- `apps/web/src/features/decision/reducer.ts`: `Utterance.done` 必須化、新 action `onPersonasResolved` (pre-fill empty bubbles) + `onUtteranceDelta` (chunk append、merge-by-persona_id)
+- `useDecisionStream.ts`: `onPersonasResolved` + `onUtteranceDelta` callback、`utterance` event は `done=true` 付与
+- `DecisionResult.tsx`: bubble + skeleton を同一 container に統合、bubble 描画優先・残数だけ skeleton 化、`PersonaThinkingChips` 廃止
+- `DecisionPage.tsx`: callback dispatch 配線
+
+### QuickStart catchAll 除外バグ修正 (同 PR)
+- `quickStartTemplates.selectQuickStartQueue`: catchAll を `excludeIds` 判定から外し spec §6「常に最後の候補」に厳密準拠
+- `useQuickStart`: queue drained でも `pool.catchAll` を fallback で常に提示
+- `VITE_QUICKSTART_DEDUPE=off` env var で dev/demo の 24h dedupe を無効化
+
+### LLM 動的 Yes nudge microcopy (PR #94、`5261d9d`、Closes #93)
+- 新 hook `useYesNudge.ts`: sequence ID で連続 No race を防止、失敗時 `message=null` (banner static fallback)
+- `DecisionPage` の `useEffect` で `state.status === "completed" && noStage > 0` で fetch、reset で clear
+- `NoMicroCopyBanner.dynamicMessage` prop 追加、優先表示。null 時は stage 別 static fallback
+
+### Decisions cache invalidation 修正 (同 PR)
+- `useChooseMutation.onSuccess` で `["score"]` のみ invalidate していたため、`["decisions", "history", "yes", N]` (=`useDecisionHistory`) のキャッシュが最大 `staleTime=30s` 残り「最近の Yes 採択」が直前 YES を反映しないバグ修正
+- `qc.invalidateQueries({ queryKey: ["decisions"] })` を追加
+
+### 合議 / Yes-No ゲーミフィケーション (PR #95 + #97)
+- **chat 風 typing dots + slide-in**: `DecisionUtteranceBubble` (U7b 拡張) と globals.css の keyframes 連携
+- **Proposal 到着 notification banner**: `DecisionResult` で proposal 初到着 2.4s だけ 「📨 合議が完了しました」 banner 表示
+- **Yes 連続採択 combo**: `useYesCombo` (localStorage 日次 reset、ref ベース stale closure 回避) + `YesComboBadge` (tier 🔥/🌟/⚡/🏆 + brokeCombo 💔)
+- **tier 別 confetti**: 10+ 連は 3 wave 大爆発 + 金色追加、vibrate 連動 (5+ 連は 3 段パルス)
+- **YesMan マスコット**: `YesManMascot.tsx` (🤵 右上 fixed、5 状況別 speech bubble + bobbing + pop-in)
+- DecisionResult に `onChoiceMade` callback prop 追加、DecisionPage 側で `recentChoice` state (1.6s) を経由してマスコット state を派生
