@@ -48,17 +48,20 @@ bash docs/demo/scripts/convert.sh
 - mp4 (H.264 + AAC、`+faststart` で Web streaming 対応)
 - gif (12 fps + palettegen for 高品質 256 色)
 
-## カバレッジ (~90-112s)
+## カバレッジ (~130s)
 
 | Section | 時間 | 内容 |
 |---|---|---|
-| §1 | ~5s | `/decision` 起動、**QuickStart カード**を表示 |
-| §2 | ~25s | QuickStart Yes → 合議 streaming (3 persona pre-fill + **typing dots ●●●** + bubble token streaming + 「📨 合議完了」 notification) |
-| §3 | ~5s | 1 回目 Yes 採択 → **confetti + マスコット「やった!」** |
-| §4 | ~20s | もう一度 → 2 回目合議 → Yes → **combo 🔥 2 連目** + tier 強化 confetti |
-| §5 | ~7s | `/score` 委任度スコア + 円グラフ + 推移 + **最近の Yes 採択履歴** (scroll で見せる) |
-| §6 | ~5s | `/preference` 嗜好プロファイル (採択/棄却傾向 + ペルソナ嗜好) |
-| §7 | ~5s | `/personas/selection` ペルソナ選択 (3 builtin + 共有プール) |
+| §1 | ~4s | **Splash** (逆説的設計の明示 + CTA) |
+| §2 | ~8s | **Sign-in** (Email + 表示名 入力 → サインイン、Mock auth) |
+| §3 | ~6s | **Home メニュー** (📊 最近の YesMan サマリカード + 💭 合議で決定 + その他カード) |
+| §4 | ~28s | **Decision (1 回目)**: QuickStart → 合議 streaming (3 persona pre-fill + **typing dots ●●●** + bubble token streaming + 「📨 合議完了」 notification) |
+| §5 | ~5s | **1 回目 Yes 採択** → confetti + マスコット 🤵「やった!」 |
+| §6 | ~20s | **2 回目合議 → Yes → combo 🔥** 2 連目 + tier 強化 confetti |
+| §7 | ~8s | `/score` **委任度スコア** + 円グラフ + 30 日推移 + **最近の Yes 採択履歴** (scroll で見せる) |
+| §8 | ~6s | `/preference` **嗜好プロファイル** (採択/棄却傾向 + ペルソナ嗜好) |
+| §9 | ~6s | `/profile` **プロフィール** (表示名 / 音声 backend 設定 / 二段階削除) |
+| §10 | ~5s | `/personas/selection` **ペルソナ選択** (3 builtin + 共有プール) |
 
 ## 演出ハイライト
 
