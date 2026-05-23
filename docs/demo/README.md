@@ -48,7 +48,29 @@ bash docs/demo/scripts/convert.sh
 - mp4 (H.264 + AAC、`+faststart` で Web streaming 対応)
 - gif (12 fps + palettegen for 高品質 256 色)
 
-## カバレッジ (~130s)
+## 動画スクリプト 2 種類
+
+| script | 用途 | 時間 |
+|---|---|---|
+| `tests/e2e/scripts/record-tour.mjs` | v0.4.0 release ベースの短縮版 (10 section) | ~133s |
+| `tests/e2e/scripts/record-full-tour.mjs` | **v0.5.0-α 全機能網羅版** (next-spec-ideas、onboarding + drill-down + 全 page) | ~258s |
+
+### 全機能版カバレッジ (record-full-tour.mjs、~258s)
+
+| § | 時間 | 内容 |
+|---|---|---|
+| §1 | ~4s | **Splash** (YesMan ブランド + CTA + サインインリンク) |
+| §2 | ~8s | **Sign-in** (新規 unique email + 表示名 入力 → サインイン、Mock auth、毎回新規 user 扱い) |
+| §3 | ~22s | **Onboarding** (性格 + 生活 50 問のうち 25 問 swipe、progress bar に確信ライン marker、「もういい、 進む」 CTA で skip) |
+| §4 | ~7s | **Home メニュー** (📊 最近の YesMan + 5 カード + BottomNav) |
+| §5 | ~120s | **Decision + Drill-down chain**: QuickStart Yes → 合議 streaming (typing dots + bubble pre-fill) → **chain 4 段** (Yes 連鎖、breadcrumb 蓄積、Amazon Prime / Netflix への routing 質問) → 最終 Yes → confetti + マスコット祝福 + **🎬 Netflix で開く →** service CTA |
+| §6 | ~12s | `/score` 委任度スコア (円グラフ + 30 日推移 + scroll) |
+| §7 | ~8s | `/preference` 嗜好プロファイル (onboarding 反映済) |
+| §8 | ~6s | `/personas` (builtin + 共有プール) |
+| §9 | ~6s | `/personas/selection` (💡 Dynamic Routing 推奨 badge) |
+| §10 | ~8s | `/profile` (Email / 表示名 / 音声 backend toggle) |
+
+### 短縮版カバレッジ (record-tour.mjs、~130s)
 
 | Section | 時間 | 内容 |
 |---|---|---|
