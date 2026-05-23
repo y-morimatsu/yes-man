@@ -124,6 +124,31 @@ html.dark {
   100% { opacity: 0; transform: scale(0.95); }
 }
 
+/* Right-direction swipe hint chevrons (marching arrows toward Yes) */
+@keyframes ym-swipe-hint-arrow {
+  0% { opacity: 0; transform: translateX(-6px); }
+  30%, 70% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(6px); }
+}
+
+/* Right-edge glow pulse (proposal card 右辺、Yes 側を視覚的誘導) */
+@keyframes ym-yes-edge-glow {
+  0%, 100% { box-shadow: inset -8px 0 16px -8px rgba(34, 197, 94, 0.18); }
+  50% { box-shadow: inset -16px 0 24px -8px rgba(34, 197, 94, 0.45); }
+}
+
+/* Mascot bobbing (gentle vertical float) */
+@keyframes ym-mascot-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Mascot speech bubble pop-in */
+@keyframes ym-mascot-bubble-in {
+  0% { opacity: 0; transform: translateY(4px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-ym-anim] {
     animation: none !important;
