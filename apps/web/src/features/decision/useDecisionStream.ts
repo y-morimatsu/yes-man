@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { ApiError } from "@yesman/api-client";
 import type { DecisionRequestPayload } from "@yesman/api-client";
 import { useApi } from "../../shell/ApiProvider";
-import type { Utterance } from "./reducer";
+import type { ExternalServiceLink, Utterance } from "./reducer";
 
 export interface StreamCallbacks {
   onStart?: (decisionId: string) => void;
@@ -20,7 +20,13 @@ export interface StreamCallbacks {
     text: string;
   }) => void;
   onUtterance?: (utterance: Utterance) => void;
-  onProposal?: (proposal: string) => void;
+  // 2026-05-23 Drill-down chain: is_final + service + depth を proposal data に同梱
+  onProposal?: (data: {
+    proposal: string;
+    isFinal: boolean;
+    depth: number;
+    service: ExternalServiceLink | null;
+  }) => void;
   onComplete?: () => void;
   onSilence?: (message: string) => void;
   onError?: (error: unknown) => void;
@@ -57,7 +63,12 @@ export function useDecisionStream(callbacks: StreamCallbacks) {
               cb.onUtterance?.({ ...event.data, done: true });
               break;
             case "proposal":
-              cb.onProposal?.(event.data.proposal_text);
+              cb.onProposal?.({
+                proposal: event.data.proposal_text,
+                isFinal: event.data.is_final ?? false,
+                depth: event.data.depth ?? 0,
+                service: event.data.service ?? null,
+              });
               break;
             case "complete":
               cb.onComplete?.();

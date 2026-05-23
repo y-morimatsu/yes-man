@@ -22,6 +22,9 @@ class DecisionRequest:
     user_input: str
     selected_persona_ids: list[UUID] = field(default_factory=list)
     llm_provider: str = "mock"
+    # 2026-05-23: Drill-down chain — 親提案列 (Yes 連鎖時の context).
+    # 空 list ならルート合議、要素ありなら N 段目の深堀り。
+    chain_context: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

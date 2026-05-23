@@ -18,7 +18,7 @@ import {
   SwipeChoice,
   useToast,
 } from "@yesman/ui";
-import type { Utterance } from "./reducer";
+import type { ChainNode, ExternalServiceLink, Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
 import { YesComboBadge } from "./YesComboBadge";
@@ -37,6 +37,15 @@ export interface DecisionResultProps {
   onNoChosen?: (noAttemptCount: number) => void;
   /** Hackathon: 親 (DecisionPage) で mascot 状態を切り替えるための callback. */
   onChoiceMade?: (choice: "yes" | "no") => void;
+  /** 2026-05-23 Drill-down chain: Yes が「次段に進む」を意味する場合のハンドラ.
+   *  isFinal=false のときに呼ぶ。指定時は内部 choose API を call せず、親が新 stream を起動。 */
+  onDrillDown?: () => void;
+  /** 2026-05-23 Drill-down chain: 現提案が最終かどうか. true なら Yes 採択 (choose API + 祝福). */
+  isFinal?: boolean;
+  /** 2026-05-23 Drill-down chain: chain history (breadcrumb 表示用). */
+  chain?: ChainNode[];
+  /** 2026-05-23 Drill-down chain: final 提案に紐づく外部 service. CTA button で URL を開く. */
+  service?: ExternalServiceLink | null;
 }
 
 export function DecisionResult({
@@ -46,6 +55,10 @@ export function DecisionResult({
   onComplete,
   onNoChosen,
   onChoiceMade,
+  onDrillDown,
+  isFinal = true,
+  chain = [],
+  service = null,
 }: DecisionResultProps) {
   const choose = useChooseMutation();
   const { push } = useToast();
@@ -141,6 +154,12 @@ export function DecisionResult({
 
   const handleChoose = async (choice: "yes" | "no") => {
     if (!decisionId) return;
+    // 2026-05-23 Drill-down chain: Yes かつ非 final なら choose API を call せず drill-down
+    if (choice === "yes" && !isFinal && onDrillDown) {
+      onChoiceMade?.("yes");
+      onDrillDown();
+      return;
+    }
     try {
       const result = await choose.mutateAsync({ id: decisionId, choice });
       const count = result?.no_attempt_count ?? 0;
@@ -167,6 +186,27 @@ export function DecisionResult({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* 2026-05-23 Drill-down chain: 既出 proposal の breadcrumb (depth >= 1 で表示) */}
+      {chain.length > 0 && (
+        <nav
+          className="rounded-xl border border-brand-200 bg-brand-50 px-3 py-2 text-xs"
+          aria-label="深堀り chain"
+          data-testid="drill-down-chain"
+        >
+          <span className="font-bold text-brand-700">🪜 これまでの決定:</span>
+          <div className="mt-1 flex flex-wrap items-center gap-1 text-neutral-700">
+            {chain.map((node, i) => (
+              <span key={node.decisionId} className="inline-flex items-center gap-1">
+                {i > 0 && <span aria-hidden className="text-brand-400">→</span>}
+                <span className="rounded-md bg-neutral-0 px-2 py-0.5 border border-brand-200">
+                  {node.proposalText}
+                </span>
+              </span>
+            ))}
+          </div>
+        </nav>
+      )}
+
       {/* Hackathon: Yes 連続採択 combo badge (chosen=yes 時 + 2 連以上 or break 時) */}
       {(combo.count >= 2 || combo.brokeCombo) && (
         <YesComboBadge
@@ -293,6 +333,28 @@ export function DecisionResult({
           noAttemptCount={noCount}
           onReset={onComplete}
         />
+      )}
+
+      {/* 2026-05-23 Drill-down chain: final proposal + service があれば外部 service CTA */}
+      {chosen === "yes" && service && (
+        <a
+          href={service.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="self-stretch rounded-2xl border-2 border-success bg-success/10 px-4 py-3 text-center text-base font-bold text-success-700 hover:bg-success/20 transition-colors shadow-md flex items-center justify-center gap-2"
+          style={{
+            background: "linear-gradient(135deg, #ECFDF5, #86EFAC33)",
+            borderColor: "#22C55E",
+            color: "#065F46",
+          }}
+          aria-label={`${service.name} で開く (外部リンク)`}
+          data-testid="external-service-cta"
+        >
+          <span aria-hidden className="text-2xl">
+            {service.emoji}
+          </span>
+          <span>{service.name} で開く →</span>
+        </a>
       )}
     </div>
   );

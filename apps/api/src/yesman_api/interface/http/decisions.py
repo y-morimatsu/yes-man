@@ -55,6 +55,7 @@ async def request_decision(
         user_id=UUID(user.sub),
         user_input=payload.user_input,
         selected_persona_ids=payload.selected_persona_ids or [],
+        chain_context=tuple(payload.chain_context or ()),
     )
     try:
         decision_id, consensus, no_attempt_count = await engine.run(request)
@@ -90,6 +91,7 @@ async def request_decision_stream(
         user_id=UUID(user.sub),
         user_input=payload.user_input,
         selected_persona_ids=payload.selected_persona_ids or [],
+        chain_context=tuple(payload.chain_context or ()),
     )
     decision_id = uuid4()  # ultrathink Imp2: SSE start event で client に事前通知
 

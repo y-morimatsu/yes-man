@@ -194,7 +194,41 @@ class DecisionEngine:
         # spec Post-CONSTRUCTION v3 (2026-05-23): _llm.stream() 経由で
         # utterance_delta event を chunk 単位 yield、最後に cleaned text を
         # utterance event として送出 (backward compat + 最終確定)。
-        masked_user_input = mask_pii(request.user_input)
+        # 2026-05-23 Drill-down chain: chain_context があれば user_input に prepend して
+        # 段階別の指示 (粒度ガイド) を加える。
+        # depth 0: domain choice (映画 / 旅行 / 洋服 等)
+        # depth 1: service routing (Amazon Prime / Netflix / ユニクロ 等で探す?)
+        # depth 2: subtype 絞り込み (ホラー / メンズ / カジュアル 等)
+        # depth 3 以上: specific instance (商品名 / 作品名 / 店舗名 — final)
+        depth = len(request.chain_context)
+        if request.chain_context:
+            context_line = " → ".join(request.chain_context)
+            if depth == 1:
+                guide = (
+                    "次の段階は『どの service / 経路で実現するか』。"
+                    "例: 『Amazon Prime で 探しますか?』『Netflix で 見ますか?』『出前館 で 注文しますか?』。"
+                    "短い疑問形 1 文 (~30 字)。"
+                )
+            elif depth == 2:
+                guide = (
+                    "次の段階は『subtype の 絞り込み』。"
+                    "例: 『ホラー』『メンズ』『カジュアル』『M サイズ』。"
+                    "1 単語 or 短いフレーズで。"
+                )
+            else:
+                guide = (
+                    "次は最も具体的な instance (商品名 / 作品名 / 店舗名 / 品名)。"
+                    "例: 『貞子 on the Movie』『AMAZON Basic T シャツ 5 枚セット』。"
+                    "これが最終決定。"
+                )
+            enriched_input = (
+                f"[これまでの絞り込み: {context_line}]\n"
+                f"{guide}\n"
+                f"元の要望: {request.user_input}"
+            )
+            masked_user_input = mask_pii(enriched_input)
+        else:
+            masked_user_input = mask_pii(request.user_input)
         user_messages = [{"role": "user", "content": masked_user_input}]
         per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
@@ -308,7 +342,33 @@ class DecisionEngine:
             )
             return
 
-        yield StreamEvent("proposal", {"proposal_text": proposal_text})
+        # 2026-05-23 Drill-down chain: is_final + service を proposal event に同梱.
+        # is_final = chain depth >= MAX_DRILL_DEPTH (3) のみ。
+        # service routing 質問 (depth=1) は終了させず、4 段目 (depth=3) で必ず final.
+        # service 情報は depth 問わず付与し、final で CTA、それまでは「ヒント」表示に使える。
+        from yesman_api.domain.decision.service_catalog import pick_service
+        MAX_DRILL_DEPTH = 3
+        combined_text = (
+            proposal_text + " " + " ".join(request.chain_context)
+        ).strip()
+        service = pick_service(combined_text)
+        service_payload: dict | None = None
+        if service is not None:
+            service_payload = {
+                "name": service.name,
+                "url": service.url,
+                "emoji": service.emoji,
+            }
+        is_final = depth >= MAX_DRILL_DEPTH
+        yield StreamEvent(
+            "proposal",
+            {
+                "proposal_text": proposal_text,
+                "is_final": is_final,
+                "depth": depth,
+                "service": service_payload,
+            },
+        )
 
         # 7. 永続化 (synchronous、complete event の前に実行)
         utterances_persist = [

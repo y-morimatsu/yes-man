@@ -21,6 +21,9 @@ class DecisionRequestDTO(BaseModel):
 
     user_input: str = Field(min_length=1, max_length=100_000)
     selected_persona_ids: list[UUID] | None = None
+    # 2026-05-23: Drill-down chain — Yes 連鎖時に親提案列を context として渡す.
+    # 例: ["映画を見る", "ホラー映画にする"] → 次は「貞子 on the Movie」レベルに深堀り.
+    chain_context: list[str] | None = Field(default=None, max_length=10)
 
 
 class ChoiceRequest(BaseModel):

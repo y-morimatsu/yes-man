@@ -5053,3 +5053,24 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 - 影響範囲: U7d-features (Decision flow UX) を中心に、必要なら U7b-ui (composites) も拡張
 **Context**: ハッカソン差別化要素、 UX 強化 (機能追加ではなく既存 flow への演出付加)
 ---
+
+## アイデア検証 v3-α - 深堀り Decision Chain (Inception 開始)
+**Timestamp**: 2026-05-23T08:00:00Z
+**User Input**: "別のアプローチ。ai-dlcで進める。
+現在,"合議で決定"で質問対してYESの場合,そのまま終わってしまう。
+たとえば、"暇だから何をすべき？" → 映画を見るのはどう -> YES -> "Yes 採択 — 素晴らしい従順さです.."
+YESを選択したら、次の候補を考えて出したい、
+映画を見る → ホラー映画は？ → 貞子 on the Movieとか。
+ピザを食べるのあれば、宅配ピザを頼みますか？ - → ピザのセットはXXでいいですか
+洋服購入 → ジーパンですか？ → アマゾンで探しますか？ → AMAZON BASICのズボンでいいですか？
+みたいな感じで最終決定するまで深堀りするようにする。"
+
+**AI Response**:
+- v0.4.0 release 後の次期仕様アイデア検証フェーズ第 1 弾
+- branch: develop 起点で `feature/drill-down-decision` を新規作成予定
+- Hackathon Pragmatism + memory `project-ideation-phase-no-auto-merge` 適用 (PR は作るが merge は user 承認まで保留)
+- 想定影響範囲: U4-decision (chain endpoint or 既存 SSE 拡張)、U7d-features (DecisionResult / DecisionPage の chain state)、U7c-api-client (新 method)、U7b-ui (DrillDownCard などの新 composite 可能性)
+- Requirements Analysis (light) でトリガー / 段数 / 終了条件 / LLM 経路 を user 確認予定
+
+**Context**: ハッカソン後の差別化、コア体験 (YES を押し続けて深堀り) の延長。NudgeBanner 終端固定の現状を「最終決定まで chain する」UX へ変更。
+---

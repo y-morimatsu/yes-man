@@ -15,6 +15,20 @@ export interface Utterance {
   done: boolean;
 }
 
+// 2026-05-23 Drill-down chain: proposal に紐づく外部 service 情報
+export interface ExternalServiceLink {
+  name: string;
+  url: string;
+  emoji: string;
+}
+
+// 2026-05-23 Drill-down chain: chain 中の 1 ノード (完了済 proposal の履歴)
+export interface ChainNode {
+  decisionId: string;
+  proposalText: string;
+  depth: number;
+}
+
 export type DecisionState =
   | { status: "idle"; input: string }
   | {
@@ -23,6 +37,10 @@ export type DecisionState =
       decisionId: string | null;
       utterances: Utterance[];
       proposal: string | null;
+      // 2026-05-23 Drill-down chain: proposal メタ (proposal 到着時に set)
+      isFinal: boolean;
+      depth: number;
+      service: ExternalServiceLink | null;
     }
   | {
       status: "completed";
@@ -30,6 +48,9 @@ export type DecisionState =
       input: string;
       utterances: Utterance[];
       proposal: string;
+      isFinal: boolean;
+      depth: number;
+      service: ExternalServiceLink | null;
     }
   // INCEPTION D Silence Theater: 沈黙ドメイン検知時の専用 state
   | { status: "silenced"; input: string; message: string }
@@ -52,7 +73,14 @@ export type DecisionAction =
       chunk: string;
     }
   | { type: "onUtterance"; utterance: Utterance }
-  | { type: "onProposal"; proposal: string }
+  // 2026-05-23 Drill-down chain: proposal に is_final / depth / service を同梱
+  | {
+      type: "onProposal";
+      proposal: string;
+      isFinal?: boolean;
+      depth?: number;
+      service?: ExternalServiceLink | null;
+    }
   | { type: "onComplete" }
   | { type: "onSilence"; message: string }
   | { type: "onError"; error: string }
@@ -82,10 +110,13 @@ export function decisionReducer(
       if (state.status === "streaming") return state;
       return {
         status: "streaming",
-        input: state.input,
+        input: "input" in state ? state.input : "",
         decisionId: null,
         utterances: [],
         proposal: null,
+        isFinal: false,
+        depth: 0,
+        service: null,
       };
 
     case "onStart":
@@ -153,7 +184,13 @@ export function decisionReducer(
 
     case "onProposal":
       if (state.status !== "streaming") return state;
-      return { ...state, proposal: action.proposal };
+      return {
+        ...state,
+        proposal: action.proposal,
+        isFinal: action.isFinal ?? false,
+        depth: action.depth ?? state.depth,
+        service: action.service ?? null,
+      };
 
     case "onComplete":
       if (state.status !== "streaming" || !state.decisionId || !state.proposal) {
@@ -165,6 +202,9 @@ export function decisionReducer(
         input: state.input,
         utterances: state.utterances,
         proposal: state.proposal,
+        isFinal: state.isFinal,
+        depth: state.depth,
+        service: state.service,
       };
 
     case "onSilence":
@@ -191,6 +231,10 @@ export function decisionReducer(
         input,
         utterances: action.utterances,
         proposal: action.proposal,
+        // 2026-05-23: buffer-swap は親流れの別案差替なので isFinal/depth/service は前 state を継承
+        isFinal: "isFinal" in state ? state.isFinal : false,
+        depth: "depth" in state ? state.depth : 0,
+        service: "service" in state ? state.service : null,
       };
     }
 
