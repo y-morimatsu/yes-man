@@ -15,6 +15,10 @@ export function useChooseMutation() {
     onSuccess: () => {
       // score を invalidate (decision で更新される)
       qc.invalidateQueries({ queryKey: ["score"] });
+      // 「最近の Yes 採択」リストも更新 (useDecisionHistory の queryKey=["decisions", "history", ...]).
+      // 旧コードは ["score"] のみで decisions キャッシュが残り、直前 YES が
+      // 最大 staleTime=30s 反映されない bug を起こしていた。
+      qc.invalidateQueries({ queryKey: ["decisions"] });
     },
   });
 }

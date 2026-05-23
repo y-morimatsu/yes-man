@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 520" width="280" height="520"
+     font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Maru Gothic ProN', 'Yu Gothic', 'Noto Serif JP', serif">
+  <!-- phone outer frame -->
+  <rect x="6" y="6" width="268" height="508" rx="28" ry="28"
+        fill="#FAFAFA" stroke="#4A3D45" stroke-width="4"/>
+  <rect x="14" y="14" width="252" height="492" rx="22" ry="22"
+        fill="#FFF7E8"/>
+  <!-- notch -->
+  <rect x="108" y="14" width="64" height="18" rx="9" fill="#4A3D45"/>
+  <!-- status bar -->
+  <text x="32" y="48" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#4A3D45">9:41</text>
+  <text x="248" y="48" font-family="-apple-system, sans-serif" font-size="10" fill="#4A3D45" text-anchor="end">📶 🔋</text>
+
+  <!-- Sticky header -->
+  <rect x="14" y="62" width="252" height="40" fill="#F5E5C4"/>
+  <text x="26" y="88" font-family="'Noto Serif JP', serif" font-size="14" font-weight="700" fill="#4A3D45">🪞 YesMan</text>
+  <text x="254" y="88" font-family="-apple-system, sans-serif" font-size="10" fill="#525252" text-anchor="end">Sign out</text>
+
+  <!-- Page title -->
+  <text x="140" y="124" text-anchor="middle" font-family="'Noto Serif JP', serif"
+        font-size="16" font-weight="700" fill="#262626">何を きめますか？</text>
+
+  <!-- Persona thinking chips (Pack A #3) — INCEPTION 改修 NO LIVE badge -->
+  <rect x="26" y="142" width="64" height="20" rx="10" fill="#E8775A" opacity="0.18"/>
+  <text x="58" y="156" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="9" fill="#E8775A">🛡️ 考え中</text>
+  <rect x="96" y="142" width="64" height="20" rx="10" fill="#E8775A" opacity="0.18"/>
+  <text x="128" y="156" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="9" fill="#E8775A">☀️ 考え中</text>
+  <rect x="166" y="142" width="64" height="20" rx="10" fill="#E8775A" opacity="0.18"/>
+  <text x="198" y="156" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="9" fill="#E8775A">⚡ 考え中</text>
+
+  <!-- Utterance bubble 1: persona 慎重派 -->
+  <rect x="26" y="180" width="228" height="46" rx="10" fill="#FFFFFF" stroke="#E0D5BC"/>
+  <text x="36" y="198" font-family="-apple-system, sans-serif" font-size="9" font-weight="700" fill="#525252">🛡️ 慎重派</text>
+  <text x="36" y="214" font-family="-apple-system, sans-serif" font-size="10" fill="#404040">健康面を考えると野菜中心が...</text>
+
+  <!-- Utterance bubble 2: persona 楽観派 (streaming animated, lighter) -->
+  <rect x="26" y="234" width="228" height="46" rx="10" fill="#FFFFFF" stroke="#E0D5BC"/>
+  <text x="36" y="252" font-family="-apple-system, sans-serif" font-size="9" font-weight="700" fill="#525252">☀️ 楽観派</text>
+  <text x="36" y="268" font-family="-apple-system, sans-serif" font-size="10" fill="#404040">気分転換に新しいお店を試そう▮</text>
+
+  <!-- Skeleton card for upcoming utterance (Mobile App Polish #5: Skeleton) -->
+  <rect x="26" y="288" width="228" height="46" rx="10" fill="#E5E5E5" opacity="0.7"/>
+  <rect x="36" y="297" width="60" height="9" rx="2" fill="#D4D4D4"/>
+  <rect x="36" y="312" width="180" height="9" rx="2" fill="#D4D4D4"/>
+
+  <!-- (intentionally NO 🔴 LIVE badge / NO "AI ペルソナが合議中..." hint — UX cleanup 5f32c72) -->
+
+  <!-- Bottom Navigation Bar -->
+  <rect x="14" y="456" width="252" height="50" fill="#FFFFFF" stroke="#E0E0E0"/>
+  <rect x="78" y="456" width="40" height="2" fill="#c2410c"/>
+  <text x="46" y="478" text-anchor="middle" font-size="14" fill="#737373">🏠</text>
+  <text x="46" y="494" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" fill="#737373">Home</text>
+  <text x="98" y="478" text-anchor="middle" font-size="14" fill="#c2410c">💭</text>
+  <text x="98" y="494" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" font-weight="700" fill="#c2410c">決定</text>
+  <text x="156" y="478" text-anchor="middle" font-size="14" fill="#737373">📊</text>
+  <text x="156" y="494" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" fill="#737373">スコア</text>
+  <text x="220" y="478" text-anchor="middle" font-size="14" fill="#737373">👤</text>
+  <text x="220" y="494" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="8" fill="#737373">プロフィール</text>
+
+  <!-- home indicator -->
+  <rect x="115" y="506" width="50" height="3" rx="1.5" fill="#4A3D45" opacity="0.6"/>
+</svg>

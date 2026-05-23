@@ -54,6 +54,21 @@ export class DecisionsModule {
     return request<NudgeResponse>(this.client, `/v1/decisions/${decisionId}/nudge`);
   }
 
+  // issue #93: No 採択 → 新 proposal 到着後の YES nudge microcopy 同期取得
+  async generateYesNudge(
+    decisionId: string,
+    payload: { stage: number },
+  ): Promise<{ message: string }> {
+    return request<{ message: string }>(
+      this.client,
+      `/v1/decisions/${decisionId}/yes-nudge`,
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+      },
+    );
+  }
+
   async history(opts?: {
     limit?: number;
     choice?: "yes" | "no" | "all";

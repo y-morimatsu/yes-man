@@ -136,11 +136,17 @@ export function SwipeChoice({
         <div
           {...handlers}
           // FE-DESIGN-06: motion vocabulary 'fast' (150ms / ease-out) 統一
-          className="relative mx-auto max-w-utterance touch-pan-y select-none transition-transform duration-150 ease-out"
+          // Hackathon: dx=0 (未スワイプ) の時に右辺グロー pulse で Yes 方向を passive 誘導
+          className="relative mx-auto max-w-utterance touch-pan-y select-none transition-transform duration-150 ease-out rounded-2xl"
           style={{
             transform: `translateX(${dx}px) rotate(${rotation}deg)`,
             cursor: disabled ? "default" : "grab",
+            animation:
+              !disabled && !confirming && dx === 0
+                ? "ym-yes-edge-glow 2.2s ease-in-out infinite"
+                : undefined,
           }}
+          data-ym-anim
           role="group"
           aria-roledescription="swipeable proposal card"
           tabIndex={0}
@@ -170,13 +176,39 @@ export function SwipeChoice({
         </div>
       </div>
 
-      {/* スワイプガイド (drawio 中央: 「👆 スワイプして！」) */}
-      <p
-        className="text-xs italic text-neutral-400"
-        aria-hidden
-      >
-        👆 スワイプして決定
-      </p>
+      {/* スワイプガイド: Hackathon で右方向 (Yes) を marching arrow で誘導.
+          dx=0 (未スワイプ) の間のみアニメ表示、スワイプ開始で hide. */}
+      {dx === 0 && !confirming && (
+        <div
+          className="flex items-center gap-2 text-xs italic text-neutral-500"
+          aria-hidden
+          data-testid="swipe-hint-right"
+          data-ym-anim
+        >
+          <span>👆 スワイプして決定</span>
+          <span className="flex items-center gap-0.5 font-bold text-success">
+            <span
+              style={{ animation: "ym-swipe-hint-arrow 1.4s ease-in-out infinite", animationDelay: "0s" }}
+              className="inline-block"
+            >
+              →
+            </span>
+            <span
+              style={{ animation: "ym-swipe-hint-arrow 1.4s ease-in-out infinite", animationDelay: "0.2s" }}
+              className="inline-block"
+            >
+              →
+            </span>
+            <span
+              style={{ animation: "ym-swipe-hint-arrow 1.4s ease-in-out infinite", animationDelay: "0.4s" }}
+              className="inline-block"
+            >
+              →
+            </span>
+            <span className="ml-1">Yes</span>
+          </span>
+        </div>
+      )}
 
       {/* WCAG 2.5.1 fallback buttons (single-pointer alternative) */}
       <div className="flex gap-4">

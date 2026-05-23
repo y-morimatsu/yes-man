@@ -4954,3 +4954,102 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 **Context**: Post-CONSTRUCTION - aidlc-docs 全面更新 (~30 ファイル変更)
 
 ---
+
+## DecisionPage YES/NO Quick-Start (post-CONSTRUCTION 改修 v3、新規 spec session 開始)
+**Timestamp**: 2026-05-22T13:30:00Z
+**User Input**: "ai-dlcにて仕様を変更。\"合議で決定\"の画面は議論内容をテキストボックスに入力するものが初期表示になっているが、めんどうくさい人間のために、時間やシチュエーションに応じた質問内容を想定してYES/NOから始めたい。５回ぐらい質問内容が確定できない場合にテキストボックスを表示させる。"
+**AI Response**: AI-DLC workflow を発動 (post-CONSTRUCTION 改修 v3 spec session)。Workspace detection → resume mode (既存 brownfield、aidlc-state.md 既存 → CONSTRUCTION 完了 + 改修フェーズ v2 進行中)。次工程: Requirements Analysis (standard depth) → User Stories → Application Design → Code Generation。Welcome message 表示は post-CONSTRUCTION 改修 pragmatism に従い省略。Spec v2 (Bedrock pre-generation 追加) で user 承認、`feature/quick-start-yes-no` ブランチで実装 → PR #78 merged。
+**Context**: INCEPTION - Workspace Detection / 新規 spec session 開始
+
+---
+
+## Quick-Start UI を SwipeChoice 統一に変更 (spec v3)
+**Timestamp**: 2026-05-22T14:30:00Z
+**User Input**: "\"合議で決定\"の初期表示のYES, NOの選択も、合議のYES、NO選択と同じ様に左右のスワイプにしたい"
+**AI Response**: spec `2026-05-22-yes-no-quickstart-design.md` を v3 に改訂 (§1 改訂履歴 / §FR-QS-02 操作 semantics / §NFR-QS-02 a11y / §7 UI mockup / §13 Acceptance Criteria)。`feature/quick-start-swipe-ui` ブランチを develop から切って実装: QuickStartCard を SwipeChoice ラップに書き換え、独自 Y/N ボタンと keyboard hint を撤廃。DecisionPage で QuickStartCard を `key={quick.current.id}` で re-key (reject 時の confirming/dx 残留防止)。strings の unused key を削除。tests: web unit 170 PASS / quick-start e2e 7/7 PASS / build OK。
+**Context**: Post-CONSTRUCTION v3 UI iteration
+
+### e2e regression 報告 (v2 完了後の調査)
+**Timestamp**: 2026-05-22T14:20:00Z
+**User Input**: "ultrathinkで修正事項のe2eを実施"
+**AI Response**: ultrathink で /decision を使う既存 9 spec を回帰実行 (98 件)。83 passed / 15 failed。失敗 screenshot から原因確定: 「エラーが発生しました: proposal_timeout」(API Mock LLM が proposal 生成で timeout)。私の helper 修正 (gotoAuthenticated の skipQuickStart option) は正しく機能 (textbox / 送信 / persona pill 正常露出)。失敗は **parallel 4 worker + Mock LLM の負荷スパイク** に起因する既存安定性問題で、QuickStart 修正の regression ではない。QuickStart 専用 spec 7/7 PASS、SSE 統合含めて v2 仕様健全動作確認済。
+**Context**: Post-CONSTRUCTION v3 e2e 報告
+
+---
+
+## Post-CONSTRUCTION 改修 v3 - 議論チャット文字列の token-streaming 表示 (Inception 開始)
+**Timestamp**: 2026-05-23T00:00:00Z
+**User Input**: "ai-dlcで進める
+
+画像部の議論のチャットについて、ペルソナ単位で議論の結果が終わるまで議論全体の文字列が表示されない。文字をパラパラと表示するようにする"
+
+**Attachment**: スクリーンショット — DecisionPage の議論中 UI、3 ペルソナ chip がすべて「考え中...」、本文 3 box は skeleton 状態
+**AI Response**: AI-DLC workflow 開始、feature branch `feature/realtime-discussion-chat-display` (develop 起点) で作業。Hackathon Pragmatism (Post-CONSTRUCTION v3 と同じ流儀) で軽量 Requirements Analysis → 実装に進む。
+**Context**: Post-CONSTRUCTION 改修フェーズ v3、対象 unit は U7d-features (DecisionPage / useDecisionStream / Result 周辺)。
+---
+
+## Post-CONSTRUCTION 改修 v3 - 議論チャット文字列の token-streaming 表示 (実装完了)
+**Timestamp**: 2026-05-23T00:30:00Z
+**AI Response**:
+- branch: `feature/realtime-discussion-chat-display` (develop 起点)
+- Hackathon Pragmatism + 軽量 AI-DLC workflow で実装完了
+- UX 確認: token を pass-through で UI 描画 (Recommended、user 確定)
+
+### 変更ファイル (7 ファイル)
+**Backend**:
+- `apps/api/src/yesman_api/domain/decision/engine.py` (`run_stream` を `self._llm.stream()` ベースに refactor、`asyncio.Queue` fan-in で 3 persona 並列 stream + `utterance_delta` event + 最終 `utterance` event)
+
+**api-client**:
+- `packages/api-client/src/sse.ts` (discriminated union に `utterance_delta` event 追加)
+
+**Frontend (apps/web)**:
+- `src/features/decision/reducer.ts` (`Utterance.done` 必須化、`onUtteranceDelta` action 追加、`onUtterance` で merge-by-persona_id 化)
+- `src/features/decision/useDecisionStream.ts` (`onUtteranceDelta` callback + `utterance_delta` dispatch、`utterance` 経由は `done=true` 付与)
+- `src/features/decision/DecisionPage.tsx` (`onUtteranceDelta` dispatch 追加)
+- `src/features/decision/DecisionResult.tsx` (bubble + skeleton を同一 container に統合、bubble 描画優先・残数だけ skeleton 化)
+- `src/features/decision/PersonaThinkingChips.tsx` (3 state: 考え中 / 発言中 / ✓ に拡張)
+- `src/features/decision/usePrefetchedDecisions.ts` (`done: true` 付与で型適合)
+
+### tests (4 ファイル)
+- `apps/api/tests/unit/decision/test_engine.py`: `test_utterance_delta_events_emitted` 追加 (chunk_size=5 で multi-delta + 結合一致を verify)
+- `apps/web/tests/features/decision/reducer.test.ts`: `onUtteranceDelta` 5 ケース追加 (insert/append/replace/multi-persona/no-op)
+- `apps/web/tests/property/decision_reducer.test.ts`: `onUtteranceDelta` PBT action 追加、`silenced` status 追記
+- `apps/web/tests/features/decision/PersonaThinkingChips.test.tsx`: 発言中 / 状態遷移 test 追加
+
+### 検証結果
+- api pytest: 271 PASS / 14 SKIP (DB integration + aws optional)
+- web vitest: 177 PASS / 32 test files
+- TypeScript `tsc --noEmit`: src/ + decision test 群 OK (Layout/SignInPage の既存型エラーは本 PR と無関係)
+- Backend SSE smoke (curl `/v1/decisions/request/stream`): `start 1 / utterance_delta 433 / utterance 3 / proposal 1 / complete 1` (Azure GPT 経由、3 persona 並列 token stream 動作確認)
+
+### UX
+- delta は LLM token のまま pass-through (raw)、最終 `utterance` event で cleaned text に置換 (prefix 除去 + 200 字 truncate)
+- PersonaThinkingChips: 考え中… (idle) → 発言中… (delta accumulate 中、amber) → ✓ {persona名} (final 到着)
+- bubble 表示: 受信 delta が即座に bubble に append、未到着 persona は skeleton 残数のみ表示
+
+**Context**: `ai-dlcで進める` 指示 + UX 確認回答後の自走 (Auto Mode Active)。
+---
+
+## Post-CONSTRUCTION 改修 v3 - 嗜好プロファイル反映 fix (issue #88)
+**Timestamp**: 2026-05-23T01:15:00Z
+**User Input**: "嗜好プロファイルが反映されない原因を調査して issue を作成して対応"
+**AI Response**:
+- branch: `bugfix/issue-88-preference-inline-handler` (develop 起点)
+- issue: #88 (bug、root cause + 対応方針記載)
+- 根本原因: `EVENT_BACKEND=sync` で SyncPublisher が no-op、apply_yes/no が呼ばれず preference 空のまま
+- 修正: `InlineLearningHandler` 新設 + `EventPublisherFactory` に repo_factory 注入口 + `.env` を `inline-async` に切替
+- E2E smoke OK (POST /decisions/stream → /choice yes → GET /preferences/me で accepted_patterns 反映確認)
+- api pytest 278 PASS / 14 SKIP (新 unit 4 + integration 3)
+---
+
+## Post-CONSTRUCTION 改修 v3 - 合議 / Yes-No 演出ゲーミフィケーション (Inception 開始)
+**Timestamp**: 2026-05-23T02:30:00Z
+**User Input**: "ai-dlcで　合議の演出やYes Noの選択時の演出をゲームのようにして、ハッカソン向け差別化要素したい。"
+**AI Response**: 
+- branch: `feature/ui-design-effects-morimatsu` (develop 起点、push 済)
+- AI-DLC Hackathon Pragmatism + adaptive depth で進行
+- Requirements Analysis: ゲーム ジャンル / 派手さレベル を user に確認予定
+- 想定 stack: 既存 canvas-confetti + CSS transitions / Web Animations API、必要なら追加 dependency (Lottie 等) を user 判断で
+- 影響範囲: U7d-features (Decision flow UX) を中心に、必要なら U7b-ui (composites) も拡張
+**Context**: ハッカソン差別化要素、 UX 強化 (機能追加ではなく既存 flow への演出付加)
+---

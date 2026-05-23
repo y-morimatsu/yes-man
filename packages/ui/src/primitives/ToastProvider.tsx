@@ -38,7 +38,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ push }}>
       {children}
-      <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+      <div
+        className="fixed right-4 flex flex-col gap-2 z-50"
+        style={{ bottom: "calc(72px + env(safe-area-inset-bottom) + 0.5rem)" }}
+      >
         {toasts.map((t) => (
           <Toast key={t.id} toast={t} onDismiss={dismiss} />
         ))}

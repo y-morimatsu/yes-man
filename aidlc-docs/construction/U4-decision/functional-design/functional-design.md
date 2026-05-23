@@ -588,3 +588,30 @@ Cold-start でない user で `selected_ids` が空かつ `UserPersonaSelection`
 **影響範囲**:
 - Mock mode のみ影響 (本番 repository は不変)
 - `tests/unit/decision/test_mock_repositories.py` に `attempt_count` バリエーション検証を追加 (seed unit test 3 件)
+
+---
+
+## Post-CONSTRUCTION 改修注記 v3 (2026-05-23)
+
+### Token streaming + persona pre-fill (PR #86、`e791650`)
+- `DecisionEngine.run_stream` を `self._llm.complete()` (全文一括) → `self._llm.stream()` (chunk yield) ベースに refactor
+- `asyncio.Queue` で 3 persona 並列 stream を fan-in、main loop が drain して event yield
+- 新 SSE event:
+  - `personas`: `_resolve_personas` 直後に persona id+name 列を emit (frontend pre-fill 用)
+  - `utterance_delta`: token chunk 毎に `{persona_id, persona_name, text}` を emit
+  - 既存 `utterance`: 最終 cleaned text (backward compat)、**失敗 persona も空 text で emit** (frontend「発言中…」解除のため)
+- prompt は変更なし、`clean_utterance_output` は最終結合後に適用 (prefix 除去 + 200字 truncate)
+- 既存 unit/integration test の utterance 期待値を「3 件、空 text 含む」に調整
+
+### EVENT_BACKEND=inline-async で preference 同プロセス更新 (PR #89、`a094204`、Closes #88)
+- `SyncPublisher.publish_decision_confirmed` が `logger.info` のみで no-op だったため、`EVENT_BACKEND=sync` では preference profile が永遠に空のままになる latent bug
+- 新規 `application/learning/inline_handler.py` (`InlineLearningHandler`): `RepositoryFactory.bundle()` 経由で `apply_yes`/`apply_no` を同 process で実行 (Consumer と等価)
+- `EventPublisherFactory(config, repo_factory=...)` で `inline-async` 時 handler を注入
+- `apps/api/.env` の `EVENT_BACKEND` 既定値を `sync` → `inline-async` に変更 (dev/demo)、prod は `eventbridge` path へ移行予定 (U5 Infrastructure Design + Code Generation 完了後)
+
+### Yes nudge LLM microcopy (PR #94、`5261d9d`、Closes #93)
+- `NudgeMessageGenerator.generate_yes_microcopy(proposal_text, stage)` を新設 — **同期返却** (existing generate() は cache+polling、こちらは直接 str)
+- 2s timeout + stage 別 fallback `_yes_nudge_fallback(stage)`
+- tone: stage 1 軽い前向き / 2 共感 / 3 不安吸い上げ / 5+ 委ねる
+- 新 endpoint `POST /v1/decisions/{id}/yes-nudge`、body `{stage}` → `{message}` (≤60 字)
+- 旧 `noStage1Copy = "別案を生成中…"` (proposal 完了後も残る misleading 文言) を「もう一案 どうぞ」に変更 (LLM 失敗時の fallback)

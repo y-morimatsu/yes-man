@@ -216,6 +216,8 @@ const FIXED_ROLES = [
 
 ```tsx
 // isStreaming のとき、LIVE badge の直後に追加
+// 注: LIVE badge は 2026-05-22 Mobile App Polish 5f32c72 で削除済。
+// 現在の実装では PersonaThinkingChips は utterance bubble 群の前 (先頭) に配置されている。
 {isStreaming && (
   <PersonaThinkingChips utterances={utterances} />
 )}

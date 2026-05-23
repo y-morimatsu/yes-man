@@ -2,7 +2,7 @@
  * DecisionResult — INCEPTION drawio B4 + B7 + Journey C 完全準拠.
  *
  * 構造:
- * 1. SSE streaming 中: 🔴 LIVE badge + utterance bubbles (議論を見るで toggle)
+ * 1. SSE streaming 中: utterance bubbles (議論を見るで toggle) — LIVE badge は UX 改善で削除
  * 2. proposal 完了: 3-line proposal card + SwipeChoice (swipe / fallback button)
  * 3. Yes 採択: NudgeBanner で ✨🎉✨ celebration (final state)
  * 4. No 採択: onNoChosen callback で親に regenerate を委譲 (drawio Journey C)
@@ -11,16 +11,19 @@
  *    - 親が microcopy banner + startStream による別案再生成を hold
  * 5. 議論を見る (FR-CV-04) は proposal 後ずっと visible (採択後も残置)
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DecisionUtteranceBubble,
+  Skeleton,
   SwipeChoice,
   useToast,
 } from "@yesman/ui";
 import type { Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
-import { PersonaThinkingChips } from "./PersonaThinkingChips";
+import { YesComboBadge } from "./YesComboBadge";
+import { useYesCombo } from "./useYesCombo";
+import { describeError } from "./describeError";
 import { t } from "./strings";
 import confetti from "canvas-confetti";
 
@@ -32,6 +35,8 @@ export interface DecisionResultProps {
   /** No 採択時に parent へ no_attempt_count を通知し、別案 regenerate を依頼.
    *  INCEPTION Journey C: No → 自動再生成 + 段階的 microcopy. */
   onNoChosen?: (noAttemptCount: number) => void;
+  /** Hackathon: 親 (DecisionPage) で mascot 状態を切り替えるための callback. */
+  onChoiceMade?: (choice: "yes" | "no") => void;
 }
 
 export function DecisionResult({
@@ -40,6 +45,7 @@ export function DecisionResult({
   decisionId,
   onComplete,
   onNoChosen,
+  onChoiceMade,
 }: DecisionResultProps) {
   const choose = useChooseMutation();
   const { push } = useToast();
@@ -47,19 +53,90 @@ export function DecisionResult({
   const [noCount, setNoCount] = useState<number>(0);
   // INCEPTION FR-CV-04: 議論を見る default closed、採択後も visible
   const [discussionOpen, setDiscussionOpen] = useState(false);
+  // Hackathon: Yes 連続採択 combo (localStorage 日次 reset)
+  const combo = useYesCombo();
+  // Hackathon: proposal 初到着時の「合議完了」notification (1 回だけ表示)
+  const [showProposalNotification, setShowProposalNotification] = useState(false);
+  useEffect(() => {
+    if (proposal !== null) {
+      setShowProposalNotification(true);
+      const t = setTimeout(() => setShowProposalNotification(false), 2400);
+      return () => clearTimeout(t);
+    }
+  }, [proposal, decisionId]);
 
-  const fireConfetti = () => {
+  /** combo 数に応じた confetti スケール (3+ で multi-wave、10+ で大爆発). */
+  const fireConfetti = (comboCount: number) => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
-    confetti({
-      particleCount: 50,
-      spread: 80,
-      origin: { y: 0.2 },
-      colors: ["#9F88C8", "#E8775A", "#FFD6E0"],
-      ticks: 150,
-      scalar: 1.1,
-    });
+    const baseColors = ["#9F88C8", "#E8775A", "#FFD6E0"];
+    if (comboCount >= 10) {
+      // 大爆発: 2 wave + gold colors
+      confetti({
+        particleCount: 120,
+        spread: 100,
+        origin: { y: 0.2 },
+        colors: ["#FFD700", "#FF8C00", "#FFFFFF", ...baseColors],
+        ticks: 220,
+        scalar: 1.3,
+      });
+      setTimeout(
+        () =>
+          confetti({
+            particleCount: 80,
+            spread: 130,
+            origin: { y: 0.3, x: 0.2 },
+            colors: ["#FFD700", "#FF8C00"],
+            ticks: 200,
+            scalar: 1.2,
+          }),
+        180,
+      );
+      setTimeout(
+        () =>
+          confetti({
+            particleCount: 80,
+            spread: 130,
+            origin: { y: 0.3, x: 0.8 },
+            colors: ["#FFD700", "#FF8C00"],
+            ticks: 200,
+            scalar: 1.2,
+          }),
+        180,
+      );
+    } else if (comboCount >= 5) {
+      confetti({
+        particleCount: 90,
+        spread: 100,
+        origin: { y: 0.2 },
+        colors: ["#C084FC", "#FBCFE8", ...baseColors],
+        ticks: 180,
+        scalar: 1.2,
+      });
+    } else if (comboCount >= 3) {
+      confetti({
+        particleCount: 70,
+        spread: 90,
+        origin: { y: 0.2 },
+        colors: ["#FCD34D", "#FEF3C7", ...baseColors],
+        ticks: 160,
+        scalar: 1.15,
+      });
+    } else {
+      confetti({
+        particleCount: 50,
+        spread: 80,
+        origin: { y: 0.2 },
+        colors: baseColors,
+        ticks: 150,
+        scalar: 1.1,
+      });
+    }
+    // Mobile App Polish §9: Haptic feedback (Android 動作、iOS no-op)
+    if ("vibrate" in navigator) {
+      navigator.vibrate(comboCount >= 5 ? [50, 30, 80] : 50);
+    }
   };
 
   const handleChoose = async (choice: "yes" | "no") => {
@@ -68,15 +145,19 @@ export function DecisionResult({
       const result = await choose.mutateAsync({ id: decisionId, choice });
       const count = result?.no_attempt_count ?? 0;
       if (choice === "yes") {
+        const newCombo = combo.recordYes();
         setChosen("yes");
         setNoCount(count);
-        fireConfetti();
+        fireConfetti(newCombo);
+        onChoiceMade?.("yes");
       } else {
+        combo.recordNo();
+        onChoiceMade?.("no");
         // INCEPTION Journey C: No → 親に regenerate 委譲
         onNoChosen?.(count);
       }
     } catch (err) {
-      push({ message: `${t("errorDefault")}: ${String(err)}`, variant: "error" });
+      push({ message: `${t("errorDefault")}: ${describeError(err)}`, variant: "error" });
     }
   };
 
@@ -86,26 +167,39 @@ export function DecisionResult({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* INCEPTION B7: 🔴 LIVE badge during SSE streaming */}
-      {isStreaming && (
-        <div className="flex items-center gap-2">
-          <span
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger text-neutral-0 text-xs font-bold"
-            role="status"
-            aria-live="polite"
-          >
-            🔴 LIVE
-          </span>
-          <span className="text-xs text-neutral-400 italic">
-            合議中 (SSE Stream)
-          </span>
+      {/* Hackathon: Yes 連続採択 combo badge (chosen=yes 時 + 2 連以上 or break 時) */}
+      {(combo.count >= 2 || combo.brokeCombo) && (
+        <YesComboBadge
+          count={combo.count}
+          brokeCombo={combo.brokeCombo}
+          onBrokeComboShown={combo.clearBrokeCombo}
+        />
+      )}
+
+      {/* Hackathon: proposal 初到着時の「合議完了」notification (2.4s で fade out) */}
+      {showProposalNotification && proposal && (
+        <div
+          className="self-stretch rounded-xl border bg-brand-50 px-4 py-2 text-center text-sm font-medium text-brand-700 shadow-sm"
+          role="status"
+          aria-label="合議完了通知"
+          data-testid="proposal-arrival-notification"
+          data-ym-anim
+          style={{
+            borderColor: "#9F88C8",
+            animation: "ym-notification-slide-down 2.4s ease-in-out forwards",
+          }}
+        >
+          📨 合議が完了しました
         </div>
       )}
 
-      {/* Pack A #3: 3 人格 thinking chips (streaming 中のみ表示) */}
-      {isStreaming && <PersonaThinkingChips utterances={utterances} />}
+      {/* Post-CONSTRUCTION v3 (2026-05-23): 旧 PersonaThinkingChips は廃止。
+          persona 名・発言中 status は bubble header に統合 (重複排除)。 */}
 
-      {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵) */}
+      {/* utterance bubbles (議論を見るで toggle、persona icons は bubble 内蔵).
+          Post-CONSTRUCTION v3 (2026-05-23): bubble は streaming 中の delta も
+          そのまま render (text が空文字でも自動増分するので box が「パラパラ」と埋まる).
+          未到着 persona 分の skeleton は bubble の下に残数だけ表示。 */}
       {showUtterances && (
         <div
           className="flex flex-col gap-2"
@@ -113,13 +207,19 @@ export function DecisionResult({
           aria-label="議論 (utterance 一覧)"
           id="discussion-region"
         >
-          {utterances.map((u, i) => (
+          {utterances.map((u) => (
             <DecisionUtteranceBubble
-              key={`${u.persona_id}-${i}`}
+              key={u.persona_id}
               personaName={u.persona_name}
               text={u.text}
+              streaming={!u.done}
             />
           ))}
+          {isStreaming &&
+            utterances.length < 3 &&
+            Array.from({ length: 3 - utterances.length }).map((_, i) => (
+              <Skeleton key={`utterance-skel-${i}`} className="h-16 w-full" />
+            ))}
         </div>
       )}
 

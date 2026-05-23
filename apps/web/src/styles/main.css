@@ -65,3 +65,17 @@ body,
     transform: none;
   }
 }
+
+/* Mobile App Polish §8: View Transitions API cross-fade (Chrome 111+/Safari TP) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

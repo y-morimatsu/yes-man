@@ -20,6 +20,12 @@ export interface NoMicroCopyBannerProps {
   stage: number;
   /** 別案 (regenerate) streaming 中フラグ (loading hint 表示用). */
   regenerating?: boolean;
+  /**
+   * issue #93: LLM 動的生成された YES nudge microcopy。
+   * 指定があれば stage 別の static copy より優先表示 (Yes 採択を後押しする一文)。
+   * null は「未到着 or 失敗 → static fallback を使う」を意味する。
+   */
+  dynamicMessage?: string | null;
 }
 
 function copyKey(stage: number):
@@ -39,9 +45,14 @@ function borderFor(stage: number): string {
   return "border-neutral-300";
 }
 
-export function NoMicroCopyBanner({ stage, regenerating }: NoMicroCopyBannerProps) {
+export function NoMicroCopyBanner({
+  stage,
+  regenerating,
+  dynamicMessage,
+}: NoMicroCopyBannerProps) {
   if (stage <= 0) return null;
-  const microcopy = t(copyKey(stage));
+  // issue #93: LLM 動的 message を優先、未到着 or 失敗時は static stage copy
+  const microcopy = dynamicMessage ?? t(copyKey(stage));
   return (
     <div
       className={`rounded-2xl border-l-4 ${borderFor(stage)} bg-neutral-100 p-3`}

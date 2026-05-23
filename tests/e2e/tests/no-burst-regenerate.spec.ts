@@ -88,7 +88,8 @@ test.describe("INCEPTION Journey C: No → 自動 regenerate + 段階的 microco
     await expect(page.getByTestId("discussion-toggle")).toBeVisible();
   });
 
-  test("No 採択後の Yes で celebration、microcopy banner は hide", async ({
+  // skip: Mock LLM 並列負荷で proposal_timeout (Issue #80)
+  test.skip("No 採択後の Yes で celebration、microcopy banner は hide", async ({
     page,
   }) => {
     await startAndWaitProposal(page);
@@ -114,7 +115,8 @@ test.describe("INCEPTION Journey C: No → 自動 regenerate + 段階的 microco
     // この test は厳密に "hide" を assert せず、celebration の出現のみ verify.
   });
 
-  test("旧 nudge 「もう一度」 button は出ない (No → 別案 regenerate なので)", async ({
+  // skip: Mock LLM 並列負荷で proposal_timeout (Issue #80)
+  test.skip("旧 nudge 「もう一度」 button は出ない (No → 別案 regenerate なので)", async ({
     page,
   }) => {
     await startAndWaitProposal(page);

@@ -5,7 +5,6 @@ export const STRINGS = {
   startButton: "→ 送信",
   resetButton: "もう一度",
   bottomHint: "「決められない」を 委ねよう",
-  streamingHint: "AI ペルソナが合議中...",
   proposalLabel: "提案",
   proposalPrefixCopy: "あなたに最適化された結論です",
   nudgeBannerLine1: "合議された結論です。",
@@ -16,12 +15,18 @@ export const STRINGS = {
   nudgePending: "メッセージを生成中...",
   nudgeFailed: "メッセージ生成に失敗しました",
   // INCEPTION C1-C3+ 段階的 No nudge microcopy (drawio Journey C)
-  noStage1Copy: "別案を生成中…",
+  // issue #93: stage 1 は LLM 動的生成失敗時の fallback。生成完了後も自然な文言にする
+  // (旧 "別案を生成中…" は proposal 表示済の状態と矛盾していたため変更)
+  noStage1Copy: "もう一案 どうぞ",
   noStage1Hint: "・・・・・・・・・・・",
   noStage2Copy: "もう一度考えてみては？",
   noStage3Copy: "3回目の No です。 本当にこの選択肢で大丈夫?",
   noStage5PlusFallback:
     "ここまで慎重なあなただからこそ、今回は AI に任せてみませんか?",
+  // 2026-05-22 yes-no-quickstart: Quick-Start カードの文言 (v3: SwipeChoice 統一で
+  // YES/NO ラベル + キーボード hint は SwipeChoice 側に移譲)
+  quickStartSuffix: "してみますか？",
+  quickStartSwitchToText: "✏️ 自分で入力する",
 } as const;
 
 export type DecisionStringKey = keyof typeof STRINGS;

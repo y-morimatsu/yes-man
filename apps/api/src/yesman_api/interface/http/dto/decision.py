@@ -60,6 +60,17 @@ class NudgeResponse(BaseModel):
     message: str | None = None
 
 
+# issue #93: No 採択 → 別案到着後の YES nudge microcopy (同期 endpoint).
+class YesNudgeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    stage: int = Field(ge=1, le=100, description="no_attempt_count (No 累積回数)")
+
+
+class YesNudgeResponse(BaseModel):
+    message: str = Field(description="LLM 生成 or fallback の microcopy (<= 60 字)")
+
+
 class ScoreHistoryPointResponse(BaseModel):
     date: str  # ISO date (YYYY-MM-DD)
     yes_ratio: float | None
@@ -102,6 +113,8 @@ __all__ = [
     "DecisionResponse",
     "ChoiceResponse",
     "NudgeResponse",
+    "YesNudgeRequest",
+    "YesNudgeResponse",
     "ScoreResponse",
     "ScoreHistoryPointResponse",
     "DecisionHistoryItemDTO",

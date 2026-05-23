@@ -45,6 +45,94 @@ async def test_generator_writes_ready_on_success():
     assert cached.status == "ready"
 
 
+# issue #93: generate_yes_microcopy 単体テスト
+class TestGenerateYesMicrocopy:
+    @pytest.mark.asyncio
+    async def test_returns_llm_text_on_success(self):
+        c = NudgeCache(ttl=60)
+        gen = NudgeMessageGenerator(
+            llm=mock_llm_provider_factory(override="もう一案 どうぞ、 これなら きっと"),
+            cache=c,
+        )
+        msg = await gen.generate_yes_microcopy(
+            proposal_text="駅近の公園か商業施設を選べ",
+            stage=1,
+        )
+        assert msg == "もう一案 どうぞ、 これなら きっと"
+
+    @pytest.mark.asyncio
+    async def test_caps_long_response_at_60_chars(self):
+        long = "あ" * 200
+        c = NudgeCache(ttl=60)
+        gen = NudgeMessageGenerator(llm=mock_llm_provider_factory(override=long), cache=c)
+        msg = await gen.generate_yes_microcopy(proposal_text="x", stage=1)
+        assert len(msg) == 60
+
+    @pytest.mark.asyncio
+    async def test_returns_fallback_when_disabled(self):
+        c = NudgeCache(ttl=60)
+        gen = NudgeMessageGenerator(
+            llm=mock_llm_provider_factory(override="x"),
+            cache=c,
+            enabled=False,
+        )
+        msg = await gen.generate_yes_microcopy(proposal_text="x", stage=1)
+        assert msg == "もう一案 どうぞ"  # stage 1 fallback
+
+    @pytest.mark.asyncio
+    async def test_returns_fallback_on_llm_exception(self):
+        class FailingLLM:
+            async def complete(self, **_kw):
+                raise RuntimeError("boom")
+
+            async def stream(self, **_kw):
+                yield ""
+
+            async def aclose(self):
+                pass
+
+        c = NudgeCache(ttl=60)
+        gen = NudgeMessageGenerator(llm=FailingLLM(), cache=c)
+        msg = await gen.generate_yes_microcopy(proposal_text="x", stage=3)
+        # stage 3 fallback
+        assert msg == "ここまでの こだわり、 大切にしながら一案 どうぞ"
+
+    @pytest.mark.asyncio
+    async def test_stage_specific_fallbacks(self):
+        class FailingLLM:
+            async def complete(self, **_kw):
+                raise RuntimeError("x")
+
+            async def stream(self, **_kw):
+                yield ""
+
+            async def aclose(self):
+                pass
+
+        gen = NudgeMessageGenerator(llm=FailingLLM(), cache=NudgeCache(ttl=60))
+        assert await gen.generate_yes_microcopy(proposal_text="x", stage=1) == "もう一案 どうぞ"
+        assert await gen.generate_yes_microcopy(proposal_text="x", stage=2) == "今度は ご納得 いただけるかも"
+        assert (
+            await gen.generate_yes_microcopy(proposal_text="x", stage=3)
+            == "ここまでの こだわり、 大切にしながら一案 どうぞ"
+        )
+        assert (
+            await gen.generate_yes_microcopy(proposal_text="x", stage=5)
+            == "ここまで考えた あなたなら、 任せてみる勇気を"
+        )
+        assert (
+            await gen.generate_yes_microcopy(proposal_text="x", stage=10)
+            == "ここまで考えた あなたなら、 任せてみる勇気を"
+        )
+
+    @pytest.mark.asyncio
+    async def test_empty_llm_response_falls_back(self):
+        c = NudgeCache(ttl=60)
+        gen = NudgeMessageGenerator(llm=mock_llm_provider_factory(override="   "), cache=c)
+        msg = await gen.generate_yes_microcopy(proposal_text="x", stage=2)
+        assert msg == "今度は ご納得 いただけるかも"
+
+
 @pytest.mark.asyncio
 async def test_generator_writes_failed_on_exception():
     class FailingLLM:

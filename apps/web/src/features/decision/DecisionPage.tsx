@@ -6,7 +6,7 @@
  * - noStage state (DecisionPage scope) で No 連続採択の累積回数を保持
  * - 別案 streaming 中も NoMicroCopyBanner は持続、Yes 採択時のみ hide
  */
-import { useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Input } from "@yesman/ui";
 import { VoiceMicInput } from "../voice/VoiceMicInput";
@@ -15,6 +15,11 @@ import { useDecisionStream } from "./useDecisionStream";
 import { usePrefetchedDecisions } from "./usePrefetchedDecisions";
 import { DecisionResult } from "./DecisionResult";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
+import { QuickStartCard } from "./QuickStartCard";
+import { useQuickStart } from "./useQuickStart";
+import { useYesNudge } from "./useYesNudge";
+import { YesManMascot, type MascotState } from "./YesManMascot";
+import { describeError } from "./describeError";
 import { t } from "./strings";
 
 const PREFETCH_BUFFER_SIZE = 2;
@@ -28,13 +33,34 @@ export default function DecisionPage() {
   const [regenerating, setRegenerating] = useState(false);
   // 最後に submit した user_input を保持 (regenerate で再利用、reducer state 透過には依存しない).
   const lastInputRef = useRef<string>("");
+  // 2026-05-22 yes-no-quickstart: 起動時 YES/NO クイック質問. textbox は quick.mode === "text" 時のみ表示.
+  const quick = useQuickStart();
 
   // No 採択時の待ち時間を消すための buffer (同じ user_input で別案を先 prefetch)
   const prefetch = usePrefetchedDecisions({ bufferSize: PREFETCH_BUFFER_SIZE });
 
+  // issue #93: No 採択 → 別案到着後に Yes 採択を後押しする LLM 動的 microcopy.
+  const yesNudge = useYesNudge();
+  // Hackathon: 直近の Yes/No 採択を mascot 用に保持 (1.6s で自動 clear).
+  const [recentChoice, setRecentChoice] = useState<"yes" | "no" | null>(null);
+  const handleChoiceMade = (choice: "yes" | "no") => {
+    setRecentChoice(choice);
+    window.setTimeout(() => setRecentChoice(null), 1600);
+  };
+
   const { startStream } = useDecisionStream({
     onStart: (id) => dispatch({ type: "onStart", decisionId: id }),
-    onUtterance: (u) => dispatch({ type: "onUtterance", utterance: u }),
+    onPersonasResolved: (personas) =>
+      dispatch({ type: "onPersonasResolved", personas }),
+    onUtteranceDelta: (d) =>
+      dispatch({
+        type: "onUtteranceDelta",
+        personaId: d.persona_id,
+        personaName: d.persona_name,
+        chunk: d.text,
+      }),
+    onUtterance: (u) =>
+      dispatch({ type: "onUtterance", utterance: { ...u, done: true } }),
     onProposal: (text) => dispatch({ type: "onProposal", proposal: text }),
     onComplete: () => {
       dispatch({ type: "onComplete" });
@@ -49,7 +75,7 @@ export default function DecisionPage() {
     },
     onSilence: (message) => dispatch({ type: "onSilence", message }),
     onError: (err) => {
-      dispatch({ type: "onError", error: String(err) });
+      dispatch({ type: "onError", error: describeError(err) });
       setRegenerating(false);
     },
   });
@@ -102,22 +128,64 @@ export default function DecisionPage() {
   const handleFullReset = () => {
     setNoStage(0);
     setRegenerating(false);
+    yesNudge.clear();
     lastInputRef.current = "";
     prefetch.clear();
     dispatch({ type: "reset" });
   };
 
-  const showInput = state.status === "idle" || state.status === "error";
+  // issue #93: state.status==="completed" && noStage>0 で yes-nudge を fetch。
+  // decisionId が変わる度に (buffer-swap / 新 stream complete) re-fetch。
+  useEffect(() => {
+    if (state.status === "completed" && noStage > 0 && state.decisionId) {
+      yesNudge.fetchOne(state.decisionId, noStage);
+    }
+    // yesNudge.fetchOne / .clear は useCallback で安定。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.status, state.status === "completed" ? state.decisionId : null, noStage]);
+
+  // idle / error 時にカード or textbox を出す。quickstart mode "quick" のときは QuickStartCard、
+  // mode "text" になったら従来 UI (textbox + voice + persona pill) に切替.
+  const showInputArea = state.status === "idle" || state.status === "error";
+  const showQuickStart = showInputArea && quick.mode === "quick" && quick.current !== null;
+  const showTextInput = showInputArea && !showQuickStart;
   const inputValue =
     state.status === "idle" || state.status === "error" || state.status === "streaming"
       ? state.input
       : "";
 
+  // QuickStart の YES = 現在質問を user_input にセットして即合議 start
+  const handleQuickYes = async () => {
+    const title = quick.accept();
+    if (!title) return;
+    dispatch({ type: "setInput", input: title });
+    lastInputRef.current = title;
+    setNoStage(0);
+    setRegenerating(false);
+    prefetch.clear();
+    dispatch({ type: "start" });
+    await startStream({ user_input: title });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
 
-      {showInput && (
+      {showQuickStart && quick.current && (
+        // key={current.id}: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐため
+        // QuickStartCard 全体を remount。reject 時に SwipeChoice の動的 state が
+        // 持ち越されると、新題目で「すでに左にスワイプされた」状態から始まってしまう.
+        <QuickStartCard
+          key={quick.current.id}
+          title={quick.current.title}
+          noCount={quick.noCount}
+          onYes={handleQuickYes}
+          onNo={quick.reject}
+          onSwitchToText={quick.switchToText}
+        />
+      )}
+
+      {showTextInput && (
         <>
           {/* テキスト入力 + 送信ボタン を横並び (chat/search UI の親和性、INCEPTION 01 から UX 改善).
               Enter キーでの誤送信は抑制 (送信は明示的にボタンを押すフローに統一). */}
@@ -142,12 +210,11 @@ export default function DecisionPage() {
             </Button>
           </div>
 
-          {/* INCEPTION screen-01: 中央配置 voice button + キャプション「音声で 話す」 */}
+          {/* INCEPTION screen-01: 中央配置 voice button */}
           <div className="flex flex-col items-center gap-1 my-2">
             <VoiceMicInput
               onTranscript={(text) => dispatch({ type: "setInput", input: text })}
             />
-            <p className="text-xs italic text-neutral-500">音声で 話す</p>
           </div>
 
           {/* INCEPTION screen-01: ダッシュド divider */}
@@ -169,14 +236,16 @@ export default function DecisionPage() {
         </>
       )}
 
-      {state.status === "streaming" && (
-        <p className="text-neutral-600">{t("streamingHint")}</p>
-      )}
-
-      {/* INCEPTION Journey C: No 連打 microcopy banner (regenerate を跨いで持続) */}
+      {/* INCEPTION Journey C: No 連打 microcopy banner (regenerate を跨いで持続)
+          issue #93: LLM 動的 microcopy (yesNudge.message) を優先表示、
+          未到着/失敗時は stage 別 static fallback (NoMicroCopyBanner 内) */}
       {noStage > 0 &&
         (state.status === "streaming" || state.status === "completed") && (
-          <NoMicroCopyBanner stage={noStage} regenerating={regenerating} />
+          <NoMicroCopyBanner
+            stage={noStage}
+            regenerating={regenerating}
+            dynamicMessage={yesNudge.message}
+          />
         )}
 
       {(state.status === "streaming" || state.status === "completed") && (
@@ -186,6 +255,7 @@ export default function DecisionPage() {
           decisionId={state.status === "completed" ? state.decisionId : null}
           onComplete={handleFullReset}
           onNoChosen={handleNoChosen}
+          onChoiceMade={handleChoiceMade}
         />
       )}
 
@@ -273,11 +343,27 @@ export default function DecisionPage() {
       )}
 
       {/* INCEPTION screen-01 bottom hint (whisper copy、決定の重さを優しく問いかける) */}
-      {showInput && (
+      {showInputArea && (
         <p className="mt-8 text-center text-xs italic text-neutral-400">
           {t("bottomHint")}
         </p>
       )}
+
+      {/* Hackathon: YesMan マスコット (右下 fixed、Portal 風)、状況に応じて吹き出し */}
+      <YesManMascot state={resolveMascotState(state.status, recentChoice)} />
     </div>
   );
+}
+
+/** mascot 表示状態を state.status + recentChoice から導出. */
+function resolveMascotState(
+  status: "idle" | "streaming" | "completed" | "silenced" | "error",
+  recentChoice: "yes" | "no" | null,
+): MascotState {
+  if (recentChoice === "yes") return "yes";
+  if (recentChoice === "no") return "no";
+  if (status === "silenced") return "silenced";
+  if (status === "streaming") return "streaming";
+  if (status === "completed") return "proposing";
+  return "hidden";
 }

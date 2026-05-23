@@ -17,10 +17,24 @@ const DEFAULT_DISPLAY_NAME = "テストユーザ";
  * この fixture は addInitScript で localStorage を seed してから navigate するので、
  * AuthProvider が初期 state から authenticated を返し、Splash gate を回避できる.
  */
+export interface GotoAuthenticatedOptions {
+  /**
+   * 2026-05-22 yes-no-quickstart: `/decision` を開いたとき DecisionPage は
+   * default で QuickStartCard を表示するようになった。既存の e2e は textbox +
+   * 「送信」ボタンを期待しているので、ここで自動的に「自分で入力する」を click
+   * して text mode に遷移し、既存 spec を変更不要に保つ。
+   *
+   * 新 QuickStart spec を書く際は `{ skipQuickStart: false }` を指定し、
+   * QuickStartCard 自体を assert する。
+   */
+  skipQuickStart?: boolean;
+}
+
 export async function gotoAuthenticated(
   page: Page,
   path = "/",
   user: { sub?: string; email?: string; display_name?: string } = {},
+  options: GotoAuthenticatedOptions = {},
 ) {
   const sub = user.sub ?? DEFAULT_SUB;
   const email = user.email ?? DEFAULT_EMAIL;
@@ -46,4 +60,11 @@ export async function gotoAuthenticated(
 
   await page.goto(path);
   await page.waitForLoadState("networkidle");
+
+  if (options.skipQuickStart !== false && path.startsWith("/decision")) {
+    const switchLink = page.getByTestId("quickstart-switch-to-text");
+    if (await switchLink.isVisible().catch(() => false)) {
+      await switchLink.click();
+    }
+  }
 }

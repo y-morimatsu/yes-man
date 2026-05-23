@@ -9,6 +9,16 @@ import type { Utterance } from "./reducer";
 
 export interface StreamCallbacks {
   onStart?: (decisionId: string) => void;
+  // Post-CONSTRUCTION v3 (2026-05-23): persona pre-fill (bubble を delta 到着前から表示)
+  onPersonasResolved?: (
+    personas: { id: string; name: string }[],
+  ) => void;
+  // Post-CONSTRUCTION v3 (2026-05-23): token streaming chunk
+  onUtteranceDelta?: (delta: {
+    persona_id: string;
+    persona_name: string;
+    text: string;
+  }) => void;
   onUtterance?: (utterance: Utterance) => void;
   onProposal?: (proposal: string) => void;
   onComplete?: () => void;
@@ -37,8 +47,14 @@ export function useDecisionStream(callbacks: StreamCallbacks) {
             case "start":
               cb.onStart?.(event.data.decision_id);
               break;
+            case "personas":
+              cb.onPersonasResolved?.(event.data.personas);
+              break;
+            case "utterance_delta":
+              cb.onUtteranceDelta?.(event.data);
+              break;
             case "utterance":
-              cb.onUtterance?.(event.data);
+              cb.onUtterance?.({ ...event.data, done: true });
               break;
             case "proposal":
               cb.onProposal?.(event.data.proposal_text);

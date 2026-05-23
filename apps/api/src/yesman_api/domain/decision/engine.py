@@ -179,23 +179,47 @@ class DecisionEngine:
             user_id=request.user_id,
         )
 
-        # 3. persona 並列 LLM call (per-persona timeout 付き)
+        # 2.5 Post-CONSTRUCTION v3 (2026-05-23): personas 解決を frontend に通知。
+        # bubble を id+name 付きで pre-render し、delta 到着前から persona header を可視化する。
+        yield StreamEvent(
+            "personas",
+            {
+                "personas": [
+                    {"id": str(p.id), "name": p.name} for p in personas
+                ]
+            },
+        )
+
+        # 3. persona 並列 LLM stream call (per-persona timeout 付き)
+        # spec Post-CONSTRUCTION v3 (2026-05-23): _llm.stream() 経由で
+        # utterance_delta event を chunk 単位 yield、最後に cleaned text を
+        # utterance event として送出 (backward compat + 最終確定)。
         masked_user_input = mask_pii(request.user_input)
         user_messages = [{"role": "user", "content": masked_user_input}]
         per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
 
-        async def generate_persona(persona):
+        # Fan-in queue: 各 persona stream task が delta / end / error を put、
+        # main loop が drain して SSE event を yield。
+        queue: asyncio.Queue = asyncio.Queue()
+
+        async def stream_persona(persona) -> None:
             system_prompt = self._orchestrator.build_persona_prompt(persona)
+            accumulated_parts: list[str] = []
             try:
-                raw = await asyncio.wait_for(
-                    self._llm.complete(
+                async def consume() -> None:
+                    async for chunk in self._llm.stream(
                         system=system_prompt,
                         messages=user_messages,
-                    ),
-                    timeout=per_persona_timeout,
-                )
-                return persona, clean_utterance_output(raw)
+                    ):
+                        if not chunk:
+                            continue
+                        accumulated_parts.append(chunk)
+                        await queue.put(("delta", persona, chunk))
+
+                await asyncio.wait_for(consume(), timeout=per_persona_timeout)
+                cleaned = clean_utterance_output("".join(accumulated_parts))
+                await queue.put(("end", persona, cleaned))
             except asyncio.TimeoutError:
                 audit_log(
                     "audit.decision.persona_timeout",
@@ -203,7 +227,7 @@ class DecisionEngine:
                     persona=persona.name,
                     timeout_seconds=per_persona_timeout,
                 )
-                return persona, ""
+                await queue.put(("end", persona, ""))
             except Exception as exc:
                 audit_log(
                     "audit.decision.persona_error",
@@ -211,25 +235,46 @@ class DecisionEngine:
                     persona=persona.name,
                     error=str(exc),
                 )
-                return persona, ""
+                await queue.put(("end", persona, ""))
 
-        tasks = [asyncio.create_task(generate_persona(p)) for p in personas]
+        tasks = [asyncio.create_task(stream_persona(p)) for p in personas]
 
-        # 4. 完了順に utterance event yield
+        # 4. Queue を drain して delta / 完了 utterance event を yield
         utterance_outputs: list[tuple] = []
-        for coro in asyncio.as_completed(tasks):
-            persona, text = await coro
-            if not text or text.isspace():
-                continue
-            utterance_outputs.append((persona, text))
-            yield StreamEvent(
-                "utterance",
-                {
-                    "persona_id": str(persona.id),
-                    "persona_name": persona.name,
-                    "text": text,
-                },
-            )
+        ended = 0
+        try:
+            while ended < len(personas):
+                msg_type, persona, text = await queue.get()
+                if msg_type == "delta":
+                    yield StreamEvent(
+                        "utterance_delta",
+                        {
+                            "persona_id": str(persona.id),
+                            "persona_name": persona.name,
+                            "text": text,
+                        },
+                    )
+                else:  # "end"
+                    ended += 1
+                    # Post-CONSTRUCTION v3 (2026-05-23): empty text (= 失敗/timeout) でも
+                    # utterance event を emit して frontend bubble の「発言中…」状態を解除する。
+                    # utterance_outputs (proposal 入力 + 永続化対象) からは空テキストを除外。
+                    yield StreamEvent(
+                        "utterance",
+                        {
+                            "persona_id": str(persona.id),
+                            "persona_name": persona.name,
+                            "text": text,
+                        },
+                    )
+                    if text and not text.isspace():
+                        utterance_outputs.append((persona, text))
+        finally:
+            # 念のため取り残し task を await (例外伝播防止)
+            for t in tasks:
+                if not t.done():
+                    t.cancel()
+            await asyncio.gather(*tasks, return_exceptions=True)
 
         # 5. 全 persona 失敗時は error event + early return (proposal call せず)
         if not utterance_outputs:

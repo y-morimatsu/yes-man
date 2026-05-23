@@ -9,7 +9,7 @@
  *   5. footnote (スコアが たかいほど AI を信頼できています)
  *   6. paradox / 解釈ガイド
  */
-import { Card, Spinner } from "@yesman/ui";
+import { Card, Skeleton } from "@yesman/ui";
 import { useScore } from "./useScore";
 import { getScoreLevel } from "./scoreLevel";
 import { ScoreRadialChart } from "./ScoreRadialChart";
@@ -22,8 +22,19 @@ export default function ScorePage() {
 
   if (isPending) {
     return (
-      <div className="flex justify-center p-8">
-        <Spinner />
+      <div className="flex flex-col gap-4">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-48 w-full" style={{ borderRadius: 16 }} />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-32 w-full" />
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-3 w-32" />
+        <Skeleton className="h-3 w-48" />
+        <div className="flex flex-col gap-2 mt-2">
+          <Skeleton className="h-20 w-full" />
+          <Skeleton className="h-20 w-full" />
+          <Skeleton className="h-20 w-full" />
+        </div>
       </div>
     );
   }

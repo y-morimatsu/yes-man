@@ -552,3 +552,21 @@ const server = setupServer(
 - `DecisionsModule` の public interface 追加のみ (既存メソッドは不変)
 - `tests/modules/decisions.test.ts` に `history()` の path / query param 整合テストを追加
 - `openapi.json` + `src/generated/schema.ts` は `GET /v1/decisions` endpoint 追加に伴い再生成 (CI drift 検知が通ることを確認)
+
+---
+
+## Post-CONSTRUCTION 改修注記 v3 (2026-05-23)
+
+### SSE event 型拡張 (PR #86、`e791650`)
+- `packages/api-client/src/sse.ts` の `DecisionStreamEvent` discriminated union に 2 種類追加:
+  - `personas`: `{ personas: { id: string; name: string }[] }` (delta 到着前の persona 通知)
+  - `utterance_delta`: `{ persona_id: string; persona_name: string; text: string }` (token chunk)
+- 既存 `utterance` / `proposal` / `complete` / `silence` / `error` / `start` は不変
+- backward compat: 旧 client が新 event を ignore しても最終 `utterance` event で同等動作
+
+### generateYesNudge メソッド追加 (PR #94、`5261d9d`、Closes #93)
+- `DecisionsModule.generateYesNudge(decisionId, { stage })` を追加
+  - `POST /v1/decisions/{id}/yes-nudge` 同期返却 (No 採択 → 別案到着後の Yes nudge microcopy)
+  - 戻り値 `{ message: string }`、≤60 字、stage 別 fallback は backend 側で適用
+- 型は inline (`openapi.json` 経由ではなく手書き、Hackathon Pragmatism)
+- `tests/modules/decisions.test.ts` への追加は将来課題 (本 PR では skip)
