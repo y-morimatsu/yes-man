@@ -42,6 +42,8 @@ export function DecisionUtteranceBubble({
       className={`p-3 rounded-2xl max-w-utterance ${bg} min-h-16`}
       role="article"
       aria-label={`発話 by ${personaName}${streaming ? " (発言中)" : ""}`}
+      data-ym-anim
+      style={{ animation: "ym-bubble-slide-in 240ms ease-out both" }}
     >
       <div className="flex items-center gap-2">
         <span className="text-xs font-medium text-brand-700 dark:text-brand-300">
@@ -57,7 +59,29 @@ export function DecisionUtteranceBubble({
           </span>
         )}
       </div>
-      <p className="text-base mt-1 leading-relaxed">{text}</p>
+      <p className="text-base mt-1 leading-relaxed">
+        {text}
+        {streaming && (
+          <span
+            className="inline-flex items-baseline gap-0.5 ml-1 align-baseline"
+            aria-hidden
+            data-ym-anim
+          >
+            <span
+              className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500"
+              style={{ animation: "ym-typing-dot 1.2s infinite", animationDelay: "0s" }}
+            />
+            <span
+              className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500"
+              style={{ animation: "ym-typing-dot 1.2s infinite", animationDelay: "0.18s" }}
+            />
+            <span
+              className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500"
+              style={{ animation: "ym-typing-dot 1.2s infinite", animationDelay: "0.36s" }}
+            />
+          </span>
+        )}
+      </p>
     </div>
   );
 }

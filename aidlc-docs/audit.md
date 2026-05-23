@@ -5041,3 +5041,15 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 - E2E smoke OK (POST /decisions/stream → /choice yes → GET /preferences/me で accepted_patterns 反映確認)
 - api pytest 278 PASS / 14 SKIP (新 unit 4 + integration 3)
 ---
+
+## Post-CONSTRUCTION 改修 v3 - 合議 / Yes-No 演出ゲーミフィケーション (Inception 開始)
+**Timestamp**: 2026-05-23T02:30:00Z
+**User Input**: "ai-dlcで　合議の演出やYes Noの選択時の演出をゲームのようにして、ハッカソン向け差別化要素したい。"
+**AI Response**: 
+- branch: `feature/ui-design-effects-morimatsu` (develop 起点、push 済)
+- AI-DLC Hackathon Pragmatism + adaptive depth で進行
+- Requirements Analysis: ゲーム ジャンル / 派手さレベル を user に確認予定
+- 想定 stack: 既存 canvas-confetti + CSS transitions / Web Animations API、必要なら追加 dependency (Lottie 等) を user 判断で
+- 影響範囲: U7d-features (Decision flow UX) を中心に、必要なら U7b-ui (composites) も拡張
+**Context**: ハッカソン差別化要素、 UX 強化 (機能追加ではなく既存 flow への演出付加)
+---

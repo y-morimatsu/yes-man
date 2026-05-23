@@ -11,7 +11,7 @@
  *    - 親が microcopy banner + startStream による別案再生成を hold
  * 5. 議論を見る (FR-CV-04) は proposal 後ずっと visible (採択後も残置)
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DecisionUtteranceBubble,
   Skeleton,
@@ -21,6 +21,8 @@ import {
 import type { Utterance } from "./reducer";
 import { useChooseMutation } from "./useDecision";
 import { NudgeBanner } from "./NudgeBanner";
+import { YesComboBadge } from "./YesComboBadge";
+import { useYesCombo } from "./useYesCombo";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 import confetti from "canvas-confetti";
@@ -48,22 +50,89 @@ export function DecisionResult({
   const [noCount, setNoCount] = useState<number>(0);
   // INCEPTION FR-CV-04: 議論を見る default closed、採択後も visible
   const [discussionOpen, setDiscussionOpen] = useState(false);
+  // Hackathon: Yes 連続採択 combo (localStorage 日次 reset)
+  const combo = useYesCombo();
+  // Hackathon: proposal 初到着時の「合議完了」notification (1 回だけ表示)
+  const [showProposalNotification, setShowProposalNotification] = useState(false);
+  useEffect(() => {
+    if (proposal !== null) {
+      setShowProposalNotification(true);
+      const t = setTimeout(() => setShowProposalNotification(false), 2400);
+      return () => clearTimeout(t);
+    }
+  }, [proposal, decisionId]);
 
-  const fireConfetti = () => {
+  /** combo 数に応じた confetti スケール (3+ で multi-wave、10+ で大爆発). */
+  const fireConfetti = (comboCount: number) => {
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
-    confetti({
-      particleCount: 50,
-      spread: 80,
-      origin: { y: 0.2 },
-      colors: ["#9F88C8", "#E8775A", "#FFD6E0"],
-      ticks: 150,
-      scalar: 1.1,
-    });
+    const baseColors = ["#9F88C8", "#E8775A", "#FFD6E0"];
+    if (comboCount >= 10) {
+      // 大爆発: 2 wave + gold colors
+      confetti({
+        particleCount: 120,
+        spread: 100,
+        origin: { y: 0.2 },
+        colors: ["#FFD700", "#FF8C00", "#FFFFFF", ...baseColors],
+        ticks: 220,
+        scalar: 1.3,
+      });
+      setTimeout(
+        () =>
+          confetti({
+            particleCount: 80,
+            spread: 130,
+            origin: { y: 0.3, x: 0.2 },
+            colors: ["#FFD700", "#FF8C00"],
+            ticks: 200,
+            scalar: 1.2,
+          }),
+        180,
+      );
+      setTimeout(
+        () =>
+          confetti({
+            particleCount: 80,
+            spread: 130,
+            origin: { y: 0.3, x: 0.8 },
+            colors: ["#FFD700", "#FF8C00"],
+            ticks: 200,
+            scalar: 1.2,
+          }),
+        180,
+      );
+    } else if (comboCount >= 5) {
+      confetti({
+        particleCount: 90,
+        spread: 100,
+        origin: { y: 0.2 },
+        colors: ["#C084FC", "#FBCFE8", ...baseColors],
+        ticks: 180,
+        scalar: 1.2,
+      });
+    } else if (comboCount >= 3) {
+      confetti({
+        particleCount: 70,
+        spread: 90,
+        origin: { y: 0.2 },
+        colors: ["#FCD34D", "#FEF3C7", ...baseColors],
+        ticks: 160,
+        scalar: 1.15,
+      });
+    } else {
+      confetti({
+        particleCount: 50,
+        spread: 80,
+        origin: { y: 0.2 },
+        colors: baseColors,
+        ticks: 150,
+        scalar: 1.1,
+      });
+    }
     // Mobile App Polish §9: Haptic feedback (Android 動作、iOS no-op)
     if ("vibrate" in navigator) {
-      navigator.vibrate(50);
+      navigator.vibrate(comboCount >= 5 ? [50, 30, 80] : 50);
     }
   };
 
@@ -73,10 +142,12 @@ export function DecisionResult({
       const result = await choose.mutateAsync({ id: decisionId, choice });
       const count = result?.no_attempt_count ?? 0;
       if (choice === "yes") {
+        const newCombo = combo.recordYes();
         setChosen("yes");
         setNoCount(count);
-        fireConfetti();
+        fireConfetti(newCombo);
       } else {
+        combo.recordNo();
         // INCEPTION Journey C: No → 親に regenerate 委譲
         onNoChosen?.(count);
       }
@@ -91,6 +162,32 @@ export function DecisionResult({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Hackathon: Yes 連続採択 combo badge (chosen=yes 時 + 2 連以上 or break 時) */}
+      {(combo.count >= 2 || combo.brokeCombo) && (
+        <YesComboBadge
+          count={combo.count}
+          brokeCombo={combo.brokeCombo}
+          onBrokeComboShown={combo.clearBrokeCombo}
+        />
+      )}
+
+      {/* Hackathon: proposal 初到着時の「合議完了」notification (2.4s で fade out) */}
+      {showProposalNotification && proposal && (
+        <div
+          className="self-stretch rounded-xl border bg-brand-50 px-4 py-2 text-center text-sm font-medium text-brand-700 shadow-sm"
+          role="status"
+          aria-label="合議完了通知"
+          data-testid="proposal-arrival-notification"
+          data-ym-anim
+          style={{
+            borderColor: "#9F88C8",
+            animation: "ym-notification-slide-down 2.4s ease-in-out forwards",
+          }}
+        >
+          📨 合議が完了しました
+        </div>
+      )}
+
       {/* Post-CONSTRUCTION v3 (2026-05-23): 旧 PersonaThinkingChips は廃止。
           persona 名・発言中 status は bubble header に統合 (重複排除)。 */}
 
