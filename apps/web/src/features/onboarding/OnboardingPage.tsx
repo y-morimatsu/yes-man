@@ -113,15 +113,26 @@ export default function OnboardingPage() {
         </p>
       </header>
 
-      {/* 信頼度 progress bar */}
+      {/* 進捗 progress bar: answeredCount / totalCount (50 問満点).
+          確信ライン (25 問達成) は別途「ある程度 把握できました」copy + 「もういい」CTA で示す. */}
       <div className="px-4">
-        <div className="h-2 rounded-full bg-neutral-100">
+        <div className="h-2 rounded-full bg-neutral-100 relative">
           <div
             className="h-2 rounded-full bg-brand-500 transition-all duration-300"
             style={{
-              width: `${Math.min(100, (onboarding.answeredCount / 25) * 100)}%`,
+              width: `${Math.min(
+                100,
+                (onboarding.answeredCount / onboarding.totalCount) * 100,
+              )}%`,
             }}
-            aria-label={`進捗 ${onboarding.answeredCount}/25 (確信ライン)`}
+            aria-label={`進捗 ${onboarding.answeredCount}/${onboarding.totalCount}`}
+          />
+          {/* 確信ライン (50% 地点) marker — 50% は 25 問 = ある程度把握 */}
+          <div
+            aria-hidden
+            className="absolute top-1/2 -translate-y-1/2 w-0.5 h-3 bg-success"
+            style={{ left: "50%" }}
+            title="確信ライン (ここまで答えると ある程度 把握)"
           />
         </div>
       </div>
