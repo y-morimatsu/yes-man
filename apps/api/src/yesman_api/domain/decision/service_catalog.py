@@ -1,0 +1,140 @@
+"""ServiceCatalog — Drill-down chain の最終提案を実 web service へ紐付ける.
+
+Hackathon Pragmatism: ダミー catalog (real public homepage URL を流用)、
+keyword matching で proposal text からカテゴリを推定し、対応 service を返す。
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True, slots=True)
+class ExternalService:
+    name: str
+    url: str
+    emoji: str
+
+
+# カテゴリ別 service. 各カテゴリの先頭が default (proposal 文字列に固有 service 名がない場合).
+SERVICE_CATALOG: dict[str, list[ExternalService]] = {
+    "movie": [
+        ExternalService("Netflix", "https://www.netflix.com/jp/", "🎬"),
+        ExternalService("Prime Video", "https://www.amazon.co.jp/Amazon-Video", "📺"),
+        ExternalService("U-NEXT", "https://video.unext.jp/", "🎞️"),
+        ExternalService("YouTube", "https://www.youtube.com/", "▶️"),
+    ],
+    "food_delivery": [
+        ExternalService("Uber Eats", "https://www.ubereats.com/jp", "🍔"),
+        ExternalService("出前館", "https://demae-can.com/", "🍱"),
+        ExternalService("Wolt", "https://wolt.com/ja/jpn", "🛵"),
+        ExternalService("ピザハット", "https://www.pizzahut.jp/", "🍕"),
+        ExternalService("ドミノ・ピザ", "https://www.dominos.jp/", "🍕"),
+    ],
+    "shopping": [
+        ExternalService("Amazon", "https://www.amazon.co.jp/", "📦"),
+        ExternalService("楽天市場", "https://www.rakuten.co.jp/", "🛍️"),
+        ExternalService("Yahoo!ショッピング", "https://shopping.yahoo.co.jp/", "🛒"),
+        ExternalService("メルカリ", "https://jp.mercari.com/", "💱"),
+    ],
+    "fashion": [
+        ExternalService("ZOZOTOWN", "https://zozo.jp/", "👕"),
+        ExternalService("ユニクロ", "https://www.uniqlo.com/jp/ja/", "👖"),
+        ExternalService("GU", "https://www.gu-global.com/jp/ja/", "👗"),
+        ExternalService("Amazon Fashion", "https://www.amazon.co.jp/fashion", "👔"),
+    ],
+    "music": [
+        ExternalService("Spotify", "https://open.spotify.com/", "🎵"),
+        ExternalService("Apple Music", "https://music.apple.com/jp/", "🎧"),
+        ExternalService("YouTube Music", "https://music.youtube.com/", "🎶"),
+    ],
+    "books": [
+        ExternalService("Kindle", "https://www.amazon.co.jp/kindlestore", "📚"),
+        ExternalService("honto", "https://honto.jp/", "📖"),
+        ExternalService("ebookjapan", "https://ebookjapan.yahoo.co.jp/", "📕"),
+    ],
+    "travel": [
+        ExternalService("じゃらん", "https://www.jalan.net/", "🏨"),
+        ExternalService("Expedia", "https://www.expedia.co.jp/", "✈️"),
+        ExternalService("Booking.com", "https://www.booking.com/index.ja.html", "🛏️"),
+        ExternalService("楽天トラベル", "https://travel.rakuten.co.jp/", "🚆"),
+    ],
+    "games": [
+        ExternalService("Steam", "https://store.steampowered.com/", "🎮"),
+        ExternalService("Nintendo Store", "https://store-jp.nintendo.com/", "🎯"),
+        ExternalService("Epic Games", "https://store.epicgames.com/ja/", "🕹️"),
+    ],
+    "food_restaurant": [
+        ExternalService("食べログ", "https://tabelog.com/", "🍽️"),
+        ExternalService("Google Maps", "https://www.google.com/maps", "🗺️"),
+        ExternalService("ホットペッパー", "https://www.hotpepper.jp/", "🍴"),
+    ],
+    "exercise": [
+        ExternalService("YouTube (筋トレ動画)", "https://www.youtube.com/results?search_query=筋トレ", "💪"),
+        ExternalService("Nike Training Club", "https://www.nike.com/jp/ntc-app", "🏋️"),
+    ],
+    "study": [
+        ExternalService("Udemy", "https://www.udemy.com/ja/", "📘"),
+        ExternalService("YouTube (学習動画)", "https://www.youtube.com/", "🎓"),
+        ExternalService("Coursera", "https://www.coursera.org/", "🎒"),
+    ],
+}
+
+# カテゴリ判定のキーワード (proposal text + chain history に対するマッチ).
+# 最初に match した category を採用 (順序が優先度).
+CATEGORY_KEYWORDS: list[tuple[str, list[str]]] = [
+    ("food_delivery", ["ピザ", "宅配", "デリバリー", "Uber", "出前", "ウォルト", "wolt"]),
+    ("food_restaurant", ["レストラン", "外食", "ランチに行", "ディナー", "食べに行"]),
+    ("movie", ["映画", "シネマ", "ホラー", "アニメ映画", "Netflix", "Prime Video", "YouTube映画"]),
+    ("music", ["音楽", "曲", "プレイリスト", "Spotify", "アーティスト"]),
+    ("books", ["本", "読書", "漫画", "マンガ", "小説", "Kindle"]),
+    ("fashion", ["ジーパン", "ジーンズ", "服", "シャツ", "ワンピース", "ユニクロ", "ZOZO", "コーディネート"]),
+    ("travel", ["旅行", "ホテル", "宿", "温泉", "観光", "新幹線", "じゃらん"]),
+    ("games", ["ゲーム", "Steam", "Nintendo", "Switch", "RPG"]),
+    ("exercise", ["筋トレ", "運動", "ジム", "ヨガ", "ストレッチ", "ランニング"]),
+    ("study", ["勉強", "学習", "資格", "Udemy"]),
+    # shopping は最も広いので fallback 寄りに最後
+    ("shopping", ["買う", "購入", "通販", "ショッピング", "Amazon", "楽天", "メルカリ"]),
+]
+
+
+def detect_category(text: str) -> str | None:
+    """proposal text + chain history から category を 1 件決定。
+
+    複数候補がヒットしても優先度順 (CATEGORY_KEYWORDS の順) で最初に match した
+    カテゴリを採用。1 件も match しなければ None (= service 未紐付け)。
+    """
+    if not text:
+        return None
+    for category, keywords in CATEGORY_KEYWORDS:
+        for kw in keywords:
+            if kw in text:
+                return category
+    return None
+
+
+def pick_service(text: str) -> ExternalService | None:
+    """text からカテゴリを判定し、該当 service の先頭 (default) を返す。
+
+    text 内に固有 service 名 (例: "Netflix" / "Amazon" / "ピザハット") があれば
+    優先的にその service を返す。なければ category の default service を返す。
+    無 category なら None。
+    """
+    category = detect_category(text)
+    if category is None:
+        return None
+    services = SERVICE_CATALOG[category]
+    # 固有 service 名マッチを先に試す
+    for svc in services:
+        if svc.name in text:
+            return svc
+    # default
+    return services[0]
+
+
+__all__ = [
+    "ExternalService",
+    "SERVICE_CATALOG",
+    "CATEGORY_KEYWORDS",
+    "detect_category",
+    "pick_service",
+]

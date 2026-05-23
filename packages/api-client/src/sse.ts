@@ -11,7 +11,12 @@ import type { YesmanApiClient } from "./client";
 import type { components } from "./generated/schema";
 import { ApiError } from "./errors";
 
-export type DecisionRequestPayload = components["schemas"]["DecisionRequestDTO"];
+// 2026-05-23 Drill-down chain: chain_context を optional 追加 (OpenAPI 自動生成スキーマと
+// 同期するまでの間の手動拡張、re-generate 時に同期される予定)
+export type DecisionRequestPayload =
+  components["schemas"]["DecisionRequestDTO"] & {
+    chain_context?: string[];
+  };
 
 export type DecisionStreamEvent =
   | { type: "start"; data: { decision_id: string } }
@@ -20,7 +25,16 @@ export type DecisionStreamEvent =
   // Post-CONSTRUCTION v3 (2026-05-23): token streaming - text は LLM chunk
   | { type: "utterance_delta"; data: { persona_id: string; persona_name: string; text: string } }
   | { type: "utterance"; data: { persona_id: string; persona_name: string; text: string } }
-  | { type: "proposal"; data: { proposal_text: string } }
+  // 2026-05-23 Drill-down chain: is_final + service を proposal event に同梱
+  | {
+      type: "proposal";
+      data: {
+        proposal_text: string;
+        is_final?: boolean;
+        depth?: number;
+        service?: { name: string; url: string; emoji: string } | null;
+      };
+    }
   | { type: "complete"; data: { decision_id: string } }
   // INCEPTION D Silence Theater: 沈黙ドメイン (宗教/選挙/暴力/卑猥) 検出時
   | { type: "silence"; data: { text: string } }

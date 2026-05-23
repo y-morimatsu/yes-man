@@ -19,6 +19,7 @@ import { QuickStartCard } from "./QuickStartCard";
 import { useQuickStart } from "./useQuickStart";
 import { useYesNudge } from "./useYesNudge";
 import { YesManMascot, type MascotState } from "./YesManMascot";
+import type { ChainNode } from "./reducer";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -41,6 +42,8 @@ export default function DecisionPage() {
 
   // issue #93: No 採択 → 別案到着後に Yes 採択を後押しする LLM 動的 microcopy.
   const yesNudge = useYesNudge();
+  // 2026-05-23 Drill-down chain: 完了済 proposal 列を保持 (Yes 連鎖時の chain_context として送る)
+  const [chain, setChain] = useState<ChainNode[]>([]);
   // Hackathon: 直近の Yes/No 採択を mascot 用に保持 (1.6s で自動 clear).
   const [recentChoice, setRecentChoice] = useState<"yes" | "no" | null>(null);
   const handleChoiceMade = (choice: "yes" | "no") => {
@@ -61,7 +64,14 @@ export default function DecisionPage() {
       }),
     onUtterance: (u) =>
       dispatch({ type: "onUtterance", utterance: { ...u, done: true } }),
-    onProposal: (text) => dispatch({ type: "onProposal", proposal: text }),
+    onProposal: (data) =>
+      dispatch({
+        type: "onProposal",
+        proposal: data.proposal,
+        isFinal: data.isFinal,
+        depth: data.depth,
+        service: data.service,
+      }),
     onComplete: () => {
       dispatch({ type: "onComplete" });
       setRegenerating(false);
@@ -87,10 +97,32 @@ export default function DecisionPage() {
     lastInputRef.current = state.input;
     setNoStage(0); // 新規 submit は No carry-forward を reset
     setRegenerating(false);
+    // 2026-05-23: 新規 submit は chain を必ず reset (前回の drill-down 履歴を引き継がない)
+    setChain([]);
     // 新規 submit のため、前のセッションの buffer を破棄
     prefetch.clear();
     dispatch({ type: "start" });
     await startStream({ user_input: state.input });
+  };
+
+  /** 2026-05-23 Drill-down chain: Yes (非 final) で次段に進む.
+   *  現 proposal を chain に push、chain_context を含めて新 stream を起動する. */
+  const handleDrillDown = async () => {
+    if (state.status !== "completed") return;
+    const newNode: ChainNode = {
+      decisionId: state.decisionId,
+      proposalText: state.proposal,
+      depth: state.depth,
+    };
+    const nextChain = [...chain, newNode];
+    setChain(nextChain);
+    setNoStage(0); // chain 進行は No carry-forward を reset
+    prefetch.clear();
+    dispatch({ type: "start" });
+    await startStream({
+      user_input: lastInputRef.current,
+      chain_context: nextChain.map((n) => n.proposalText),
+    });
   };
 
   /** INCEPTION Journey C: No 採択 → 自動再生成 + 段階的 microcopy.
@@ -129,6 +161,7 @@ export default function DecisionPage() {
     setNoStage(0);
     setRegenerating(false);
     yesNudge.clear();
+    setChain([]);
     lastInputRef.current = "";
     prefetch.clear();
     dispatch({ type: "reset" });
@@ -256,6 +289,11 @@ export default function DecisionPage() {
           onComplete={handleFullReset}
           onNoChosen={handleNoChosen}
           onChoiceMade={handleChoiceMade}
+          // 2026-05-23 Drill-down chain
+          isFinal={state.status === "completed" ? state.isFinal : false}
+          chain={chain}
+          service={state.status === "completed" ? state.service : null}
+          onDrillDown={handleDrillDown}
         />
       )}
 

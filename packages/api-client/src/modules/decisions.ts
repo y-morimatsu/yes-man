@@ -3,7 +3,11 @@ import { request } from "../client";
 import type { components } from "../generated/schema";
 import { DecisionStream } from "../sse";
 
-export type DecisionRequestPayload = components["schemas"]["DecisionRequestDTO"];
+// 2026-05-23 Drill-down chain: chain_context を optional 拡張 (OpenAPI 自動生成と同期するまでの手動)
+export type DecisionRequestPayload =
+  components["schemas"]["DecisionRequestDTO"] & {
+    chain_context?: string[];
+  };
 export type DecisionResponse = components["schemas"]["DecisionResponse"];
 export type ChoiceResponse = components["schemas"]["ChoiceResponse"];
 export type NudgeResponse = components["schemas"]["NudgeResponse"];
