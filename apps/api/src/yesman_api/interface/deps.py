@@ -148,6 +148,9 @@ def get_decision_engine(
         profile_repo=bundle.profile,
         cold_start=cold_start,
     )
+    # v3-γ anonymous-strangers: app.state.anonymous_pool が存在すれば inject
+    # (Task 2 で persona_source="anonymous" 経路をサポート、未設定なら builtin only)
+    pool_repo = getattr(request.app.state, "anonymous_pool", None)
     return DecisionEngine(
         llm=llm,
         orchestrator=orchestrator,
@@ -161,6 +164,8 @@ def get_decision_engine(
         selection_repo=bundle.user_persona_selection,
         # Issue #4: Dynamic Persona Routing 用
         preference_repo=bundle.preference,
+        # v3-γ anonymous-strangers
+        pool_repo=pool_repo,
     )
 
 

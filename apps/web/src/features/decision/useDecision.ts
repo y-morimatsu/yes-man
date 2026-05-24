@@ -23,6 +23,18 @@ export function useChooseMutation() {
   });
 }
 
+export function useDecisionHistory(opts?: {
+  limit?: number;
+  choice?: "yes" | "no" | "all";
+}) {
+  const api = useApi();
+  return useQuery({
+    queryKey: ["decisions", "history", opts ?? {}],
+    queryFn: () => api.decisions.history(opts),
+    staleTime: 30_000,
+  });
+}
+
 export function useNudge(decisionId: string | null, enabled: boolean) {
   const api = useApi();
   return useQuery({

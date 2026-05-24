@@ -92,6 +92,7 @@ test.describe("INCEPTION Pink Nudge Banner (drawio B4 下部 nudge)", () => {
   test("Yes celebration emoji ✨🎉✨ / 「素晴らしい従順さです」 (drawio B4-Yes)", async ({
     page,
   }) => {
+    // 2026-05-24 C-2 fix: root Yes で is_final=true → NudgeBanner 経路、過去 skip 解除.
     await gotoAuthenticated(page, "/decision");
     await page.getByPlaceholder(/今日/).fill("celebration 検証");
     await page.getByRole("button", { name: /送信/ }).click();

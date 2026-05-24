@@ -33,6 +33,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
     const next = decisionReducer(streaming, { type: "onStart", decisionId: "d1" });
     expect((next as Extract<DecisionState, { status: "streaming" }>).decisionId).toBe("d1");
@@ -48,6 +49,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
     const next = decisionReducer(streaming, { type: "onUtterance", utterance: u });
     expect((next as Extract<DecisionState, { status: "streaming" }>).utterances).toHaveLength(1);
@@ -63,6 +65,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
     const next = decisionReducer(streaming, { type: "onComplete" });
     expect(next.status).toBe("completed");
@@ -78,6 +81,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
     const next = decisionReducer(streaming, { type: "onComplete" });
     expect(next.status).toBe("streaming");
@@ -101,6 +105,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
     const next = decisionReducer(completed, { type: "reset" });
     expect(next).toEqual({ status: "idle", input: "" });
@@ -116,6 +121,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
     const next = decisionReducer(streaming, { type: "setInput", input: "dinner" });
     expect(next).toBe(streaming);
@@ -132,6 +138,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
 
     it("pre-fills empty utterances with done=false", () => {
@@ -217,6 +224,7 @@ describe("decisionReducer", () => {
       isFinal: false,
       depth: 0,
       service: null,
+      lastSpeakerId: null,
     };
 
     it("first delta inserts new utterance with done=false", () => {

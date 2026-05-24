@@ -422,3 +422,48 @@ CONSTRUCTION 全完了 (2026-05-16) 以降に発生した実装/仕様変更を�
 2. **Post-CONSTRUCTION 改修注記**: 改修が発生した unit には末尾に `## Post-CONSTRUCTION 改修注記 (YYYY-MM-DD)` セクションを追記
 3. **audit.md は Append-only**: 全ての改修は `audit.md` 末尾に時系列追記
 4. **本 `aidlc-state.md` の改修ログ表**: 上記「改修一覧」を単一の起点として参照
+
+---
+
+## アイデア検証 (Post-v0.4.0) — Idea Track
+
+> v0.4.0 release 後、user 明示許可なく develop/main へ merge しない (memory: `project-ideation-phase-no-auto-merge`)。各 idea は branch 内で完結し、demo 動画とともに評価される。
+
+### v3-α: drill-down decision chain (merged into `feature/next-spec-ideas`)
+- branch: `feature/drill-down-decision` (deleted、`feature/next-spec-ideas` に統合)
+- 機能: YES 採択 → 最大 4 段 chain で深堀り (映画 → ホラー → 貞子)、final で service catalog CTA
+- 状態: ✅ 実装完了、demo 動画 ~258s 録画済
+
+### v3-β: 新規登録時 嗜好把握 onboarding (merged into `feature/next-spec-ideas`)
+- branch: `feature/next-spec-ideas` 上で直接実装
+- 機能: 50 問 YES/NO (性格 25 + 生活 20 + 興味 5)、SwipeChoice 再利用、per-user 完了 flag
+- 状態: ✅ 実装完了、demo 動画 ~258s に統合済
+
+### v3-γ: anonymous-strangers (案 5、Inception 完了)
+- **branch**: `feature/next-spec-ideas-anonymous-strangers`
+- **由来**: [docs/superpowers/idea/合議アイデアとして考えたこと.txt](../docs/superpowers/idea/合議アイデアとして考えたこと.txt) 案 5 (ideator 一推し)、mockup [docs/superpowers/idea/mockup-anonymous-strangers.html](../docs/superpowers/idea/mockup-anonymous-strangers.html)
+- **core**: 自分の opt-in 公開した価値観 tags + 口グセが、世界の誰かの合議で persona として動く相互参加体験
+- **inception 成果物** ([aidlc-docs/inception/anonymous-strangers/](inception/anonymous-strangers/)):
+  - requirements.md (6 FR + 6 NFR + 5 SC、Standard depth)
+  - user-stories.md (4 Epic + 9 Story、P0-P3 優先度)
+  - workflow-plan.md (どの stage 実行 / skip、Hackathon Pragmatism 適用)
+  - application-design.md (component 階層 + data model + LLM prompt + i18n)
+  - units-decomposition.md (1 unit、10 task、~18-19h)
+- **Inception Stage Progress**:
+  - [x] Workspace Detection (brownfield、既存 v0.4.0 + drill-down + onboarding)
+  - [⏭] Reverse Engineering (skip、既知)
+  - [x] Requirements Analysis (Standard depth、mockup を input)
+  - [x] User Stories (Standard depth)
+  - [x] Workflow Planning
+  - [x] Application Design
+  - [x] Units Generation (1 unit、Minimal)
+- **状態**: ⏳ user 承認待ち (Construction 開始可否)
+- **next step**: user approve → Task 1 (backend persona pool 基盤) から着手
+
+### v3-γ rev2: ultrathink fixes + drawio + screenshots (2026-05-24)
+- ultrathink レビュー: Critical 5 / Important 6 / Improvements 6 件、全 17 fixes applied
+- inception 成果物 5 ファイル全 update、合計時間見積 ~18-19h → **~26-30h** = 3-4 営業日
+- drawio 追加: [aidlc-docs/inception/anonymous-strangers/diagrams/anonymous-strangers-design.drawio](inception/anonymous-strangers/diagrams/anonymous-strangers-design.drawio) (2 page: 画面フロー + コンポーネント依存)、同内容を [docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio](../docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio) にもコピー
+- superpowers spec: [docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md](../docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md) (brainstorming + Gherkin 受入基準)
+- 画面キャプチャ: [aidlc-docs/inception/anonymous-strangers/screens/](inception/anonymous-strangers/screens/) (13 PNG、全景 1 + mockup 12 画面、2.4MB)
+- 状態: ⏳ Construction 着手承認待ち

@@ -10,18 +10,14 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 4
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results",
         "repeatEach": 1,
-        "retries": 1,
-        "metadata": {
-          "actualWorkers": 4
-        },
+        "retries": 0,
+        "metadata": {},
         "id": "mobile-chrome",
         "name": "mobile-chrome",
         "testDir": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests",
@@ -88,22 +84,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1796,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:10.301Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "d748ac400d08b85935ef-18c6044a6ba0815ef9ed",
@@ -122,27 +104,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1745,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:10.302Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "d748ac400d08b85935ef-3f9c949eccabe99a8707",
               "file": "auth.spec.ts",
-              "line": 12,
+              "line": 13,
               "column": 3
             },
             {
@@ -156,27 +124,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1799,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:10.300Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "d748ac400d08b85935ef-7c6ea001d05f2c1abd8a",
               "file": "auth.spec.ts",
-              "line": 17,
+              "line": 18,
               "column": 3
             }
           ]
@@ -207,22 +161,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1712,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:10.302Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f2a856cf2cd05c9ecfaa-ac1e7a7e65b9a86c7a5c",
@@ -241,22 +181,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1168,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:12.380Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f2a856cf2cd05c9ecfaa-48c8c3eb933dcbecfacd",
@@ -275,22 +201,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1347,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:12.406Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f2a856cf2cd05c9ecfaa-79c60b3e8dffdc03969c",
@@ -326,22 +238,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1195,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:12.452Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-ca495294341e048a0766",
@@ -360,22 +258,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1164,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:12.574Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-1e677e1c5ea64a4c93c1",
@@ -394,22 +278,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1064,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:13.563Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-bfbcbd0fadd2a1260c00",
@@ -428,22 +298,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1129,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:13.666Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-d424b1d9cafa526ff334",
@@ -458,32 +314,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 911,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:13.761Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/design.spec.ts",
+                        "line": 65,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-8574b666b4c874d7498e",
               "file": "design.spec.ts",
-              "line": 63,
-              "column": 3
+              "line": 65,
+              "column": 8
             },
             {
               "title": "Score 詳細統計 numeric は tabular font (font-mono、INCEPTION §1.3 数字)",
@@ -496,27 +347,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1178,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:13.768Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-a01144b4000c3478ce99",
               "file": "design.spec.ts",
-              "line": 88,
+              "line": 90,
               "column": 3
             },
             {
@@ -530,27 +367,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 1253,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:14.632Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-30e589a38206d0581329",
               "file": "design.spec.ts",
-              "line": 102,
+              "line": 104,
               "column": 3
             },
             {
@@ -564,27 +387,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1099,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:14.685Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-6cd0da5946b26aab83b7",
               "file": "design.spec.ts",
-              "line": 125,
+              "line": 127,
               "column": 3
             },
             {
@@ -598,27 +407,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1240,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:14.801Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a97bb9db443074d9bdd1-d274f9e88e035088f802",
               "file": "design.spec.ts",
-              "line": 138,
+              "line": 140,
               "column": 3
             }
           ]
@@ -649,22 +444,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1097,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:14.961Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-d01f166d2ca8510031ab",
@@ -683,27 +464,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1093,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:15.799Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-7f67d8154df14fd56125",
               "file": "inception-complete-screens.spec.ts",
-              "line": 30,
+              "line": 31,
               "column": 3
             },
             {
@@ -717,27 +484,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "passed",
-                      "duration": 504,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:15.898Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-a04dc316289e5ebf0051",
               "file": "inception-complete-screens.spec.ts",
-              "line": 39,
+              "line": 40,
               "column": 3
             },
             {
@@ -751,27 +504,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1081,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:16.051Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-ea5664b973f9ba933b16",
               "file": "inception-complete-screens.spec.ts",
-              "line": 47,
+              "line": 48,
               "column": 3
             }
           ]
@@ -779,7 +518,7 @@
         {
           "title": "Journey B: Decision Experience (5 screens)",
           "file": "inception-complete-screens.spec.ts",
-          "line": 61,
+          "line": 62,
           "column": 6,
           "specs": [
             {
@@ -793,160 +532,43 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1086,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:16.064Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-30382ecc7fb6798601ce",
               "file": "inception-complete-screens.spec.ts",
-              "line": 62,
+              "line": 63,
               "column": 3
             },
             {
-              "title": "B7 Live SSE: 🔴 LIVE badge + persona icon utterances",
-              "ok": false,
+              "title": "B7 Live SSE: persona icon utterances (LIVE badge は UX 改善で削除)",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 1,
-                      "parallelIndex": 1,
-                      "status": "failed",
-                      "duration": 92169,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50",
-                        "location": {
-                          "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
-                          "column": 50,
-                          "line": 80
-                        },
-                        "snippet": "  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
-                            "column": 50,
-                            "line": 80
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n\n  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:16.409Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome/error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
+                      "type": "skip",
+                      "location": {
                         "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
-                        "column": 50,
-                        "line": 80
-                      }
-                    },
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 92259,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50",
-                        "location": {
-                          "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
-                          "column": 50,
-                          "line": 80
-                        },
-                        "snippet": "  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
-                            "column": 50,
-                            "line": 80
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText(/LIVE/).first()\nExpected: visible\nTimeout: 90000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 90000ms\u001b[22m\n\u001b[2m  - waiting for getByText(/LIVE/).first()\u001b[22m\n\n\n  78 |     await page.getByPlaceholder(/今日/).fill(\"B7 LIVE 検証\");\n  79 |     await page.getByRole(\"button\", { name: /送信/ }).click();\n> 80 |     await expect(page.getByText(/LIVE/).first()).toBeVisible({\n     |                                                  ^\n  81 |       timeout: 90_000,\n  82 |     });\n  83 |     await page.waitForSelector('[role=\"article\"]', { timeout: 90_000 });\n    at /Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts:80:50"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-05-19T07:24:48.841Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/error-context.md"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/inception-complete-screens-42374-dge-persona-icon-utterances-mobile-chrome-retry1/trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
-                        "column": 50,
-                        "line": 80
+                        "line": 76,
+                        "column": 8
                       }
                     }
                   ],
-                  "status": "unexpected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
-              "id": "095776dff2e7e4cd6161-7195626b56d11b13bd31",
+              "id": "095776dff2e7e4cd6161-8741651bb787e38955ef",
               "file": "inception-complete-screens.spec.ts",
-              "line": 74,
-              "column": 3
+              "line": 76,
+              "column": 8
             },
             {
               "title": "B4 提案: 3-line proposal + 議論を見る button + Yes/No",
@@ -959,27 +581,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1220,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:16.897Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-5b21422b10d49fb15a78",
               "file": "inception-complete-screens.spec.ts",
-              "line": 94,
+              "line": 93,
               "column": 3
             },
             {
@@ -993,27 +601,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1102,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:17.136Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-0fb1d4d0bcc1ff45a226",
               "file": "inception-complete-screens.spec.ts",
-              "line": 115,
+              "line": 114,
               "column": 3
             },
             {
@@ -1027,27 +621,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1407,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:17.155Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-26bb8bdf9ab3807e94bd",
               "file": "inception-complete-screens.spec.ts",
-              "line": 122,
+              "line": 121,
               "column": 3
             }
           ]
@@ -1055,7 +635,7 @@
         {
           "title": "Journey C: No 連打 (段階的 microcopy 4 stages)",
           "file": "inception-complete-screens.spec.ts",
-          "line": 146,
+          "line": 145,
           "column": 6,
           "specs": [
             {
@@ -1065,32 +645,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1219,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:18.121Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                        "line": 162,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-4c478a928b03882657ca",
               "file": "inception-complete-screens.spec.ts",
               "line": 162,
-              "column": 3
+              "column": 8
             },
             {
               "title": "C2 No 2 回目: 「もう一度考えてみては？」 (count >= 2)",
@@ -1099,32 +674,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1530,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:18.244Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                        "line": 184,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-8e502a75567c19671e1f",
               "file": "inception-complete-screens.spec.ts",
-              "line": 183,
-              "column": 3
+              "line": 184,
+              "column": 8
             },
             {
               "title": "C3+ No 5+ 回: AI 生成 fallback「ここまで慎重なあなただからこそ」",
@@ -1133,39 +703,34 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1566,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:18.568Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-complete-screens.spec.ts",
+                        "line": 206,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-fce97c2e998767aa08eb",
               "file": "inception-complete-screens.spec.ts",
-              "line": 204,
-              "column": 3
+              "line": 206,
+              "column": 8
             }
           ]
         },
         {
           "title": "Journey D: Silence Theater (4 screens)",
           "file": "inception-complete-screens.spec.ts",
-          "line": 226,
+          "line": 228,
           "column": 6,
           "specs": [
             {
@@ -1179,27 +744,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1210,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:19.345Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-4d8b5d2b32aa1c76eb32",
               "file": "inception-complete-screens.spec.ts",
-              "line": 227,
+              "line": 229,
               "column": 3
             },
             {
@@ -1213,27 +764,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1200,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:19.778Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-08c915cc90f5d4841e18",
               "file": "inception-complete-screens.spec.ts",
-              "line": 238,
+              "line": 240,
               "column": 3
             },
             {
@@ -1247,27 +784,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1222,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:20.140Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-7158fec677effbecb102",
               "file": "inception-complete-screens.spec.ts",
-              "line": 249,
+              "line": 251,
               "column": 3
             }
           ]
@@ -1275,7 +798,7 @@
         {
           "title": "Journey G: Persona Management (4 screens)",
           "file": "inception-complete-screens.spec.ts",
-          "line": 268,
+          "line": 270,
           "column": 6,
           "specs": [
             {
@@ -1289,27 +812,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1036,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:20.561Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-a36e6f7a387a35dec927",
               "file": "inception-complete-screens.spec.ts",
-              "line": 269,
+              "line": 271,
               "column": 3
             },
             {
@@ -1323,27 +832,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1109,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:20.982Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-9a162d82c69badbef132",
               "file": "inception-complete-screens.spec.ts",
-              "line": 278,
+              "line": 280,
               "column": 3
             },
             {
@@ -1357,27 +852,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1233,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:21.366Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-9f659de2c153b10b96b3",
               "file": "inception-complete-screens.spec.ts",
-              "line": 288,
+              "line": 290,
               "column": 3
             },
             {
@@ -1391,27 +872,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1159,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:21.601Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "095776dff2e7e4cd6161-7927d339fe73f4535a6a",
               "file": "inception-complete-screens.spec.ts",
-              "line": 300,
+              "line": 302,
               "column": 3
             }
           ]
@@ -1442,22 +909,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1067,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:22.101Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-baa0f99b1869d7730d4c",
@@ -1476,22 +929,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1094,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:22.609Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-b343c05ce8a8d2e864bc",
@@ -1510,27 +949,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1081,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:22.769Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-558fd687e5b103e0801c",
               "file": "inception-design.spec.ts",
-              "line": 41,
+              "line": 42,
               "column": 3
             },
             {
@@ -1544,27 +969,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1087,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:23.172Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-4e5a7f9f9d6aa27eaf18",
               "file": "inception-design.spec.ts",
-              "line": 48,
+              "line": 49,
               "column": 3
             },
             {
@@ -1578,27 +989,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1059,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:23.707Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-c6d60be58226ba35eaa2",
               "file": "inception-design.spec.ts",
-              "line": 57,
+              "line": 58,
               "column": 3
             }
           ]
@@ -1606,7 +1003,7 @@
         {
           "title": "INCEPTION Header (全画面共通、screens/01-06 上部)",
           "file": "inception-design.spec.ts",
-          "line": 68,
+          "line": 69,
           "column": 6,
           "specs": [
             {
@@ -1620,61 +1017,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1082,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:23.854Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-2fd9cd513649cca78da0",
               "file": "inception-design.spec.ts",
-              "line": 69,
-              "column": 3
-            },
-            {
-              "title": "Header に nav icons (⚙️ 📊 👤) が存在 (INCEPTION header 右側 3 アクション)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1090,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:24.263Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "8f3fe1a53c4d9d064a59-1dd68d73278e25a25138",
-              "file": "inception-design.spec.ts",
-              "line": 80,
+              "line": 70,
               "column": 3
             }
           ]
@@ -1682,7 +1031,7 @@
         {
           "title": "INCEPTION Decision Input (screen-01 home-input.svg)",
           "file": "inception-design.spec.ts",
-          "line": 93,
+          "line": 84,
           "column": 6,
           "specs": [
             {
@@ -1696,27 +1045,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1047,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:24.771Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-1b15ee021224cdcaa480",
               "file": "inception-design.spec.ts",
-              "line": 94,
+              "line": 85,
               "column": 3
             },
             {
@@ -1730,27 +1065,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1065,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:24.939Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-70b3618bd717092af728",
               "file": "inception-design.spec.ts",
-              "line": 101,
+              "line": 92,
               "column": 3
             },
             {
@@ -1764,27 +1085,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1103,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:25.357Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-55e07af18cc0b3e7bcad",
               "file": "inception-design.spec.ts",
-              "line": 109,
+              "line": 100,
               "column": 3
             }
           ]
@@ -1792,7 +1099,7 @@
         {
           "title": "INCEPTION Score Dashboard (screen-04 score-dashboard.svg)",
           "file": "inception-design.spec.ts",
-          "line": 117,
+          "line": 108,
           "column": 6,
           "specs": [
             {
@@ -1806,27 +1113,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1074,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:25.821Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-3d2338093731c8a825d8",
               "file": "inception-design.spec.ts",
-              "line": 118,
+              "line": 109,
               "column": 3
             },
             {
@@ -1840,27 +1133,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1077,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:26.008Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-efeac90a2b23a0cb475f",
               "file": "inception-design.spec.ts",
-              "line": 125,
+              "line": 116,
               "column": 3
             },
             {
@@ -1874,27 +1153,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1065,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:26.465Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-44332b20850552de240d",
               "file": "inception-design.spec.ts",
-              "line": 132,
+              "line": 123,
               "column": 3
             },
             {
@@ -1908,27 +1173,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1065,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:26.899Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-521fc1c8900c55d255d0",
               "file": "inception-design.spec.ts",
-              "line": 141,
+              "line": 132,
               "column": 3
             }
           ]
@@ -1936,7 +1187,7 @@
         {
           "title": "INCEPTION Proposal Card + Yes/No (screen-03 proposal-card.svg)",
           "file": "inception-design.spec.ts",
-          "line": 153,
+          "line": 144,
           "column": 6,
           "specs": [
             {
@@ -1950,27 +1201,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1184,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:27.089Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-8b7d287845f08069f5e3",
               "file": "inception-design.spec.ts",
-              "line": 154,
+              "line": 145,
               "column": 3
             },
             {
@@ -1980,39 +1217,34 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1223,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:27.533Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-design.spec.ts",
+                        "line": 166,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-0de3011446ee9456d33a",
               "file": "inception-design.spec.ts",
-              "line": 174,
-              "column": 3
+              "line": 166,
+              "column": 8
             }
           ]
         },
         {
           "title": "INCEPTION Persona Pool (screen-06 persona-pool.svg)",
           "file": "inception-design.spec.ts",
-          "line": 191,
+          "line": 183,
           "column": 6,
           "specs": [
             {
@@ -2026,27 +1258,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1055,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:27.969Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-495a6e2ca09924ac68b6",
               "file": "inception-design.spec.ts",
-              "line": 192,
+              "line": 184,
               "column": 3
             },
             {
@@ -2060,27 +1278,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1049,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:28.277Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-47a60fd49ec88a71de78",
               "file": "inception-design.spec.ts",
-              "line": 199,
+              "line": 191,
               "column": 3
             },
             {
@@ -2094,27 +1298,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1018,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:28.760Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-5f1a1a4340f190f1e493",
               "file": "inception-design.spec.ts",
-              "line": 208,
+              "line": 200,
               "column": 3
             }
           ]
@@ -2122,7 +1312,7 @@
         {
           "title": "INCEPTION input style",
           "file": "inception-design.spec.ts",
-          "line": 216,
+          "line": 208,
           "column": 6,
           "specs": [
             {
@@ -2136,27 +1326,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1072,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:29.028Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "8f3fe1a53c4d9d064a59-9aa5eee36e43d110cb12",
               "file": "inception-design.spec.ts",
-              "line": 217,
+              "line": 209,
               "column": 3
             }
           ]
@@ -2187,22 +1363,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1059,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:29.336Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-7049ad4cfe05d9f895de",
@@ -2221,22 +1383,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1103,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:29.788Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-3a95640602c0723d1b5c",
@@ -2255,22 +1403,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1097,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:30.111Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-dacd31db846ae7655f7f",
@@ -2283,7 +1417,7 @@
         {
           "title": "Mobile layout: stack columns (sm < 640px)",
           "file": "inception-mobile.spec.ts",
-          "line": 49,
+          "line": 50,
           "column": 6,
           "specs": [
             {
@@ -2297,27 +1431,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1140,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:30.398Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-7b95d167750d223a6410",
               "file": "inception-mobile.spec.ts",
-              "line": 50,
+              "line": 51,
               "column": 3
             },
             {
@@ -2331,27 +1451,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1180,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:30.896Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-950f73109d0e3aef7dff",
               "file": "inception-mobile.spec.ts",
-              "line": 67,
+              "line": 68,
               "column": 3
             }
           ]
@@ -2359,11 +1465,11 @@
         {
           "title": "Mobile Header (overflow check)",
           "file": "inception-mobile.spec.ts",
-          "line": 75,
+          "line": 76,
           "column": 6,
           "specs": [
             {
-              "title": "Header (logo + nav + Sign out) が viewport 内に収まる",
+              "title": "Header (logo + Sign out のみ) が viewport 内に収まる",
               "ok": true,
               "tags": [],
               "tests": [
@@ -2373,27 +1479,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1065,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:31.212Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
-              "id": "36f1f81e41b0e1292815-c831c9d9254df5b5097b",
+              "id": "36f1f81e41b0e1292815-f954dc77704436399896",
               "file": "inception-mobile.spec.ts",
-              "line": 76,
+              "line": 77,
               "column": 3
             }
           ]
@@ -2401,7 +1493,7 @@
         {
           "title": "Mobile Touch Targets (WCAG 2.5.5 / Apple HIG)",
           "file": "inception-mobile.spec.ts",
-          "line": 93,
+          "line": 94,
           "column": 6,
           "specs": [
             {
@@ -2415,27 +1507,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1049,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:31.541Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-746009448892b4db884a",
               "file": "inception-mobile.spec.ts",
-              "line": 94,
+              "line": 95,
               "column": 3
             },
             {
@@ -2449,27 +1527,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1138,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:32.080Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-f8a9f64b90f870711be7",
               "file": "inception-mobile.spec.ts",
-              "line": 105,
+              "line": 106,
               "column": 3
             },
             {
@@ -2483,27 +1547,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1026,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:32.281Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-c1c9dca7c32eb5e9c0e2",
               "file": "inception-mobile.spec.ts",
-              "line": 119,
+              "line": 120,
               "column": 3
             }
           ]
@@ -2511,7 +1561,7 @@
         {
           "title": "Mobile copy fits without truncation",
           "file": "inception-mobile.spec.ts",
-          "line": 131,
+          "line": 132,
           "column": 6,
           "specs": [
             {
@@ -2525,27 +1575,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1035,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:32.594Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-4ce2e60ef7ba1d1d04a3",
               "file": "inception-mobile.spec.ts",
-              "line": 132,
+              "line": 133,
               "column": 3
             },
             {
@@ -2559,27 +1595,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1070,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:33.221Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-8a884219630e7203ea75",
               "file": "inception-mobile.spec.ts",
-              "line": 144,
+              "line": 145,
               "column": 3
             }
           ]
@@ -2587,7 +1609,7 @@
         {
           "title": "Mobile Modal (persona create) fits viewport",
           "file": "inception-mobile.spec.ts",
-          "line": 159,
+          "line": 160,
           "column": 6,
           "specs": [
             {
@@ -2601,27 +1623,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1144,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:33.311Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-a4cb4e1950e08e6253ff",
               "file": "inception-mobile.spec.ts",
-              "line": 160,
+              "line": 161,
               "column": 3
             }
           ]
@@ -2629,7 +1637,7 @@
         {
           "title": "Mobile Splash A1 (drawio 280×520)",
           "file": "inception-mobile.spec.ts",
-          "line": 174,
+          "line": 175,
           "column": 6,
           "specs": [
             {
@@ -2643,31 +1651,17 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1151,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:33.634Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "36f1f81e41b0e1292815-432c6eb3a9342c7aec16",
               "file": "inception-mobile.spec.ts",
-              "line": 175,
+              "line": 176,
               "column": 3
             },
             {
-              "title": "Splash disclaimer + → スワイプして同意 は initial viewport 内に visible",
+              "title": "Splash disclaimer は initial viewport 内に visible",
               "ok": true,
               "tags": [],
               "tests": [
@@ -2677,27 +1671,181 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1078,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:34.295Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
-              "id": "36f1f81e41b0e1292815-dc821919dbb71703587b",
+              "id": "36f1f81e41b0e1292815-304517efb78397fb09c9",
               "file": "inception-mobile.spec.ts",
-              "line": 185,
+              "line": 187,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "BottomNav (Mobile App Polish §4)",
+          "file": "inception-mobile.spec.ts",
+          "line": 197,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Bottom Navigation Bar が画面下に固定表示される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-0e465849961fd7e27269",
+              "file": "inception-mobile.spec.ts",
+              "line": 198,
+              "column": 3
+            },
+            {
+              "title": "4 tab の tap target が 44×44px 以上",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-b1d77d6f4dd9119b8f99",
+              "file": "inception-mobile.spec.ts",
+              "line": 208,
+              "column": 3
+            },
+            {
+              "title": "tab tap で active 状態が切替わる",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-2a452087a68283d915c5",
+              "file": "inception-mobile.spec.ts",
+              "line": 219,
+              "column": 3
+            },
+            {
+              "title": "/auth/splash で BottomNav は非表示",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-c35517b03fdd9a7fad93",
+              "file": "inception-mobile.spec.ts",
+              "line": 229,
+              "column": 3
+            },
+            {
+              "title": "Sticky Header — scroll しても画面上部に固定される",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-3c3ddba4093c5e362c6b",
+              "file": "inception-mobile.spec.ts",
+              "line": 242,
+              "column": 3
+            },
+            {
+              "title": "/score で 📊 スコア tab が active",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-2e62190a5981a85aaf7f",
+              "file": "inception-mobile.spec.ts",
+              "line": 263,
+              "column": 3
+            },
+            {
+              "title": "/personas で BottomNav 全 tab が inactive (Persona は nav 除外)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-26bfdd4f6a953922e5f3",
+              "file": "inception-mobile.spec.ts",
+              "line": 277,
+              "column": 3
+            },
+            {
+              "title": "/preferences で BottomNav 全 tab が inactive (Preference は nav 除外)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "36f1f81e41b0e1292815-919af83ebbf4eaf3b6d7",
+              "file": "inception-mobile.spec.ts",
+              "line": 288,
               "column": 3
             }
           ]
@@ -2718,79 +1866,40 @@
           "column": 6,
           "specs": [
             {
-              "title": "合議中に 🔴 LIVE badge 表示 (drawio B7、FR-CV-01〜03)",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1168,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:34.464Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "b8653a9d58d3a2a4a435-988c75222b9d48fff124",
-              "file": "inception-structural.spec.ts",
-              "line": 20,
-              "column": 3
-            },
-            {
               "title": "Utterance bubble に persona icon (🛡️/☀️/⚡) が表示",
               "ok": true,
               "tags": [],
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1179,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:34.794Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                        "line": 21,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-efaea172a19945143d0e",
               "file": "inception-structural.spec.ts",
-              "line": 30,
-              "column": 3
+              "line": 21,
+              "column": 8
             }
           ]
         },
         {
           "title": "INCEPTION B4: Proposal Card 3-line + caption (drawio B4)",
           "file": "inception-structural.spec.ts",
-          "line": 57,
+          "line": 48,
           "column": 6,
           "specs": [
             {
@@ -2804,27 +1913,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1191,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:35.384Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-390563a1f9a8d3ca900f",
               "file": "inception-structural.spec.ts",
-              "line": 58,
+              "line": 49,
               "column": 3
             },
             {
@@ -2838,27 +1933,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1217,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:35.636Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-cd410759d153ae50b749",
               "file": "inception-structural.spec.ts",
-              "line": 72,
+              "line": 63,
               "column": 3
             }
           ]
@@ -2866,7 +1947,7 @@
         {
           "title": "INCEPTION Pink Nudge Banner (drawio B4 下部 nudge)",
           "file": "inception-structural.spec.ts",
-          "line": 85,
+          "line": 76,
           "column": 6,
           "specs": [
             {
@@ -2876,32 +1957,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1177,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:35.977Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/inception-structural.spec.ts",
+                        "line": 78,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-e8e390b09e5f006b11f7",
               "file": "inception-structural.spec.ts",
-              "line": 86,
-              "column": 3
+              "line": 78,
+              "column": 8
             },
             {
               "title": "Yes celebration emoji ✨🎉✨ / 「素晴らしい従順さです」 (drawio B4-Yes)",
@@ -2914,27 +1990,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1283,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:36.579Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-a07d0df2ff0516a69f18",
               "file": "inception-structural.spec.ts",
-              "line": 100,
+              "line": 92,
               "column": 3
             }
           ]
@@ -2942,7 +2004,7 @@
         {
           "title": "INCEPTION Score Dashboard (drawio Score 拡張)",
           "file": "inception-structural.spec.ts",
-          "line": 117,
+          "line": 109,
           "column": 6,
           "specs": [
             {
@@ -2956,27 +2018,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1074,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:36.856Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-45ccb9ba3eaf694044ed",
               "file": "inception-structural.spec.ts",
-              "line": 118,
+              "line": 110,
               "column": 3
             },
             {
@@ -2990,27 +2038,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1077,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:37.157Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-74bd0fe3368115906024",
               "file": "inception-structural.spec.ts",
-              "line": 127,
+              "line": 119,
               "column": 3
             }
           ]
@@ -3018,7 +2052,7 @@
         {
           "title": "INCEPTION G2 Persona Management (drawio: icon + 共有 status)",
           "file": "inception-structural.spec.ts",
-          "line": 137,
+          "line": 130,
           "column": 6,
           "specs": [
             {
@@ -3032,27 +2066,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1038,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:37.867Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-f60eeb516eb71d85bd67",
               "file": "inception-structural.spec.ts",
-              "line": 138,
+              "line": 131,
               "column": 3
             },
             {
@@ -3066,27 +2086,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1167,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:37.934Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-48e804b40004de579768",
               "file": "inception-structural.spec.ts",
-              "line": 146,
+              "line": 139,
               "column": 3
             }
           ]
@@ -3094,7 +2100,7 @@
         {
           "title": "INCEPTION D: Silence Theater (drawio: 沈黙演出専用画面)",
           "file": "inception-structural.spec.ts",
-          "line": 165,
+          "line": 158,
           "column": 6,
           "specs": [
             {
@@ -3108,27 +2114,13 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1201,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:38.238Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "b8653a9d58d3a2a4a435-3593006a5c094ec5521d",
               "file": "inception-structural.spec.ts",
-              "line": 166,
+              "line": 159,
               "column": 3
             }
           ]
@@ -3159,22 +2151,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1193,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:38.914Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "996a23b56416e8be714c-95d1ca477e35277ef851",
@@ -3193,22 +2171,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1231,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:39.108Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "996a23b56416e8be714c-eef94e39b58ae11833ca",
@@ -3227,22 +2191,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1212,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:39.449Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "996a23b56416e8be714c-9c546cc82909a7434684",
@@ -3257,32 +2207,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1255,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:40.110Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/no-burst-regenerate.spec.ts",
+                        "line": 92,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "996a23b56416e8be714c-a64bcd64796cb9f2b51c",
               "file": "no-burst-regenerate.spec.ts",
-              "line": 91,
-              "column": 3
+              "line": 92,
+              "column": 8
             },
             {
               "title": "旧 nudge 「もう一度」 button は出ない (No → 別案 regenerate なので)",
@@ -3291,32 +2236,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1186,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:40.343Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/no-burst-regenerate.spec.ts",
+                        "line": 119,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "996a23b56416e8be714c-e8752ac624f4ae0df237",
               "file": "no-burst-regenerate.spec.ts",
-              "line": 117,
-              "column": 3
+              "line": 119,
+              "column": 8
             }
           ]
         }
@@ -3346,22 +2286,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1029,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:40.670Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a1022f92645f89b1be60-964fb4beb6b6736fc9d9",
@@ -3380,22 +2306,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1173,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:41.375Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a1022f92645f89b1be60-aaf560101ec0ac38f2a1",
@@ -3414,27 +2326,178 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1066,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:41.536Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "a1022f92645f89b1be60-b360fb58d57d49066ee8",
               "file": "persona.spec.ts",
               "line": 21,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "quick-start.spec.ts",
+      "file": "quick-start.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Quick-Start (YES/NO クイック質問 / Swipe UI)",
+          "file": "quick-start.spec.ts",
+          "line": 14,
+          "column": 6,
+          "specs": [
+            {
+              "title": "起動時に QuickStartCard + SwipeChoice fallback button が表示され、textbox は出ない",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-afb4629c2598630c36bf",
+              "file": "quick-start.spec.ts",
+              "line": 15,
+              "column": 3
+            },
+            {
+              "title": "「✏️ 自分で入力する」 link で textbox + 送信 + persona pill が出現",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-2d75bc38077a472ddce5",
+              "file": "quick-start.spec.ts",
+              "line": 31,
+              "column": 3
+            },
+            {
+              "title": "NO fallback button を 4 回押しても QuickStart 維持 / 5 回目で textbox fallback",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-500ef48c850985b6e574",
+              "file": "quick-start.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "Yes fallback button で現在の質問 title が user_input になり、合議 SSE が起動",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-f8293126b8cd55c9d0eb",
+              "file": "quick-start.spec.ts",
+              "line": 61,
+              "column": 3
+            },
+            {
+              "title": "ArrowLeft で NO 進行、ArrowRight で YES (キーボード代替)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-289c9be66008df4aece4",
+              "file": "quick-start.spec.ts",
+              "line": 83,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Quick-Start: 既存 e2e との互換 (helper の skipQuickStart=true default)",
+          "file": "quick-start.spec.ts",
+          "line": 107,
+          "column": 6,
+          "specs": [
+            {
+              "title": "`gotoAuthenticated(..., '/decision')` は QuickStart を自動 skip し、textbox を露出",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-1a0474fb193d41007cf8",
+              "file": "quick-start.spec.ts",
+              "line": 108,
+              "column": 3
+            },
+            {
+              "title": "`/` (Home) では QuickStart skip ロジックは発火しない",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 300000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "12da19610844f64228ea-645df4aeba7779233bad",
+              "file": "quick-start.spec.ts",
+              "line": 118,
               "column": 3
             }
           ]
@@ -3465,22 +2528,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1047,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:41.707Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "0d373efe7c3551728c3a-9da42a3e4a97f7230645",
@@ -3495,32 +2544,27 @@
               "tests": [
                 {
                   "timeout": 300000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "mobile-chrome",
-                  "projectName": "mobile-chrome",
-                  "results": [
+                  "annotations": [
                     {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 886,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:42.557Z",
-                      "annotations": [],
-                      "attachments": []
+                      "type": "skip",
+                      "location": {
+                        "file": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/tests/score.spec.ts",
+                        "line": 12,
+                        "column": 8
+                      }
                     }
                   ],
-                  "status": "expected"
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "0d373efe7c3551728c3a-83f2772c3ffc265135a0",
               "file": "score.spec.ts",
-              "line": 11,
-              "column": 3
+              "line": 12,
+              "column": 8
             }
           ]
         }
@@ -3550,22 +2594,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1187,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:42.612Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-93004df5314df9156426",
@@ -3584,22 +2614,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1215,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:42.762Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-b3dabfb4ea49b4bde67b",
@@ -3618,22 +2634,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1237,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:43.452Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-919bd043900c31d04fba",
@@ -3660,22 +2662,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1219,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:43.805Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-cfcbd758a1231172e45a",
@@ -3694,22 +2682,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1177,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:43.981Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-4455136e995ac2dc65db",
@@ -3728,22 +2702,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1493,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:44.692Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-f9e4205d94d7bb3ab0b5",
@@ -3762,22 +2722,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1416,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:45.028Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-6c125c58d16424ac7d16",
@@ -3796,22 +2742,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1168,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:45.161Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-ad70ae079d8e3bbf2a9b",
@@ -3830,22 +2762,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1185,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:46.189Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "f766ea7d6688145a72f3-75b54e8bb249d8c55e19",
@@ -3881,22 +2799,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "passed",
-                      "duration": 1030,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:46.337Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "4f8e77fcf9b309101475-dfcc9b24fa5226071b07",
@@ -3915,22 +2819,8 @@
                   "expectedStatus": "passed",
                   "projectId": "mobile-chrome",
                   "projectName": "mobile-chrome",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "passed",
-                      "duration": 1045,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-05-19T07:23:46.454Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
+                  "results": [],
+                  "status": "skipped"
                 }
               ],
               "id": "4f8e77fcf9b309101475-16c3debdc55136a18a0a",
@@ -3945,11 +2835,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-05-19T07:23:08.067Z",
-    "duration": 193252.15000000002,
-    "expected": 99,
-    "skipped": 0,
-    "unexpected": 1,
+    "startTime": "2026-05-22T23:04:20.852Z",
+    "duration": 63.70800000000003,
+    "expected": 0,
+    "skipped": 113,
+    "unexpected": 0,
     "flaky": 0
   }
 }

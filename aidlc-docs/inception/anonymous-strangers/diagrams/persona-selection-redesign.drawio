@@ -1,0 +1,361 @@
+<mxfile host="app.diagrams.net" version="24.0.0" type="device">
+  <diagram name="1. 画面遷移" id="flow">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="ペルソナ選択 リデザイン — 画面遷移 (2026-05-24)" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- 現状 (Before) — 上段 -->
+        <!-- ========================================== -->
+        <mxCell id="before_label" value="🔴 現状 (Before)" style="text;html=1;fontSize=14;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#B83232;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Home (Before) -->
+        <mxCell id="b_home" value="&lt;b&gt;Home&lt;/b&gt;&lt;br&gt;&lt;br&gt;決めてもらう人:&lt;br&gt;[T] [orange] [blue]&lt;br&gt;↻ (固定 hardcoded)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#B83232;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- PersonaSelection (Before) -->
+        <mxCell id="b_selection" value="&lt;b&gt;PersonaSelection&lt;/b&gt;&lt;br&gt;&lt;br&gt;Tab:&lt;br&gt;・ビルトイン (✓選択)&lt;br&gt;・世界の誰か (random)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#B83232;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="320" y="100" width="180" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Decision (Before) -->
+        <mxCell id="b_decision" value="&lt;b&gt;Decision&lt;/b&gt;&lt;br&gt;&lt;br&gt;anonymous mode:&lt;br&gt;・self_spec (T) 自動 inject&lt;br&gt;・+ pool.sample(n=2) random&lt;br&gt;= 3 personas&lt;br&gt;(自分が混ざる)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#B83232;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="580" y="100" width="220" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Problems list (Before) -->
+        <mxCell id="b_problems" value="&lt;b&gt;問題点:&lt;/b&gt;&lt;br&gt;① Home avatar が hardcoded (実 selection と無関係)&lt;br&gt;② anonymous は random sampling、ユーザー選択不可&lt;br&gt;③ 「自分」が discussion に強制参加 (T icon)&lt;br&gt;④ 3 source の mix 選択不可" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3F3;strokeColor=#B83232;dashed=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="860" y="100" width="380" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows (Before) -->
+        <mxCell id="b_arr1" style="endArrow=classic;html=1;strokeColor=#B83232;" edge="1" parent="1" source="b_home" target="b_selection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b_arr1_label" value="↻ tap" style="text;html=1;fontSize=10;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="252" y="145" width="56" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b_arr2" style="endArrow=classic;html=1;strokeColor=#B83232;" edge="1" parent="1" source="b_home" target="b_decision">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="240" />
+              <mxPoint x="690" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b_arr2_label" value="決めてもらう tap (anonymous mode)" style="text;html=1;fontSize=10;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="320" y="230" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ========================================== -->
+        <!-- 新設計 (After) — 下段 -->
+        <!-- ========================================== -->
+        <mxCell id="after_label" value="🟢 新設計 (After)" style="text;html=1;fontSize=14;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#21A48F;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="200" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- Home (After) -->
+        <mxCell id="a_home" value="&lt;b&gt;Home&lt;/b&gt;&lt;br&gt;&lt;br&gt;決めてもらう人:&lt;br&gt;[実 selection に基づき動的]&lt;br&gt;ex: [慎重派] [pool#A] [my:カレ-]&lt;br&gt;0件: 「人を選ぶ →」 placeholder&lt;br&gt;↻ → /personas/selection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="380" width="220" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- PersonaSelection (After) -->
+        <mxCell id="a_selection" value="&lt;b&gt;PersonaSelection&lt;/b&gt;&lt;br&gt;&lt;br&gt;選択中: 2/3 (混在 OK)&lt;br&gt;&lt;br&gt;Tab:&lt;br&gt;・🛡️ ビルトイン&lt;br&gt;・🌐 世界の誰か (一覧、self除く)&lt;br&gt;・✨ 自作&lt;br&gt;&lt;br&gt;Persona Card + checkbox" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="360" y="380" width="220" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Decision (After) -->
+        <mxCell id="a_decision" value="&lt;b&gt;Decision (MangaStage)&lt;/b&gt;&lt;br&gt;&lt;br&gt;backend:&lt;br&gt;・request.selected_personas[]&lt;br&gt;・source ごとに resolve&lt;br&gt;・3 persona 全て発話&lt;br&gt;・&lt;b&gt;self injection なし&lt;/b&gt;&lt;br&gt;&lt;br&gt;MangaStage:&lt;br&gt;・3 actor 全て blob (T icon 撤去)&lt;br&gt;・ユーザーは observer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="660" y="380" width="240" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Benefits list (After) -->
+        <mxCell id="a_benefits" value="&lt;b&gt;改善:&lt;/b&gt;&lt;br&gt;① Home avatar が実 selection を反映 (見える化)&lt;br&gt;② anonymous も builtin と同じ選択 UX&lt;br&gt;③ 自分は discussion 不参加 (NFR-6 + UX)&lt;br&gt;④ 3 source 自由 mix (builtin + anonymous + my)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FAF5;strokeColor=#21A48F;dashed=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="960" y="380" width="380" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows (After) -->
+        <mxCell id="a_arr1" style="endArrow=classic;html=1;strokeColor=#21A48F;" edge="1" parent="1" source="a_home" target="a_selection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_arr1_label" value="↻ tap" style="text;html=1;fontSize=10;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="292" y="445" width="56" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_arr2" style="endArrow=classic;html=1;strokeColor=#21A48F;" edge="1" parent="1" source="a_selection" target="a_home">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="610" />
+              <mxPoint x="170" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_arr2_label" value="保存 → Home (selection persisted)" style="text;html=1;fontSize=10;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="240" y="600" width="240" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="a_arr3" style="endArrow=classic;html=1;strokeColor=#21A48F;" edge="1" parent="1" source="a_home" target="a_decision">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="650" />
+              <mxPoint x="780" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a_arr3_label" value="決めてもらう tap (selected_personas を payload に inject)" style="text;html=1;fontSize=10;fillColor=#FFFFFF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="350" y="660" width="320" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="2. 画面イメージ" id="screens">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="画面イメージ ワイヤーフレーム (iPhone SE 375×667 想定)" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================ -->
+        <!-- Screen 1: Home -->
+        <!-- ============================ -->
+        <mxCell id="s1_label" value="Screen 1: Home (/) — 動的 avatar 表示" style="text;html=1;fontSize=13;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Phone frame -->
+        <mxCell id="s1_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EEE2;strokeColor=#2E2418;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="380" height="640" as="geometry" />
+        </mxCell>
+
+        <!-- Header (Layout) -->
+        <mxCell id="s1_header" value="YesMan                            Sign out" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#E0D5BC;fontSize=11;align=left;spacingLeft=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="380" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- 「決めてもらう人」 card -->
+        <mxCell id="s1_card" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#C8B98A;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="56" y="150" width="348" height="240" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s1_card_header" value="決めてもらう人                                ↻" style="text;html=1;fontSize=10;align=left;spacingLeft=12;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="64" y="160" width="332" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 3 avatar slots (dynamic) -->
+        <mxCell id="s1_av1" value="慎重派" style="ellipse;whiteSpace=wrap;html=1;fillColor=#21A48F;strokeColor=#FAF6EC;strokeWidth=2;fontColor=#FFFFFF;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="195" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_av2" value="pool#A" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EF7A62;strokeColor=#FAF6EC;strokeWidth=2;fontColor=#FFFFFF;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="146" y="195" width="48" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="s1_av3" value="my:カレー" style="ellipse;whiteSpace=wrap;html=1;fillColor=#8AB2DF;strokeColor=#FAF6EC;strokeWidth=2;fontColor=#FFFFFF;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="192" y="195" width="48" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s1_av_note" value="↑ 動的 (実 selection)。0 件なら「人を選ぶ →」 placeholder" style="text;html=1;fontSize=9;align=center;fillColor=none;strokeColor=none;fontColor=#888888;" vertex="1" parent="1">
+          <mxGeometry x="64" y="250" width="332" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Input box -->
+        <mxCell id="s1_input" value="&quot;今夜の夕飯どうしよ&quot;                                🎙" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#E0D5BC;fontSize=10;align=left;spacingLeft=10;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="72" y="280" width="316" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- 決めてもらう button -->
+        <mxCell id="s1_btn" value="決めてもらう" style="ellipse;whiteSpace=wrap;html=1;fillColor=#2E2418;strokeColor=none;fontColor=#FAF6EC;fontSize=12;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="116" y="346" width="228" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- BottomNav -->
+        <mxCell id="s1_nav" value="Home | スコア | 履歴 | プロフ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#E0D5BC;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="686" width="380" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ============================ -->
+        <!-- Screen 2: PersonaSelection -->
+        <!-- ============================ -->
+        <mxCell id="s2_label" value="Screen 2: /personas/selection — 3 source 混在選択 (max 3)" style="text;html=1;fontSize=13;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="460" y="60" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EEE2;strokeColor=#2E2418;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="90" width="380" height="640" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2_header" value="‹  ペルソナ選択" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#E0D5BC;fontSize=11;align=left;spacingLeft=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="90" width="380" height="44" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2_count" value="選択中: 2 / 3 (ビルトイン:1 + 世界:1)" style="text;html=1;fontSize=11;align=left;spacingLeft=20;fillColor=none;strokeColor=none;fontColor=#E8775A;" vertex="1" parent="1">
+          <mxGeometry x="460" y="144" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 3 tabs -->
+        <mxCell id="s2_tab1" value="🛡️ ビルトイン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#E8775A;strokeWidth=2;fontSize=10;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="476" y="174" width="110" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_tab2" value="🌐 世界の誰か" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#E0D5BC;fontSize=10;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="592" y="174" width="116" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_tab3" value="✨ 自作" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#E0D5BC;fontSize=10;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="714" y="174" width="110" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- Persona cards (active tab = builtin) -->
+        <mxCell id="s2_card1" value="✓ 慎重派&#xa;思慮深く、リスクを評価" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE5DD;strokeColor=#E8775A;strokeWidth=2;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="476" y="218" width="348" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_card2" value="☐ 楽観派&#xa;ポジティブで前進" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#E0D5BC;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="476" y="284" width="348" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="s2_card3" value="☐ 効率派&#xa;最短ルートで結果を出す" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#E0D5BC;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="476" y="350" width="348" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2_note1" value="他 tab で世界の誰か:1 件選択済 (混在 OK)" style="text;html=1;fontSize=10;align=left;spacingLeft=20;fillColor=none;strokeColor=none;fontColor=#888888;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="476" y="416" width="350" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s2_btn_save" value="保存して戻る" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8775A;strokeColor=none;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="540" y="612" width="220" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ============================ -->
+        <!-- Screen 3: Decision (MangaStage) -->
+        <!-- ============================ -->
+        <mxCell id="s3_label" value="Screen 3: /decision — MangaStage (3 actor、T icon 廃止)" style="text;html=1;fontSize=13;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="880" y="60" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s3_phone" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EEE2;strokeColor=#2E2418;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="880" y="90" width="380" height="640" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s3_header" value="‹  決め中  &quot;今夜の夕食&quot;&#xa;● 3 人で 考え中" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#E0D5BC;fontSize=11;align=left;spacingLeft=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="880" y="90" width="380" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Stage area -->
+        <mxCell id="s3_stage" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#E0D5BC;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="896" y="160" width="348" height="500" as="geometry" />
+        </mxCell>
+
+        <!-- proposal overlay -->
+        <mxCell id="s3_proposal" value="冷蔵庫の残り物で&#xa;10 分で一品作れ。&#xa;&#xa;[ ← No ]   [ Yes → ]&#xa;&#xa;合議された結論です。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#C8B98A;fontSize=11;align=center;fontStyle=2;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="912" y="176" width="316" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Bubbles area (3 actor speak) -->
+        <mxCell id="s3_bubble1" value="慎重派&#xa;「リスク考えよう」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F9CED0;strokeColor=#C8B98A;fontSize=9;align=left;spacingLeft=8;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="912" y="446" width="100" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_bubble2" value="pool#A&#xa;「カレーいいよ」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F9CED0;strokeColor=#C8B98A;fontSize=9;align=left;spacingLeft=8;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1024" y="446" width="100" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_bubble3" value="my:カレー&#xa;「ラーメン!」" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F9CED0;strokeColor=#C8B98A;fontSize=9;align=left;spacingLeft=8;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1136" y="446" width="100" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- 3 actors (all blob, NO T icon) -->
+        <mxCell id="s3_actor1" value="●●" style="ellipse;whiteSpace=wrap;html=1;fillColor=#21A48F;strokeColor=#FAF6EC;strokeWidth=2;fontColor=#2E2418;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="932" y="554" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_actor2" value="●●" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EF7A62;strokeColor=#FAF6EC;strokeWidth=2;fontColor=#2E2418;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1044" y="554" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_actor3" value="●●" style="ellipse;whiteSpace=wrap;html=1;fillColor=#8AB2DF;strokeColor=#FAF6EC;strokeWidth=2;fontColor=#2E2418;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1156" y="554" width="40" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s3_actor_note" value="↑ 全て選択 persona の blob (T icon = self は無し)" style="text;html=1;fontSize=9;align=center;fillColor=none;strokeColor=none;fontColor=#888888;" vertex="1" parent="1">
+          <mxGeometry x="896" y="600" width="348" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Earth horizon (stylized) -->
+        <mxCell id="s3_horizon" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#21A48F;strokeColor=none;opacity=30;" vertex="1" parent="1">
+          <mxGeometry x="876" y="630" width="388" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="s3_nav" value="Home | スコア | 履歴 | プロフ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAF6EC;strokeColor=#E0D5BC;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="686" width="380" height="44" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <diagram name="3. データモデル + API" id="data">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="データモデル + API コントラクト" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="800" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================ -->
+        <!-- データモデル -->
+        <!-- ============================ -->
+        <mxCell id="dm_label" value="データモデル (Frontend / Backend 共通)" style="text;html=1;fontSize=14;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="400" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dm_before" value="🔴 現状&#xa;&#xa;Selection = {&#xa;  persona_ids: string[]   // builtin/my DB id のみ&#xa;}&#xa;&#xa;PersonaSource = &quot;builtin&quot; | &quot;anonymous&quot;&#xa;// localStorage で別管理&#xa;// anonymous source の選択 ID は持たない (random)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6E6;strokeColor=#B83232;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="60" y="110" width="500" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dm_after" value="🟢 新設計&#xa;&#xa;type SelectedPersona = {&#xa;  source: &quot;builtin&quot; | &quot;anonymous&quot; | &quot;my&quot;&#xa;  id: string   // それぞれの DB / pool 内 UUID&#xa;}&#xa;&#xa;type Selection = SelectedPersona[]   // max 3, source 混在可&#xa;&#xa;// persona_source 概念は廃止 (selection が source を内包)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="600" y="110" width="500" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- ============================ -->
+        <!-- API -->
+        <!-- ============================ -->
+        <mxCell id="api_label" value="API コントラクト変更" style="text;html=1;fontSize=14;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="300" width="400" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- API 1: GET /persona-pool/list (new) -->
+        <mxCell id="api_1" value="① GET /v1/persona-pool/list?limit=20  [新規]&#xa;&#xa;Response:&#xa;{&#xa;  personas: [&#xa;    { persona_id, value_tags, primary_language, formality }&#xa;  ]&#xa;}&#xa;&#xa;Note: caller の persona は exclude (NFR-6 + 「自分を除外」)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="500" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- API 2: POST /decisions/request/stream -->
+        <mxCell id="api_2" value="② POST /v1/decisions/request/stream  [拡張]&#xa;&#xa;Request:&#xa;{&#xa;  user_input: &quot;...&quot;,&#xa;  selected_personas: [&#xa;    { source: &quot;builtin&quot;, id: &quot;uuid&quot; },&#xa;    { source: &quot;anonymous&quot;, id: &quot;uuid&quot; },&#xa;    { source: &quot;my&quot;, id: &quot;uuid&quot; }&#xa;  ]&#xa;}&#xa;&#xa;backward compat: 旧 persona_source + selected_persona_ids も受け付け" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="560" y="340" width="540" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- API 3: PUT /personas/me/selection -->
+        <mxCell id="api_3" value="③ PUT /v1/personas/me/selection  [拡張]&#xa;&#xa;Request:&#xa;{&#xa;  personas: [&#xa;    { source: &quot;builtin&quot;, id },&#xa;    { source: &quot;anonymous&quot;, id }&#xa;  ]&#xa;}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1F5EB;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="40" y="500" width="500" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Backend resolver flow -->
+        <mxCell id="resolver_label" value="Backend persona resolver flow (decision engine)" style="text;html=1;fontSize=14;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="690" width="400" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="resolver" value="for entry in request.selected_personas:&#xa;    if entry.source == &quot;anonymous&quot;:&#xa;        spec = pool_repo.get_by_id(entry.id, excluding_sub=caller)  # 自分は拒否&#xa;        prompt = build_anonymous_prompt(spec)&#xa;    elif entry.source in (&quot;builtin&quot;, &quot;my&quot;):&#xa;        persona = persona_repo.get(entry.id)&#xa;        prompt = build_builtin_prompt(persona)&#xa;    yield utterance_event(spec/persona, prompt)&#xa;# NO self_spec injection&#xa;# total = len(selected_personas) (典型 3、最少 1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#21A48F;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="40" y="730" width="1060" height="140" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

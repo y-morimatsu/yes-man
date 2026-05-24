@@ -45,6 +45,13 @@ class Profile(SQLModel, table=True):
         sa_column=Column(JSONB, nullable=False, server_default="{}"),
     )
     life_stage: str | None = Field(default=None, max_length=50)
+    # 2026-05-24: avatar customization. {mode, color, emoji, image_url}.
+    # mode: "default" | "color" | "emoji" (Phase 1) | "image" (Phase 2).
+    # null なら default (green gradient + display_name 頭文字).
+    avatar_config: dict[str, Any] | None = Field(
+        default=None,
+        sa_column=Column(JSONB, nullable=True),
+    )
     created_at: datetime = Field(default_factory=_utcnow)
     updated_at: datetime = Field(default_factory=_utcnow)
 

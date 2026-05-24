@@ -14,12 +14,16 @@ import { decisionReducer, initialState } from "./reducer";
 import { useDecisionStream } from "./useDecisionStream";
 import { usePrefetchedDecisions } from "./usePrefetchedDecisions";
 import { DecisionResult } from "./DecisionResult";
+import { MangaStage } from "./MangaStage";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
 import { QuickStartCard } from "./QuickStartCard";
+import { StageHeader } from "./StageHeader";
 import { useQuickStart } from "./useQuickStart";
 import { useYesNudge } from "./useYesNudge";
 import { YesManMascot, type MascotState } from "./YesManMascot";
-import type { ChainNode } from "./reducer";
+import type { ChainNode, StageMode } from "./reducer";
+import { usePersonaSource } from "../persona/usePersonaSource";
+import { useUnifiedSelection } from "../persona/useUnifiedSelection";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -46,9 +50,30 @@ export default function DecisionPage() {
   const [chain, setChain] = useState<ChainNode[]>([]);
   // Hackathon: 直近の Yes/No 採択を mascot 用に保持 (1.6s で自動 clear).
   const [recentChoice, setRecentChoice] = useState<"yes" | "no" | null>(null);
+  // 2026-05-24: MangaStage 上部 overlay 用 DOM 要素 (DecisionResult が proposal-card を
+  // createPortal でここに転送). ref callback で state にセットして re-render を trigger.
+  const [proposalOverlayEl, setProposalOverlayEl] = useState<HTMLDivElement | null>(
+    null,
+  );
   const handleChoiceMade = (choice: "yes" | "no") => {
     setRecentChoice(choice);
     window.setTimeout(() => setRecentChoice(null), 1600);
+  };
+
+  // v3-γ Task 5: persona source 連携 (Task 4 connecting note の実装).
+  // "anonymous" 選択時は stageMode="manga"、DecisionRequestPayload に persona_source を inject.
+  const { source: personaSource } = usePersonaSource();
+  const stageMode: StageMode = personaSource === "anonymous" ? "manga" : "chat";
+
+  // 2026-05-24 v4: 統合 selection (3 source mix). 指定時は selected_personas で送信.
+  const { selection: unifiedSelection } = useUnifiedSelection();
+
+  /** stream payload に selected_personas を merge (非空時のみ). */
+  const buildStreamPayload = (
+    base: Parameters<typeof startStream>[0],
+  ): Parameters<typeof startStream>[0] => {
+    if (unifiedSelection.length === 0) return base;
+    return { ...base, selected_personas: unifiedSelection };
   };
 
   const { startStream } = useDecisionStream({
@@ -102,7 +127,9 @@ export default function DecisionPage() {
     // 新規 submit のため、前のセッションの buffer を破棄
     prefetch.clear();
     dispatch({ type: "start" });
-    await startStream({ user_input: state.input });
+    await startStream(
+      buildStreamPayload({ user_input: state.input, persona_source: personaSource }),
+    );
   };
 
   /** 2026-05-23 Drill-down chain: Yes (非 final) で次段に進む.
@@ -119,10 +146,13 @@ export default function DecisionPage() {
     setNoStage(0); // chain 進行は No carry-forward を reset
     prefetch.clear();
     dispatch({ type: "start" });
-    await startStream({
-      user_input: lastInputRef.current,
-      chain_context: nextChain.map((n) => n.proposalText),
-    });
+    await startStream(
+      buildStreamPayload({
+        user_input: lastInputRef.current,
+        chain_context: nextChain.map((n) => n.proposalText),
+        persona_source: personaSource,
+      }),
+    );
   };
 
   /** INCEPTION Journey C: No 採択 → 自動再生成 + 段階的 microcopy.
@@ -153,7 +183,9 @@ export default function DecisionPage() {
     // buffer 切れの fallback: 従来の同期 stream
     setRegenerating(true);
     dispatch({ type: "start" });
-    await startStream({ user_input: input });
+    await startStream(
+      buildStreamPayload({ user_input: input, persona_source: personaSource }),
+    );
   };
 
   /** 完全 reset (Yes 採択後の もう一度 / silenced からの Home / error からのやり直し). */
@@ -197,12 +229,34 @@ export default function DecisionPage() {
     setRegenerating(false);
     prefetch.clear();
     dispatch({ type: "start" });
-    await startStream({ user_input: title });
+    await startStream(
+      buildStreamPayload({ user_input: title, persona_source: personaSource }),
+    );
   };
 
+  // mockup §5: 合議進行中 (streaming/completed) は専用 StageHeader を表示、
+  // idle/error 時は従来の pageTitle h1 を表示 (両経路で共通).
+  const isInDiscussion =
+    state.status === "streaming" || state.status === "completed";
+
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
+    // 2026-05-24 v9: mobile (iPhone SE 667 / iPhone 12 Pro 844) で全要素を viewport に収めるため
+    //   h-full (= main の content area = viewport - header - pt - pb) を使用.
+    //   MangaStage は flex-1 で残り空間を動的フィット、bubble/actor は内部 absolute で配置.
+    //   idle / error 時は通常の auto-height layout (input area が小さいため不要).
+    <div
+      className={`flex flex-col gap-3 ${isInDiscussion ? "h-full" : ""}`}
+    >
+      {isInDiscussion ? (
+        <StageHeader
+          participantCount={state.utterances.length || 3}
+          topic={lastInputRef.current}
+          onBack={handleFullReset}
+          status={state.status === "completed" ? "completed" : "streaming"}
+        />
+      ) : (
+        <h1 className="font-serif text-lg font-bold">{t("pageTitle")}</h1>
+      )}
 
       {showQuickStart && quick.current && (
         // key={current.id}: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐため
@@ -281,6 +335,21 @@ export default function DecisionPage() {
           />
         )}
 
+      {/* 2026-05-24: 両経路 (builtin + anonymous) で MangaStage を utterance render に使用.
+          DecisionResult の bubble は常時 hide (重複防止). proposal-card は React Portal で
+          MangaStage 上部 overlay に転送 (空き領域に SwipeChoice + 結論 + pink nudge を表示). */}
+      {(state.status === "streaming" || state.status === "completed") && (
+        <MangaStage
+          utterances={state.utterances}
+          currentSpeakerId={state.lastSpeakerId ?? undefined}
+          personaSource={personaSource}
+        >
+          {/* proposal-card は DecisionResult が createPortal で ここに render する.
+              この div の ref を proposalOverlayEl state に登録して DecisionResult に渡す. */}
+          <div ref={setProposalOverlayEl} />
+        </MangaStage>
+      )}
+
       {(state.status === "streaming" || state.status === "completed") && (
         <DecisionResult
           utterances={state.utterances}
@@ -294,6 +363,10 @@ export default function DecisionPage() {
           chain={chain}
           service={state.status === "completed" ? state.service : null}
           onDrillDown={handleDrillDown}
+          // 2026-05-24: 両経路で MangaStage を bubble 表示に使うため、ここの bubble は常時 hide.
+          hideUtterances
+          // 2026-05-24: proposal-card を MangaStage の overlay 領域に Portal で render.
+          proposalCardPortal={proposalOverlayEl}
         />
       )}
 

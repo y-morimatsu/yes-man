@@ -9,13 +9,25 @@
 
 import type { YesmanApiClient } from "./client";
 import type { components } from "./generated/schema";
+// I-1 fix (Task 3 ultrathink): PrimaryLanguage / Formality を persona-pool.ts に統一
+// (将来言語追加時に 1 箇所更新で済むよう DRY 化)
+import type { Formality, PrimaryLanguage } from "./modules/persona-pool";
 import { ApiError } from "./errors";
 
-// 2026-05-23 Drill-down chain: chain_context を optional 追加 (OpenAPI 自動生成スキーマと
-// 同期するまでの間の手動拡張、re-generate 時に同期される予定)
+// 2026-05-23 Drill-down chain: chain_context を optional 追加
+// 2026-05-24 v3-γ anonymous-strangers: persona_source を optional 追加
+// 2026-05-24 v4: selected_personas (3 source mix) を追加. persona_source は backward compat.
+export type SelectedPersonaSource = "builtin" | "anonymous" | "my";
+export interface SelectedPersonaRef {
+  source: SelectedPersonaSource;
+  id: string;
+}
 export type DecisionRequestPayload =
   components["schemas"]["DecisionRequestDTO"] & {
     chain_context?: string[];
+    persona_source?: "builtin" | "anonymous";
+    /** 2026-05-24 v4: 3 source mix 選択. 指定時は persona_source / selected_persona_ids より優先. */
+    selected_personas?: SelectedPersonaRef[];
   };
 
 export type DecisionStreamEvent =
@@ -23,8 +35,20 @@ export type DecisionStreamEvent =
   // Post-CONSTRUCTION v3 (2026-05-23): personas pre-fill - delta 到着前から bubble header を可視化
   | { type: "personas"; data: { personas: { id: string; name: string }[] } }
   // Post-CONSTRUCTION v3 (2026-05-23): token streaming - text は LLM chunk
+  // v3-γ (2026-05-24): anonymous 経路では utterance_delta は **emit されない** (FR-3 / NFR-2)
   | { type: "utterance_delta"; data: { persona_id: string; persona_name: string; text: string } }
-  | { type: "utterance"; data: { persona_id: string; persona_name: string; text: string } }
+  // v3-γ (2026-05-24): anonymous 経路では optional 拡張 (primary_language / formality).
+  // 2026-05-24: 「原文を表示」機能削除に伴い `original` field は廃止 (日本語 text のみ).
+  | {
+      type: "utterance";
+      data: {
+        persona_id: string;
+        persona_name: string;
+        text: string;
+        primary_language?: PrimaryLanguage;
+        formality?: Formality;
+      };
+    }
   // 2026-05-23 Drill-down chain: is_final + service を proposal event に同梱
   | {
       type: "proposal";

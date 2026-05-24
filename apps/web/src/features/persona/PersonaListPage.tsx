@@ -20,7 +20,7 @@ export default function PersonaListPage() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
+        <h1 className="font-serif text-lg font-bold">{t("pageTitle")}</h1>
         <div className="flex gap-2">
           <Link to="/personas/selection">
             <Button variant="secondary" size="sm">選択管理</Button>

@@ -10,7 +10,7 @@
  *   - is_shared → 🔓 / not shared → 🔒 共有 ON/OFF アイコン
  */
 import { Card } from "../primitives/Card";
-import { personaIconFor } from "./DecisionUtteranceBubble";
+import { personaBackgroundFor, personaIconFor } from "./DecisionUtteranceBubble";
 
 export interface PersonaCardData {
   id: string;
@@ -46,6 +46,7 @@ export function PersonaCard({
     .join(" ");
 
   const icon = personaIconFor(persona.name);
+  const iconBg = personaBackgroundFor(persona.name);
 
   return (
     <Card className={className} onClick={onClick}>
@@ -58,7 +59,7 @@ export function PersonaCard({
           />
         ) : (
           <div
-            className="h-12 w-12 rounded-full bg-brand-100 flex items-center justify-center text-2xl"
+            className={`h-12 w-12 rounded-full ${iconBg} flex items-center justify-center text-2xl`}
             aria-hidden
           >
             {icon}

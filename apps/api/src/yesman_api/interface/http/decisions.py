@@ -17,7 +17,7 @@ from yesman_api.domain.auth.models import AuthenticatedUser
 from yesman_api.domain.decision.engine import DecisionEngine
 from yesman_api.domain.persistence.models import Decision
 from yesman_api.domain.decision.errors import DecisionError
-from yesman_api.domain.decision.models import DecisionRequest
+from yesman_api.domain.decision.models import DecisionRequest, SelectedPersonaRef
 from yesman_api.domain.decision.nudge import NudgeCache, NudgeMessageGenerator
 from yesman_api.interface.deps import (
     get_current_user,
@@ -42,6 +42,22 @@ from yesman_api.interface.http.dto.decision import (
 router = APIRouter(prefix="/v1/decisions", tags=["decisions"])
 
 
+def _build_domain_request(payload: DecisionRequestDTO, user_id: UUID) -> DecisionRequest:
+    """2026-05-24 v4: DTO → DecisionRequest 変換. selected_personas を含めて伝搬."""
+    selected_refs = tuple(
+        SelectedPersonaRef(source=p.source, id=p.id)
+        for p in (payload.selected_personas or [])
+    )
+    return DecisionRequest(
+        user_id=user_id,
+        user_input=payload.user_input,
+        selected_persona_ids=payload.selected_persona_ids or [],
+        chain_context=tuple(payload.chain_context or ()),
+        persona_source=payload.persona_source,
+        selected_personas=selected_refs,
+    )
+
+
 # ============================================================
 # 非ストリーミング合議
 # ============================================================
@@ -51,12 +67,7 @@ async def request_decision(
     user: AuthenticatedUser = Depends(get_current_user),
     engine: DecisionEngine = Depends(get_decision_engine),
 ) -> DecisionResponse:
-    request = DecisionRequest(
-        user_id=UUID(user.sub),
-        user_input=payload.user_input,
-        selected_persona_ids=payload.selected_persona_ids or [],
-        chain_context=tuple(payload.chain_context or ()),
-    )
+    request = _build_domain_request(payload, UUID(user.sub))
     try:
         decision_id, consensus, no_attempt_count = await engine.run(request)
     except DecisionError as exc:
@@ -87,12 +98,7 @@ async def request_decision_stream(
     user: AuthenticatedUser = Depends(get_current_user),
     engine: DecisionEngine = Depends(get_decision_engine),
 ) -> StreamingResponse:
-    request = DecisionRequest(
-        user_id=UUID(user.sub),
-        user_input=payload.user_input,
-        selected_persona_ids=payload.selected_persona_ids or [],
-        chain_context=tuple(payload.chain_context or ()),
-    )
+    request = _build_domain_request(payload, UUID(user.sub))
     decision_id = uuid4()  # ultrathink Imp2: SSE start event で client に事前通知
 
     async def event_stream():

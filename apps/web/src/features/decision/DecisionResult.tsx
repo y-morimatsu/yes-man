@@ -12,6 +12,7 @@
  * 5. 議論を見る (FR-CV-04) は proposal 後ずっと visible (採択後も残置)
  */
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   DecisionUtteranceBubble,
   Skeleton,
@@ -46,6 +47,13 @@ export interface DecisionResultProps {
   chain?: ChainNode[];
   /** 2026-05-23 Drill-down chain: final 提案に紐づく外部 service. CTA button で URL を開く. */
   service?: ExternalServiceLink | null;
+  /** v3-γ Task 5: anonymous 経路で MangaStage が utterance を可視化する場合、
+   *  内部 bubble + 「議論を見る」 toggle を隠す (重複表示防止). */
+  hideUtterances?: boolean;
+  /** 2026-05-24: proposal-card (SwipeChoice + 結論カード + pink nudge) を React Portal で
+   *  別 DOM 要素に render する. MangaStage 上部 overlay に提案を表示するために使用.
+   *  null/undefined なら従来通り inline render. */
+  proposalCardPortal?: HTMLElement | null;
 }
 
 export function DecisionResult({
@@ -59,6 +67,8 @@ export function DecisionResult({
   isFinal = true,
   chain = [],
   service = null,
+  hideUtterances = false,
+  proposalCardPortal = null,
 }: DecisionResultProps) {
   const choose = useChooseMutation();
   const { push } = useToast();
@@ -181,8 +191,10 @@ export function DecisionResult({
   };
 
   const isStreaming = proposal === null;
-  const showUtterances = isStreaming || discussionOpen;
-  const showDiscussionButton = !isStreaming;
+  // v3-γ Task 5: anonymous 経路では MangaStage 側で utterance を表示するため、
+  // DecisionResult 内 bubble + toggle を隠す.
+  const showUtterances = !hideUtterances && (isStreaming || discussionOpen);
+  const showDiscussionButton = !hideUtterances && !isStreaming;
 
   return (
     <div className="flex flex-col gap-4">
@@ -263,51 +275,116 @@ export function DecisionResult({
         </div>
       )}
 
-      {/* INCEPTION B4: 3-line proposal card + SwipeChoice (swipe + fallback button).
-          key={decisionId}: buffer swap で No 確定済 internal state (confirming/dx) を
-          持ち越さないよう、別案到着時は instance を強制 remount する. */}
-      {proposal && !chosen && (
-        <SwipeChoice
-          key={decisionId ?? "no-decision"}
-          proposalText={proposal}
-          onYes={() => handleChoose("yes")}
-          onNo={() => handleChoose("no")}
-          disabled={choose.isPending}
-        >
-          <article
-            className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 p-6 shadow-md flex flex-col items-center gap-2"
-            aria-label="提案"
-            role="article"
-          >
-            <p className="text-sm text-neutral-700">今日の あなたの 結論は</p>
-            <p className="font-serif text-2xl font-bold text-neutral-900 text-center">
-              {proposal}
-            </p>
-            <p className="text-xs italic text-brand-600">
-              {t("proposalPrefixCopy")}
-            </p>
-          </article>
-        </SwipeChoice>
-      )}
+      {/* 2026-05-24: proposal-card + pink nudge を変数化. proposalCardPortal が指定されていれば
+          createPortal で外部 DOM (例: MangaStage overlay) に render、なければ inline.
+          Yes 採択後 (chosen==="yes") も同じ overlay 位置に read-only な「決まったこと」card を残置
+          ─ 「ばーんと消える」体感を抑制し、結果を視覚的に持続表示. */}
+      {proposal && (() => {
+        const isChosenYes = chosen === "yes";
+        const proposalCardBlock = (
+          <>
+            {/* mockup §6 結論カード — italic 結論 (overlay 用に mini-stage は省略).
+                Yes 採択後は SwipeChoice を外し、card と「✨ 決まりました」 nudge のみ残置. */}
+            {isChosenYes ? (
+              <article
+                className="rounded-3xl overflow-hidden shadow-md flex flex-col"
+                style={{
+                  background: "#FFFCF4",
+                  border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                  boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
+                }}
+                aria-label="採択された結論"
+                role="article"
+                data-testid="proposal-result-card-chosen"
+              >
+                <div className="px-4 pt-3 pb-2 text-center">
+                  <p
+                    className="text-[10px] uppercase tracking-widest mb-1"
+                    style={{ color: "rgba(46, 36, 24, 0.55)" }}
+                  >
+                    決まったこと
+                  </p>
+                  <p
+                    className="font-medium"
+                    style={{
+                      fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
+                      fontStyle: "italic",
+                      fontSize: 18,
+                      lineHeight: 1.25,
+                      color: "#2E2418",
+                    }}
+                  >
+                    {proposal}
+                  </p>
+                </div>
+              </article>
+            ) : (
+              <SwipeChoice
+                key={decisionId ?? "no-decision"}
+                proposalText={proposal}
+                onYes={() => handleChoose("yes")}
+                onNo={() => handleChoose("no")}
+                disabled={choose.isPending}
+                showSwipeHint={!proposalCardPortal}
+              >
+                <article
+                  className="rounded-3xl overflow-hidden shadow-md flex flex-col"
+                  style={{
+                    background: "#FFFCF4",
+                    border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                    boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
+                  }}
+                  aria-label="提案"
+                  role="article"
+                  data-testid="proposal-result-card"
+                >
+                  <div className="px-4 pt-3 pb-2 text-center">
+                    <p
+                      className="font-medium"
+                      style={{
+                        fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
+                        fontStyle: "italic",
+                        fontSize: 18,
+                        lineHeight: 1.25,
+                        color: "#2E2418",
+                      }}
+                    >
+                      {proposal}
+                    </p>
+                  </div>
+                </article>
+              </SwipeChoice>
+            )}
 
-      {/* INCEPTION 03-proposal-card.svg L46-49: 下部 pink nudge banner (proposal 表示中は常時表示).
-          「合議された結論です。/ 迷う必要は ありません ♪」 */}
-      {proposal && !chosen && (
-        <div
-          className="rounded-2xl border px-4 py-3 text-center"
-          style={{ background: "#FFD6E0", borderColor: "#FF8FAE" }}
-          role="region"
-          aria-label="合議メッセージ"
-          data-testid="proposal-pink-nudge"
-        >
-          <p className="text-xs font-bold" style={{ color: "#E8775A" }}>
-            合議された結論です。
-          </p>
-          <p className="text-xs" style={{ color: "#E8775A" }}>
-            迷う必要は ありません ♪
-          </p>
-        </div>
-      )}
+            {/* INCEPTION 03-proposal-card.svg L46-49: 下部 pink nudge banner.
+                Yes 採択後は「✨ 決まりました」 にメッセージ切替. */}
+            <div
+              className="mt-2 rounded-xl border px-3 py-1.5 text-center"
+              style={{ background: "#FFD6E0", borderColor: "#FF8FAE" }}
+              role="region"
+              aria-label="合議メッセージ"
+              data-testid="proposal-pink-nudge"
+            >
+              <p className="text-[11px]" style={{ color: "#E8775A" }}>
+                {isChosenYes ? (
+                  <>
+                    <span className="font-bold">✨ 決まりました。</span>
+                    <span className="ml-1">あとは行動するだけ ♪</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="font-bold">合議された結論です。</span>
+                    <span className="ml-1">迷う必要は ありません ♪</span>
+                  </>
+                )}
+              </p>
+            </div>
+          </>
+        );
+        return proposalCardPortal
+          ? createPortal(proposalCardBlock, proposalCardPortal)
+          : proposalCardBlock;
+      })()}
 
       {/* 議論を見る toggle (FR-CV-04): proposal 後ずっと visible、採択後も残置 */}
       {showDiscussionButton && (
@@ -325,7 +402,8 @@ export function DecisionResult({
         </button>
       )}
 
-      {/* Yes 採択: NudgeBanner celebration (final state). No は親側で別案 regenerate */}
+      {/* Yes 採択: NudgeBanner celebration (final state). proposal text は overlay 側で
+          常時表示するため、NudgeBanner には渡さない (重複防止). */}
       {chosen === "yes" && decisionId && (
         <NudgeBanner
           decisionId={decisionId}

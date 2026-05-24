@@ -5089,3 +5089,66 @@ YESを選択したら、次の候補を考えて出したい、
 
 **Context**: Cold-start user の Persona Selection 自動推奨 (`Dynamic Persona Routing`) や drill-down service 紐付けが、空 PreferenceProfile では効きづらいため、onboarding で初期データを取る。
 ---
+
+## アイデア検証 v3-γ - anonymous-strangers (案 5) Inception 開始
+**Timestamp**: 2026-05-24T00:00:00Z
+**User Input**: "OK" (anonymous-strangers の AI-DLC inception phase 開始承認)
+
+**事前合意事項** (前 turn):
+- 2 案 (anonymous-strangers / group-chat) のうち、ideator 一推し + メタ新規性 + デモ映え観点で `feature/next-spec-ideas-anonymous-strangers` を MVP として優先
+- group-chat の招待 URL/QR は将来拡張として後置 (anonymous pool 基盤を再利用)
+
+**AI Response**:
+- ハッカソン Pragmatism + アイデア検証期 mode で軽量に inception を実行
+- 成果物を `aidlc-docs/inception/anonymous-strangers/` に集約 (5 file):
+  - requirements.md (Standard depth、mockup 11 画面を input)
+  - user-stories.md (4 Epic / 9 Story、P0-P3 優先度)
+  - workflow-plan.md (どの stage を実行 / skip するか)
+  - application-design.md (component 階層 + data model + LLM prompt + i18n)
+  - units-decomposition.md (1 unit、10 task、~18-19h estimate)
+- 想定影響範囲: apps/api/domain/persona_pool.py (new)、apps/api/api/persona_pool_router.py (new)、apps/web/features/decision/MangaStage.tsx (new)、packages/ui/composites/MangaBubble.tsx (new) ほか
+- 既存 v0.4.0 + drill-down + onboarding は壊さない (StageRenderer 切替 + Persona Selection に tab 追加)
+- memory `project-ideation-phase-no-auto-merge` 適用 (develop/main merge は user 承認まで保留)
+
+**Context**: 元アイデア (docs/superpowers/idea/合議アイデアとして考えたこと.txt) 案 5 を MVP として実装。差別化の核心は「自分の opt-in 公開した価値観が、世界の誰かの合議で動く」というメタ的相互参加体験。
+---
+
+## アイデア検証 v3-γ - anonymous-strangers ultrathink fixes applied + drawio + screenshots
+**Timestamp**: 2026-05-24T08:50:00Z
+**User Input**: "ultrathinkでレビューして" → "drawioや画面キャプチャも更新して。"
+
+**AI Response (ultrathink レビュー結果)**:
+- Critical 5 件: C1 token streaming と JSON 出力の互換性 / C2 「今日 N 件」global aggregate / C3 persona_id mapping 表現 / C4 AuthMiddleware integration / C5 3 source ↔ 2 source 混線
+- Important 6 件: I1 MangaStage 見積 5-6h → 8-10h / I2 i18n font 戦略誤り / I3 LLM 5 言語品質保証 / I4 e2e LLM flakiness / I5 既存 regression check / I6 Cognito/Mock transparent
+- Improvements 6 件: Imp1 demo opt-in sequence / Imp2 localStorage key 衝突予防 / Imp3 OptInCard preview 常時 / Imp4 PBT 活用 / Imp5 formality 追加 / Imp6 空 profile guard
+
+**適用済み修正 (17/17 fixes applied)**:
+- `aidlc-docs/inception/anonymous-strangers/requirements.md`: FR-1 / FR-3 / FR-7 / NFR-1 + 新 FR-8 (formality) + FR-9 (opt-in guard) + NFR-5 (i18n font CDN) + NFR-6 (auth)
+- `aidlc-docs/inception/anonymous-strangers/user-stories.md`: US-1.1 AC-4 (pool 補完) + US-1.2 AC-5 (token streaming 不採用) + US-1.3 AC-4/AC-5 (ARIA + font fallback) + US-2.1/US-2.3 (preview 常時) + US-2.2 (server-side) + 新 US-2.4 (opt-in guard、新 Empty-Newbie persona) + US-4.1 (2-source)
+- `aidlc-docs/inception/anonymous-strangers/application-design.md`: 2-source tab、interface 層追加、SSE event 拡張、Hybrid fixture + LLM 戦略、CDN font 戦略、AuthMiddleware 透過、OriginalTextToggle ARIA 仕様
+- `aidlc-docs/inception/anonymous-strangers/units-decomposition.md`: Task 1 +30min (auth)、Task 5 +3-4h (i18n + RTL)、Task 8 +2-3h (mock LLM + regression)、Task 9 (demo sequence)、合計 ~26-30h
+- `aidlc-docs/inception/anonymous-strangers/workflow-plan.md`: 変更なし
+
+**追加成果物**:
+- `aidlc-docs/inception/anonymous-strangers/diagrams/anonymous-strangers-design.drawio` (2 ページ: 画面フロー + コンポーネント依存)
+- `docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio` (上記の copy、既存 specs/diagrams/ 規約に従う)
+- `docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md` (brainstorming spec doc、Gherkin 受入基準、ultrathink fixes 反映状況)
+- `aidlc-docs/inception/anonymous-strangers/screens/` (13 PNG: 全景 + mockup 12 画面、Playwright で capture、2.4MB)
+- `tests/e2e/scripts/capture-anonymous-strangers-mockup.mjs` (上記 PNG 生成 script)
+
+**Context**: ultrathink レビューで設計矛盾 5 件 / 改善余地 12 件を発見、全件 reasonable judgement で apply。実装時間見積もりが ~18-19h → ~26-30h に改訂、~3-4 営業日が現実的。Construction phase 承認待ち。
+---
+
+## anonymous-strangers drawio Page 3 追加 (画面イメージ embed)
+**Timestamp**: 2026-05-24T09:11:00Z
+**User Input**: "drawioに画面イメージを追加して"
+
+**AI Response**:
+- screens 12 PNG を `sips -Z 280` で縮小 → 各 10-25KB
+- Base64 encode して drawio に embed (Python script で Page 3 XML 生成)
+- 「03_画面イメージ」page を 2 drawio (inception + superpowers/specs) 両方に append
+- レイアウト: 4 cols × 3 rows grid、各 cell に thumbnail + 画面ラベル (§N + route) + ヒント (★ = 新規)
+- ファイルサイズ: 27KB → 279KB (Base64 inline により embed 自己完結)
+
+**確認方法**: VSCode drawio extension or draw.io desktop で開くと、Page 3 「03_画面イメージ」タブで 12 screen thumbnails が grid 表示される。
+---

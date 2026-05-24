@@ -65,6 +65,7 @@ test.describe("FR-CV-04: 議論を見る button (default closed + toggle + persi
   });
 
   test("Yes 採択後も 議論を見る button が visible (DOM 残置)", async ({ page }) => {
+    // 2026-05-24 C-2 fix: root Yes で is_final=true → NudgeBanner 経路、過去 skip 解除.
     await startDecisionAndWaitForProposal(page);
 
     // Yes 採択 (fallback button click で確実に発火)
@@ -116,6 +117,7 @@ test.describe("Swipe Yes/No (INCEPTION ui-mockups.md §1.1 + drawio screen-03)",
       process.env.LLM_PROVIDER === "litellm",
       "real LLM 環境では swipe 後の nudge 生成も実 LLM 経由になり flaky のため skip",
     );
+    // 2026-05-24 C-2 fix: root Yes で is_final=true、NudgeBanner 経路に復帰.
     await startDecisionAndWaitForProposal(page);
 
     // Swipe area の中心を取得
@@ -149,6 +151,7 @@ test.describe("Swipe Yes/No (INCEPTION ui-mockups.md §1.1 + drawio screen-03)",
       process.env.LLM_PROVIDER === "litellm",
       "real LLM 環境では skip (上記同様)",
     );
+    // 2026-05-24 C-2 fix: root Yes で is_final=true、NudgeBanner 経路に復帰.
     await startDecisionAndWaitForProposal(page);
     const swipeCard = page.getByTestId("swipe-card");
     await swipeCard.focus();
