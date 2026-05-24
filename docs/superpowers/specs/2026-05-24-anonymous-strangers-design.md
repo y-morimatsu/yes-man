@@ -2,7 +2,7 @@
 
 - **Date**: 2026-05-24
 - **Author**: y-morimatsu (with Claude Opus 4.7)
-- **Status**: Inception 完了、ultrathink fixes 適用済 (Construction 承認待ち)
+- **Status**: ✅ **実装完了 (2026-05-24 final)** — 詳細な現状仕様は §7 参照 (このドキュメントは初期構想を保持、§7 が現状実装の Source of Truth)
 - **Scope**: 匿名の他ユーザー persona と漫画的吹き出しステージで合議する新機能
 - **Branch**: `feature/next-spec-ideas-anonymous-strangers` (`feature/next-spec-ideas` から派生)
 - **Related**:
@@ -201,3 +201,113 @@ Critical 5 / Important 6 / Improvements 6 件すべて適用済 (詳細 [aidlc-d
 - Imp4: Property-Based Testing 1 件 (Task 1 + Task 5)
 - Imp5: persona attribute に formality 追加 (MVP 含む)
 - Imp6: 空 profile での opt-in guard (FR-9 / US-2.4)
+
+---
+
+## 7. 現状実装 (2026-05-24 final) — 初期構想からの差分
+
+実装過程で UX 検証 + ハッカソンデモ向け改修を経て、初期構想 (§1〜§6) から以下の変更があった。**ここが現状の Source of Truth**。
+
+### 7.1 Persona Selection: 2-tab → **3-tab**
+
+| 項目 | 旧 (§2 Gherkin) | 現状 |
+|---|---|---|
+| Tab 数 | 2 (builtin / anonymous) | **3 (builtin / anonymous / **my**)** |
+| `PersonaSource` type | `"builtin" \| "anonymous"` | `"builtin" \| "anonymous" \| "my"` |
+| 自作 persona の置き場 | builtin tab 内に mix 表示 | **専用 my tab に分離** |
+| 自作 0 件時 | (該当なし) | 空状態 placeholder + 「＋ 新規」 中央 CTA |
+
+### 7.2 Anonymous: random sampling → **explicit 選択**
+
+| 項目 | 旧 | 現状 |
+|---|---|---|
+| 表示 component | `AnonymousRandomCard` (自分 + random 2 名) | **`AnonymousSelectionList`** (opt-in pool 全件 list) |
+| 選択 UI | ↻ shuffle | **user explicit 選択 (チェック式)** |
+| Caller 扱い | 自分 + 2 名で render | **caller は完全除外** (「自分は世界の誰かではない」) |
+| Backend endpoint | `GET /v1/persona-pool/random` | **`GET /v1/persona-pool/list?limit=N`** (旧 random は廃止) |
+
+### 7.3 Selection 統一: **unified selection { source, id }[]**
+
+| 項目 | 旧 | 現状 |
+|---|---|---|
+| 選択 state | persona_source ごとに別 storage | **`{ source: "builtin"\|"anonymous"\|"my", id: string }[]`** で統一 |
+| Storage | (実装次第) | **localStorage key `yesman:unified-selection`** (max 3 across all sources) |
+| Hook | (該当なし) | **`useUnifiedSelection`** (isSelected / toggle / reset / countBySource) |
+
+### 7.4 ペルソナ作成 Modal の追加 (`/personas/selection` に統合)
+
+旧 spec では `/personas` (PersonaListPage) のみ作成可だったが、現状は `/personas/selection` にも **「＋ 新規」 button + PersonaCreateModal** を追加。
+- 作成成功時: `useCreatePersona` が my list を invalidate + `onCreated` callback で **my タブへ自動切替**
+- moderator reject 時: server `detail.message` を error Toast
+
+### 7.5 builtin おすすめ badge の常時表示
+
+旧仕様: preference profile 由来の top N のみ「💡 おすすめ」 badge を付与 → 初回 user で profile 空時 badge 0 件。
+現状: **builtin 3 種 (慎重 / 楽観 / 効率) は常に推奨**、preference top N は追加で merge (my persona も推奨対象に)。
+
+### 7.6 MangaStage: 単一層 absolute → **flex column** + theme color
+
+| 項目 | 旧 | 現状 |
+|---|---|---|
+| Layout | 単一の position:absolute parent + 内部絶対配置 | **flex column 3 段 (Overlay / Spacer / Cluster 220px)** |
+| Mobile fit | iPhone SE で重なり多発 | flex flow で物理的に分離 |
+| Actor 配色 | 固定 (`green/orange/blue`) by index | **persona theme color** (慎重=sky / 楽観=amber / 効率=violet)。anonymous は BlobAvatar (id hash) |
+| Actor 表示 | BlobAvatar のみ | builtin は **emoji icon (🛡️/☀️/⚡) + gradient bg**、anonymous は BlobAvatar |
+| Bubble bg | `pink` / `cream` (variant) | builtin は theme pastel (sky-100 / amber-100 / violet-100) で **bgColorOverride**、anonymous は pink |
+| Self injection | builtin 経路で self_spec injection | **完全廃止** (selected_personas のみ) |
+| 経路統一 | ChatStage (builtin) vs MangaStage (anonymous) | **全経路 MangaStage** (両経路統一、ChatStage 廃止) |
+
+### 7.7 Bubble / Actor click 前面化 (新機能)
+
+過去 bubble (small / opacity 0.3) または actor (icon/blob) を tap で前面化:
+- `focusedPersonaId` state、同要素 再 tap で auto に戻る
+- `MangaBubble` に `onClick` prop 追加 → `role=button` + Enter/Space キー対応
+- actor は wrapping `<div>` → **`<button>`** に変更、placeholder は `disabled`
+- 詳細 testid: `manga-actor-{0,1,2}`, `manga-bubble-{0,1,2}`
+
+### 7.8 StageHeader: streaming → **completed** で文言切替
+
+| 状態 | Title | Subtitle |
+|---|---|---|
+| streaming | 「決め中」 | 「● N 人で 考え中」 |
+| **completed** | 「結論」 | 「● N 人の意見が まとまりました」 |
+
+`<StageHeader status="streaming" \| "completed">` で切替。
+
+### 7.9 Yes 採択後の overlay 残置 (UX 改善)
+
+旧: SwipeChoice 押下後 proposal card 全体が unmount → overlay が一瞬で空白。
+現状: **read-only な「決まったこと」 read-only card を同じ overlay 位置に残置** (`proposal-result-card-chosen`)、pink nudge は「✨ 決まりました。あとは行動するだけ ♪」に切替。
+
+### 7.10 原文表示 toggle / Anonymous 履歴専用画面の **撤去**
+
+| 機能 | 状態 |
+|---|---|
+| 原文表示 (`OriginalTextToggle`) | **削除** (UX 過剰、翻訳されたままで十分) |
+| `AnonymousPersonaList` (履歴専用画面) | **削除** (Score に統合) |
+| `AnonymousPersonaDetail` (詳細画面) | **削除** |
+| 「今日 N 件の決め事に登場」 | **削除** (OptInCard preview のみ残置) |
+| 口グセ (quirks) | **削除** (UX 過剰、prompt に組み込み済) |
+
+### 7.11 Profile + AvatarEditor (新規)
+
+| 項目 | 旧 (Inception 範囲外) | 現状 |
+|---|---|---|
+| Profile card | ProfileSummaryCard + BasicAttributesCard 分離 | **ProfileCard 統合** (案 A) |
+| Avatar | default のみ | **8 color preset + 12 emoji preset + custom emoji** |
+| Backend persist | (なし) | **`profile.avatar_config` JSONB** field を追加 |
+| Mode | `"default"` | `"default" \| "color" \| "emoji" \| "image"` (image は将来枠) |
+
+### 7.12 Home / Score の UI 構成変更
+
+- **Home**: 委任率 strip を **画面先頭に移動** + placeholder 入力 box (mic icon) を **廃止**
+- **Score**: 「📊 過去の傾向」 section (`PreferenceTrends` component) を embed、`/preferences` ページと shared
+
+### 7.13 関連ドキュメント
+
+現状実装の **画面遷移 / data-testid / 再生成手順** は別ファイルに分離:
+
+📄 **[2026-05-24-final-ui-walkthrough.md](2026-05-24-final-ui-walkthrough.md)** — 実画面キャプチャ + Mermaid フロー + testid 一覧
+
+実画面キャプチャ: [docs/screens/current/](../../screens/current/) (26 PNG、`tests/e2e/scripts/capture-current-screens.mjs` で再生成)
+ツアー動画: [docs/demo/output/YesMan-tour-20260524-231509.mp4](../../demo/output/YesMan-tour-20260524-231509.mp4) (~3:50)

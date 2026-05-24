@@ -5152,3 +5152,26 @@ YESを選択したら、次の候補を考えて出したい、
 
 **確認方法**: VSCode drawio extension or draw.io desktop で開くと、Page 3 「03_画面イメージ」タブで 12 screen thumbnails が grid 表示される。
 ---
+
+## anonymous-strangers 実装完了 + ドキュメント全更新
+**Timestamp**: 2026-05-24T23:30:00Z
+**User Input**: "現在の実装に合わせてドキュメントを全て更新してください。画面キャプチャやdraoioのドキュメントも。"
+
+**AI Response**:
+- 実装ベースの画面キャプチャ script を新規作成 (`tests/e2e/scripts/capture-current-screens.mjs`)、26 PNG を `docs/screens/current/` に生成
+- README.md 「画面イメージ」 セクション (Mobile App Polish 部分) を **2026-05-24 Final UI** に置換 (15 cell × 3 row、現実装スクリーン参照)
+- README.md に「🎨 Post-CONSTRUCTION v4 (2026-05-24): anonymous-strangers + 漫画ステージ + UI ポリッシュ」 セクションを追加
+- 新規 spec `docs/superpowers/specs/2026-05-24-final-ui-walkthrough.md` 作成 (drawio 代替、Mermaid 遷移図 + 各画面の data-testid 一覧 + 旧 drawio 差分 + 再生成手順)
+- `docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md` に **§7 現状実装 (2026-05-24 final) — 初期構想からの差分** を追記 (13 サブセクション: 2-tab → 3-tab、random → explicit 選択、unified selection、ペルソナ作成 Modal、おすすめ badge 常時、MangaStage flex column + theme、bubble click 前面化、StageHeader 状態切替、Yes 残置、原文表示削除、Profile + AvatarEditor、Home/Score 再構成)
+- `aidlc-docs/aidlc-state.md` に **Post-CONSTRUCTION 改修フェーズ v4 主要追加 (2026-05-24)** を追記 (anonymous-strangers feature の 11 項目 + 削除機能 + test count 更新)
+
+**Source of Truth 階層**:
+1. 実画面キャプチャ (`docs/screens/current/`) — 最も視覚的
+2. `2026-05-24-final-ui-walkthrough.md` — 画面遷移 + testid (Mermaid)
+3. `2026-05-24-anonymous-strangers-design.md` §7 — 仕様変更点
+4. README.md — エントリポイント
+
+**drawio 扱い**: 旧 `2026-05-24-anonymous-strangers-screens.drawio` は **初期構想 (2026-05-24 旧)** として保持。GUI 編集が必要で実装追随コスト高のため update せず、代わりに新 `*-walkthrough.md` が現状の Source of Truth。
+
+**Context**: ハッカソン期間中の急速な UI 改修 (multi-source persona、MangaStage theme、Yes 残置、Profile + Avatar 等) により、設計当初の drawio / 旧 mockup と実装が乖離。100+ files commit 後にドキュメント整合を実施。
+---

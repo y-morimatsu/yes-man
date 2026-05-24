@@ -218,38 +218,102 @@ CONSTRUCTION フェーズで実装する主要画面のワイヤーフレーム 
 >
 > 📖 サービスの全体像をストーリー仕立てで体感したい場合は **[コンセプト絵本](https://morimatsutemp.blob.core.windows.net/workshare/concept-storybook.html)** を開いてください
 
-### 📱 実装スクリーン (Post-CONSTRUCTION: Mobile App Polish + UX 改修)
+### 📱 実装スクリーン (2026-05-24 Final UI — anonymous-strangers + UI ポリッシュ)
 
-CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → ネイティブアプリ感** へのブラッシュアップを実施 (`feature/web-mobile-app-polish`、14 commit)。Sticky header 簡素化 / Bottom Navigation 4-tab / Safe Area Insets / Skeleton loader / Page transitions / Haptic feedback + 同 branch 内で `[object Object]` エラー表示の修正と冗長表示 (LIVE バッジ / 「AI ペルソナが合議中...」 / 「音声で 話す」キャプション) の削除を実施。
+CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → ネイティブアプリ感** + **anonymous-strangers feature** を実装。Sticky header 簡素化 / Bottom Nav 4-tab / Safe Area Insets / Skeleton loader / Page transitions / Haptic feedback に加え、漫画ステージ (MangaStage)、3-source persona 選択、Avatar カスタマイズ、Yes 採択後の overlay 残置などをまとめ。**実画面のスクリーンショットは [docs/screens/current/](docs/screens/current/) に格納** (`tests/e2e/scripts/capture-current-screens.mjs` で再生成可能)。
 
 <table>
 <tr>
 <td align="center" width="33%">
-<img src="docs/superpowers/specs/diagrams/screens/01-splash.svg" width="220" alt="Splash"/><br>
+<img src="docs/screens/current/01-splash.png" width="220" alt="Splash"/><br>
 <b>🪞 Splash</b><br>
-<sub>逆説的設計の明示 + CTA + サインインリンク (2026-05-21 リデザイン)</sub>
+<sub>逆説的設計の明示 + CTA + サインインリンク</sub>
 </td>
 <td align="center" width="33%">
-<img src="docs/superpowers/specs/diagrams/screens/02-signin.svg" width="220" alt="Sign in"/><br>
+<img src="docs/screens/current/02-signin-empty.png" width="220" alt="Sign in"/><br>
 <b>🔐 Sign in</b><br>
-<sub>Mock auth (email/password、即時 redirect to Home)</sub>
+<sub>Mock auth (email + 表示名、即時 redirect to /onboarding 新規 or /home 既存)</sub>
 </td>
 <td align="center" width="33%">
-<img src="docs/superpowers/specs/diagrams/screens/03-decision-home.svg" width="220" alt="Decision Home"/><br>
-<b>💭 Decision Home (cleanup 後)</b><br>
-<sub>簡素化 sticky header + 中央 voice button (caption なし) + persona pill + Bottom Nav 4-tab (決定 active)</sub>
+<img src="docs/screens/current/05-onboarding-skip-available.png" width="220" alt="Onboarding"/><br>
+<b>🎯 Onboarding</b><br>
+<sub>性格 + 生活 swipe (最大 50 問)、確信ライン到達で「もういい、進む」 CTA</sub>
 </td>
 </tr>
 <tr>
-<td align="center" width="33%" colspan="3">
-<img src="docs/superpowers/specs/diagrams/screens/04-decision-streaming.svg" width="220" alt="Decision Streaming"/><br>
-<b>📡 Decision Streaming (cleanup 後)</b><br>
-<sub>3 persona thinking chips + utterance bubbles + Skeleton card。<b>🔴 LIVE バッジと「AI ペルソナが合議中...」hint は UX 冗長性を理由に削除</b>（5f32c72)、状態は thinking chips と utterance で十分自明</sub>
+<td align="center" width="33%">
+<img src="docs/screens/current/06-home.png" width="220" alt="Home"/><br>
+<b>🏠 Home</b><br>
+<sub>委任率 strip 先頭 + 決めてもらう人 card + 最近の決定 (新規 user は welcome strip)</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/07-persona-selection-builtin.png" width="220" alt="Persona Selection Builtin"/><br>
+<b>🎭 Persona Selection — ビルトイン</b><br>
+<sub>慎重派 / 楽観派 / 効率派 (sky / amber / violet) + 💡 おすすめ badge + 「＋ 新規」</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/08-persona-selection-anonymous.png" width="220" alt="Persona Selection Anonymous"/><br>
+<b>🌐 Persona Selection — 世界の誰か</b><br>
+<sub>opt-in 中の匿名 pool (caller 除外)、value tags + 言語 + formality 表示</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+<img src="docs/screens/current/09-persona-selection-custom-empty.png" width="220" alt="Persona Selection Custom Empty"/><br>
+<b>✨ カスタム — 空状態</b><br>
+<sub>初回 user 向け CTA + 「＋ 新規」 で自作 persona 作成 modal を起動</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/11-persona-create-modal-filled.png" width="220" alt="Persona Create Modal"/><br>
+<b>📝 ペルソナ作成 Modal</b><br>
+<sub>名前 + 説明 + プロンプト指示文 (≥30 文字) + Avatar URL。moderator チェック付き</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/13-persona-selection-3-selected.png" width="220" alt="3 selected"/><br>
+<b>✅ 3 人選択完了</b><br>
+<sub>builtin / anonymous / my から最大 3 人 mix 可能、source breakdown 表示</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+<img src="docs/screens/current/14-decision-quickstart.png" width="220" alt="QuickStart"/><br>
+<b>💡 QuickStart</b><br>
+<sub>「もしかして〜について?」 候補を SwipeChoice で即決、自分で入力にも切替可</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/16-decision-proposal-arrived.png" width="220" alt="MangaStage proposal arrived"/><br>
+<b>📡 MangaStage (合議中)</b><br>
+<sub>persona theme color (sky/amber/violet) の actor + bubble。話者は large、既出は small で fade</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/17-decision-bubble-clicked-focus.png" width="220" alt="Bubble click focus"/><br>
+<b>🔍 Bubble click 前面化</b><br>
+<sub>過去 bubble / actor を tap で 前面化 (large 切替)、再 tap で auto に戻る</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+<img src="docs/screens/current/18-decision-yes-residual.png" width="220" alt="Yes residual"/><br>
+<b>✨ Yes 採択後 (overlay 残置)</b><br>
+<sub>「結論 / N 人の意見が まとまりました」 header + 「決まったこと」 read-only card</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/20-score-top.png" width="220" alt="Score"/><br>
+<b>📊 委任度スコア</b><br>
+<sub>radial chart + AI コメント (LLM 可変) + 30 日推移グラフ + 📊 過去の傾向 embed</sub>
+</td>
+<td align="center" width="33%">
+<img src="docs/screens/current/21-profile-view.png" width="220" alt="Profile"/><br>
+<b>👤 Profile</b><br>
+<sub>ProfileCard 統合 (avatar + name + 価値観 tag + 基本属性)。編集で AvatarEditor を開く</sub>
 </td>
 </tr>
 </table>
 
-> 💡 Mobile App Polish 全体の設計 (Layout + BottomNav + Safe Area + Skeleton + View Transitions + Haptic) と Post-CONSTRUCTION 改修注記 (LIVE バッジ削除 / describeError fix) は **[2026-05-22-mobile-app-polish-design.md](docs/superpowers/specs/2026-05-22-mobile-app-polish-design.md)** + **[mobile-app-polish-screens.drawio](docs/superpowers/specs/diagrams/2026-05-22-mobile-app-polish-screens.drawio)** (4 ページ) を参照
+> 💡 全 23+ 画面のキャプチャは **[docs/screens/current/](docs/screens/current/)** 参照
+> 📹 ツアー動画 (~3:50) は **[docs/demo/output/YesMan-tour-20260524-231509.mp4](docs/demo/output/YesMan-tour-20260524-231509.mp4)** 参照
+> 🎨 anonymous-strangers feature の設計は **[2026-05-24-anonymous-strangers-design.md](docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md)** + **[2026-05-24-anonymous-strangers-screens.drawio](docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio)** 参照
+> 📐 Mobile App Polish の設計は **[2026-05-22-mobile-app-polish-design.md](docs/superpowers/specs/2026-05-22-mobile-app-polish-design.md)** + **[mobile-app-polish-screens.drawio](docs/superpowers/specs/diagrams/2026-05-22-mobile-app-polish-screens.drawio)** 参照
 
 ### 🎮 Post-CONSTRUCTION v3 (v0.4.0): ゲーミフィケーション + token streaming + LLM Yes nudge
 
@@ -266,6 +330,26 @@ CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → �
 | 全画面共通 | **YesMan マスコット 🤵** (右上 fixed) + 状況別 speech bubble (考え中 / 任せて / やった / 次は… / 沈黙) + bobbing animation |
 
 すべて `prefers-reduced-motion: reduce` で無効化可能、 a11y 維持。詳細は [`aidlc-docs/inception/application-design/screens/README.md`](aidlc-docs/inception/application-design/screens/README.md#post-construction-改修注記-v3-2026-05-23--token-streaming--yes-nudge-llm--gamification) と各 unit の `functional-design.md` Post-CONSTRUCTION 改修注記 v3 セクション参照。
+
+### 🎨 Post-CONSTRUCTION v4 (2026-05-24): anonymous-strangers + 漫画ステージ + UI ポリッシュ
+
+ハッカソン期間中に追加実装した最終 UI 層。`feature/next-spec-ideas-anonymous-strangers` branch にて 100+ files 規模で commit。動的演出 + multi-source persona 選択 + Avatar カスタマイズが核。
+
+| 場面 / 機能 | 内容 |
+|---|---|
+| **MangaStage** (合議画面) | 3 actor が底辺に並ぶ漫画調レイアウト + EarthHorizon 背景。話者は large bubble、既出は small + opacity 0.3。actor は **builtin persona theme color** (慎重=sky / 楽観=amber / 効率=violet) の emoji icon、anonymous は BlobAvatar |
+| **Bubble click 前面化** | 過去 bubble / actor (icon|blob) を tap で前面化、再 tap で auto に戻る (focus state) |
+| **StageHeader 状態遷移** | 「決め中 / N 人で 考え中」 (streaming) → 「結論 / N 人の意見が まとまりました」 (completed) に切替 |
+| **Yes 採択後 overlay 残置** | SwipeChoice の Yes/No 押下後も同じ overlay 位置に **「決まったこと」 read-only card** を残置、消失体感を抑制 |
+| **3-source persona 選択** | ビルトイン (3 種) / 世界の誰か (anonymous pool) / カスタム (自作) を tab で切替。max 3 across sources、localStorage 永続化 |
+| **ペルソナ作成 Modal** | 「＋ 新規」 から custom persona を作成 (name / description / prompt_text / avatar_url)、moderator チェック + 作成後 my タブへ自動切替 |
+| **builtin おすすめ badge** | 慎重派 / 楽観派 / 効率派 は常に 💡 おすすめ、preference profile から top N で my persona も自動追加 |
+| **Home 再構成** | 委任率 strip を画面先頭に移動 (achievement を最初に visible)、placeholder 入力 box は廃止 |
+| **Score 過去の傾向 embed** | radial chart + 推移グラフの下に **PreferenceTrends** (採択 / 棄却 / ペルソナ嗜好 / 推定タグ) を embed |
+| **ProfileCard 統合 + AvatarEditor** | 自分の avatar を 8 color preset + 12 emoji preset + custom emoji 入力で編集、`profile.avatar_config` (JSONB) で persist |
+| **anonymous-strangers backend** | `persona_pool` domain (opt-in pool / list / detail / random) + decision engine の mixed 経路 (builtin + anonymous + my の任意 mix) |
+
+詳細は **[2026-05-24-anonymous-strangers-design.md](docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md)** および [aidlc-docs/inception/anonymous-strangers/](aidlc-docs/inception/anonymous-strangers/) (requirements / user-stories / application-design / units-decomposition) を参照。
 
 ---
 
