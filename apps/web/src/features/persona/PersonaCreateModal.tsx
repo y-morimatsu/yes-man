@@ -10,9 +10,15 @@ import { t } from "./strings";
 export interface PersonaCreateModalProps {
   open: boolean;
   onClose: () => void;
+  /** 作成成功時 callback (例: 作成直後に my タブへ切替). */
+  onCreated?: () => void;
 }
 
-export function PersonaCreateModal({ open, onClose }: PersonaCreateModalProps) {
+export function PersonaCreateModal({
+  open,
+  onClose,
+  onCreated,
+}: PersonaCreateModalProps) {
   const create = useCreatePersona();
   const { push } = useToast();
   const [name, setName] = useState("");
@@ -34,6 +40,7 @@ export function PersonaCreateModal({ open, onClose }: PersonaCreateModalProps) {
       setPromptText("");
       setAvatarUrl("");
       onClose();
+      onCreated?.();
     } catch (err) {
       if (err instanceof ApiError && err.is("rejected_by_moderator")) {
         // ultrathink U7d FD I2: server 由来 detail.message を Toast

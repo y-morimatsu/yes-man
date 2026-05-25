@@ -1,0 +1,292 @@
+<mxfile host="65bd71144e">
+    <diagram id="page-a" name="A. 決断は毒">
+        <mxGraphModel dx="1157" dy="783" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="bgA" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="1920" height="1080" as="geometry"/>
+                </mxCell>
+                <mxCell id="progA" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="320" height="6" as="geometry"/>
+                </mxCell>
+                <mxCell id="ebA" value="— 01 PROBLEM" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;spacing=0;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="100" width="400" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="hdA" value="決断は、人類を最も効率的に&#xa;消耗させる毒である。" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=68;fontFamily=serif;fontStyle=0;spacingTop=8;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="150" width="1640" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA1" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="430" width="540" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA1n" value="35,000" style="text;html=1;align=left;verticalAlign=top;fontColor=#B85C3D;fontSize=110;fontFamily=serif;fontStyle=0;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="450" width="500" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA1l" value="大人が 1 日に下す意思決定の数 (推定)。&#xa;小さな選択の累積が、夜には判断力を枯らす。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=22;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="600" width="500" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA2" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="430" width="540" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA2n" value="73%" style="text;html=1;align=left;verticalAlign=top;fontColor=#B85C3D;fontSize=110;fontFamily=serif;fontStyle=0;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="450" width="500" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA2l" value="「もうどうでもいい」で何もしなかった&#xa;経験のある社会人の割合 (自社調べ, N=120)。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=22;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="600" width="500" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA3" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="430" width="540" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA3n" value="意志力 = 有限" style="text;html=1;align=left;verticalAlign=top;fontColor=#B85C3D;fontSize=68;fontFamily=serif;fontStyle=0;" parent="1" vertex="1">
+                    <mxGeometry x="1270" y="470" width="500" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="statA3l" value="決めるほど判断力は鈍り、&#xa;最後は他人の言いなりになる。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=22;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="1270" y="600" width="500" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="qboxA" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#B85C3D;strokeWidth=0;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="760" width="1640" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="qboxAbar" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="760" width="6" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="qboxAt" value="「決断疲労は意志力を侵食し、やがて人を意思のない生き物に変える。」" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=32;fontFamily=serif;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="790" width="1560" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="qboxAa" value="— Roy F. Baumeister『Willpower』" style="text;html=1;align=left;verticalAlign=top;fontColor=#6B6557;fontSize=22;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="870" width="1560" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="conA" value="▶ だから、人類はずっと「決めない権利」を求めてきた。" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=28;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="970" width="1640" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-b" name="B. 怠惰は権利">
+        <mxGraphModel dx="1745" dy="750" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="bgB" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="1920" height="1080" as="geometry"/>
+                </mxCell>
+                <mxCell id="progB" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="320" height="6" as="geometry"/>
+                </mxCell>
+                <mxCell id="ebB" value="— 01 PROBLEM" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="100" width="400" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="hdB" value="怠惰は、罪か?&#xa;いいえ、人類最古の権利である。" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=68;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="150" width="1640" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="evolveB" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F5F1E3;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="410" width="1640" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev1" value="🔥&#xa;火" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=48;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="450" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev1c" value="石器時代" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=18;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="640" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="evArr1" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=40;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="520" width="60" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev2" value="⌚&#xa;時間" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=48;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="450" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev2c" value="時計" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=18;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="640" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="evArr2" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=40;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="520" width="60" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev3" value="🧠&#xa;計算" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=48;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="450" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev3c" value="電卓" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=18;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="640" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="evArr3" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=40;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="520" width="60" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev4" value="📱&#xa;記憶" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=48;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="450" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev4c" value="スマホ" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=18;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="640" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="evArr4" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=40;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="520" width="60" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev5" value="✍️&#xa;文章" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=48;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="450" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev5c" value="ChatGPT" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=18;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="640" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="evArr5" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=40;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1320" y="520" width="60" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev6" value="❓&#xa;意思決定" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=48;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="450" width="320" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="ev6c" value="そして、次は ──" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=18;fontFamily=Helvetica;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="640" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="midB" value="人類は、面倒なことから順に手放してきた。&#xa;次に手放すべきは、もう、決まっている。" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=36;fontFamily=serif;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="740" width="1640" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="conBline" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="900" width="6" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="conB" value="「決断」こそ、人類最後の重荷。&#xa;それを堕落と呼ぶか、解放と呼ぶか。" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=28;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="900" width="1600" height="80" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-c" name="C. 今日の決断リスト">
+        <mxGraphModel dx="3173" dy="1364" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="bgC" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="1920" height="1080" as="geometry"/>
+                </mxCell>
+                <mxCell id="progC" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="320" height="6" as="geometry"/>
+                </mxCell>
+                <mxCell id="ebC" value="— 01 PROBLEM" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="100" width="400" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="hdC" value="今日、あなたが決めたことを&#xa;思い出してください。" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=66;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="150" width="1640" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="listC" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="410" width="1640" height="440" as="geometry"/>
+                </mxCell>
+                <mxCell id="li1" value="☑  着る服" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="440" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li2" value="☑  朝食のメニュー" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="440" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li3" value="☑  電車のルート" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="440" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li4" value="☑  読むメール" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="520" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li5" value="☑  返信する順" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="520" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li6" value="☑  会議で発言するか" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="520" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li7" value="☑  昼食の店" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="600" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li8" value="☑  帰宅時間" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="600" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li9" value="☑  夜の予定" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="600" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li10" value="☑  見る YouTube" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="680" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li11" value="☑  寝る時間" style="text;html=1;align=left;verticalAlign=middle;fontColor=#1A1814;fontSize=30;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="680" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="li12" value="☑  明日も同じ自分でいるか" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=30;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1240" y="680" width="500" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="midCline" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;opacity=20;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="790" width="1520" height="2" as="geometry"/>
+                </mxCell>
+                <mxCell id="midC" value="… 全部、面倒くさかったでしょう?" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=30;fontFamily=serif;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="790" width="1520" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="conC" value="▶ 人間は本来、決めたくない生き物。それで、いい。" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=28;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="930" width="1640" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="page-d" name="D. 進化系譜">
+        <mxGraphModel dx="1745" dy="750" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="bgD" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="1920" height="1080" as="geometry"/>
+                </mxCell>
+                <mxCell id="progD" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry width="320" height="6" as="geometry"/>
+                </mxCell>
+                <mxCell id="ebD" value="— 01 PROBLEM" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="100" width="400" height="32" as="geometry"/>
+                </mxCell>
+                <mxCell id="hdD" value="人類は、面倒なことから順に&#xa;手放してきた。" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=66;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="150" width="1640" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="row1D" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F5F1E3;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="410" width="1640" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1d1" value="🔥 火を起こす" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="430" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1arr1" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=36;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="430" width="40" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1d2" value="⌚ 時を計る" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="430" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1arr2" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=36;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="430" width="40" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1d3" value="🧠 計算する" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="430" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1arr3" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=36;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="430" width="40" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1d4" value="📱 記憶する" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1420" y="430" width="340" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="row2D" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F5F1E3;strokeColor=#B8AC91;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="560" width="1640" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2d1" value="📆 予定を組む" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="580" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2arr1" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=36;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="580" width="40" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2d2" value="🗺 道を覚える" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="580" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2arr2" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=36;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="580" width="40" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2d3" value="✍️ 文章を書く" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=28;fontFamily=serif;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="580" width="380" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2arr3" value="→" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=36;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="580" width="40" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2d4" value="❓ ???" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=28;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1420" y="580" width="340" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="midD" value="次に手放すべきは、もう、決まっている。" style="text;html=1;align=center;verticalAlign=middle;fontColor=#3A362E;fontSize=32;fontFamily=serif;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="720" width="1640" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="bigD" value="意 思 決 定" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#B85C3D;strokeWidth=3;fontColor=#973F22;fontSize=72;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="800" width="800" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="conD" value="▶ 人類最後の面倒を、AI に。" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=28;fontFamily=serif;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="980" width="1640" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

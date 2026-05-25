@@ -1,140 +1,261 @@
 /**
- * PersonaSelectionPage — 最大 3 個選択 + builtin reset (U7d FD §4.3).
+ * PersonaSelectionPage — 2026-05-24 v4 統合 selection.
+ *
+ * 3 source tab (ビルトイン / 世界の誰か / 自作) を切替、selection は localStorage に
+ * 統合保存 (max 3 across all sources)。 anonymous の random sampling は廃止、user 選択式に。
  */
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, PersonaCard, Spinner, useToast } from "@yesman/ui";
-import {
-  useBuiltinPersonas,
-  useMyPersonas,
-  useResetSelection,
-  useSelection,
-  useSetSelection,
-} from "./usePersona";
+import { useBuiltinPersonas, useMyPersonas } from "./usePersona";
+import { PersonaSourceTabs } from "./PersonaSourceTabs";
+import { AnonymousSelectionList } from "./AnonymousSelectionList";
+import { PersonaCreateModal } from "./PersonaCreateModal";
+import { useUnifiedSelection } from "./useUnifiedSelection";
+import { MAX_SELECTION, type SelectedPersona } from "./unifiedSelectionStorage";
+import { usePersonaSource } from "./usePersonaSource";
 import { usePreference } from "../preference/usePreference";
 import { t } from "./strings";
 
-const MAX_SELECTION = 3;
 const RECOMMEND_TOP_N = 3;
 
 export default function PersonaSelectionPage() {
+  const navigate = useNavigate();
+  const { source, setSource } = usePersonaSource();
   const { data: my } = useMyPersonas();
   const { data: builtin } = useBuiltinPersonas();
-  const { data: current, isPending } = useSelection();
   const { data: preference } = usePreference();
-  const setSelection = useSetSelection();
-  const resetSelection = useResetSelection();
+  const { selection, isSelected, toggle, reset, countBySource } =
+    useUnifiedSelection();
   const { push } = useToast();
-  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [createOpen, setCreateOpen] = useState(false);
 
-  // Issue #4 Dynamic Persona Routing: persona_style_preference の score 上位 N 個の名前を
-  // 「💡 おすすめ」対象として保持. backend 側 _resolve_personas と一致するロジック.
+  // 2026-05-24: builtin 3 種 (慎重派 / 楽観派 / 効率派) は常に推奨。
+  //   preference profile が空でも、user が初めて来た時点で 3 種全てに おすすめ badge を表示。
+  //   preference 由来の persona は top N で追加 (my persona も推奨可)。
   const recommendedNames = useMemo(() => {
-    const style = (preference as { persona_style_preference?: Record<string, number> })
-      ?.persona_style_preference;
-    if (!style) return new Set<string>();
-    const sorted = Object.entries(style)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, RECOMMEND_TOP_N)
-      .map(([name]) => name);
-    return new Set(sorted);
-  }, [preference]);
-
-  // current selection を state 初期化
-  useEffect(() => {
-    if (current?.persona_ids) {
-      setSelected(new Set(current.persona_ids));
+    const result = new Set<string>(builtin?.map((p) => p.name) ?? []);
+    const style = (
+      preference as { persona_style_preference?: Record<string, number> }
+    )?.persona_style_preference;
+    if (style) {
+      const sorted = Object.entries(style)
+        .sort(([, a], [, b]) => b - a)
+        .slice(0, RECOMMEND_TOP_N)
+        .map(([name]) => name);
+      sorted.forEach((n) => result.add(n));
     }
-  }, [current?.persona_ids]);
+    return result;
+  }, [preference, builtin]);
 
-  const toggle = (id: string) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else if (next.size < MAX_SELECTION) {
-        next.add(id);
-      } else {
-        push({ message: t("selectionOverLimit"), variant: "info" });
-        return prev;
-      }
-      return next;
-    });
-  };
-
-  const handleSave = async () => {
-    try {
-      await setSelection.mutateAsync({ persona_ids: Array.from(selected) });
-      push({ message: t("selectionSaved"), variant: "success" });
-    } catch (err) {
-      push({ message: String(err), variant: "error" });
+  const handleToggleBuiltin = (id: string) => {
+    const entry: SelectedPersona = { source: "builtin", id };
+    const result = toggle(entry);
+    if (result === "limit") {
+      push({
+        message: `選択は最大 ${MAX_SELECTION} 件まで (現在 ${selection.length})`,
+        variant: "info",
+      });
     }
   };
 
-  const handleReset = async () => {
-    try {
-      await resetSelection.mutateAsync();
-      setSelected(new Set());
-      push({ message: t("selectionReset"), variant: "info" });
-    } catch (err) {
-      push({ message: String(err), variant: "error" });
+  const handleToggleMy = (id: string) => {
+    const entry: SelectedPersona = { source: "my", id };
+    const result = toggle(entry);
+    if (result === "limit") {
+      push({
+        message: `選択は最大 ${MAX_SELECTION} 件まで (現在 ${selection.length})`,
+        variant: "info",
+      });
     }
   };
 
-  if (isPending) return <Spinner />;
+  if (!builtin && !my) return <Spinner />;
 
-  const all = [...(builtin ?? []), ...(my ?? [])];
+  const builtinList = builtin ?? [];
+  const myList = my ?? [];
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-serif text-2xl font-bold">{t("selectionPageTitle")}</h1>
-      <p className="text-sm text-neutral-600">
-        選択中: {selected.size} / {MAX_SELECTION}
-      </p>
-      {recommendedNames.size > 0 && (
-        <p className="text-xs italic text-neutral-500">
-          💡 嗜好プロファイルから推奨:{" "}
-          <span className="font-semibold not-italic" style={{ color: "#E8775A" }}>
-            {Array.from(recommendedNames).join(" / ")}
-          </span>
-        </p>
-      )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {all.map((p) => (
-          <div key={p.id} className="relative">
-            {recommendedNames.has(p.name) && (
-              <span
-                className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
-                style={{ background: "#FFD6E0", color: "#E8775A" }}
-                aria-label="嗜好プロファイルから推奨"
-              >
-                💡 おすすめ
-              </span>
-            )}
-            <PersonaCard
-              persona={p}
-              selected={selected.has(p.id)}
-              onClick={() => toggle(p.id)}
-            />
-          </div>
-        ))}
+      <div className="flex justify-between items-center">
+        <h1 className="font-serif text-lg font-bold">{t("selectionPageTitle")}</h1>
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={() => setCreateOpen(true)}
+          data-testid="selection-create-persona"
+        >
+          {t("createButton")}
+        </Button>
       </div>
+
+      {/* 選択 count + source 別 breakdown */}
+      <p
+        className="text-xs"
+        style={{ color: "#E8775A" }}
+        data-testid="selection-count"
+      >
+        選択中: <span className="font-bold">{selection.length}</span> / {MAX_SELECTION}
+        {selection.length > 0 && (
+          <span className="ml-2 text-[10px] text-neutral-500">
+            (ビルトイン:{countBySource.builtin} ・ 世界:{countBySource.anonymous} ・
+            自作:{countBySource.my})
+          </span>
+        )}
+      </p>
+
+      <PersonaSourceTabs value={source} onChange={setSource} />
+
+      {source === "anonymous" && (
+        <div
+          role="tabpanel"
+          id="persona-panel-anonymous"
+          aria-labelledby="persona-source-tab-anonymous"
+          className="flex flex-col gap-3"
+        >
+          <p className="text-xs italic text-neutral-500">
+            🌐 opt-in 中の世界の誰か (caller は除外)
+          </p>
+          <AnonymousSelectionList />
+        </div>
+      )}
+
+      {source === "builtin" && (
+        <div
+          role="tabpanel"
+          id="persona-panel-builtin"
+          aria-labelledby="persona-source-tab-builtin"
+          className="flex flex-col gap-4"
+        >
+          {recommendedNames.size > 0 && (
+            <p className="text-xs italic text-neutral-500">
+              💡 嗜好プロファイルから推奨:{" "}
+              <span
+                className="font-semibold not-italic"
+                style={{ color: "#E8775A" }}
+              >
+                {Array.from(recommendedNames).join(" / ")}
+              </span>
+            </p>
+          )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {builtinList.map((p) => (
+              <div key={p.id} className="relative">
+                {recommendedNames.has(p.name) && (
+                  <span
+                    className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
+                    style={{ background: "#FFD6E0", color: "#E8775A" }}
+                  >
+                    💡 おすすめ
+                  </span>
+                )}
+                <PersonaCard
+                  persona={p}
+                  selected={isSelected({ source: "builtin", id: p.id })}
+                  onClick={() => handleToggleBuiltin(p.id)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {source === "my" && (
+        <div
+          role="tabpanel"
+          id="persona-panel-my"
+          aria-labelledby="persona-source-tab-my"
+          className="flex flex-col gap-4"
+        >
+          {myList.length === 0 ? (
+            <div
+              className="rounded-2xl p-6 text-center flex flex-col items-center gap-3"
+              style={{
+                background: "#FFFCF4",
+                border: "0.5px dashed rgba(46, 36, 24, 0.25)",
+              }}
+              data-testid="my-personas-empty"
+            >
+              <span className="text-3xl" aria-hidden>
+                ✨
+              </span>
+              <p className="text-sm text-neutral-600">
+                まだ自作ペルソナがありません
+              </p>
+              <p className="text-xs text-neutral-500 italic">
+                右上の「＋ 新規」から、あなただけの相談相手を作れます
+              </p>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setCreateOpen(true)}
+                data-testid="my-personas-empty-create"
+              >
+                {t("createButton")}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <p className="text-xs italic text-neutral-500">
+                ✨ あなたが作成したペルソナ ({myList.length} 件)
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {myList.map((p) => (
+                  <div key={p.id} className="relative">
+                    {recommendedNames.has(p.name) && (
+                      <span
+                        className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
+                        style={{ background: "#FFD6E0", color: "#E8775A" }}
+                      >
+                        💡 おすすめ
+                      </span>
+                    )}
+                    <PersonaCard
+                      persona={p}
+                      selected={isSelected({ source: "my", id: p.id })}
+                      onClick={() => handleToggleMy(p.id)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="flex gap-2 justify-end">
         <Button
           variant="secondary"
-          onClick={handleReset}
-          loading={resetSelection.isPending}
+          onClick={() => {
+            reset();
+            push({ message: "選択を解除しました", variant: "info" });
+          }}
         >
-          {t("selectionResetButton")}
+          リセット
         </Button>
         <Button
           variant="primary"
-          onClick={handleSave}
-          disabled={selected.size === 0}
-          loading={setSelection.isPending}
+          data-testid="selection-confirm"
+          disabled={selection.length === 0}
+          onClick={() => {
+            push({
+              message: `${selection.length} 人で 決定する 準備が できました`,
+              variant: "success",
+            });
+            navigate("/");
+          }}
         >
-          {t("selectionSaveButton")}
+          決定 ({selection.length})
         </Button>
       </div>
+
+      {/* 2026-05-24: 新規ペルソナ作成 (PersonaListPage と同じ Modal を再利用).
+          成功時 useCreatePersona が my list を invalidate + my タブへ自動切替で作成結果を可視化. */}
+      <PersonaCreateModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreated={() => setSource("my")}
+      />
     </div>
   );
 }

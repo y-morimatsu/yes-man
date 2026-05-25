@@ -18,6 +18,8 @@ export interface NudgeBannerProps {
   choice: "yes" | "no";
   noAttemptCount?: number;
   onReset: () => void;
+  /** Yes 採択時に表示する「決まったこと」 (= 採択した proposal text). */
+  proposalText?: string;
 }
 
 /** INCEPTION drawio Journey C: 段階的 No microcopy.
@@ -41,6 +43,7 @@ export function NudgeBanner({
   choice,
   noAttemptCount,
   onReset,
+  proposalText,
 }: NudgeBannerProps) {
   const { data, isPending } = useNudge(decisionId, true);
 
@@ -61,6 +64,38 @@ export function NudgeBanner({
         <h3 className="font-serif text-xl font-bold text-brand-700 mb-1">
           Yes 採択 — 素晴らしい従順さです
         </h3>
+        {/* 2026-05-24: 採択された proposal text を「決まったこと」として表示.
+            Yes 選択後に proposal card が unmount されるため、ここで残置. */}
+        {proposalText && (
+          <div
+            className="mt-3 mb-2 mx-auto max-w-md rounded-2xl px-4 py-3 text-left"
+            style={{
+              background: "#FFFCF4",
+              border: "0.5px solid rgba(46, 36, 24, 0.15)",
+              boxShadow: "0 4px 14px rgba(46, 36, 24, 0.08)",
+            }}
+            data-testid="nudge-banner-proposal"
+          >
+            <p
+              className="text-[10px] uppercase tracking-widest mb-1"
+              style={{ color: "rgba(46, 36, 24, 0.55)" }}
+            >
+              決まったこと
+            </p>
+            <p
+              className="font-medium"
+              style={{
+                fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
+                fontStyle: "italic",
+                fontSize: 16,
+                lineHeight: 1.4,
+                color: "#2E2418",
+              }}
+            >
+              {proposalText}
+            </p>
+          </div>
+        )}
         <p className="text-sm text-brand-700 font-bold">
           {t("nudgeBannerLine1")}
         </p>

@@ -4,17 +4,19 @@
  * ultrathink U7d FD Imp3: 二段階削除確認 (Modal + checkbox + final button).
  */
 import { useState } from "react";
-import { Button, Card, Modal, Spinner, useToast } from "@yesman/ui";
-import { useProfile, useDeleteProfile } from "./useProfile";
+import { Button, Card, Modal, useToast } from "@yesman/ui";
+import { useDeleteProfile } from "./useProfile";
 import { useAuth } from "../../shell/AuthProvider";
 import { signOutUser } from "../../shell/auth";
 import { useVoiceBackend, type VoiceUserBackend } from "../voice/useVoiceBackend";
 import { t } from "./strings";
-import { BasicAttributesCard } from "./BasicAttributesCard";
+// v3-γ Task 7: anonymous-strangers opt-in toggle + preview + guard
+import { OptInCard } from "./OptInCard";
+// 2026-05-24 v2: 統合 ProfileCard (旧 ProfileSummaryCard + BasicAttributesCard).
+import { ProfileCard } from "./ProfileCard";
 
 export default function ProfilePage() {
   const { sub, email } = useAuth();
-  const { data, isPending } = useProfile();
   const deleteMe = useDeleteProfile();
   const { push } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,23 +34,40 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
+      <h1
+        className="text-lg font-bold"
+        style={{
+          fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
+          fontStyle: "italic",
+          color: "#2E2418",
+        }}
+      >
+        あなたのプロフィール
+      </h1>
 
-      <Card>
-        <dl className="grid grid-cols-[8rem_1fr] gap-2 text-sm">
-          <dt className="font-semibold">{t("fieldEmail")}:</dt>
-          <dd>{email ?? "-"}</dd>
-          <dt className="font-semibold">{t("fieldSub")}:</dt>
-          <dd className="font-mono break-all text-xs text-neutral-600">{sub ?? "-"}</dd>
-        </dl>
-        {isPending && (
-          <div className="mt-3">
-            <Spinner size="sm" />
-          </div>
-        )}
-      </Card>
+      {/* 2026-05-24 v2: 統合 Profile Card (avatar + name + stat + 価値観タグ + 基本属性 + 編集). */}
+      <ProfileCard />
 
-      <BasicAttributesCard profile={data ?? undefined} />
+      {/* v3-γ Task 7: 世界の誰か opt-in card (preview + guard + 「今日 N 件」) */}
+      <OptInCard />
+
+      {/* email / sub の technical info (運用上必要、折りたたみ風に薄表示) */}
+      <details className="text-xs">
+        <summary
+          className="cursor-pointer"
+          style={{ color: "rgba(46,36,24,0.55)" }}
+        >
+          アカウント情報
+        </summary>
+        <Card>
+          <dl className="grid grid-cols-[8rem_1fr] gap-2 text-sm">
+            <dt className="font-semibold">{t("fieldEmail")}:</dt>
+            <dd>{email ?? "-"}</dd>
+            <dt className="font-semibold">{t("fieldSub")}:</dt>
+            <dd className="font-mono break-all text-xs text-neutral-600">{sub ?? "-"}</dd>
+          </dl>
+        </Card>
+      </details>
 
       {/* 音声入力 backend 切替 (A: Web Speech API / B: Server STT) */}
       <Card>

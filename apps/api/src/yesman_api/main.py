@@ -27,8 +27,10 @@ from yesman_api.infrastructure.decision.llm_providers.factory import LLMProvider
 from yesman_api.infrastructure.learning.consumer import DecisionConfirmedConsumer
 from yesman_api.infrastructure.learning.supervisor import ConsumerSupervisor
 from yesman_api.infrastructure.persistence.factory import RepositoryFactory
+from yesman_api.infrastructure.persistence.mock_pool_repository import MockPoolRepository
 from yesman_api.interface.http.decisions import router as decisions_router
 from yesman_api.interface.http.health import router as health_router
+from yesman_api.interface.http.persona_pool import router as persona_pool_router
 from yesman_api.interface.http.persona_selections import router as persona_selections_router
 from yesman_api.interface.http.personas import router as personas_router
 from yesman_api.interface.http.preferences import router as preferences_router
@@ -87,6 +89,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # U6 voice: VoiceProviderFactory + adapter は app-wide singleton (stateless)
     voice_factory = VoiceProviderFactory(config)
     voice_provider = await voice_factory.create()
+
+    # v3-γ anonymous-strangers: in-memory pool singleton (NFR-1)
+    # 1 user only でも合議が成立するよう fixture 5 名分を seed (en/fr/ar/zh/ja)。
+    # SqlModel backend 経路は MVP 未実装、本番化時に追加する TODO は NFR-1 に記録済。
+    anonymous_pool = MockPoolRepository(seed_fixtures=True)
 
     # DecisionEngine は per-request の RepositoryBundle を使うため、
     # ファクトリ参照を保持し handler 内で組み立てる方が綺麗だが、MVP では
@@ -156,6 +163,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.persona_moderator = persona_moderator  # U-Persona
     app.state.voice_factory = voice_factory  # U6
     app.state.voice_provider = voice_provider  # U6
+    app.state.anonymous_pool = anonymous_pool  # v3-γ anonymous-strangers
     app.state.config = config
 
     get_logger("startup").info(
@@ -232,6 +240,7 @@ def create_app() -> FastAPI:
     app.include_router(personas_router)  # U-Persona
     app.include_router(persona_selections_router)  # U-Persona
     app.include_router(voice_router)  # U6
+    app.include_router(persona_pool_router)  # v3-γ anonymous-strangers
     return app
 
 

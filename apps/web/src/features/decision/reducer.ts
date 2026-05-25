@@ -8,11 +8,42 @@
 // Utterance 型 (api-client Type-only import 想定、依存 cycle 回避で local 定義)
 // Post-CONSTRUCTION v3 (2026-05-23): `done` で streaming 中 vs 確定済を区別。
 // false = utterance_delta accumulate 中 / true = 最終 utterance event 到着済。
+// v3-γ (2026-05-24, Task 5): anonymous 経路では optional 拡張
+//   primary_language / formality を追加。
+//   builtin 経路では undefined のまま (regression なし、既存 chat path 不変).
+// 2026-05-24: 「原文を表示」機能削除に伴い `original` field は廃止.
 export interface Utterance {
   persona_id: string;
   persona_name: string;
   text: string;
   done: boolean;
+  /** 元言語 (anonymous 経路のみ、ja/en/fr/ar/zh) */
+  primary_language?: "ja" | "en" | "fr" | "ar" | "zh";
+  /** 話し方 (anonymous 経路のみ、polite/casual/blunt) */
+  formality?: "polite" | "casual" | "blunt";
+}
+
+/**
+ * StageMode — 合議 stage の renderer 切替.
+ * v3-γ (2026-05-24, Task 5).
+ *
+ * "chat"  = 既存 DecisionUtteranceBubble + token streaming (v0.4.0、default)
+ * "manga" = 漫画ステージ + MangaBubble (anonymous-strangers、token streaming なし)
+ */
+export type StageMode = "chat" | "manga";
+
+// 2026-05-23 Drill-down chain: proposal に紐づく外部 service 情報
+export interface ExternalServiceLink {
+  name: string;
+  url: string;
+  emoji: string;
+}
+
+// 2026-05-23 Drill-down chain: chain 中の 1 ノード (完了済 proposal の履歴)
+export interface ChainNode {
+  decisionId: string;
+  proposalText: string;
+  depth: number;
 }
 
 export type DecisionState =
@@ -23,6 +54,13 @@ export type DecisionState =
       decisionId: string | null;
       utterances: Utterance[];
       proposal: string | null;
+      // 2026-05-23 Drill-down chain: proposal メタ (proposal 到着時に set)
+      isFinal: boolean;
+      depth: number;
+      service: ExternalServiceLink | null;
+      // 2026-05-24: 最新発話者の persona_id (manga stage で current speaker を highlight).
+      // onUtterance / onUtteranceDelta で更新、anonymous 経路で must.
+      lastSpeakerId: string | null;
     }
   | {
       status: "completed";
@@ -30,6 +68,10 @@ export type DecisionState =
       input: string;
       utterances: Utterance[];
       proposal: string;
+      isFinal: boolean;
+      depth: number;
+      service: ExternalServiceLink | null;
+      lastSpeakerId: string | null;
     }
   // INCEPTION D Silence Theater: 沈黙ドメイン検知時の専用 state
   | { status: "silenced"; input: string; message: string }
@@ -52,7 +94,14 @@ export type DecisionAction =
       chunk: string;
     }
   | { type: "onUtterance"; utterance: Utterance }
-  | { type: "onProposal"; proposal: string }
+  // 2026-05-23 Drill-down chain: proposal に is_final / depth / service を同梱
+  | {
+      type: "onProposal";
+      proposal: string;
+      isFinal?: boolean;
+      depth?: number;
+      service?: ExternalServiceLink | null;
+    }
   | { type: "onComplete" }
   | { type: "onSilence"; message: string }
   | { type: "onError"; error: string }
@@ -82,10 +131,14 @@ export function decisionReducer(
       if (state.status === "streaming") return state;
       return {
         status: "streaming",
-        input: state.input,
+        input: "input" in state ? state.input : "",
         decisionId: null,
         utterances: [],
         proposal: null,
+        isFinal: false,
+        depth: 0,
+        service: null,
+        lastSpeakerId: null,
       };
 
     case "onStart":
@@ -127,12 +180,14 @@ export function decisionReducer(
               done: false,
             },
           ],
+          // streaming 中 chunk が来ている persona = 現在話している
+          lastSpeakerId: action.personaId,
         };
       }
       const current = state.utterances[existingIdx]!;
       const updated = state.utterances.slice();
       updated[existingIdx] = { ...current, text: current.text + action.chunk };
-      return { ...state, utterances: updated };
+      return { ...state, utterances: updated, lastSpeakerId: action.personaId };
     }
 
     case "onUtterance": {
@@ -144,16 +199,26 @@ export function decisionReducer(
         (u) => u.persona_id === finalU.persona_id,
       );
       if (existingIdx === -1) {
-        return { ...state, utterances: [...state.utterances, finalU] };
+        return {
+          ...state,
+          utterances: [...state.utterances, finalU],
+          lastSpeakerId: finalU.persona_id,
+        };
       }
       const updated = state.utterances.slice();
       updated[existingIdx] = finalU;
-      return { ...state, utterances: updated };
+      return { ...state, utterances: updated, lastSpeakerId: finalU.persona_id };
     }
 
     case "onProposal":
       if (state.status !== "streaming") return state;
-      return { ...state, proposal: action.proposal };
+      return {
+        ...state,
+        proposal: action.proposal,
+        isFinal: action.isFinal ?? false,
+        depth: action.depth ?? state.depth,
+        service: action.service ?? null,
+      };
 
     case "onComplete":
       if (state.status !== "streaming" || !state.decisionId || !state.proposal) {
@@ -165,6 +230,10 @@ export function decisionReducer(
         input: state.input,
         utterances: state.utterances,
         proposal: state.proposal,
+        isFinal: state.isFinal,
+        depth: state.depth,
+        service: state.service,
+        lastSpeakerId: state.lastSpeakerId,
       };
 
     case "onSilence":
@@ -185,12 +254,19 @@ export function decisionReducer(
       // 直前の状態が completed (proposal 表示中) であることが前提だが、
       // 念のため input を残しつつ completed に強制遷移する.
       const input = "input" in state ? state.input : "";
+      // swap 時は最後の utterance を current speaker として扱う (mockup の「最新発話者を highlight」整合)
+      const lastUtterance = action.utterances[action.utterances.length - 1];
       return {
         status: "completed",
         decisionId: action.decisionId,
         input,
         utterances: action.utterances,
         proposal: action.proposal,
+        // 2026-05-23: buffer-swap は親流れの別案差替なので isFinal/depth/service は前 state を継承
+        isFinal: "isFinal" in state ? state.isFinal : false,
+        depth: "depth" in state ? state.depth : 0,
+        service: "service" in state ? state.service : null,
+        lastSpeakerId: lastUtterance?.persona_id ?? null,
       };
     }
 

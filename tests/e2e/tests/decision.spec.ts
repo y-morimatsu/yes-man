@@ -16,6 +16,8 @@ test.describe("Decision flow", () => {
   });
 
   test("Decision streaming → utterance bubbles → proposal → Yes 採択 (UI レベル検証)", async ({ page }) => {
+    // 2026-05-24 C-2 fix (Task 8 ultrathink): root (depth=0) で is_final=true なので
+    // Yes 採択は NudgeBanner 経路 (mockup §6 通り). 過去の skip を解除.
     await gotoAuthenticated(page, "/decision");
     await page.getByPlaceholder(/今日/).fill("ランチ何にする");
     await page.getByRole("button", { name: /送信/ }).click();

@@ -5053,3 +5053,125 @@ INCEPTION 仕様 e2e 8 件 を新規作成し全 FAIL 確認:
 - 影響範囲: U7d-features (Decision flow UX) を中心に、必要なら U7b-ui (composites) も拡張
 **Context**: ハッカソン差別化要素、 UX 強化 (機能追加ではなく既存 flow への演出付加)
 ---
+
+## アイデア検証 v3-α - 深堀り Decision Chain (Inception 開始)
+**Timestamp**: 2026-05-23T08:00:00Z
+**User Input**: "別のアプローチ。ai-dlcで進める。
+現在,"合議で決定"で質問対してYESの場合,そのまま終わってしまう。
+たとえば、"暇だから何をすべき？" → 映画を見るのはどう -> YES -> "Yes 採択 — 素晴らしい従順さです.."
+YESを選択したら、次の候補を考えて出したい、
+映画を見る → ホラー映画は？ → 貞子 on the Movieとか。
+ピザを食べるのあれば、宅配ピザを頼みますか？ - → ピザのセットはXXでいいですか
+洋服購入 → ジーパンですか？ → アマゾンで探しますか？ → AMAZON BASICのズボンでいいですか？
+みたいな感じで最終決定するまで深堀りするようにする。"
+
+**AI Response**:
+- v0.4.0 release 後の次期仕様アイデア検証フェーズ第 1 弾
+- branch: develop 起点で `feature/drill-down-decision` を新規作成予定
+- Hackathon Pragmatism + memory `project-ideation-phase-no-auto-merge` 適用 (PR は作るが merge は user 承認まで保留)
+- 想定影響範囲: U4-decision (chain endpoint or 既存 SSE 拡張)、U7d-features (DecisionResult / DecisionPage の chain state)、U7c-api-client (新 method)、U7b-ui (DrillDownCard などの新 composite 可能性)
+- Requirements Analysis (light) でトリガー / 段数 / 終了条件 / LLM 経路 を user 確認予定
+
+**Context**: ハッカソン後の差別化、コア体験 (YES を押し続けて深堀り) の延長。NudgeBanner 終端固定の現状を「最終決定まで chain する」UX へ変更。
+---
+
+## アイデア検証 v3-β - 新規登録時 嗜好把握 onboarding (Inception 開始)
+**Timestamp**: 2026-05-23T11:00:00Z
+**User Input**: "ai-dlcを利用してこのブランチに次のアイデアを実装する。
+ユーザ新規登録時にユーザ嗜好把握(YES-NOで50問ぐらい)をする"
+
+**AI Response**:
+- アイデア検証フェーズ第 2 弾 (`feature/next-spec-ideas` 上で実装)
+- 想定: signup 直後に YES/NO ~50 問の onboarding カードを表示、PreferenceProfile を cold-start 状態から埋める
+- v0.4.0 で持っている YES-nudge LLM / drill-down chain / PreferenceProfile 学習 と整合
+- 影響範囲: U7d-features (新 OnboardingPage)、U2-storage (Profile に onboarding_completed flag)、U7c-api-client (新 endpoint method)、おそらく新 application/onboarding/ 配下
+- memory `project-ideation-phase-no-auto-merge` 適用 (PR は作成可、merge は user 承認まで)
+
+**Context**: Cold-start user の Persona Selection 自動推奨 (`Dynamic Persona Routing`) や drill-down service 紐付けが、空 PreferenceProfile では効きづらいため、onboarding で初期データを取る。
+---
+
+## アイデア検証 v3-γ - anonymous-strangers (案 5) Inception 開始
+**Timestamp**: 2026-05-24T00:00:00Z
+**User Input**: "OK" (anonymous-strangers の AI-DLC inception phase 開始承認)
+
+**事前合意事項** (前 turn):
+- 2 案 (anonymous-strangers / group-chat) のうち、ideator 一推し + メタ新規性 + デモ映え観点で `feature/next-spec-ideas-anonymous-strangers` を MVP として優先
+- group-chat の招待 URL/QR は将来拡張として後置 (anonymous pool 基盤を再利用)
+
+**AI Response**:
+- ハッカソン Pragmatism + アイデア検証期 mode で軽量に inception を実行
+- 成果物を `aidlc-docs/inception/anonymous-strangers/` に集約 (5 file):
+  - requirements.md (Standard depth、mockup 11 画面を input)
+  - user-stories.md (4 Epic / 9 Story、P0-P3 優先度)
+  - workflow-plan.md (どの stage を実行 / skip するか)
+  - application-design.md (component 階層 + data model + LLM prompt + i18n)
+  - units-decomposition.md (1 unit、10 task、~18-19h estimate)
+- 想定影響範囲: apps/api/domain/persona_pool.py (new)、apps/api/api/persona_pool_router.py (new)、apps/web/features/decision/MangaStage.tsx (new)、packages/ui/composites/MangaBubble.tsx (new) ほか
+- 既存 v0.4.0 + drill-down + onboarding は壊さない (StageRenderer 切替 + Persona Selection に tab 追加)
+- memory `project-ideation-phase-no-auto-merge` 適用 (develop/main merge は user 承認まで保留)
+
+**Context**: 元アイデア (docs/superpowers/idea/合議アイデアとして考えたこと.txt) 案 5 を MVP として実装。差別化の核心は「自分の opt-in 公開した価値観が、世界の誰かの合議で動く」というメタ的相互参加体験。
+---
+
+## アイデア検証 v3-γ - anonymous-strangers ultrathink fixes applied + drawio + screenshots
+**Timestamp**: 2026-05-24T08:50:00Z
+**User Input**: "ultrathinkでレビューして" → "drawioや画面キャプチャも更新して。"
+
+**AI Response (ultrathink レビュー結果)**:
+- Critical 5 件: C1 token streaming と JSON 出力の互換性 / C2 「今日 N 件」global aggregate / C3 persona_id mapping 表現 / C4 AuthMiddleware integration / C5 3 source ↔ 2 source 混線
+- Important 6 件: I1 MangaStage 見積 5-6h → 8-10h / I2 i18n font 戦略誤り / I3 LLM 5 言語品質保証 / I4 e2e LLM flakiness / I5 既存 regression check / I6 Cognito/Mock transparent
+- Improvements 6 件: Imp1 demo opt-in sequence / Imp2 localStorage key 衝突予防 / Imp3 OptInCard preview 常時 / Imp4 PBT 活用 / Imp5 formality 追加 / Imp6 空 profile guard
+
+**適用済み修正 (17/17 fixes applied)**:
+- `aidlc-docs/inception/anonymous-strangers/requirements.md`: FR-1 / FR-3 / FR-7 / NFR-1 + 新 FR-8 (formality) + FR-9 (opt-in guard) + NFR-5 (i18n font CDN) + NFR-6 (auth)
+- `aidlc-docs/inception/anonymous-strangers/user-stories.md`: US-1.1 AC-4 (pool 補完) + US-1.2 AC-5 (token streaming 不採用) + US-1.3 AC-4/AC-5 (ARIA + font fallback) + US-2.1/US-2.3 (preview 常時) + US-2.2 (server-side) + 新 US-2.4 (opt-in guard、新 Empty-Newbie persona) + US-4.1 (2-source)
+- `aidlc-docs/inception/anonymous-strangers/application-design.md`: 2-source tab、interface 層追加、SSE event 拡張、Hybrid fixture + LLM 戦略、CDN font 戦略、AuthMiddleware 透過、OriginalTextToggle ARIA 仕様
+- `aidlc-docs/inception/anonymous-strangers/units-decomposition.md`: Task 1 +30min (auth)、Task 5 +3-4h (i18n + RTL)、Task 8 +2-3h (mock LLM + regression)、Task 9 (demo sequence)、合計 ~26-30h
+- `aidlc-docs/inception/anonymous-strangers/workflow-plan.md`: 変更なし
+
+**追加成果物**:
+- `aidlc-docs/inception/anonymous-strangers/diagrams/anonymous-strangers-design.drawio` (2 ページ: 画面フロー + コンポーネント依存)
+- `docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio` (上記の copy、既存 specs/diagrams/ 規約に従う)
+- `docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md` (brainstorming spec doc、Gherkin 受入基準、ultrathink fixes 反映状況)
+- `aidlc-docs/inception/anonymous-strangers/screens/` (13 PNG: 全景 + mockup 12 画面、Playwright で capture、2.4MB)
+- `tests/e2e/scripts/capture-anonymous-strangers-mockup.mjs` (上記 PNG 生成 script)
+
+**Context**: ultrathink レビューで設計矛盾 5 件 / 改善余地 12 件を発見、全件 reasonable judgement で apply。実装時間見積もりが ~18-19h → ~26-30h に改訂、~3-4 営業日が現実的。Construction phase 承認待ち。
+---
+
+## anonymous-strangers drawio Page 3 追加 (画面イメージ embed)
+**Timestamp**: 2026-05-24T09:11:00Z
+**User Input**: "drawioに画面イメージを追加して"
+
+**AI Response**:
+- screens 12 PNG を `sips -Z 280` で縮小 → 各 10-25KB
+- Base64 encode して drawio に embed (Python script で Page 3 XML 生成)
+- 「03_画面イメージ」page を 2 drawio (inception + superpowers/specs) 両方に append
+- レイアウト: 4 cols × 3 rows grid、各 cell に thumbnail + 画面ラベル (§N + route) + ヒント (★ = 新規)
+- ファイルサイズ: 27KB → 279KB (Base64 inline により embed 自己完結)
+
+**確認方法**: VSCode drawio extension or draw.io desktop で開くと、Page 3 「03_画面イメージ」タブで 12 screen thumbnails が grid 表示される。
+---
+
+## anonymous-strangers 実装完了 + ドキュメント全更新
+**Timestamp**: 2026-05-24T23:30:00Z
+**User Input**: "現在の実装に合わせてドキュメントを全て更新してください。画面キャプチャやdraoioのドキュメントも。"
+
+**AI Response**:
+- 実装ベースの画面キャプチャ script を新規作成 (`tests/e2e/scripts/capture-current-screens.mjs`)、26 PNG を `docs/screens/current/` に生成
+- README.md 「画面イメージ」 セクション (Mobile App Polish 部分) を **2026-05-24 Final UI** に置換 (15 cell × 3 row、現実装スクリーン参照)
+- README.md に「🎨 Post-CONSTRUCTION v4 (2026-05-24): anonymous-strangers + 漫画ステージ + UI ポリッシュ」 セクションを追加
+- 新規 spec `docs/superpowers/specs/2026-05-24-final-ui-walkthrough.md` 作成 (drawio 代替、Mermaid 遷移図 + 各画面の data-testid 一覧 + 旧 drawio 差分 + 再生成手順)
+- `docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md` に **§7 現状実装 (2026-05-24 final) — 初期構想からの差分** を追記 (13 サブセクション: 2-tab → 3-tab、random → explicit 選択、unified selection、ペルソナ作成 Modal、おすすめ badge 常時、MangaStage flex column + theme、bubble click 前面化、StageHeader 状態切替、Yes 残置、原文表示削除、Profile + AvatarEditor、Home/Score 再構成)
+- `aidlc-docs/aidlc-state.md` に **Post-CONSTRUCTION 改修フェーズ v4 主要追加 (2026-05-24)** を追記 (anonymous-strangers feature の 11 項目 + 削除機能 + test count 更新)
+
+**Source of Truth 階層**:
+1. 実画面キャプチャ (`docs/screens/current/`) — 最も視覚的
+2. `2026-05-24-final-ui-walkthrough.md` — 画面遷移 + testid (Mermaid)
+3. `2026-05-24-anonymous-strangers-design.md` §7 — 仕様変更点
+4. README.md — エントリポイント
+
+**drawio 扱い**: 旧 `2026-05-24-anonymous-strangers-screens.drawio` は **初期構想 (2026-05-24 旧)** として保持。GUI 編集が必要で実装追随コスト高のため update せず、代わりに新 `*-walkthrough.md` が現状の Source of Truth。
+
+**Context**: ハッカソン期間中の急速な UI 改修 (multi-source persona、MangaStage theme、Yes 残置、Profile + Avatar 等) により、設計当初の drawio / 旧 mockup と実装が乖離。100+ files commit 後にドキュメント整合を実施。
+---

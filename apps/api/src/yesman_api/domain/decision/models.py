@@ -12,6 +12,21 @@ from uuid import UUID
 
 DomainClassification = Literal["daily", "work", "school", "major", "silenced"]
 SilenceDomain = Literal["religion", "election", "violence", "obscene"]
+PersonaSource = Literal["builtin", "anonymous"]
+SelectedPersonaSource = Literal["builtin", "anonymous", "my"]
+
+
+@dataclass(frozen=True, slots=True)
+class SelectedPersonaRef:
+    """2026-05-24 v4: 3 source mix selection の単一エントリ.
+
+    source ごとに id の解決先が異なる:
+    - builtin / my: persona_repo の DB UUID
+    - anonymous: pool_repo の persona_id (sub-deterministic UUID)
+    """
+
+    source: SelectedPersonaSource
+    id: UUID
 
 
 @dataclass(frozen=True, slots=True)
@@ -22,6 +37,12 @@ class DecisionRequest:
     user_input: str
     selected_persona_ids: list[UUID] = field(default_factory=list)
     llm_provider: str = "mock"
+    # 2026-05-23: Drill-down chain — 親提案列 (Yes 連鎖時の context).
+    chain_context: tuple[str, ...] = ()
+    # 2026-05-24 v3-γ anonymous-strangers: persona source 選択 (backward-compat 用)
+    persona_source: PersonaSource = "builtin"
+    # 2026-05-24 v4: 3 source mix selection (優先). 未指定なら旧 fields を使う.
+    selected_personas: tuple[SelectedPersonaRef, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,6 +86,9 @@ class StreamEvent:
 __all__ = [
     "DomainClassification",
     "SilenceDomain",
+    "PersonaSource",
+    "SelectedPersonaSource",
+    "SelectedPersonaRef",
     "DecisionRequest",
     "PersonaUtterance",
     "ConsensusOutput",

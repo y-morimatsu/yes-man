@@ -32,7 +32,7 @@ describe("Layout", () => {
     } as ReturnType<typeof useAuth>);
 
     renderWithRoute("/");
-    const logo = screen.getByText(/🪞 YesMan/);
+    const logo = screen.getByText(/YesMan/);
     expect(logo).toBeInTheDocument();
     const header = logo.closest("header");
     expect(header?.className).toContain("sticky");
@@ -87,7 +87,7 @@ describe("Layout", () => {
     } as ReturnType<typeof useAuth>);
 
     renderWithRoute("/");
-    const header = screen.getByText(/🪞 YesMan/).closest("header");
+    const header = screen.getByText(/YesMan/).closest("header");
     expect(header?.textContent).not.toContain("⚙️");
     expect(header?.textContent).not.toContain("📊");
     expect(header?.textContent).not.toContain("👤");

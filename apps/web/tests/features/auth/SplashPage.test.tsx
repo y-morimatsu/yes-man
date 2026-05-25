@@ -27,16 +27,13 @@ function renderSplash(initialEntries: { pathname: string; state?: unknown }[] = 
 describe("SplashPage", () => {
   beforeEach(() => navigateMock.mockReset());
 
-  it("YESMAN wordmark / tagline / disclaimer / CTA / secondary link を表示する", () => {
+  it("YesMan italic title / tagline / CTA / login link を表示する (mockup §1)", () => {
     renderSplash();
-    expect(screen.getByRole("heading", { name: "YESMAN" })).toBeInTheDocument();
-    expect(screen.getByText("人間最後の仕事は、")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "YesMan" })).toBeInTheDocument();
+    expect(screen.getByText(/人間最後の仕事は/)).toBeInTheDocument();
     expect(screen.getByText(/YES で承認すること/)).toBeInTheDocument();
-    expect(screen.getByText(/逆説的設計/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /はじめる/ })).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /すでにアカウントがある方は サインイン/ }),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("splash-start")).toHaveTextContent("はじめる");
+    expect(screen.getByTestId("splash-login")).toHaveTextContent("ログイン");
   });
 
   it("[はじめる →] click で /auth/signin に navigate される", async () => {
@@ -49,12 +46,10 @@ describe("SplashPage", () => {
     );
   });
 
-  it("secondary link click でも /auth/signin に navigate される", async () => {
+  it("ログイン link click でも /auth/signin に navigate される", async () => {
     const user = userEvent.setup();
     renderSplash();
-    await user.click(
-      screen.getByRole("button", { name: /すでにアカウントがある方は サインイン/ }),
-    );
+    await user.click(screen.getByTestId("splash-login"));
     expect(navigateMock).toHaveBeenCalledWith(
       "/auth/signin",
       expect.objectContaining({ state: { from: { pathname: "/" } } }),
@@ -73,9 +68,13 @@ describe("SplashPage", () => {
     );
   });
 
-  it("🪞 emoji は aria-hidden で screen reader にスキップされる", () => {
+  it("mockup §1: 3 blob avatar が render される (orange/green/blue)", () => {
     renderSplash();
-    const emoji = screen.getByText("🪞");
-    expect(emoji).toHaveAttribute("aria-hidden", "true");
+    // BlobAvatar は role=img + data-testid="blob-avatar"
+    const blobs = screen.getAllByTestId("blob-avatar");
+    expect(blobs).toHaveLength(3);
+    expect(blobs[0]).toHaveAttribute("data-blob-color", "orange");
+    expect(blobs[1]).toHaveAttribute("data-blob-color", "green");
+    expect(blobs[2]).toHaveAttribute("data-blob-color", "blue");
   });
 });

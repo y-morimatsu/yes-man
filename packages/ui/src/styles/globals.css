@@ -154,3 +154,30 @@ html.dark {
     animation: none !important;
   }
 }
+
+/* ================================================================
+ * v3-γ anonymous-strangers (2026-05-24, Task 5): 漫画ステージ用
+ * ================================================================ */
+
+/* MangaBubble pop-in (large 時のみ trigger). slide-in と差別化、漫画らしい弾み */
+@keyframes ym-manga-bubble-pop {
+  0% { opacity: 0; transform: translateY(8px) scale(0.92); }
+  60% { opacity: 1; transform: translateY(-2px) scale(1.03); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* MangaBubble の large → small 移行 (opacity + 縮小、subtle) */
+@keyframes ym-manga-bubble-fade {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0.55; transform: scale(0.96); }
+}
+
+/* i18n font fallback (Noto Sans Arabic / Noto Sans SC は apps/web/index.html で CDN load).
+ * NFR-5 fix: font 未 load 時は system font fallback で graceful degrade. */
+.lang-ar {
+  font-family: "Noto Sans Arabic", "Noto Naskh Arabic", system-ui, sans-serif;
+  /* Arabic は dir=rtl で bubble 内側のみ反転 (stage 全体は LTR 維持). */
+}
+.lang-zh {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}

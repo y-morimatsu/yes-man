@@ -26,6 +26,11 @@ export interface SwipeChoiceProps {
   threshold?: number;
   /** 子要素 (proposal card) を渡せる。未指定なら proposalText を中央表示. */
   children?: ReactNode;
+  /**
+   * 「👆 スワイプして決定 → → → Yes」の hint 表示。
+   * default true。onboarding 等で連続出題時は false で消すと UI がすっきり。
+   */
+  showSwipeHint?: boolean;
 }
 
 const SWIPE_THRESHOLD_DEFAULT = 100;
@@ -49,6 +54,7 @@ export function SwipeChoice({
   disabled,
   threshold = SWIPE_THRESHOLD_DEFAULT,
   children,
+  showSwipeHint = true,
 }: SwipeChoiceProps) {
   const [dx, setDx] = useState(0);
   const [confirming, setConfirming] = useState<"yes" | "no" | null>(null);
@@ -178,7 +184,7 @@ export function SwipeChoice({
 
       {/* スワイプガイド: Hackathon で右方向 (Yes) を marching arrow で誘導.
           dx=0 (未スワイプ) の間のみアニメ表示、スワイプ開始で hide. */}
-      {dx === 0 && !confirming && (
+      {showSwipeHint && dx === 0 && !confirming && (
         <div
           className="flex items-center gap-2 text-xs italic text-neutral-500"
           aria-hidden
