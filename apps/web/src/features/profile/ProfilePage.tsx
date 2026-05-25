@@ -4,6 +4,7 @@
  * ultrathink U7d FD Imp3: 二段階削除確認 (Modal + checkbox + final button).
  */
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, Modal, useToast } from "@yesman/ui";
 import { useDeleteProfile } from "./useProfile";
 import { useAuth } from "../../shell/AuthProvider";
@@ -16,7 +17,8 @@ import { OptInCard } from "./OptInCard";
 import { ProfileCard } from "./ProfileCard";
 
 export default function ProfilePage() {
-  const { sub, email } = useAuth();
+  const { sub, email, refresh } = useAuth();
+  const navigate = useNavigate();
   const deleteMe = useDeleteProfile();
   const { push } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
@@ -29,6 +31,18 @@ export default function ProfilePage() {
       await signOutUser();
     } catch (err) {
       push({ message: String(err), variant: "error" });
+    }
+  };
+
+  // refresh 前に splash へ明示 navigate することで RequireAuth の state.from 自動埋めを回避.
+  // (state.from が立つと再 sign in 後 /profile に戻されてしまう)
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      navigate("/auth/splash", { replace: true });
+      await refresh();
+    } catch (err) {
+      push({ message: `ログアウトに失敗しました: ${String(err)}`, variant: "error" });
     }
   };
 
@@ -73,6 +87,14 @@ export default function ProfilePage() {
       <Card>
         <h2 className="font-serif font-semibold mb-3">🎤 音声入力 backend</h2>
         <VoiceBackendSelector />
+      </Card>
+
+      {/* 2026-05-26: Layout header から移管した sign out. */}
+      <Card>
+        <h2 className="font-sans font-semibold mb-3">ログアウト</h2>
+        <Button variant="secondary" onClick={handleSignOut} data-testid="profile-sign-out">
+          ログアウト
+        </Button>
       </Card>
 
       <Card className="border-l-4 border-danger">

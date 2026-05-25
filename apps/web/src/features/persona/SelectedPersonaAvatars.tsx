@@ -113,7 +113,7 @@ export function SelectedPersonaAvatars({
       <Link
         to={emptyLinkTo}
         data-testid="home-avatar-empty-placeholder"
-        className="text-xs italic hover:underline"
+        className="text-xs hover:underline"
         style={{ color: "rgba(46, 36, 24, 0.55)" }}
       >
         {emptyText}
