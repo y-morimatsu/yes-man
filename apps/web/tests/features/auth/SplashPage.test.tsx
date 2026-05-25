@@ -27,9 +27,11 @@ function renderSplash(initialEntries: { pathname: string; state?: unknown }[] = 
 describe("SplashPage", () => {
   beforeEach(() => navigateMock.mockReset());
 
-  it("YesMan title / はじめる CTA を表示する", () => {
+  it("YesMan title / tagline / はじめる CTA を表示する", () => {
     renderSplash();
     expect(screen.getByRole("heading", { name: "YesMan" })).toBeInTheDocument();
+    expect(screen.getByText(/人間最後の仕事は/)).toBeInTheDocument();
+    expect(screen.getByText(/YES で承認すること/)).toBeInTheDocument();
     expect(screen.getByTestId("splash-start")).toHaveTextContent("はじめる");
   });
 

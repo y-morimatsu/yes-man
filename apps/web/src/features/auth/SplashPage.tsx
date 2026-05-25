@@ -4,9 +4,9 @@
  * mockup §1 構成:
  *   - 上下中央配置
  *   - 3 blob (orange / green / blue) 横並び (size 44 + 2 eyes)
- *   - YesMan italic serif title (大、Crimson Pro — 唯一残存ブランド要素)
- *   - 「人間最後の仕事は、YES で承認すること。」 tagline (2026-05-27: sans 化)
- *   - 黒楕円 button「はじめる」 (cream-lt text, sans-serif、単独 CTA)
+ *   - YesMan italic serif title (大、Crimson Pro、46px — 唯一残存ブランド要素)
+ *   - 「人間最後の仕事は、YES で承認すること。」 tagline (sans 化、user 指示で保持)
+ *   - 黒楕円 button「はじめる」 (cream-lt text, sans-serif、単独 CTA、w-65% max-220px)
  *   - 画面下部に地球地平線 (緑 / オレンジ / 青の半円 3 つが重なる)
  */
 import { useLocation, useNavigate } from "react-router-dom";
@@ -79,18 +79,38 @@ export default function SplashPage() {
 
       {/* Body (z-10 で 地球より前) */}
       <div className="relative z-10 w-full max-w-md text-center flex flex-col items-center">
-        {/* 3 blob (orange / green / blue) */}
-        <div className="flex items-end gap-3 mb-4">
-          <BlobAvatar size={36} color="orange" gaze="upright" name="" />
-          <BlobAvatar size={36} color="green" gaze="downleft" name="" />
-          <BlobAvatar size={36} color="blue" gaze="center" name="" />
+        {/* 3 blob (orange / green / blue) — mockup §1 splash-cast 仕様 + ほんの少しランダム.
+            x/y 両軸に微小オフセット (±1〜2px) を入れ、整列感を緩める */}
+        <div className="flex items-end gap-3.5 mb-7">
+          <BlobAvatar
+            size={44}
+            color="orange"
+            gaze="upright"
+            name=""
+            className="-translate-y-1 -translate-x-px"
+          />
+          <BlobAvatar
+            size={44}
+            color="green"
+            gaze="downleft"
+            name=""
+            className="translate-y-[5px] translate-x-px"
+          />
+          <BlobAvatar
+            size={44}
+            color="blue"
+            gaze="center"
+            name=""
+            className="-translate-y-[3px] -translate-x-px"
+          />
         </div>
 
         <h1
-          className="text-3xl font-medium mb-2"
+          className="font-medium mb-4"
           style={{
             fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
             fontStyle: "italic",
+            fontSize: 46,
             letterSpacing: "0.02em",
             color: MK_UMBER,
           }}
@@ -98,6 +118,8 @@ export default function SplashPage() {
           YesMan
         </h1>
 
+        {/* tagline (user 指示で残置). 2026-05-27 sans 化 + 2026-05-27 #1 cherry-pick で
+            #1 自体は tagline 削除だったが、user 指示で UI 上は維持. */}
         <p
           className="text-xs leading-relaxed mb-4"
           style={{
@@ -111,11 +133,11 @@ export default function SplashPage() {
           YES で承認すること。
         </p>
 
-        {/* 黒楕円 「はじめる」 CTA */}
+        {/* 黒楕円 「はじめる」 CTA — mockup §1: 65% width max 220px、絞って厚く */}
         <button
           type="button"
           onClick={goToSignIn}
-          className="w-[78%] rounded-full py-2.5 transition-opacity hover:opacity-90 active:opacity-80"
+          className="w-[65%] max-w-[220px] rounded-full py-3 transition-opacity hover:opacity-90 active:opacity-80"
           style={{
             background: MK_UMBER,
             color: MK_CREAM,
