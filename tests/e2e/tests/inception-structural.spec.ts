@@ -15,6 +15,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { gotoAuthenticated } from "../fixtures/auth";
+import { clickYesUntilNudgeBanner } from "../fixtures/drill-down";
 
 test.describe("INCEPTION B7: Discussion Live (drawio: SSE 合議中)", () => {
   // skip: Mock LLM 並列負荷で proposal_timeout (Issue #80)
@@ -92,14 +93,15 @@ test.describe("INCEPTION Pink Nudge Banner (drawio B4 下部 nudge)", () => {
   test("Yes celebration emoji ✨🎉✨ / 「素晴らしい従順さです」 (drawio B4-Yes)", async ({
     page,
   }) => {
-    // 2026-05-24 C-2 fix: root Yes で is_final=true → NudgeBanner 経路、過去 skip 解除.
+    // 2026-05-25 A 案 revert: depth=0 で is_final=false なので Yes 連鎖で 4 段 drill-down が必要.
     await gotoAuthenticated(page, "/decision");
     await page.getByPlaceholder(/今日/).fill("celebration 検証");
     await page.getByRole("button", { name: /送信/ }).click();
     await page.waitForSelector('[role="article"]', { timeout: 90_000 });
-    const yes = page.getByRole("button", { name: /Yes/, exact: false });
-    await expect(yes).toBeVisible({ timeout: 120_000 });
-    await yes.click();
+    await expect(
+      page.getByRole("button", { name: /Yes/, exact: false }),
+    ).toBeVisible({ timeout: 120_000 });
+    await clickYesUntilNudgeBanner(page);
     // ✨🎉✨ または 「素晴らしい従順さです」 (逆説的設計コピー)
     await expect(
       page.getByText(/素晴らしい従順さです/).first(),

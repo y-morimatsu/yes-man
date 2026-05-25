@@ -69,6 +69,11 @@ class _AnonymousProxy:
         self.spec = spec
 
 
+#: 2026-05-25 drill-down chain の最大深さ. depth 0 (root) から数えて MAX に到達したら is_final=true.
+#: 値の増減で UX の刻みが変わる (4 = 5 click で final、自然な絞り込みのレンジ).
+MAX_DRILL_DEPTH = 4
+
+
 class DecisionEngine:
     def __init__(
         self,
@@ -257,29 +262,52 @@ class DecisionEngine:
         # 2026-05-23 Drill-down chain: chain_context があれば user_input に prepend して
         # 段階別の指示 (粒度ガイド) を加える。
         # depth 0: domain choice (映画 / 旅行 / 洋服 等)
-        # depth 1: service routing (Amazon Prime / Netflix / ユニクロ 等で探す?)
-        # depth 2: subtype 絞り込み (ホラー / メンズ / カジュアル 等)
-        # depth 3 以上: specific instance (商品名 / 作品名 / 店舗名 — final)
+        # 2026-05-25 統一指針: 固定 stage 制 (action / service / subtype / instance) を廃し、
+        # LLM 自身が「徐々に具体化」する自然な絞り込みに任せる. 最終 (depth=MAX) で Amazon
+        # サービスで開ける固有名に必ず到達するよう、終盤ほど instance 寄りに誘導.
         depth = len(request.chain_context)
         if request.chain_context:
             context_line = " → ".join(request.chain_context)
-            if depth == 1:
+            remaining = MAX_DRILL_DEPTH - depth
+            if remaining <= 1:
+                # final 段の手前/到達: Amazon で実際に開ける固有名へ詰める
                 guide = (
-                    "次の段階は『どの service / 経路で実現するか』。"
-                    "例: 『Amazon Prime で 探しますか?』『Netflix で 見ますか?』『出前館 で 注文しますか?』。"
-                    "短い疑問形 1 文 (~30 字)。"
+                    "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
+                    "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
+                    "を含む断定 1 文を出してください. "
+                    "例: 『貞子 on the Movie を Amazon Prime Video で』 / "
+                    "『AMAZON Basic T シャツ 5 枚セット を Amazon Fashion で』 / "
+                    "『「君たちはどう生きるか」を Kindle で』. "
+                    "Yes で外部 service ボタンに進みます."
                 )
-            elif depth == 2:
+            elif depth == 1:
+                # 最初の drill-down: 必ず media / channel / 入手経路を提案する.
                 guide = (
-                    "次の段階は『subtype の 絞り込み』。"
-                    "例: 『ホラー』『メンズ』『カジュアル』『M サイズ』。"
-                    "1 単語 or 短いフレーズで。"
+                    f"絞り込み chain 残 {remaining} 段. "
+                    "**今は media / channel / 場所 / 入手経路 を 1 つ提案する** 短い疑問 or 断定 1 文 (~40 字). "
+                    "user に「どの経路で実現するか」を **明示的に問う** 段階です.\n"
+                    "例:\n"
+                    "- 『映画見たい』 → 『配信で 観ますか?』 or 『劇場で 観に行きますか?』 or 『DVD/Blu-ray で 観ますか?』\n"
+                    "- 『服 買いたい』 → 『通販で 買いますか?』 or 『店舗で 試着して 買いますか?』\n"
+                    "- 『夜食』 → 『出前で 注文しますか?』 or 『コンビニで 買いますか?』 or 『家にある物で 済ましますか?』\n"
+                    "- 『音楽 聴きたい』 → 『配信サービスで 聴きますか?』 or 『CD を 買いますか?』\n"
+                    "**特定の media (劇場 / 通販 / 店舗 等) に決め打ちしない** — "
+                    "user 相談に合う **自然な 1 つの選択肢** を出す. "
+                    "service 名 (Amazon / Netflix 等) はまだ出さない. media 選択だけ."
                 )
             else:
+                # depth >= 2 中間段: 前段の media を受け継いで subtype / ジャンル / 価格 等 1 軸絞り込み.
                 guide = (
-                    "次は最も具体的な instance (商品名 / 作品名 / 店舗名 / 品名)。"
-                    "例: 『貞子 on the Movie』『AMAZON Basic T シャツ 5 枚セット』。"
-                    "これが最終決定。"
+                    f"絞り込み chain 残 {remaining} 段. "
+                    "前段までの絞り込み (特に media / channel 選択) を **必ず受け継いで** ください. "
+                    "今は **subtype / ジャンル / 価格帯 / シーン 等 1 軸だけ絞る** "
+                    "短い断定 or 疑問 1 文 (~40 字). "
+                    "前段で配信系 media が選ばれていれば Amazon Prime Video / Amazon Music / "
+                    "Kindle / Amazon.co.jp 等の Amazon サービスへ自然に寄せ、合わない場合 "
+                    "(劇場 / 店舗 / 出前 等) は無理に Amazon を出さず、user 相談に最も適した "
+                    "他 service (TOHO シネマズ / 出前館 / Uber Eats / じゃらん 等) を選ぶ. "
+                    "**お題と前段 media からの逸脱は厳禁**. "
+                    "極端に具体的な固有名は最終段まで温存."
                 )
             enriched_input = (
                 f"[これまでの絞り込み: {context_line}]\n"
@@ -383,6 +411,23 @@ class DecisionEngine:
 
         # 6. proposal 生成 (4 つ目の LLM call、timeout 付き)
         proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        # 2026-05-25 外部サービス誘導: depth=0 root proposal は次段で Amazon サービスへ
+        # 繋がる action を含む内容にする (drill-down chain 起点の役割).
+        if depth == 0:
+            proposal_system += (
+                "\n\n"
+                "**重要**: この proposal は drill-down chain の **起点** です. "
+                "ユーザーの相談を **広く受け止めた 大まかな方向性** だけを示す短い 1 文を出してください. "
+                "『〇〇しよう / 〇〇するのが良い』程度の素直な助言に留め、以下を **必ず守って** ください:\n"
+                "- **手段 / 場所 / 媒体を決め打ちしない** "
+                "(例: 『映画見たい』 → 『劇場で 1 本観ろ』 はダメ. "
+                "『観たい映画を 1 本 観よう』 のように、劇場 / 配信 / DVD 等の channel は明示しない).\n"
+                "- **特定 service 名 (Amazon / Prime Video / Netflix / Uber Eats / 出前館 等) を出さない**. "
+                "service への誘導は次段以降の役割.\n"
+                "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
+                "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
+                "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+            )
         try:
             raw_proposal = await asyncio.wait_for(
                 self._llm.complete(
@@ -404,10 +449,10 @@ class DecisionEngine:
 
         # 2026-05-23 Drill-down chain: is_final + service を proposal event に同梱.
         # is_final = chain depth >= MAX_DRILL_DEPTH (3) のみ。
-        # service routing 質問 (depth=1) は終了させず、4 段目 (depth=3) で必ず final.
+        # depth 0..2 は Yes で onDrillDown 経路 (chain_context を積んで再 stream)、
+        # 4 段目 (depth=3) で final → NudgeBanner + 外部 service CTA を表示.
         # service 情報は depth 問わず付与し、final で CTA、それまでは「ヒント」表示に使える。
         from yesman_api.domain.decision.service_catalog import pick_service
-        MAX_DRILL_DEPTH = 3
         combined_text = (
             proposal_text + " " + " ".join(request.chain_context)
         ).strip()
@@ -419,11 +464,10 @@ class DecisionEngine:
                 "url": service.url,
                 "emoji": service.emoji,
             }
-        # 2026-05-24 C-2 fix (Task 8 ultrathink): mockup §6 通り「root 1 回 Yes で完結」を default.
-        # depth=0 (root) または depth>=MAX_DRILL_DEPTH で is_final=true.
-        # drill-down (0 < depth < MAX) は user が明示的に「もっと詳しく」 ボタンで opt-in する
-        # 設計 (frontend で別途実装). default 動作は mockup と整合し、NudgeBanner 完結.
-        is_final = depth == 0 or depth >= MAX_DRILL_DEPTH
+        # 2026-05-25 revert (A 案): Yes 連鎖で深堀り → 4 段目 (depth=3) で final.
+        # depth >= MAX_DRILL_DEPTH (3) のときのみ is_final=true。
+        # depth 0..2 は Yes で onDrillDown が起動し、chain_context を積んで再 stream。
+        is_final = depth >= MAX_DRILL_DEPTH
         yield StreamEvent(
             "proposal",
             {
@@ -718,21 +762,25 @@ class DecisionEngine:
             f"日常会話で {spec.primary_language} を話します。\n"
             f"話し方は {formality_hint} です。"
         )
-        # I-4: chain_context を inject (builtin path の depth-aware ガイドと整合)
+        # I-4: chain_context を inject (builtin path の統一指針と整合)
         chain_section = ""
         if chain_context:
             depth = len(chain_context)
             context_line = " → ".join(chain_context)
-            if depth == 1:
+            remaining = MAX_DRILL_DEPTH - depth
+            if remaining <= 1:
                 guide = (
-                    "次は『どの service / 経路で実現するか』を提案してください "
-                    "(例: Amazon Prime / Netflix / ユニクロ 等)."
+                    "**最終段**. Amazon で実際に開ける固有名 (作品名 / 商品名 / "
+                    "ストア名 / 著者名 / アーティスト名) を含む具体的 1 文で提案."
                 )
-            elif depth == 2:
-                guide = "次は subtype を絞り込んでください (例: ホラー / メンズ / カジュアル)."
             else:
                 guide = (
-                    "最も具体的な instance (商品名 / 作品名 / 店舗名) を提案 — これが最終決定."
+                    f"chain 残 {remaining} 段. 一段だけ具体化してください "
+                    "(ジャンル / service / subtype / シーン / 価格帯 等 1 軸). "
+                    "ユーザー相談に自然に合う場合のみ Amazon Prime Video / Music / Fashion / "
+                    "Kindle / Prime Gaming / Amazon.co.jp に寄せる. 合わない場合は他 service "
+                    "(Uber Eats / 出前館 / 食べログ / じゃらん 等). お題からの逸脱は禁止. "
+                    "極端に具体的すぎる固有名は最終段まで温存."
                 )
             chain_section = (
                 f"\n\nこれまでの絞り込み: {context_line}\n{guide}"
@@ -939,6 +987,22 @@ class DecisionEngine:
 
         # 6. proposal 生成 (builtin path と同じ orchestrator を流用)
         proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        # 2026-05-25 外部サービス誘導: depth=0 root は次段で Amazon サービスへ繋がる action を含める.
+        if len(request.chain_context) == 0:
+            proposal_system += (
+                "\n\n"
+                "**重要**: この proposal は drill-down chain の **起点** です. "
+                "ユーザーの相談を **広く受け止めた 大まかな方向性** だけを示す短い 1 文を出してください. "
+                "『〇〇しよう / 〇〇するのが良い』程度の素直な助言に留め、以下を **必ず守って** ください:\n"
+                "- **手段 / 場所 / 媒体を決め打ちしない** "
+                "(例: 『映画見たい』 → 『劇場で 1 本観ろ』 はダメ. "
+                "『観たい映画を 1 本 観よう』 のように、劇場 / 配信 / DVD 等の channel は明示しない).\n"
+                "- **特定 service 名 (Amazon / Prime Video / Netflix / Uber Eats / 出前館 等) を出さない**. "
+                "service への誘導は次段以降の役割.\n"
+                "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
+                "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
+                "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+            )
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
         try:
             raw_proposal = await asyncio.wait_for(
@@ -959,7 +1023,6 @@ class DecisionEngine:
         # 7. drill-down chain depth + service catalog (builtin path と同じ)
         from yesman_api.domain.decision.service_catalog import pick_service
 
-        MAX_DRILL_DEPTH = 3
         depth = len(request.chain_context)
         combined_text = (
             proposal_text + " " + " ".join(request.chain_context)
@@ -972,11 +1035,8 @@ class DecisionEngine:
                 "url": service.url,
                 "emoji": service.emoji,
             }
-        # 2026-05-24 C-2 fix (Task 8 ultrathink): mockup §6 通り「root 1 回 Yes で完結」を default.
-        # depth=0 (root) または depth>=MAX_DRILL_DEPTH で is_final=true.
-        # drill-down (0 < depth < MAX) は user が明示的に「もっと詳しく」 ボタンで opt-in する
-        # 設計 (frontend で別途実装). default 動作は mockup と整合し、NudgeBanner 完結.
-        is_final = depth == 0 or depth >= MAX_DRILL_DEPTH
+        # 2026-05-25 revert (A 案): builtin path と同じく depth >= MAX_DRILL_DEPTH のみ final.
+        is_final = depth >= MAX_DRILL_DEPTH
         yield StreamEvent(
             "proposal",
             {
@@ -1157,6 +1217,22 @@ class DecisionEngine:
 
         # 6. proposal 生成
         proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        # 2026-05-25 外部サービス誘導: depth=0 root は次段で Amazon サービスへ繋がる action を含める.
+        if len(request.chain_context) == 0:
+            proposal_system += (
+                "\n\n"
+                "**重要**: この proposal は drill-down chain の **起点** です. "
+                "ユーザーの相談を **広く受け止めた 大まかな方向性** だけを示す短い 1 文を出してください. "
+                "『〇〇しよう / 〇〇するのが良い』程度の素直な助言に留め、以下を **必ず守って** ください:\n"
+                "- **手段 / 場所 / 媒体を決め打ちしない** "
+                "(例: 『映画見たい』 → 『劇場で 1 本観ろ』 はダメ. "
+                "『観たい映画を 1 本 観よう』 のように、劇場 / 配信 / DVD 等の channel は明示しない).\n"
+                "- **特定 service 名 (Amazon / Prime Video / Netflix / Uber Eats / 出前館 等) を出さない**. "
+                "service への誘導は次段以降の役割.\n"
+                "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
+                "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
+                "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+            )
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
         try:
             raw_proposal = await asyncio.wait_for(
@@ -1177,7 +1253,6 @@ class DecisionEngine:
         # 7. drill-down + service catalog
         from yesman_api.domain.decision.service_catalog import pick_service
 
-        MAX_DRILL_DEPTH = 3
         depth = len(request.chain_context)
         combined_text = (
             proposal_text + " " + " ".join(request.chain_context)
@@ -1190,7 +1265,8 @@ class DecisionEngine:
                 "url": service.url,
                 "emoji": service.emoji,
             }
-        is_final = depth == 0 or depth >= MAX_DRILL_DEPTH
+        # 2026-05-25 revert (A 案): mixed path も depth >= MAX_DRILL_DEPTH のみ final.
+        is_final = depth >= MAX_DRILL_DEPTH
 
         yield StreamEvent(
             "proposal",

@@ -38,13 +38,15 @@ SERVICE_CATALOG: dict[str, list[ExternalService]] = {
         ExternalService("メルカリ", "https://jp.mercari.com/", "💱"),
     ],
     "fashion": [
-        # User 希望: 洋服はユニクロ or Amazon Fashion を first preference に
-        ExternalService("ユニクロ", "https://www.uniqlo.com/jp/ja/", "👖"),
+        # User 希望 (2026-05-25): 全 category で Amazon サービスを first preference に統一
         ExternalService("Amazon Fashion", "https://www.amazon.co.jp/fashion", "👔"),
+        ExternalService("ユニクロ", "https://www.uniqlo.com/jp/ja/", "👖"),
         ExternalService("GU", "https://www.gu-global.com/jp/ja/", "👗"),
         ExternalService("ZOZOTOWN", "https://zozo.jp/", "👕"),
     ],
     "music": [
+        # User 希望: 音楽は Amazon Music を first preference に
+        ExternalService("Amazon Music", "https://music.amazon.co.jp/", "🎵"),
         ExternalService("Spotify", "https://open.spotify.com/", "🎵"),
         ExternalService("Apple Music", "https://music.apple.com/jp/", "🎧"),
         ExternalService("YouTube Music", "https://music.youtube.com/", "🎶"),
@@ -61,6 +63,8 @@ SERVICE_CATALOG: dict[str, list[ExternalService]] = {
         ExternalService("楽天トラベル", "https://travel.rakuten.co.jp/", "🚆"),
     ],
     "games": [
+        # User 希望 (2026-05-25): Amazon サービス (Prime Gaming) を first preference に
+        ExternalService("Amazon Prime Gaming", "https://gaming.amazon.com/", "🎮"),
         ExternalService("Steam", "https://store.steampowered.com/", "🎮"),
         ExternalService("Nintendo Store", "https://store-jp.nintendo.com/", "🎯"),
         ExternalService("Epic Games", "https://store.epicgames.com/ja/", "🕹️"),
