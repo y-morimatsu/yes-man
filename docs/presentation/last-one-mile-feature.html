@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YesMan — Last One Mile (追加機能説明資料)</title>
+<style>
+  /* ===========================================================
+     Design tokens — index.html (本編) と同一パレット
+     warm cream + terracotta + serif headline (Claude / Anthropic 風)
+     =========================================================== */
+  :root {
+    --bg-paper:        #FBFAF5;
+    --bg-paper-alt:    #F1EDDF;
+    --bg-card:         #FFFFFF;
+    --bg-card-tint:    #F5F1E3;
+
+    --ink:             #1A1814;
+    --ink-soft:        #3A362E;
+    --ink-muted:       #6B6557;
+    --ink-faint:       #918B7D;
+
+    --accent:          #B85C3D;
+    --accent-deep:     #973F22;
+    --accent-soft:     #EFC5B3;
+    --accent-pale:     #FAE5D9;
+
+    --line:            #B8AC91;
+    --line-soft:       #CFC4A8;
+
+    --sky:             #3F8FC2;
+    --amber:           #D9962F;
+    --violet:          #7C5FB5;
+    --mint:            #4DA974;
+
+    /* service brand accents (説明用、approximate) */
+    --amazon:          #FF9900;
+    --amazon-deep:     #232F3E;
+    --prime:           #00A8E1;
+    --demae:           #E60012;
+    --uber-eats:       #06C167;
+    --spotify:         #1DB954;
+    --netflix:         #E50914;
+
+    --shadow-sm:       0 1px 3px rgba(40, 25, 10, 0.10);
+    --shadow-md:       0 6px 18px rgba(40, 25, 10, 0.14);
+    --shadow-lg:       0 18px 48px rgba(40, 25, 10, 0.18);
+
+    --serif: "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+    --sans:  -apple-system, BlinkMacSystemFont, "Inter", "Hiragino Kaku Gothic ProN",
+             "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+    --mono:  "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg-paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: clamp(15px, 1.1vw, 19px);
+    font-weight: 450;
+    line-height: 1.55;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  b, strong { font-weight: 700; }
+
+  /* ======================== Stage / Slide ======================== */
+  .stage { position: fixed; inset: 0; }
+  .deck  { position: absolute; inset: 0; background: var(--bg-paper); overflow: hidden; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    padding: clamp(40px, 5vh, 72px) clamp(48px, 7vw, 120px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 360ms ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ======================== Typography ======================== */
+  .eyebrow {
+    font-size: clamp(13px, 0.95vw, 16px);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h1.title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(56px, 6.5vw, 96px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  h2.section {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(36px, 3.4vw, 56px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  h3.lead {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0 0 18px;
+  }
+  .kicker {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(17px, 1.55vw, 24px);
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+  }
+  p.body {
+    font-size: clamp(16px, 1.25vw, 21px);
+    color: var(--ink-soft);
+    max-width: 64ch;
+  }
+  .accent-text { color: var(--accent); }
+  .ink-soft { color: var(--ink-soft); }
+  .ink-muted { color: var(--ink-muted); }
+  .label {
+    font-size: clamp(12px, 0.9vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* ======================== Layout primitives ======================== */
+  .row { display: flex; gap: 28px; }
+  .col { display: flex; flex-direction: column; gap: 16px; }
+  .grow { flex: 1; }
+  .center-y { align-items: center; }
+  .between { justify-content: space-between; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+  /* ======================== Card ======================== */
+  .card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+  }
+  .card.tint { background: var(--bg-card-tint); }
+  .card.accent {
+    background: var(--accent-pale);
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+  .card .num {
+    font-family: var(--serif);
+    font-size: clamp(14px, 1vw, 16px);
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .card h4 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(20px, 1.6vw, 26px);
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: clamp(15px, 1.15vw, 18px);
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ======================== Header band ======================== */
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 28px;
+  }
+  .slide-header .left { display: flex; flex-direction: column; gap: 2px; }
+
+  /* ======================== Footer / nav ======================== */
+  .footer {
+    position: absolute;
+    bottom: 18px; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+    pointer-events: none;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-size: clamp(13px, 0.95vw, 16px);
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .brand b { color: var(--ink); font-weight: 600; }
+  .pager {
+    font-family: var(--mono);
+    font-size: clamp(13px, 0.95vw, 15px);
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .nav-controls {
+    position: fixed;
+    bottom: 18px; right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 50;
+    padding: 4px 8px 4px 14px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-controls .pager { margin: 0 4px; }
+  .nav-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--bg-card);
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 160ms ease;
+    box-shadow: var(--shadow-md);
+  }
+  .nav-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .progress-bar {
+    position: absolute;
+    top: 0; left: 0;
+    height: 5px;
+    background: var(--accent);
+    transition: width 360ms ease;
+    z-index: 40;
+  }
+  .deck.presenting .progress-bar,
+  .deck.presenting .footer,
+  .deck.presenting ~ .nav-controls { display: none; }
+
+  /* ======================== Cover slide ======================== */
+  .cover {
+    background: var(--bg-paper);
+    padding: clamp(56px, 7vh, 96px) clamp(56px, 8vw, 140px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 8px;
+    background: var(--accent);
+  }
+  .cover .top { display: flex; align-items: center; justify-content: space-between; }
+  .cover .logo-mark {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--serif);
+    font-size: clamp(18px, 1.4vw, 22px);
+    color: var(--ink);
+  }
+  .cover .logo-dot {
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .cover .meta {
+    font-family: var(--mono);
+    font-size: clamp(13px, 1vw, 16px);
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+    text-align: right;
+    font-weight: 500;
+  }
+  .cover h1.title {
+    font-size: clamp(72px, 8vw, 140px);
+    margin-top: 24px;
+    letter-spacing: -0.035em;
+    font-weight: 600;
+  }
+  .cover .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 2vw, 34px);
+    color: var(--ink-soft);
+    margin-top: 18px;
+  }
+  .cover .tagline em {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.12em;
+    letter-spacing: 0.05em;
+    color: var(--accent-deep);
+    background: linear-gradient(
+      transparent 60%, var(--accent-pale) 60%,
+      var(--accent-pale) 94%, transparent 94%);
+    padding: 0 0.18em;
+    border-radius: 2px;
+  }
+  .cover .sub {
+    font-size: clamp(16px, 1.25vw, 21px);
+    color: var(--ink-soft);
+    margin-top: 28px;
+    max-width: 64ch;
+    line-height: 1.7;
+  }
+  .cover .sub p + p { margin-top: 0.7em; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .pill {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    background: var(--accent-pale);
+    color: var(--accent-deep);
+    font-size: clamp(13px, 1vw, 16px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  /* ======================== Flow diagram ======================== */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 18px;
+    margin: 16px 0;
+  }
+  .flow-step {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 20px;
+    text-align: center;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+  .flow-step.accent {
+    background: var(--accent-pale);
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+  .flow-step .ico {
+    font-size: clamp(28px, 2.6vw, 40px);
+    line-height: 1;
+  }
+  .flow-step .name {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(16px, 1.3vw, 20px);
+    color: var(--ink);
+  }
+  .flow-step .sub {
+    font-size: clamp(13px, 1vw, 15px);
+    color: var(--ink-muted);
+  }
+  .flow-arrow {
+    font-family: var(--mono);
+    font-size: clamp(20px, 2vw, 28px);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ======================== Phone mockup ======================== */
+  .phone {
+    width: clamp(220px, 18vw, 280px);
+    aspect-ratio: 9 / 19.5;
+    background: #1a1814;
+    border-radius: 32px;
+    padding: 12px;
+    box-shadow: var(--shadow-lg);
+    margin: 0 auto;
+  }
+  .phone-screen {
+    background: var(--bg-paper);
+    width: 100%; height: 100%;
+    border-radius: 22px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .phone-status {
+    height: 24px;
+    background: var(--bg-paper);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 14px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--ink-muted);
+  }
+  .phone-content {
+    flex: 1;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .bubble {
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    line-height: 1.4;
+    max-width: 85%;
+  }
+  .bubble.user {
+    background: var(--accent-pale);
+    color: var(--accent-deep);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.ai {
+    background: #ECE8DA;
+    color: var(--ink);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .bubble .who {
+    font-size: 9px;
+    color: var(--ink-muted);
+    margin-bottom: 2px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .swipe-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-top: 4px;
+  }
+  .swipe-card .head {
+    font-size: 9px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .swipe-card .prop {
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+  .swipe-card .actions {
+    display: flex;
+    justify-content: space-around;
+    font-size: 9px;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+  .swipe-card .actions .yes { color: var(--mint); }
+  .swipe-card .actions .no  { color: var(--accent-deep); }
+  .deep-link {
+    background: var(--ink);
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .deep-link .svc-ico {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .deep-link .meta {
+    font-size: 9px; line-height: 1.3;
+  }
+  .deep-link .meta b {
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .deep-link .cta {
+    margin-left: auto;
+    background: white;
+    color: var(--ink);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  /* ======================== Service tile ======================== */
+  .svc-tile {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 130px;
+  }
+  .svc-tile .badge {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: white;
+    font-size: 14px;
+  }
+  .svc-tile .name {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(15px, 1.2vw, 18px);
+    color: var(--ink);
+    margin-top: 4px;
+  }
+  .svc-tile .desc {
+    font-size: clamp(12px, 0.95vw, 14px);
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+  .svc-tile .status {
+    font-family: var(--mono);
+    font-size: clamp(10px, 0.8vw, 12px);
+    color: var(--ink-muted);
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px dashed var(--line-soft);
+    letter-spacing: 0.04em;
+  }
+  .svc-tile .status .v1 { color: var(--accent-deep); font-weight: 700; }
+  .svc-tile .status .v2 { color: var(--violet); font-weight: 700; }
+  .svc-tile .status .v3 { color: var(--ink-faint); font-weight: 700; }
+
+  /* ======================== Architecture box ======================== */
+  .arch-layer {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .arch-layer.accent {
+    background: var(--accent-pale);
+    border-color: var(--accent);
+  }
+  .arch-layer .layer-name {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(17px, 1.4vw, 22px);
+    color: var(--ink);
+    min-width: 220px;
+  }
+  .arch-layer .layer-desc {
+    font-size: clamp(13px, 1.05vw, 16px);
+    color: var(--ink-soft);
+    flex: 1;
+  }
+  .arch-arrow {
+    text-align: center;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: clamp(18px, 1.6vw, 24px);
+    margin: -4px 0;
+  }
+
+  /* ======================== Horizon (roadmap) ======================== */
+  .horizon {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 22px;
+  }
+  .horizon-col {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .horizon-col .when {
+    font-family: var(--mono);
+    font-size: clamp(11px, 0.9vw, 13px);
+    color: var(--accent-deep);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+  .horizon-col h4 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(18px, 1.5vw, 22px);
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .horizon-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .horizon-col ul li {
+    font-size: clamp(13px, 1.05vw, 16px);
+    color: var(--ink-soft);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.45;
+  }
+  .horizon-col ul li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.65em;
+    top: 0.4em;
+  }
+
+  /* ======================== Quote block ======================== */
+  .quote-big {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3vw, 48px);
+    line-height: 1.4;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .quote-big em {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--accent-deep);
+    background: linear-gradient(
+      transparent 65%, var(--accent-pale) 65%,
+      var(--accent-pale) 95%, transparent 95%);
+    padding: 0 0.12em;
+  }
+
+  /* ======================== Inline diff highlight ======================== */
+  .strike {
+    text-decoration: line-through;
+    color: var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="deck">
+    <div class="progress-bar" id="progress"></div>
+
+    <!-- ====================================================
+         Slide 1 — Cover
+         ==================================================== -->
+    <section class="slide cover active" data-title="Cover">
+      <div class="top">
+        <div class="logo-mark">
+          <div class="logo-dot"></div>
+          <span>YesMan</span>
+        </div>
+        <div class="meta">
+          ADD-ON FEATURE<br>
+          v0.5 / 2026-05
+        </div>
+      </div>
+
+      <div>
+        <div class="eyebrow">Add-on feature proposal</div>
+        <h1 class="title">Last One Mile.</h1>
+        <p class="tagline"><em>YES</em> の その先へ、<br>行動まで、AI が運ぶ。</p>
+        <div class="sub">
+          <p>YesMan の決定 (Decision) は今、スワイプで「閉じる」。</p>
+          <p>でも本当の終わりは、<b>実際に観た / 買った / 食べた</b> その瞬間にある。</p>
+          <p>本資料は、<b>意思決定 後の深堀り質問</b> と <b>外部サービスへの deep-link 実行</b> を YesMan に追加する提案 — 通称 <span class="accent-text"><b>Last One Mile</b></span>。</p>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="pill">📦 ADD-ON — Decision → Drill-down → Execute</div>
+        <div class="meta">ぐうたラボ / YesMan Team</div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 2 — The Gap (今 YesMan が止まる場所)
+         ==================================================== -->
+    <section class="slide" data-title="The Gap">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">01 — The Gap</div>
+          <h2 class="section">YES、その先で止まっている。</h2>
+          <p class="kicker" style="margin-top: 8px;">今の YesMan は「決まった」で完了する。でも、人はそこから「動く」必要がある。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="flex: 1;">
+        <div class="card tint">
+          <div class="num">— TODAY</div>
+          <h4>現状: 決めて、終わり。</h4>
+          <p style="margin-bottom: 14px;">合議 → 提案 → Yes スワイプ。<br>
+            画面には「決まったこと」 が残り、ユーザーは <b>自分でアプリを開き直す</b>。</p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+            <li style="color: var(--ink-muted); padding-left: 16px; position: relative; font-size: clamp(14px, 1.1vw, 17px);">
+              <span style="position: absolute; left: 0; color: var(--ink-faint);">·</span>
+              「今夜映画」 → <span class="strike">Prime Video 開く</span> → タイトル探す → 再生
+            </li>
+            <li style="color: var(--ink-muted); padding-left: 16px; position: relative; font-size: clamp(14px, 1.1vw, 17px);">
+              <span style="position: absolute; left: 0; color: var(--ink-faint);">·</span>
+              「コーヒー切れた」 → <span class="strike">Amazon 開く</span> → 検索 → カート → 注文
+            </li>
+            <li style="color: var(--ink-muted); padding-left: 16px; position: relative; font-size: clamp(14px, 1.1vw, 17px);">
+              <span style="position: absolute; left: 0; color: var(--ink-faint);">·</span>
+              「お腹空いた、何か食べたい」 → <span class="strike">出前館 開く</span> → 店探す → ...
+            </li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--accent-deep); font-weight: 600;">→ 判断は委任できたが、<b>実行は自分でやる</b>。</p>
+        </div>
+
+        <div class="card accent">
+          <div class="num">— TOMORROW</div>
+          <h4>本来: YES の先、即実行へ。</h4>
+          <p style="margin-bottom: 14px;">合議 → 提案 → Yes → <b>AI が深堀り</b> → <b>外部サービスを直接開く</b>。</p>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+            <li style="color: var(--ink); padding-left: 16px; position: relative; font-size: clamp(14px, 1.1vw, 17px);">
+              <span style="position: absolute; left: 0; color: var(--accent);">▸</span>
+              「今夜映画」 → 「ジャンルは?」 → <b>Prime Video が起動・自動再生</b>
+            </li>
+            <li style="color: var(--ink); padding-left: 16px; position: relative; font-size: clamp(14px, 1.1vw, 17px);">
+              <span style="position: absolute; left: 0; color: var(--accent);">▸</span>
+              「コーヒー切れた」 → 「同じ豆?」 → <b>Amazon の Buy Now ページに直行</b>
+            </li>
+            <li style="color: var(--ink); padding-left: 16px; position: relative; font-size: clamp(14px, 1.1vw, 17px);">
+              <span style="position: absolute; left: 0; color: var(--accent);">▸</span>
+              「お腹空いた」 → 「気分は?」 → <b>出前館の絞り込み済リストへ</b>
+            </li>
+          </ul>
+          <p style="margin-top: 16px; color: var(--accent-deep); font-weight: 700;">→ 判断疲労 だけでなく <b>実行疲労 まで</b>、肩代わり。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 3 — Vision (全体像 = 3-step flow)
+         ==================================================== -->
+    <section class="slide" data-title="Vision">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">02 — Vision</div>
+          <h2 class="section">Decision → Drill-down → Execute.</h2>
+          <p class="kicker" style="margin-top: 8px;">YES を起点に、AI が深堀りし、サービスを開ける。3 ステップで完結。</p>
+        </div>
+      </div>
+
+      <div class="flow" style="margin: 32px 0;">
+        <div class="flow-step">
+          <div class="ico">🎭</div>
+          <div class="name">① Decision</div>
+          <div class="sub">合議による提案<br>(既存機能)</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step accent">
+          <div class="ico">🔎</div>
+          <div class="name">② Drill-down</div>
+          <div class="sub">Yes 後に AI が<br>1〜3 問深堀り</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="ico">🚀</div>
+          <div class="name">③ Execute</div>
+          <div class="sub">外部サービスを<br>deep-link で起動</div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-top: 12px;">
+        <div class="card">
+          <div class="num">① 既存</div>
+          <h4>合議 + スワイプ</h4>
+          <p>3 persona の合議が断定調の提案を出力。右スワイプで Yes 採択。<br>
+            <span class="ink-muted">→ ここまでは v0.4 で完成済</span></p>
+        </div>
+        <div class="card accent">
+          <div class="num">② 新規</div>
+          <h4>深堀り質問の自動生成</h4>
+          <p>提案の <b>カテゴリ</b> (映像 / 購入 / 飲食 / 音楽 …) に応じて、AI が <b>必要最小限</b> の絞り込み質問を 1〜3 問生成。<br>
+            すべて Yes/No スワイプで答えられる形式。</p>
+        </div>
+        <div class="card">
+          <div class="num">③ 新規</div>
+          <h4>Deep link 実行</h4>
+          <p>絞り込み結果を URL クエリ / Universal Link に組み立てて、<b>外部アプリを直接起動</b>。<br>
+            ユーザーは「実行に至る道のり」を一切歩かない。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 4 — Flow Example 1: Amazon Prime Video
+         ==================================================== -->
+    <section class="slide" data-title="Flow A — Prime Video">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">03A — Flow Example A</div>
+          <h2 class="section">🎬 「今夜どう過ごす?」</h2>
+          <p class="kicker" style="margin-top: 8px;">娯楽カテゴリ — Amazon Prime Video へ。</p>
+        </div>
+      </div>
+
+      <div class="row" style="flex: 1; gap: clamp(28px, 4vw, 56px); align-items: center;">
+
+        <!-- Phone mockup -->
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-status">
+              <span>9:41</span>
+              <span>YesMan</span>
+              <span>100%</span>
+            </div>
+            <div class="phone-content">
+              <div class="bubble user">今夜、どう過ごそう?</div>
+              <div class="bubble ai">
+                <div class="who">⚖️ 合議の結論</div>
+                映画でも観てゆっくりしましょう。
+              </div>
+              <div class="swipe-card">
+                <div class="head">PROPOSAL</div>
+                <div class="prop">『君の名は。』を Prime Video で観る</div>
+                <div class="actions">
+                  <span class="no">← No</span>
+                  <span class="yes">Yes →</span>
+                </div>
+              </div>
+              <div class="bubble ai" style="margin-top: 4px;">
+                <div class="who">🔎 深堀り</div>
+                音響は強めにする?
+              </div>
+              <div class="deep-link">
+                <div class="svc-ico" style="background: var(--prime); color: white;">Pv</div>
+                <div class="meta">
+                  <b>Prime Video</b>
+                  自動再生に遷移
+                </div>
+                <div class="cta">起動 →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="col" style="flex: 1; gap: 18px;">
+          <div class="card">
+            <div class="num">STEP ①</div>
+            <h4>合議 + 提案</h4>
+            <p>「今夜どう過ごす?」 → 慎重派 / 楽観派 / 効率派 の合議 →<br><b>「『君の名は。』を Prime Video で」</b>。</p>
+          </div>
+          <div class="card accent">
+            <div class="num">STEP ② — 深堀り (2 問)</div>
+            <h4>絞り込み質問</h4>
+            <p style="margin-bottom: 8px;"><b>Q1:</b> 字幕は要る? <span class="ink-muted">→ Yes/No</span></p>
+            <p style="margin-bottom: 8px;"><b>Q2:</b> 音響は強めにする (Dolby)? <span class="ink-muted">→ Yes/No</span></p>
+            <p style="font-size: 13px; color: var(--ink-muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line-soft);">
+              ※ 質問は LLM が動的生成 (固定リストでなく、提案文脈に依存)</p>
+          </div>
+          <div class="card">
+            <div class="num">STEP ③ — Deep link</div>
+            <h4>Prime Video 起動</h4>
+            <p style="font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--bg-card-tint); padding: 8px 12px; border-radius: 6px; margin-top: 4px; word-break: break-all;">
+              primevideo://detail/{asin}?autoplay=1<br>&amp;subtitles=ja&amp;audio=dolby-5.1
+            </p>
+            <p style="font-size: 13px; color: var(--ink-muted); margin-top: 8px;">
+              Universal Link で <b>アプリがある端末ではアプリ起動 / 無ければ Web</b>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 5 — Flow Example 2: Amazon Shopping
+         ==================================================== -->
+    <section class="slide" data-title="Flow B — Amazon">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">03B — Flow Example B</div>
+          <h2 class="section">🛒 「あれ、もう切れてる」</h2>
+          <p class="kicker" style="margin-top: 8px;">購入カテゴリ — Amazon ワンタップ購入へ。</p>
+        </div>
+      </div>
+
+      <div class="row" style="flex: 1; gap: clamp(28px, 4vw, 56px); align-items: center;">
+
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-status">
+              <span>9:41</span>
+              <span>YesMan</span>
+              <span>100%</span>
+            </div>
+            <div class="phone-content">
+              <div class="bubble user">コーヒー豆が切れた</div>
+              <div class="bubble ai">
+                <div class="who">⚖️ 合議の結論</div>
+                同じ豆を Amazon で再注文。
+              </div>
+              <div class="swipe-card">
+                <div class="head">PROPOSAL</div>
+                <div class="prop">前回購入の AGF Blendy 200g を 2 袋</div>
+                <div class="actions">
+                  <span class="no">← No</span>
+                  <span class="yes">Yes →</span>
+                </div>
+              </div>
+              <div class="bubble ai" style="margin-top: 4px;">
+                <div class="who">🔎 深堀り</div>
+                明日着の便で?
+              </div>
+              <div class="deep-link">
+                <div class="svc-ico" style="background: var(--amazon); color: var(--amazon-deep);">A</div>
+                <div class="meta">
+                  <b>Amazon</b>
+                  Buy Now で次の画面へ
+                </div>
+                <div class="cta">起動 →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col" style="flex: 1; gap: 18px;">
+          <div class="card">
+            <div class="num">STEP ①</div>
+            <h4>履歴を踏まえた提案</h4>
+            <p>「コーヒー豆切れた」 → 嗜好プロファイル + 購入履歴 (将来連携) → <b>「前回購入の AGF Blendy 200g」</b>。</p>
+          </div>
+          <div class="card accent">
+            <div class="num">STEP ② — 深堀り (1〜2 問)</div>
+            <h4>絞り込み質問</h4>
+            <p style="margin-bottom: 8px;"><b>Q1:</b> 個数は前回と同じ (2 袋) でいい? <span class="ink-muted">→ Yes/No</span></p>
+            <p><b>Q2:</b> 明日お急ぎ便で? <span class="ink-muted">→ Yes/No</span></p>
+          </div>
+          <div class="card">
+            <div class="num">STEP ③ — Deep link</div>
+            <h4>Amazon の Buy Now / Cart へ</h4>
+            <p style="font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--bg-card-tint); padding: 8px 12px; border-radius: 6px; margin-top: 4px; word-break: break-all;">
+              https://www.amazon.co.jp/gp/<br>aws/cart/add.html?ASIN.1={asin}<br>&amp;Quantity.1=2
+            </p>
+            <p style="font-size: 13px; color: var(--ink-muted); margin-top: 8px;">
+              <b>Cart API</b> (公式 affiliate) で「商品が入った状態の Cart 画面」へ。<br>
+              ユーザーは <b>確定ボタンを押すだけ</b>。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 6 — Flow Example 3: Demae-can / Uber Eats
+         ==================================================== -->
+    <section class="slide" data-title="Flow C — Food Delivery">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">03C — Flow Example C</div>
+          <h2 class="section">🍜 「お腹空いた、面倒」</h2>
+          <p class="kicker" style="margin-top: 8px;">飲食カテゴリ — 出前館 / Uber Eats へ。</p>
+        </div>
+      </div>
+
+      <div class="row" style="flex: 1; gap: clamp(28px, 4vw, 56px); align-items: center;">
+
+        <div class="phone">
+          <div class="phone-screen">
+            <div class="phone-status">
+              <span>9:41</span>
+              <span>YesMan</span>
+              <span>100%</span>
+            </div>
+            <div class="phone-content">
+              <div class="bubble user">お腹空いた、外出は面倒</div>
+              <div class="bubble ai">
+                <div class="who">⚖️ 合議の結論</div>
+                出前で和食を取りましょう。
+              </div>
+              <div class="swipe-card">
+                <div class="head">PROPOSAL</div>
+                <div class="prop">和食 (天丼 or 親子丼) を 30 分以内で配達</div>
+                <div class="actions">
+                  <span class="no">← No</span>
+                  <span class="yes">Yes →</span>
+                </div>
+              </div>
+              <div class="bubble ai" style="margin-top: 4px;">
+                <div class="who">🔎 深堀り</div>
+                予算は ¥1,500 以内で OK?
+              </div>
+              <div class="deep-link">
+                <div class="svc-ico" style="background: var(--demae); color: white;">出</div>
+                <div class="meta">
+                  <b>出前館</b>
+                  絞り込み済みリスト
+                </div>
+                <div class="cta">起動 →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col" style="flex: 1; gap: 18px;">
+          <div class="card">
+            <div class="num">STEP ①</div>
+            <h4>位置と気分を踏まえた提案</h4>
+            <p>「お腹空いた、面倒」 → 現在地 + 過去の嗜好 → <b>「和食を出前で」</b>。</p>
+          </div>
+          <div class="card accent">
+            <div class="num">STEP ② — 深堀り (2〜3 問)</div>
+            <h4>絞り込み質問</h4>
+            <p style="margin-bottom: 8px;"><b>Q1:</b> 予算 ¥1,500 以内? <span class="ink-muted">→ Yes/No</span></p>
+            <p style="margin-bottom: 8px;"><b>Q2:</b> 配達 30 分以内 必須? <span class="ink-muted">→ Yes/No</span></p>
+            <p><b>Q3:</b> 量は多め? <span class="ink-muted">→ Yes/No</span></p>
+          </div>
+          <div class="card">
+            <div class="num">STEP ③ — Deep link</div>
+            <h4>出前館 / Uber Eats へ</h4>
+            <p style="font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--bg-card-tint); padding: 8px 12px; border-radius: 6px; margin-top: 4px; word-break: break-all;">
+              demaecan://search?cuisine=ja<br>&amp;price_max=1500&amp;eta_max=30
+            </p>
+            <p style="font-size: 13px; color: var(--ink-muted); margin-top: 8px;">
+              <b>絞り込み済み</b> の検索結果ページが開く。ユーザーは「店舗 1 つ選ぶ」 だけ。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 7 — Drill-down 設計方針
+         ==================================================== -->
+    <section class="slide" data-title="Drill-down">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">04 — Drill-down Design</div>
+          <h2 class="section">深堀りの設計指針。</h2>
+          <p class="kicker" style="margin-top: 8px;">「もう一度判断疲労にする」 のでは本末転倒。短く・断定的に・スワイプで。</p>
+        </div>
+      </div>
+
+      <div class="grid-4" style="flex: 1; align-content: start;">
+        <div class="card">
+          <div class="num">① 量</div>
+          <h4>1〜3 問まで</h4>
+          <p>4 問以上は判断疲労を再生産する。LLM 側で「最重要 N 軸」 を選別。</p>
+        </div>
+        <div class="card">
+          <div class="num">② 形式</div>
+          <h4>Yes/No スワイプ統一</h4>
+          <p>本編 UI と完全に揃える。自由入力 / 多肢選択は <b>使わない</b>。</p>
+        </div>
+        <div class="card">
+          <div class="num">③ 内容</div>
+          <h4>嗜好 + 履歴を活用</h4>
+          <p>過去 30 日の preference profile + 採択履歴で <b>多くの軸は既に推定済</b>。AI は埋まらない穴だけ聞く。</p>
+        </div>
+        <div class="card">
+          <div class="num">④ Skip</div>
+          <h4>「お任せ」 が常に選べる</h4>
+          <p>「全部 Yes」 ボタンで <b>1 タップ即実行</b>。判断疲労ゼロモード。</p>
+        </div>
+        <div class="card">
+          <div class="num">⑤ 復元</div>
+          <h4>履歴に質問+回答を残す</h4>
+          <p>後で振り返れるよう、決定詳細画面に <b>深堀りスレッド</b> を保存。</p>
+        </div>
+        <div class="card">
+          <div class="num">⑥ Safety</div>
+          <h4>沈黙 4 カテゴリは drill-down も発動しない</h4>
+          <p>宗教 / 選挙 / 暴力 / 卑猥 は提案自体を生成しないので drill-down も自動的にスキップ。</p>
+        </div>
+        <div class="card">
+          <div class="num">⑦ 失敗時</div>
+          <h4>Deep link 不発でも閉じない</h4>
+          <p>アプリ未インストール / Universal Link 不通の時は Web fallback +「クリップボードにコピー」。</p>
+        </div>
+        <div class="card accent">
+          <div class="num">⑧ 一貫性</div>
+          <h4>YesMan の世界観を保つ</h4>
+          <p>外部サービスを開いた後も「YesMan で決めた」 体験。<br><b>Yes 採択履歴 / 委任度スコアに反映</b>。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 8 — Architecture
+         ==================================================== -->
+    <section class="slide" data-title="Architecture">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">05 — Architecture</div>
+          <h2 class="section">3 層で追加できる。</h2>
+          <p class="kicker" style="margin-top: 8px;">既存の Decision pipeline に <b>後段</b> として接続。Strategy + DI で外部サービスは差替え可能。</p>
+        </div>
+      </div>
+
+      <div class="col" style="gap: 8px; flex: 1; justify-content: center; max-width: 980px; margin: 0 auto; width: 100%;">
+
+        <div class="arch-layer">
+          <div class="layer-name">📥 Decision (既存)</div>
+          <div class="layer-desc">
+            user_input → 合議 → proposal_text + persona_outputs → Yes/No スワイプ<br>
+            <span class="ink-muted">→ <b>Yes 時にイベント発火</b> (`decision.accepted`)</span>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <div class="arch-layer accent">
+          <div class="layer-name">🔎 Intent Classifier (新規)</div>
+          <div class="layer-desc">
+            proposal_text + user_input → <b>action_category</b> (entertainment / purchase / food / music / travel / none)<br>
+            <span class="ink-muted">→ 軽量 LLM (1-shot) または rule-based。none なら drill-down スキップ。</span>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <div class="arch-layer accent">
+          <div class="layer-name">🎯 Drill-down Engine (新規)</div>
+          <div class="layer-desc">
+            action_category + preference_profile + decision context → <b>1〜3 questions</b> (Yes/No)<br>
+            <span class="ink-muted">→ LLM プロンプトに「最大 N 問 / 既知の嗜好を再質問しない」 制約を埋め込み。</span>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <div class="arch-layer accent">
+          <div class="layer-name">🔌 Action Provider Registry (新規)</div>
+          <div class="layer-desc">
+            action_category + answers → <b>provider</b> (PrimeVideoProvider / AmazonProvider / DemaecanProvider / ...) を選択<br>
+            <span class="ink-muted">→ 各 provider は `build_deep_link(answers) -> URL` のみ実装する小さな I/F (Strategy)。</span>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+
+        <div class="arch-layer">
+          <div class="layer-name">🚀 Execute (新規)</div>
+          <div class="layer-desc">
+            Universal Link / アプリスキーム / Web URL を生成 → ブラウザに `window.location.href` で遷移<br>
+            <span class="ink-muted">→ 失敗時は Web fallback. 履歴に execution_url を保存。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 9 — Service Connector Matrix
+         ==================================================== -->
+    <section class="slide" data-title="Service Connectors">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">06 — Service Connectors</div>
+          <h2 class="section">繋ぐ先は、増やせる。</h2>
+          <p class="kicker" style="margin-top: 8px;">各 connector は <b>~50 行</b>。Strategy + DI なので追加コストが線形。</p>
+        </div>
+      </div>
+
+      <div class="grid-4" style="flex: 1; align-content: start;">
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--prime);">Pv</div>
+          <div class="name">Amazon Prime Video</div>
+          <div class="desc">タイトル + 言語 + 音響で deep link 生成 → 自動再生。</div>
+          <div class="status">v1 <span class="v1">● MVP</span></div>
+        </div>
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--amazon); color: var(--amazon-deep);">A</div>
+          <div class="name">Amazon</div>
+          <div class="desc">ASIN + 個数 + 配送オプションで Cart 画面へ。</div>
+          <div class="status">v1 <span class="v1">● MVP</span></div>
+        </div>
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--demae);">出</div>
+          <div class="name">出前館</div>
+          <div class="desc">cuisine + price + eta で絞り込み済リスト。</div>
+          <div class="status">v1 <span class="v1">● MVP</span></div>
+        </div>
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--uber-eats);">U</div>
+          <div class="name">Uber Eats</div>
+          <div class="desc">出前館の fallback。同じ answers で対応可能。</div>
+          <div class="status">v2 <span class="v2">◐ Phase 2</span></div>
+        </div>
+
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--spotify);">S</div>
+          <div class="name">Spotify</div>
+          <div class="desc">気分 → playlist / podcast に自動遷移。</div>
+          <div class="status">v2 <span class="v2">◐ Phase 2</span></div>
+        </div>
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--netflix);">N</div>
+          <div class="name">Netflix</div>
+          <div class="desc">ジャンル / 気分 → 該当作品の詳細ページへ。</div>
+          <div class="status">v2 <span class="v2">◐ Phase 2</span></div>
+        </div>
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--sky);">🚖</div>
+          <div class="name">タクシー (GO / DiDi)</div>
+          <div class="desc">行き先 + 配車時刻で配車画面へ。</div>
+          <div class="status">v3 <span class="v3">○ Phase 3</span></div>
+        </div>
+        <div class="svc-tile">
+          <div class="badge" style="background: var(--mint);">📅</div>
+          <div class="name">カレンダー / リマインダー</div>
+          <div class="desc">「やる」 提案 → カレンダー登録 / リマインダー作成。</div>
+          <div class="status">v3 <span class="v3">○ Phase 3</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 10 — Why it matters
+         ==================================================== -->
+    <section class="slide" data-title="Why">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">07 — Why it matters</div>
+          <h2 class="section">"YES" の意味が、深くなる。</h2>
+        </div>
+      </div>
+
+      <div class="row" style="flex: 1; gap: clamp(28px, 4vw, 56px); align-items: center;">
+        <div style="flex: 1.1;">
+          <div class="quote-big">
+            判断疲労を取り除いても、<br>
+            <em>実行疲労</em> が残っていた。<br>
+            <span style="font-style: italic; font-weight: 500; font-size: 0.78em; color: var(--ink-soft);">
+              ― 決めるのは AI、でもアプリを開くのは <b>あなた</b>。
+            </span>
+          </div>
+          <div style="margin-top: 32px; padding: 20px 24px; background: var(--accent-pale); border-radius: 12px; border-left: 4px solid var(--accent);">
+            <p style="font-family: var(--serif); font-size: clamp(20px, 1.8vw, 28px); color: var(--ink); line-height: 1.5;">
+              Last One Mile は、その最後の摩擦を消す。<br>
+              <b>YES を押した瞬間に、世界が動く</b>。
+            </p>
+          </div>
+        </div>
+
+        <div class="col" style="flex: 1; gap: 14px;">
+          <div class="card tint">
+            <h4 style="font-size: clamp(17px, 1.4vw, 22px);">📈 ユーザー価値</h4>
+            <p>「決定 → 実行」 の所要時間が <b>30 秒 → 3 秒</b>。<br>
+              判断疲労 + 実行疲労 = ゼロ。</p>
+          </div>
+          <div class="card tint">
+            <h4 style="font-size: clamp(17px, 1.4vw, 22px);">💰 ビジネス価値</h4>
+            <p>各サービスとの <b>affiliate 連携</b> が自然な収益源に。<br>
+              Amazon associates / 出前館 partner program 経由。</p>
+          </div>
+          <div class="card tint">
+            <h4 style="font-size: clamp(17px, 1.4vw, 22px);">🪞 ブランド価値</h4>
+            <p>「決めて終わり」 ではなく <b>「決めて動く」</b> AI へ。<br>
+              "Yes" の一語が現実を変える、唯一のサービス。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 11 — Roadmap (3 horizons)
+         ==================================================== -->
+    <section class="slide" data-title="Roadmap">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">08 — Roadmap</div>
+          <h2 class="section">段階的に、繋いでいく。</h2>
+          <p class="kicker" style="margin-top: 8px;">MVP は 3 サービスから。後は connector を足すだけ。</p>
+        </div>
+      </div>
+
+      <div class="horizon" style="flex: 1; align-content: start;">
+        <div class="horizon-col">
+          <div class="when">PHASE 1 — 0〜3 ヶ月</div>
+          <h4>MVP: 3 connector</h4>
+          <ul>
+            <li>Amazon Prime Video (Universal Link)</li>
+            <li>Amazon (Cart API)</li>
+            <li>出前館 (検索 URL + 絞り込み)</li>
+            <li>Drill-down engine v1 (max 2 問)</li>
+            <li>Intent classifier (entertainment / purchase / food / none)</li>
+            <li>履歴に execution_url / drill-down 回答 を保存</li>
+          </ul>
+        </div>
+        <div class="horizon-col">
+          <div class="when">PHASE 2 — 3〜9 ヶ月</div>
+          <h4>Connector 拡張 + 体験強化</h4>
+          <ul>
+            <li>Uber Eats / Netflix / Spotify / Apple Music</li>
+            <li>「お任せ」 1-tap で drill-down skip</li>
+            <li>Drill-down 履歴 → preference profile への学習反映</li>
+            <li>Affiliate ID 管理 (per-connector の収益トラッキング)</li>
+            <li>Deep link 失敗時の Web fallback / コピー復元</li>
+          </ul>
+        </div>
+        <div class="horizon-col">
+          <div class="when">PHASE 3 — 9 ヶ月〜</div>
+          <h4>真の Agentic 実行</h4>
+          <ul>
+            <li>注文 / 決済まで <b>YesMan 内で完結</b> (OAuth + 各サービス API)</li>
+            <li>「Yes 1 回で、配達まで完了」 体験</li>
+            <li>Connector marketplace (3rd-party 開発者が追加可能)</li>
+            <li>カレンダー / リマインダー / IoT (スマートスピーカー)</li>
+            <li>API 公開: 他サービスが YesMan に「決定の委譲」 を依頼</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; padding: 14px 20px; background: var(--bg-card-tint); border-radius: 10px; border-left: 3px solid var(--accent);">
+        <p style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); font-style: italic;">
+          Phase 1 の 3 connector + drill-down v1 は、 <b>既存 codebase に約 800 行</b> の追加で実現可能 (Strategy + DI 利用)。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 12 — Closing
+         ==================================================== -->
+    <section class="slide" data-title="Closing">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">— Add-on Proposal — End</div>
+        </div>
+      </div>
+
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 36px; max-width: 900px;">
+
+        <div class="quote-big">
+          決めるのは AI、<br>
+          動かすのも、<em>AI に任せる</em>。<br>
+          <span style="font-style: italic; font-weight: 500; font-size: 0.7em; color: var(--ink-soft); display: block; margin-top: 12px;">
+            ― 人間最後の仕事は、<b>YES で承認すること</b>。
+          </span>
+        </div>
+
+        <div class="row" style="gap: 20px; flex-wrap: wrap;">
+          <div class="pill" style="
+              display: inline-flex; gap: 8px; align-items: center;
+              padding: 10px 18px; border-radius: 999px;
+              border: 1.5px solid var(--accent); background: var(--accent-pale);
+              color: var(--accent-deep); font-size: clamp(13px, 1vw, 16px);
+              font-weight: 700; letter-spacing: 0.06em;">
+            🎬 Prime Video
+          </div>
+          <div class="pill" style="
+              display: inline-flex; gap: 8px; align-items: center;
+              padding: 10px 18px; border-radius: 999px;
+              border: 1.5px solid var(--accent); background: var(--accent-pale);
+              color: var(--accent-deep); font-size: clamp(13px, 1vw, 16px);
+              font-weight: 700; letter-spacing: 0.06em;">
+            🛒 Amazon
+          </div>
+          <div class="pill" style="
+              display: inline-flex; gap: 8px; align-items: center;
+              padding: 10px 18px; border-radius: 999px;
+              border: 1.5px solid var(--accent); background: var(--accent-pale);
+              color: var(--accent-deep); font-size: clamp(13px, 1vw, 16px);
+              font-weight: 700; letter-spacing: 0.06em;">
+            🍜 出前館
+          </div>
+          <div class="pill" style="
+              display: inline-flex; gap: 8px; align-items: center;
+              padding: 10px 18px; border-radius: 999px;
+              border: 1.5px solid var(--line); background: var(--bg-card);
+              color: var(--ink-muted); font-size: clamp(13px, 1vw, 16px);
+              font-weight: 700; letter-spacing: 0.06em;">
+            + Spotify / Netflix / GO / …
+          </div>
+        </div>
+
+        <div style="font-family: var(--serif); font-style: italic; font-size: clamp(16px, 1.2vw, 20px); color: var(--ink-muted); margin-top: 8px;">
+          — ぐうたラボ / YesMan Team
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Footer & nav (各 slide で共通)
+         ==================================================== -->
+    <div class="footer">
+      <div class="brand"><b>YesMan</b> — Last One Mile (Add-on Proposal)</div>
+      <div class="pager"><span id="cur">01</span> / <span id="total">12</span></div>
+    </div>
+  </div>
+
+  <div class="nav-controls" id="nav">
+    <button class="nav-btn" id="prev" title="前へ (←)">◀</button>
+    <div class="pager"><span id="cur2">01</span>/<span id="total2">12</span></div>
+    <button class="nav-btn" id="next" title="次へ (→)">▶</button>
+  </div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let idx = 0;
+
+  const elCur     = document.getElementById('cur');
+  const elCur2    = document.getElementById('cur2');
+  const elTotal   = document.getElementById('total');
+  const elTotal2  = document.getElementById('total2');
+  const progress  = document.getElementById('progress');
+
+  const fmt = (n) => String(n + 1).padStart(2, '0');
+  elTotal.textContent  = String(total).padStart(2, '0');
+  elTotal2.textContent = String(total).padStart(2, '0');
+
+  function render() {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    elCur.textContent  = fmt(idx);
+    elCur2.textContent = fmt(idx);
+    progress.style.width = `${((idx + 1) / total) * 100}%`;
+    history.replaceState(null, '', `#${idx + 1}`);
+  }
+
+  function go(delta) {
+    idx = Math.max(0, Math.min(total - 1, idx + delta));
+    render();
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(-1));
+  document.getElementById('next').addEventListener('click', () => go(+1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      go(+1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      go(-1);
+    } else if (e.key === 'Home') {
+      idx = 0; render();
+    } else if (e.key === 'End') {
+      idx = total - 1; render();
+    } else if (e.key === 'f' || e.key === 'F') {
+      // toggle presenting mode (hide chrome)
+      document.querySelector('.deck').classList.toggle('presenting');
+    }
+  });
+
+  // jump to anchor (#N) on load
+  const m = location.hash.match(/^#(\d+)$/);
+  if (m) {
+    const n = parseInt(m[1], 10) - 1;
+    if (n >= 0 && n < total) idx = n;
+  }
+  render();
+</script>
+
+</body>
+</html>
