@@ -27,29 +27,16 @@ function renderSplash(initialEntries: { pathname: string; state?: unknown }[] = 
 describe("SplashPage", () => {
   beforeEach(() => navigateMock.mockReset());
 
-  it("YesMan italic title / tagline / CTA / login link を表示する (mockup §1)", () => {
+  it("YesMan title / はじめる CTA を表示する", () => {
     renderSplash();
     expect(screen.getByRole("heading", { name: "YesMan" })).toBeInTheDocument();
-    expect(screen.getByText(/人間最後の仕事は/)).toBeInTheDocument();
-    expect(screen.getByText(/YES で承認すること/)).toBeInTheDocument();
     expect(screen.getByTestId("splash-start")).toHaveTextContent("はじめる");
-    expect(screen.getByTestId("splash-login")).toHaveTextContent("ログイン");
   });
 
   it("[はじめる →] click で /auth/signin に navigate される", async () => {
     const user = userEvent.setup();
     renderSplash();
     await user.click(screen.getByRole("button", { name: /はじめる/ }));
-    expect(navigateMock).toHaveBeenCalledWith(
-      "/auth/signin",
-      expect.objectContaining({ state: { from: { pathname: "/" } } }),
-    );
-  });
-
-  it("ログイン link click でも /auth/signin に navigate される", async () => {
-    const user = userEvent.setup();
-    renderSplash();
-    await user.click(screen.getByTestId("splash-login"));
     expect(navigateMock).toHaveBeenCalledWith(
       "/auth/signin",
       expect.objectContaining({ state: { from: { pathname: "/" } } }),

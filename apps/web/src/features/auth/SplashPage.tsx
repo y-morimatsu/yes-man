@@ -6,8 +6,7 @@
  *   - 3 blob (orange / green / blue) 横並び (size 44 + 2 eyes)
  *   - YesMan italic serif title (大、Crimson Pro — 唯一残存ブランド要素)
  *   - 「人間最後の仕事は、YES で承認すること。」 tagline (2026-05-27: sans 化)
- *   - 黒楕円 button「はじめる」 (cream-lt text, sans-serif)
- *   - 「すでにアカウントがある方は ログイン」 link
+ *   - 黒楕円 button「はじめる」 (cream-lt text, sans-serif、単独 CTA)
  *   - 画面下部に地球地平線 (緑 / オレンジ / 青の半円 3 つが重なる)
  */
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +15,6 @@ import { BlobAvatar } from "@yesman/ui";
 const MK_CREAM = "#F2EEE2";
 const MK_CREAM_LT = "#FFFCF4";
 const MK_UMBER = "#2E2418";
-const MK_MUTED = "rgba(46, 36, 24, 0.55)";
 
 export default function SplashPage() {
   const location = useLocation();
@@ -130,25 +128,6 @@ export default function SplashPage() {
         >
           はじめる
         </button>
-
-        <p
-          className="mt-2 text-[12px]"
-          style={{
-            fontFamily: "var(--font-sans)",
-            color: MK_MUTED,
-          }}
-        >
-          すでにアカウントがある方は{" "}
-          <button
-            type="button"
-            onClick={goToSignIn}
-            className="underline underline-offset-2 hover:no-underline"
-            style={{ color: MK_UMBER }}
-            data-testid="splash-login"
-          >
-            ログイン
-          </button>
-        </p>
       </div>
     </main>
   );
