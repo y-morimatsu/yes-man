@@ -53,8 +53,14 @@ SERVICE_CATALOG: dict[str, list[ExternalService]] = {
     ],
     "books": [
         ExternalService("Kindle", "https://www.amazon.co.jp/kindlestore", "📚"),
+        ExternalService("Audible", "https://www.audible.co.jp/", "🎧"),
         ExternalService("honto", "https://honto.jp/", "📖"),
         ExternalService("ebookjapan", "https://ebookjapan.yahoo.co.jp/", "📕"),
+    ],
+    # 2026-05-26 (Hackathon): オーディオブック専用 category. books より先に判定して
+    # Audible を first preference にする (Kindle に流れないようにする).
+    "audio_books": [
+        ExternalService("Audible", "https://www.audible.co.jp/", "🎧"),
     ],
     "travel": [
         ExternalService("じゃらん", "https://www.jalan.net/", "🏨"),
@@ -93,18 +99,32 @@ SERVICE_CATALOG: dict[str, list[ExternalService]] = {
 # 書籍は明示的キーワード (読書/漫画/小説/Kindle) のみで検出。
 # また movie / fashion を books より優先 (より specific な category を先に).
 CATEGORY_KEYWORDS: list[tuple[str, list[str]]] = [
-    ("food_delivery", ["ピザ", "宅配", "デリバリー", "Uber", "出前", "ウォルト", "wolt"]),
+    # 2026-05-26 fix: "宅配" を単独 keyword から外す ("自宅配信" 内の "宅配" に誤マッチして
+    # movie/music 提案が food_delivery と判定される事例があった). より特異な語に置き換え.
+    ("food_delivery", [
+        "ピザ", "宅配ピザ", "宅配寿司", "宅配弁当",
+        "デリバリー", "フードデリバリー",
+        "Uber Eats", "ウーバーイーツ",
+        "出前館", "出前",
+        "wolt", "Wolt", "ウォルト",
+        "ドミノ", "ピザハット",
+    ]),
     ("food_restaurant", ["レストラン", "外食", "ランチに行", "ディナー", "食べに行"]),
-    ("movie", ["映画", "シネマ", "ホラー", "アニメ映画", "Netflix", "Prime Video", "Amazon Prime", "U-NEXT", "YouTube映画", "ドラマ"]),
+    # 2026-05-26 (Hackathon): "アニメ" 単独 keyword 追加 (お題「アニメ 観たい」 対応).
+    ("movie", ["映画", "シネマ", "ホラー", "アニメ映画", "アニメ", "Netflix", "Prime Video", "Amazon Prime", "U-NEXT", "YouTube映画", "ドラマ"]),
     ("music", ["音楽", "曲", "プレイリスト", "Spotify", "アーティスト", "アルバム"]),
     ("fashion", ["ジーパン", "ジーンズ", "Tシャツ", "T シャツ", "シャツ", "洋服", "服を", "服が", "ワンピース", "ユニクロ", "ZOZO", "GU", "Amazon Fashion", "ファッション", "コーディネート", "メンズ", "レディース", "デニム", "スカート", "ニット"]),
-    ("books", ["読書", "漫画", "マンガ", "小説", "Kindle", "Audible", "ebookjapan"]),
+    # 2026-05-26 (Hackathon): オーディオブック専用 category を books より先に判定.
+    # 「オーディオブック / ながら聴き / 朗読 / Audible」 keyword で hit させて Audible 直行.
+    ("audio_books", ["オーディオブック", "ながら聴き", "朗読", "Audible"]),
+    ("books", ["読書", "漫画", "マンガ", "小説", "Kindle", "ebookjapan"]),
     ("travel", ["旅行", "ホテル", "宿", "温泉", "観光", "新幹線", "じゃらん"]),
     ("games", ["ゲーム", "Steam", "Nintendo", "Switch", "RPG"]),
     ("exercise", ["筋トレ", "運動", "ジム", "ヨガ", "ストレッチ", "ランニング"]),
     ("study", ["勉強", "学習", "資格", "Udemy"]),
     # shopping は最も広いので fallback 寄りに最後
-    ("shopping", ["買う", "購入", "通販", "ショッピング", "Amazon", "楽天", "メルカリ"]),
+    # 2026-05-26 (Hackathon): 日用品 / 生活用品 / 家電 / ガジェット / 雑貨 を追加 (Amazon shopping 着地用).
+    ("shopping", ["買う", "購入", "通販", "ショッピング", "Amazon", "楽天", "メルカリ", "日用品", "生活用品", "家電", "ガジェット", "雑貨"]),
 ]
 
 
