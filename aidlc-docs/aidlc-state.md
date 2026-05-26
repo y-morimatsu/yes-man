@@ -66,6 +66,16 @@
 | Property-Based Testing | Yes | Requirements Analysis (2026-05-09) |
 | Construction Flow | Yes | Issue #6 implementation (2026-05-19) |
 | Frontend Design | Yes | Issue #6 implementation (2026-05-19) |
+| Visual Supplements | Yes (Full) | drill-down-auto-open Requirements Analysis (2026-05-26) |
+
+### Feature-specific overrides
+| Feature | Extension | Enforcement | Decided At |
+|---|---|---|---|
+| drill-down-auto-open | Visual Supplements | **Full** | 2026-05-26 (Q1=A) |
+| drill-down-auto-open | Frontend Design | **Full** | 2026-05-26 (Q2=A) |
+| drill-down-auto-open | Security Baseline | **Full** | 2026-05-26 (Q3=A) |
+| drill-down-auto-open | Property-Based Testing | **Skip (No)** | 2026-05-26 (Q4=C, feature-specific override of project-wide Yes — drill-down handler は単純な条件分岐、pure function なし) |
+| drill-down-auto-open | Construction Flow | **Partial (01/03/05)** | 2026-05-26 (Q5=B, parallel sub-agent / approval gating / phase summary は scope 外、exploration / multi-approach / confidence-filtered review のみ強制) |
 
 ## Stage Progress
 ### 🔵 INCEPTION PHASE

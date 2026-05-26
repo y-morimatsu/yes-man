@@ -5175,3 +5175,233 @@ YESを選択したら、次の候補を考えて出したい、
 
 **Context**: ハッカソン期間中の急速な UI 改修 (multi-source persona、MangaStage theme、Yes 残置、Profile + Avatar 等) により、設計当初の drawio / 旧 mockup と実装が乖離。100+ files commit 後にドキュメント整合を実施。
 ---
+
+## Requirements Analysis 起動 (drill-down 最終段 UX 改修)
+**Timestamp**: 2026-05-26T11:30:00+09:00
+**User Input**: "最後の質問は\"XXXで開きますか？\"にしてYESを選択したらサイトを開くようにしたい。
+ai-dlcで要件を考え直しましょう。"
+**AI Response**: AI-DLC workflow を kick off. Welcome message 表示、Workspace Detection は brownfield として resume、Requirements Analysis (Standard depth) に進む.
+**Context**: Post-CONSTRUCTION 改修フェーズ v4 の continuation. drill-down decision の最終段 (depth=MAX) で proposal を疑問形 "XXX で開きますか?" にして、Yes 採択時に自動で外部 service URL を open するフロー追加.
+
+---
+
+## Requirements Analysis - Questions file created
+**Timestamp**: 2026-05-26T11:42:00+09:00
+**User Input**: (前ターンで「ai-dlcで要件を考え直しましょう」)
+**AI Response**: Created `aidlc-docs/inception/drill-down-auto-open/requirements-questions.md` with 6 multiple-choice questions per question-format-guide.md (proposal text format / Yes 動作 / CTA 扱い / service 範囲 / popup ブロック対策 / 受け入れ基準). Awaiting user answers via [Answer]: tags.
+**Context**: AskUserQuestion UI tool was rejected by user; switched to file-based question format mandated by AI-DLC.
+
+---
+
+## Requirements Analysis - User answers received + requirements.md created
+**Timestamp**: 2026-05-26T11:55:00+09:00
+**User Input**: "完了"
+**Answers (all A)**:
+- Q1 = A: proposal text を疑問形「XXX で 開きますか?」固定
+- Q2 = A: 新タブで open + NudgeBanner も表示
+- Q3 = A: CTA button 継続 (popup ブロック fallback)
+- Q4 = A: 全 service で同一振る舞い
+- Q5 = A: API await の前に window.open() を発火 (popup block 回避)
+- Q6 = A: Gherkin 受け入れ基準で OK
+**AI Response**: contradiction なし、ambiguity なし。requirements.md を `aidlc-docs/inception/drill-down-auto-open/requirements.md` に作成 (FR 8 件 / NFR 5 件 / Gherkin 4 scenario / 影響範囲 + 検証指標). 承認待ち.
+
+---
+
+## Extension Opt-In Loading (CLAUDE.md mandatory step)
+**Timestamp**: 2026-05-26T12:05:00+09:00
+**User Input**: "要件を進る前にai-dlcのextensionルールを理解して取り込んでください。"
+**AI Response**:
+- Scanned `.aidlc-rule-details/extensions/` recursively, found 5 extensions, all with `*.opt-in.md`:
+  - design/visual-supplements
+  - frontend/design
+  - security/baseline
+  - testing/property-based
+  - construction/flow
+- Loaded ONLY the 5 `*.opt-in.md` files (NOT the full rules) per CLAUDE.md "Context-Optimized" deferred loading policy.
+- Created `aidlc-docs/inception/drill-down-auto-open/extensions-opt-in-questions.md` with 5 opt-in questions + my recommendation table.
+- Awaiting user answers; will record results to `aidlc-docs/aidlc-state.md` `## Extension Configuration` and deferred-load full rules for enabled extensions only.
+
+---
+
+## Extension Opt-In Decisions + full rules loaded
+**Timestamp**: 2026-05-26T12:25:00+09:00
+**User Input**: "回答しました。" (extensions-opt-in-questions.md 内 [Answer]: tag 経由)
+**Answers**:
+- Q1 Visual Supplements = A (Full enforcement)
+- Q2 Frontend Design = A (Full enforcement)
+- Q3 Security Baseline = A (Full enforcement)
+- Q4 Property-Based Testing = C (Skip; feature-specific override of project-wide Yes)
+- Q5 Construction Flow = B (Partial: CONS-FLOW-01/03/05 only)
+
+**AI Response**:
+- Loaded 4 enabled full rules:
+  - `.aidlc-rule-details/extensions/design/visual-supplements/visual-supplements.md`
+  - `.aidlc-rule-details/extensions/frontend/design/frontend-design.md`
+  - `.aidlc-rule-details/extensions/security/baseline/security-baseline.md`
+  - `.aidlc-rule-details/extensions/construction/flow/construction-flow.md`
+- Did NOT load property-based-testing.md (Q4=C, deferred load skipped per CLAUDE.md).
+- Updated `aidlc-docs/aidlc-state.md` `## Extension Configuration` with feature-specific override table.
+- Updated `aidlc-docs/inception/drill-down-auto-open/requirements.md`:
+  - Added "Extension Configuration (本 feature 適用)" section at top
+  - Added NFR-DAO-06 (noopener,noreferrer), NFR-DAO-07 (fail-safe defaults), NFR-DAO-08 (component reuse), NFR-DAO-09 (SVG inheritance)
+  - Added §9 Visual Supplements 評価 with VIS-SUPP-01..05 threshold evaluation + inline Mermaid sequence (Yes click flow)
+  - Added §10 Compliance Matrix covering all 27 enabled extension rules with Status (Compliant / N/A / Deferred)
+- Awaiting user approval.
+
+**Context**: VIS-SUPP=Full は私の推奨 (C) より厳しい opt-in だったが、閾値評価で本件は drawio 不要・Mermaid sufficient と判定 (5 nodes / 2 lanes / no parallel branches、VIS-SUPP-01 thresholds 未満)。FE-DESIGN は inheritance 中心、SECURITY-15 は noopener 適用、CONS-FLOW は Code Generation 段で deferred.
+
+---
+
+## Requirements v2 - ultrathink review reflected
+**Timestamp**: 2026-05-26T13:30:00+09:00
+**User Input**: "必須と推奨を修正"
+**AI Response**: ultrathink レビュー所見 Critical 3 + Major 5 を `aidlc-docs/inception/drill-down-auto-open/requirements.md` に反映 (v2).
+**変更内容**:
+- **C1 (FR-DAO-01)**: backend prompt 分岐を `remaining <= 1` → `depth == MAX_DRILL_DEPTH` に厳密化、prompt と is_final の境界一致
+- **C2 (新 FR-DAO-09)**: SwipeChoice の 3 Yes path (swipe / button / ArrowRight) で `onYesSync?` callback prop 経由で user gesture chain 内 (setTimeout 前) に同期発火、popup block 回避
+- **C3 (Gherkin)**: "Yes 4 回連打 + final 表示" → "Yes 4 回 click で final 表示, 5 回目で window.open" に精緻化、popup block 検証 scenario 追加
+- **M1 (FR-DAO-08)**: mock `DRILL_DOWN_PROPOSALS[4]` のみ疑問形、`[1]..[3]` は断定維持と明確化
+- **M2 (§8)**: Playwright `page.waitForEvent("popup")` pattern + close で副作用回避を pattern code 付で記載
+- **M3 (新 NFR-DAO-10)**: Accessibility — isFinal=true 時 `yesAriaLabelOverride` で「外部サイトを開きます」 semantic
+- **M4 (§8)**: iOS Safari は手動確認 (自動化 scope 外) を明示
+- **M5 (承認セクション)**: CONS-FLOW-04 advisory として "Approval Gate 1" を充足する旨を明示、本 audit 記録もそれに該当
+- **§6 影響範囲**: SwipeChoice.tsx を frontend 改修対象として追加
+- **Compliance Matrix**: FE-DESIGN-07 を "Compliant (extended)" に更新 (SwipeChoice prop 追加について明記)
+
+**Context**: ultrathink review が C1 (prompt と is_final の境界乖離) と C2 (setTimeout 180ms による popup block リスク) と C3 (Gherkin 曖昧表現) を critical として指摘、いずれも実装可能性 / 整合性 に直接影響. v2 で fix.
+
+承認待ち (v2).
+
+---
+
+## Requirements v2 - Approval Gate 1 (CONS-FLOW-04 advisory) PASSED
+**Timestamp**: 2026-05-26T13:42:00+09:00
+**User Input**: "OK"
+**AI Response**: Requirements v2 (ultrathink C1-C3 + M1-M5 反映済) 承認受領.
+**Gate**: CONS-FLOW-04 (advisory under Partial mode) — Approval Gate 1 / 3 (after Exploration, requirements equivalent) PASSED.
+**Next**: Workflow Planning (ALWAYS EXECUTE per CLAUDE.md), User Stories は skip (UI 1 file + handler 1 関数追加 + backend prompt 1 行修正 規模、user 影響シナリオは Gherkin で既に網羅) として提案予定.
+
+---
+
+## Workflow Planning - drill-down-auto-open
+**Timestamp**: 2026-05-26T13:48:00+09:00
+**User Input**: (前ターン "OK" から continuation)
+**AI Response**: `aidlc-docs/inception/drill-down-auto-open/workflow-plan.md` 作成. 構成:
+- INCEPTION: WD ✅ / RE N/A / RA ✅ v2 / US SKIP / WP 🟧 / AD 🟧 Minimal / UG SKIP
+- CONSTRUCTION: FD/NFRA/NFRD/ID SKIP / CG EXECUTE (CONS-FLOW 01/03/05) / BT EXECUTE
+- Risk: Low, Rollback: Easy, Testing: Simple
+- CONS-FLOW-04 advisory: Gate 1 PASSED (requirements approval), Gate 2 (architecture) / 3 (review) pending
+- Mermaid workflow diagram + Stage 別実行計画表 + 完了条件 含む
+- 6 影響ファイル (engine.py / mock_adapter.py / SwipeChoice.tsx / DecisionResult.tsx + 2 test) を component graph + 表で documented
+
+承認待ち.
+
+---
+
+## Workflow Plan - Approved
+**Timestamp**: 2026-05-26T13:53:00+09:00
+**User Input**: "OK"
+**AI Response**: workflow-plan.md 承認受領. 次 phase: Application Design (Minimal depth) — SwipeChoice public API extension + handleChoose pseudocode + backend prompt diff sketch.
+
+---
+
+## Application Design (Minimal depth) - drill-down-auto-open
+**Timestamp**: 2026-05-26T14:00:00+09:00
+**User Input**: (前ターン "OK" workflow plan 承認 から continuation)
+**AI Response**: `aidlc-docs/inception/drill-down-auto-open/application-design.md` 作成. Minimal depth で 4 component (SwipeChoice / DecisionResult / engine.py / mock_adapter) の interface 拡張仕様 documented:
+- §1 Scope: non-breaking enhancement のみ、新規 component なし
+- §2 Component Interface Changes: SwipeChoice 新 optional props 2 個 (onYesSync, yesAriaLabelOverride) 仕様 + DecisionResult handleChoose 拡張 + engine.py prompt 分岐 condition 厳密化 + mock_adapter[4] 文言修正
+- §3 Sequence Detail: popup block 回避の同期 chain 強調版 Mermaid (onYesSync → window.open は user gesture chain 内、onYes → choose API は setTimeout 後の非同期)
+- §4 Test Strategy: 4 layer (ui vitest / web vitest / api pytest / playwright e2e + real-LLM 任意)
+- §5 Compliance Re-check: FE-DESIGN-07 extended、新規 blocking なし
+- §6 Open Questions: なし
+
+承認待ち (Gate 1.7 補助).
+
+---
+
+## Application Design - VIS-SUPP-03 reevaluated + HTML mockup added
+**Timestamp**: 2026-05-26T14:14:00+09:00
+**User Input**: "デザインは？"
+**AI Response**: AD §5 で VIS-SUPP-03 を N/A → Compliant に再評価. HTML mockup を作成:
+- 新規 file: `aidlc-docs/inception/drill-down-auto-open/mockups/proposal-final-before-after.html`
+- Single-file, inline CSS, INCEPTION palette (FE-DESIGN-03) + Noto Serif JP italic (FE-DESIGN-02) 継承
+- Pixel 5 viewport (393×851) simulation device frame
+- Before (現状: 断定形「観ましょう。」+ 手動 CTA) vs After (新仕様: 疑問形「開きますか?」+ 自動 window.open + NudgeBanner) を side-by-side 比較
+- 差分凡例 table 8 項目 (proposal text / Yes aria-label / Yes click 遷移 / window.open option / 外部 CTA / NudgeBanner / 中間段 / palette)
+- VIS-SUPP-04 (Storage) も Compliant に格上げ (storage path 整合)
+- VIS-SUPP-05 cross-reference 拡張 (mockup → AD → requirements の双方向 link)
+- application-design.md §5,6,7,8 章番号調整、requirements.md §10 Compliance Matrix 同期
+**Rationale**: text 変更のみ ≠ N/A — proposal text の semantic / aria-label / Yes 採択時の挙動 の 3 つが UX に影響するため、視覚的に before/after 比較する mockup は VIS-SUPP-03 で求められる "UI restructure" に近い意義を持つ. 既存 SVG canonical (03-proposal-card.svg) は触らず、HTML mockup で本 feature 固有の変化点だけを可視化.
+
+---
+
+## Application Design + HTML mockup - Approved
+**Timestamp**: 2026-05-26T14:20:00+09:00
+**User Input**: "OK"
+**AI Response**: AD (含 VIS-SUPP-03 mockup) 承認受領. 次 phase: Code Generation Plan (CONS-FLOW-01 Exploration Findings + CONS-FLOW-03 Multi-approach) — Gate 2 (architecture / multi-approach) advisory 適用.
+
+---
+
+## Code Generation Plan (CONS-FLOW-01 + CONS-FLOW-03 blocking)
+**Timestamp**: 2026-05-26T14:30:00+09:00
+**User Input**: (前ターン "OK" AD 承認から continuation)
+**AI Response**: `aidlc-docs/construction/drill-down-auto-open/code/code-generation-plan.md` 作成 (Part 1: Planning).
+- §1 Exploration Findings (CONS-FLOW-01 blocking): 既存 patterns 9 件を path:line で引用 + 隣接 component 影響 + INCEPTION canonical refs (SVG + HTML mockup) + pre-existing 違反 surveillance "No adjacent violations detected" + findings → design rationale 表
+- §2 Proposal Approaches (CONS-FLOW-03 blocking): 3 案 (A Minimal-change / B Clean / C Pragmatic) を Pros/Cons/Files/Compliance impact 付で並列提示
+- §2 推奨: ✅ **Approach B (Clean)** — SwipeChoice 新 optional props (onYesSync + yesAriaLabelOverride) で popup block 完全回避 + a11y 対応、4 file 改修
+- §3 Generation Plan: 6 phase 31 step の実装 checklist
+- §4 Risk: Low / Rollback: Easy
+- §5 Approval Gate 2 (CONS-FLOW-04 advisory + CONS-FLOW-03 blocking): user に推奨 Approach 承認待ち
+
+---
+
+## Gate 2 (CONS-FLOW-03 multi-approach + CONS-FLOW-04 advisory) - PASSED
+**Timestamp**: 2026-05-26T14:36:00+09:00
+**User Input**: "Approach B で OK"
+**AI Response**: Approach B (Clean) 承認受領. Code Generation Part 2 (Generate) 開始. 順序: engine.py prompt 厳密化 → mock_adapter[4] → SwipeChoice 拡張 + new test → DecisionResult 拡張 + test → e2e popup pattern → regression verify.
+**Gates**: Gate 1 ✅, Gate 1.5 (workflow) ✅, Gate 1.7 (AD) ✅, Gate 2 ✅, Gate 3 (review) pending.
+
+---
+
+## Construction Code Generation Complete (再記録)
+**Timestamp**: 2026-05-26T14:48:00+09:00
+**User Input**: (continuation from Gate 2 approval)
+**AI Response**: Approach B (Clean) 実装完了. test results:
+- api unit: 80 PASS / ui vitest 9 NEW PASS / web vitest 123 PASS (118→123) / e2e drill-down 2 PASS
+- 5 file changed (engine.py / mock_adapter.py / SwipeChoice.tsx / DecisionResult.tsx / packages/ui dist rebuild)
+- 2 new test file + 1 e2e refactor + 1 fixture comment update
+**Summary doc**: aidlc-docs/construction/drill-down-auto-open/code/phase-summary.md (CONS-FLOW-07 advisory)
+
+---
+
+## CONS-FLOW-05 Code Review + Blocking #1 Fix
+**Timestamp**: 2026-05-26T14:57:00+09:00
+**User Input**: "Gate 3 review を進めて"
+**AI Response**: feature-dev:code-reviewer agent で CONS-FLOW-05 高精度レビュー実施.
+- Blocking finding: 1 件 (DAO-RVW-001, confidence 82, e2e popup race condition)
+- Advisory: 3 件 (DAO-RVW-002/003/004)
+- Compliance: FR-DAO-01..09 / NFR-DAO-01..10 / SECURITY-13/15 / FE-DESIGN-07 / CONS-FLOW-01/03/05 全 Compliant 確認
+- review-findings.md 作成: `aidlc-docs/construction/drill-down-auto-open/code/review-findings.md`
+**Blocking #1 修正**:
+- tests/e2e/tests/drill-down-decision.spec.ts:96-106 を `context.waitForEvent("page")` → `page.waitForEvent("popup")` + `popup.waitForURL(/amazon\.co\.jp/)` に変更 (race condition 解消 + 要件 §8 整合)
+- Advisory A2 ついでに修正: SwipeChoice.tsx:77-81 のコメント正確化 (button click path は setTimeout なし)
+- packages/ui rebuild + e2e 2 件 PASS 再確認 (10.7s)
+- Advisory A1 / A3 は deferred (次 PR / 手動)
+**Status**: review-findings.md Final Disposition = **Approve (Gate 3 PASSED on user 承認)**.
+
+---
+
+## Gate 3 (CONS-FLOW-04 advisory + CONS-FLOW-05 blocking) - PASSED
+**Timestamp**: 2026-05-26T15:05:00+09:00
+**User Input**: "Gate 3 OK"
+**AI Response**: Gate 3 承認受領.
+- CONS-FLOW-05 Blocking 1 件 (DAO-RVW-001) 修正済 + e2e retest PASS
+- Advisory A2 (SwipeChoice コメント) 修正済
+- Advisory A1 / A3 deferred (次 PR / 手動 follow-up)
+- review-findings.md Final Disposition: Approve
+- **本 feature の AI-DLC INCEPTION + CONSTRUCTION 全 phase 完了**
+**All Gates Status**: 1 ✅ / 1.5 ✅ / 1.7 ✅ / 2 ✅ / 3 ✅
+**Next**: finishing-a-development-branch (commit 構成 / PR 化 / merge 判断). project memory `project_ideation_phase_no_auto_merge.md` 準拠で develop / main merge は user 明示承認待ち.
+
+---
