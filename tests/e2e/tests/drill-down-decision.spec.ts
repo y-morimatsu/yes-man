@@ -9,7 +9,7 @@
  *
  * 2026-05-26 drill-down-auto-open (FR-DAO-01/02/09):
  *  - final proposal text は疑問形「XXX で 開きますか?」で終わる (mock: DRILL_DOWN_PROPOSALS[4])
- *  - 5 回目の Yes で `page.waitForEvent("popup")` が fire し、URL に amazon.co.jp/Amazon-Video を含む
+ *  - 5 回目の Yes で `page.waitForEvent("popup")` が fire し、URL に amazon.co.jp/gp/video/storefront を含む
  *  - popup tab は即 close して network 副作用回避
  */
 import { expect, test } from "@playwright/test";

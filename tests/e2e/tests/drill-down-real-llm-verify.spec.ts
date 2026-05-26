@@ -102,7 +102,7 @@ test("「映画見たい」: Yes 連鎖で Amazon Prime Video CTA まで届く�
   // 判定: Amazon Prime Video URL を含むか
   const finalProposal = proposals.filter((p) => p.isFinal).at(-1);
   if (finalProposal) {
-    console.log(`\n>>> 最終 final proposal:\n    service=${finalProposal.serviceName} url=${finalProposal.serviceUrl}\n    届いた?: ${finalProposal.serviceUrl?.includes("amazon.co.jp/Amazon-Video") ? "✅ YES" : "❌ NO (別 service に着地)"}`);
+    console.log(`\n>>> 最終 final proposal:\n    service=${finalProposal.serviceName} url=${finalProposal.serviceUrl}\n    届いた?: ${finalProposal.serviceUrl?.includes("amazon.co.jp/gp/video/storefront") ? "✅ YES" : "❌ NO (別 service に着地)"}`);
   } else {
     console.log(`\n>>> 最終 final proposal: なし (Yes クリックが MAX_DRILL_DEPTH まで届かなかった)`);
   }

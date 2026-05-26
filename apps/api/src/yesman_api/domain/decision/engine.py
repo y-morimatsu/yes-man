@@ -532,13 +532,15 @@ class DecisionEngine:
         combined_text = (
             proposal_text + " " + " ".join(request.chain_context)
         ).strip()
-        service = pick_service(combined_text)
+        picked = pick_service(combined_text)
         service_payload: dict | None = None
-        if service is not None:
+        if picked is not None:
+            service, category = picked
             service_payload = {
                 "name": service.name,
                 "url": service.url,
                 "emoji": service.emoji,
+                "category": category,
             }
         # 2026-05-25 revert (A 案): Yes 連鎖で深堀り → 4 段目 (depth=3) で final.
         # depth >= MAX_DRILL_DEPTH (3) のときのみ is_final=true。
@@ -1148,13 +1150,15 @@ class DecisionEngine:
         combined_text = (
             proposal_text + " " + " ".join(request.chain_context)
         ).strip()
-        service = pick_service(combined_text)
+        picked = pick_service(combined_text)
         service_payload: dict | None = None
-        if service is not None:
+        if picked is not None:
+            service, category = picked
             service_payload = {
                 "name": service.name,
                 "url": service.url,
                 "emoji": service.emoji,
+                "category": category,
             }
         # 2026-05-25 revert (A 案): builtin path と同じく depth >= MAX_DRILL_DEPTH のみ final.
         # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
@@ -1416,13 +1420,15 @@ class DecisionEngine:
         combined_text = (
             proposal_text + " " + " ".join(request.chain_context)
         ).strip()
-        service = pick_service(combined_text)
+        picked = pick_service(combined_text)
         service_payload: dict | None = None
-        if service is not None:
+        if picked is not None:
+            service, category = picked
             service_payload = {
                 "name": service.name,
                 "url": service.url,
                 "emoji": service.emoji,
+                "category": category,
             }
         # 2026-05-25 revert (A 案): mixed path も depth >= MAX_DRILL_DEPTH のみ final.
         # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.

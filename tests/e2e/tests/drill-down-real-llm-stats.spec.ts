@@ -91,7 +91,7 @@ test(`「${PROMPT}」: ${TRIALS} 試行で Amazon Prime Video 到達率`, async 
   }
 
   console.log("\n========= 集計 =========");
-  const reachedAmazonPrime = results.filter((r) => r.finalUrl?.includes("amazon.co.jp/Amazon-Video")).length;
+  const reachedAmazonPrime = results.filter((r) => r.finalUrl?.includes("amazon.co.jp/gp/video/storefront")).length;
   const reachedAnyAmazon = results.filter((r) => r.finalUrl?.includes("amazon.co.jp")).length;
   const reachedFinal = results.filter((r) => r.finalUrl !== null).length;
   console.log(`Amazon Prime Video 到達: ${reachedAmazonPrime}/${TRIALS}`);

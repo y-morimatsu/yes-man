@@ -19,7 +19,7 @@ class ExternalService:
 SERVICE_CATALOG: dict[str, list[ExternalService]] = {
     "movie": [
         # User 希望: 映画は Amazon Prime を first preference に
-        ExternalService("Amazon Prime Video", "https://www.amazon.co.jp/Amazon-Video", "📺"),
+        ExternalService("Amazon Prime Video", "https://www.amazon.co.jp/gp/video/storefront", "📺"),
         ExternalService("Netflix", "https://www.netflix.com/jp/", "🎬"),
         ExternalService("U-NEXT", "https://video.unext.jp/", "🎞️"),
         ExternalService("YouTube", "https://www.youtube.com/", "▶️"),
@@ -145,8 +145,12 @@ def detect_category(text: str) -> str | None:
     return None
 
 
-def pick_service(text: str) -> ExternalService | None:
-    """text からカテゴリを判定し、該当 service を返す。
+def pick_service(text: str) -> tuple[ExternalService, str] | None:
+    """text からカテゴリを判定し、該当 service と category を返す。
+
+    2026-05-26: category 情報を呼び出し側に伝播するため、戻り値を
+    (service, category) tuple に変更. frontend で category 別の
+    「持っていますか?/購入しますか?」 確認 step を出すために使う.
 
     優先順:
       1. 完全 service 名が text に含まれる (例: "Netflix", "ピザハット")
@@ -163,14 +167,14 @@ def pick_service(text: str) -> ExternalService | None:
     # 1. 完全 service 名マッチ (case-insensitive)
     for svc in services:
         if svc.name.lower() in text_lower:
-            return svc
+            return (svc, category)
     # 2. ブランド頭部単語 partial match (例: "Amazon" → "Amazon Fashion")
     for svc in services:
         first_word = svc.name.split()[0].lower()
         if len(first_word) >= 3 and first_word in text_lower:
-            return svc
+            return (svc, category)
     # 3. default
-    return services[0]
+    return (services[0], category)
 
 
 __all__ = [

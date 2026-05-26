@@ -14,7 +14,7 @@ test.skip(
 );
 
 const SCENARIOS = [
-  { prompt: "映画見たい", expectedDomain: "amazon.co.jp/Amazon-Video", label: "Amazon Prime Video" },
+  { prompt: "映画見たい", expectedDomain: "amazon.co.jp/gp/video/storefront", label: "Amazon Prime Video" },
   { prompt: "洋服欲しい", expectedDomain: "amazon.co.jp/fashion", label: "Amazon Fashion" },
   { prompt: "本を読みたい", expectedDomain: "amazon.co.jp/kindlestore", label: "Kindle" },
   { prompt: "音楽聴きたい", expectedDomain: "music.amazon.co.jp", label: "Amazon Music" },
