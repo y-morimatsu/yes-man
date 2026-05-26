@@ -1065,91 +1065,45 @@
           </div>
         </div>
 
-        <div class="card tint" style="display: flex; flex-direction: column; gap: 10px;">
-          <div class="label">嗜好プロファイル (実装通り)</div>
-
-          <!-- 1. 採択された domain (accepted_patterns 集計) -->
+        <div class="card tint" style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="label">嗜好プロファイル (可視化)</div>
           <div>
-            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">採択された domain <span style="font-size: 12px; color: var(--ink-muted); font-family: var(--mono);">(accepted_patterns 集計)</span></div>
-            <div class="col" style="gap: 6px;">
-              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="width: 60px; color: var(--ink-soft);">食事</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
-                  <div style="width: 70%; height: 100%; background: var(--accent);"></div>
-                </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">12 件</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="width: 60px; color: var(--ink-soft);">仕事</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
-                  <div style="width: 47%; height: 100%; background: var(--accent);"></div>
-                </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">8 件</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="width: 60px; color: var(--ink-soft);">娯楽</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
-                  <div style="width: 30%; height: 100%; background: var(--accent);"></div>
-                </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">5 件</span>
-              </div>
-              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
-                <span style="width: 60px; color: var(--ink-soft);">旅行</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
-                  <div style="width: 18%; height: 100%; background: var(--accent);"></div>
-                </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">3 件</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 2. 推定タグ (inferred_tags) -->
-          <div>
-            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">推定タグ <span style="font-size: 12px; color: var(--ink-muted); font-family: var(--mono);">(inferred_tags)</span></div>
+            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">採択された傾向</div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <span class="actor-chip">work-focused</span>
-              <span class="actor-chip">family-focused</span>
-              <span class="actor-chip">career</span>
-              <span class="actor-chip">health</span>
-              <span class="actor-chip">growth</span>
+              <span class="actor-chip">手早い</span>
+              <span class="actor-chip">予算重視</span>
+              <span class="actor-chip">屋内</span>
+              <span class="actor-chip">和食</span>
+              <span class="actor-chip">単独行動</span>
             </div>
           </div>
-
-          <!-- 3. ペルソナ嗜好 (persona_style_preference, score [-1, 1]) -->
           <div>
-            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">ペルソナ嗜好 <span style="font-size: 12px; color: var(--ink-muted); font-family: var(--mono);">(score [-1, 1])</span></div>
+            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin: 14px 0 8px;">ペルソナ親和度</div>
             <div class="col" style="gap: 6px;">
-              <!-- 慎重派 +0.56 -->
               <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
                 <span style="width: 60px; color: var(--ink-soft);">慎重派</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative;">
-                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink-faint);"></div>
-                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 28%; background: var(--sky);"></div>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 78%; height: 100%; background: var(--sky);"></div>
                 </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink); width: 48px; text-align: right;">+0.56</span>
+                <span style="font-family: var(--mono); font-size: 15px; color: var(--ink-muted);">78%</span>
               </div>
-              <!-- 楽観派 -0.16 -->
               <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
                 <span style="width: 60px; color: var(--ink-soft);">楽観派</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative;">
-                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink-faint);"></div>
-                  <div style="position: absolute; right: 50%; top: 0; bottom: 0; width: 8%; background: var(--amber);"></div>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 42%; height: 100%; background: var(--amber);"></div>
                 </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink); width: 48px; text-align: right;">-0.16</span>
+                <span style="font-family: var(--mono); font-size: 15px; color: var(--ink-muted);">42%</span>
               </div>
-              <!-- 効率派 +0.30 -->
               <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
                 <span style="width: 60px; color: var(--ink-soft);">効率派</span>
-                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative;">
-                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink-faint);"></div>
-                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 15%; background: var(--violet);"></div>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 65%; height: 100%; background: var(--violet);"></div>
                 </div>
-                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink); width: 48px; text-align: right;">+0.30</span>
+                <span style="font-family: var(--mono); font-size: 15px; color: var(--ink-muted);">65%</span>
               </div>
             </div>
           </div>
-
-          <div style="margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-muted); font-style: italic;">
+          <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-muted); font-style: italic;">
             ユーザーがいつでも閲覧・修正・全リセット可能。エコーチェンバー回避設計。
           </div>
         </div>
@@ -1259,6 +1213,9 @@
         </div>
       </div>
 
+      <div style="margin-top: 22px; padding: 14px 18px; background: var(--accent-pale); border-radius: 8px; font-size: 15px; color: var(--ink-soft);">
+        🛡️ <b>moderator チェック</b> で作成時に沈黙ドメイン誘発を検知。共有は知り合い間に限定、悪用報告フローも実装済。
+      </div>
     </section>
 
     <!-- ====================================================
