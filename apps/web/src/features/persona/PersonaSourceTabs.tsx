@@ -16,9 +16,9 @@ const TABS: { id: PersonaSource; label: string; emoji: string; hint: string }[] 
   },
   {
     id: "anonymous",
-    label: "世界の誰か",
-    emoji: "🌐",
-    hint: "ランダムに呼ぶ",
+    label: "知り合い",
+    emoji: "🤝",
+    hint: "opt-in 中から 呼ぶ",
   },
   {
     id: "my",

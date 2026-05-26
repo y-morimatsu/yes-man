@@ -53,9 +53,6 @@ export function QuickStartCard({
           <p className="font-serif text-xl font-bold text-neutral-900">
             {title}
           </p>
-          <p className="font-serif text-base text-neutral-700">
-            {t("quickStartSuffix")}
-          </p>
         </div>
       </SwipeChoice>
 

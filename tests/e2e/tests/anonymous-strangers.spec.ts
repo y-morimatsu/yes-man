@@ -88,7 +88,7 @@ test.describe("anonymous-strangers (v3-γ)", () => {
   }) => {
     await gotoAuthenticated(page, "/personas/anonymous");
     await expect(
-      page.getByRole("heading", { name: /これまで 決めてくれた 世界の誰か/ }),
+      page.getByRole("heading", { name: /これまで 決めてくれた 知り合い/ }),
     ).toBeVisible();
     // 空 state (cited-by-me がまだない、demo seed は self が cite した記録ではない)
     await expect(page.getByTestId("anonymous-list-empty")).toBeVisible();

@@ -78,7 +78,7 @@ export function SelectedPersonaAvatars({
           key,
           type: "blob",
           blobColor: colorFor(p.persona_id),
-          label: "世界の誰か",
+          label: "知り合い",
         } as ResolvedAvatar;
       }
       const persona = (s.source === "builtin" ? builtins : my)?.find(

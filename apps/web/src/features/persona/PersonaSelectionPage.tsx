@@ -114,7 +114,7 @@ export default function PersonaSelectionPage() {
           className="flex flex-col gap-3"
         >
           <p className="text-xs italic text-neutral-500">
-            🌐 opt-in 中の世界の誰か (caller は除外)
+            🤝 opt-in 中の 知り合い (caller は除外)
           </p>
           <AnonymousSelectionList />
         </div>

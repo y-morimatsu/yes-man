@@ -113,7 +113,7 @@ test.describe("Journey B: Decision Experience (5 screens)", () => {
 
   test("B6 Score Dashboard: 委任度 (Yes 比率) + 解説 + AI コメント", async ({ page }) => {
     await gotoAuthenticated(page, "/score");
-    await expect(page.getByRole("heading", { name: /委任度 スコア/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /YesMan スコア/ })).toBeVisible();
     await expect(page.getByText(/委任度 \(Yes 比率\)/)).toBeVisible();
     await expect(page.getByText(/委ねているかを可視化/).first()).toBeVisible();
   });

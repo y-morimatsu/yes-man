@@ -62,7 +62,7 @@ export function AnonymousSelectionList() {
   if (list.isError) {
     return (
       <p className="text-xs text-error italic" role="alert">
-        世界の誰か一覧を取得できませんでした
+        知り合い一覧を取得できませんでした
       </p>
     );
   }
@@ -74,7 +74,7 @@ export function AnonymousSelectionList() {
         data-testid="anonymous-selection-empty"
       >
         <p className="text-sm italic text-neutral-500">
-          まだ「世界の誰か」 はいません
+          まだ「知り合い」 はいません
         </p>
         <p className="text-xs text-neutral-400 mt-1">
           誰かが opt-in するとここに表示されます
@@ -104,7 +104,7 @@ export function AnonymousSelectionList() {
               size={36}
               color={colorFor(p.persona_id)}
               gaze="center"
-              name="世界の誰か"
+              name="知り合い"
             />
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap gap-1 mb-1">
