@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YesMan — 審査基準ギャップ分析</title>
+<style>
+  :root {
+    --bg-paper:        #FBFAF5;
+    --bg-paper-alt:    #F1EDDF;
+    --bg-card:         #FFFFFF;
+    --bg-card-tint:    #F5F1E3;
+    --ink:             #1A1814;
+    --ink-soft:        #3A362E;
+    --ink-muted:       #6B6557;
+    --ink-faint:       #918B7D;
+    --accent:          #B85C3D;
+    --accent-deep:     #973F22;
+    --accent-soft:     #EFC5B3;
+    --accent-pale:     #FAE5D9;
+    --line:            #B8AC91;
+    --line-soft:       #CFC4A8;
+    --ok:              #2F7A4F;
+    --warn:            #D9962F;
+    --critical:        #C13E2E;
+    --serif: "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+    --sans:  -apple-system, BlinkMacSystemFont, "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+    --mono:  "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 56px 36px 80px; }
+  header.cover {
+    border-left: 8px solid var(--accent);
+    padding-left: 24px;
+    margin-bottom: 48px;
+  }
+  header.cover .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.18em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+  }
+  header.cover h1 {
+    font-family: var(--serif); font-weight: 500; font-size: 44px;
+    line-height: 1.2; color: var(--ink); margin-bottom: 12px;
+    letter-spacing: -0.015em;
+  }
+  header.cover .lead {
+    font-size: 17px; color: var(--ink-soft); max-width: 60ch; line-height: 1.7;
+  }
+  header.cover .meta {
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  h2.section-title {
+    font-family: var(--serif); font-weight: 500; font-size: 30px;
+    color: var(--ink); margin: 48px 0 12px; letter-spacing: -0.01em;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 8px;
+  }
+  h3.sub {
+    font-family: var(--serif); font-weight: 500; font-size: 22px;
+    color: var(--ink); margin: 28px 0 12px;
+  }
+  p { margin-bottom: 12px; color: var(--ink-soft); }
+  ul, ol { margin: 8px 0 16px 24px; color: var(--ink-soft); }
+  li { margin-bottom: 6px; line-height: 1.65; }
+  b, strong { color: var(--ink); font-weight: 700; }
+  code {
+    font-family: var(--mono); font-size: 13px;
+    background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;
+    color: var(--ink);
+  }
+
+  /* Phase cards */
+  .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+  .phase-card {
+    background: var(--bg-card); border: 1.5px solid var(--line);
+    border-radius: 12px; padding: 22px;
+  }
+  .phase-card .phase-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--accent); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .phase-card h4 {
+    font-family: var(--serif); font-size: 20px; color: var(--ink);
+    margin-bottom: 4px; font-weight: 500;
+  }
+  .phase-card .when { font-family: var(--mono); font-size: 13px; color: var(--ink-muted); margin-bottom: 14px; }
+  .phase-card ul { margin: 8px 0 0 18px; }
+  .phase-card li { font-size: 14px; color: var(--ink-soft); }
+
+  /* Criterion analysis */
+  .crit {
+    background: var(--bg-card); border: 1.5px solid var(--line);
+    border-radius: 12px; padding: 24px; margin: 18px 0;
+    position: relative;
+  }
+  .crit::before {
+    content: ""; position: absolute; left: 0; top: 24px; bottom: 24px;
+    width: 4px; background: var(--accent); border-radius: 2px;
+  }
+  .crit h3.crit-title {
+    font-family: var(--serif); font-size: 22px; color: var(--ink);
+    margin: 0 0 4px 14px; font-weight: 500;
+  }
+  .crit .crit-phase {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    margin-left: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .crit .crit-body { margin-top: 14px; padding-left: 14px; }
+
+  .row3 {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
+    margin-top: 12px;
+  }
+  .pill-section {
+    background: var(--bg-card-tint); border-radius: 8px; padding: 14px;
+    border: 1px solid var(--line-soft);
+  }
+  .pill-section.strength { border-color: rgba(47, 122, 79, 0.4); background: rgba(47, 122, 79, 0.05); }
+  .pill-section.gap      { border-color: rgba(217, 150, 47, 0.5); background: rgba(217, 150, 47, 0.08); }
+  .pill-section.action   { border-color: var(--accent-soft); background: var(--accent-pale); }
+  .pill-section .pill-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .pill-section.strength .pill-label { color: var(--ok); }
+  .pill-section.gap .pill-label      { color: var(--warn); }
+  .pill-section.action .pill-label   { color: var(--accent-deep); }
+  .pill-section ul { margin: 4px 0 0 18px; }
+  .pill-section li { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); }
+
+  /* TODO list */
+  .todo-table {
+    width: 100%; border-collapse: collapse; margin-top: 14px;
+    background: var(--bg-card); border: 1.5px solid var(--line); border-radius: 10px;
+    overflow: hidden;
+  }
+  .todo-table th {
+    background: var(--bg-card-tint); padding: 12px 14px; text-align: left;
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    border-bottom: 1.5px solid var(--line);
+  }
+  .todo-table td {
+    padding: 12px 14px; font-size: 14px; color: var(--ink-soft);
+    border-bottom: 1px solid var(--line-soft); vertical-align: top;
+    line-height: 1.55;
+  }
+  .todo-table tr:last-child td { border-bottom: none; }
+  .pri {
+    display: inline-block; font-family: var(--mono); font-size: 11px;
+    padding: 2px 8px; border-radius: 4px; font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .pri-p0 { background: rgba(193, 62, 46, 0.15); color: var(--critical); }
+  .pri-p1 { background: rgba(217, 150, 47, 0.18); color: var(--warn); }
+  .pri-p2 { background: rgba(47, 122, 79, 0.15); color: var(--ok); }
+  .pri-p3 { background: var(--bg-card-tint); color: var(--ink-muted); }
+
+  /* Callout */
+  .callout {
+    margin: 24px 0;
+    padding: 18px 22px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-pale);
+    border-radius: 0 8px 8px 0;
+  }
+  .callout .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--accent-deep); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .callout p { font-family: var(--serif); font-size: 17px; color: var(--ink); font-style: italic; line-height: 1.55; margin: 0; }
+
+  footer {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; color: var(--ink-muted);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header class="cover">
+    <div class="eyebrow">SCREENING GAP ANALYSIS</div>
+    <h1>YesMan — 審査基準ギャップ分析</h1>
+    <p class="lead">
+      AWS Summit Japan 2026 AI-DLC ハッカソンの<b>事前書類審査</b>と<b>予選 (麻布台ヒルズ 5/30)</b>の
+      2 フェーズ評価基準に対し、現状の実装 / プレゼン / 監査ログ / ドキュメント成果物の
+      適合度を点検し、本番までの優先 TODO を整理する。
+    </p>
+    <div class="meta">作成: 2026-05-26 / ぐうたラボ / YesMan v0.4.0+</div>
+  </header>
+
+  <!-- ============ 審査フェーズ整理 ============ -->
+  <h2 class="section-title">1. 審査フェーズ整理</h2>
+  <p>
+    AI-DLC ハッカソンは <b>2 段階</b>の審査構成。両フェーズで <b>基準が異なる</b>ため、
+    両方を視野に入れた準備が必要。
+  </p>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-label">Phase 1</div>
+      <h4>事前書類審査</h4>
+      <div class="when">提出済 / 平均 30 分 × 117 チーム / 全人手</div>
+      <ul>
+        <li>創造性とテーマ適合性</li>
+        <li>ビジネス意図 (Intent) の明確さ</li>
+        <li>Unit 分解の適切さ</li>
+        <li>ドキュメントの品質</li>
+      </ul>
+    </div>
+    <div class="phase-card">
+      <div class="phase-label">Phase 2</div>
+      <h4>予選会 (オフライン)</h4>
+      <div class="when">2026-05-30 (土) @麻布台ヒルズ / 5 チーム選出</div>
+      <ul>
+        <li>MVP デモの完成度</li>
+        <li>AI-DLC プロセスの実践と工夫</li>
+        <li>創造性とテーマ適合性</li>
+        <li>プレゼンテーション</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">CRITICAL INSIGHT</div>
+    <p>
+      審査員は <b>AI を使わず全員人間の目</b>で 30 分/件 をかけて見ている。
+      <code>audit.md</code> の議論履歴を実際に読まれ、「AI を鵜呑みにせず議論したか」が
+      評価ポイントになる。<b>形式的な承認回答は減点要因</b>と明言されている。
+    </p>
+  </div>
+
+  <!-- ============ 事前書類審査ギャップ ============ -->
+  <h2 class="section-title">2. 事前書類審査 4 基準 — ギャップ分析</h2>
+
+  <!-- 創造性とテーマ適合性 -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 1 / 基準 1</div>
+    <h3 class="crit-title">創造性とテーマ適合性</h3>
+    <div class="crit-body">
+      <p>
+        評価観点: テーマ (人をダメにするサービス) への適合、独自性、共感、推薦可能性。
+      </p>
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>水野版リブランディングで <b>How we spoil humans</b> / <b>Dependency by Design</b> をスローガン化</li>
+            <li>「言い当てる × ダメにする」の<b>二重メタファー</b>: AI 学習の正確性向上 → 結果として依存深化</li>
+            <li>沈黙ドメイン (宗教/選挙/暴力/卑猥) で<b>倫理担保</b> = 健康的に ダメにできる</li>
+            <li>コンセプト絵本 (12 場面紙芝居) で<b>感情訴求</b></li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>「他の "ダメにする" サービスとの違い」明示が弱い (例: SNS 中毒、ゲーム廃人 との差)</li>
+            <li>「なるほどと思える」要素が <b>"言い当て" の説明</b>に依存しすぎ — 観客がメタを掴めるか</li>
+            <li>「人に勧めたい」要素が、Biz/Marketing 観点で記述薄</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li>Slide 3 (Concept) に「他のダメサービスとの違い」1 行追加</li>
+            <li>Slide 4 (Approach) の kicker を「人に勧めたくなる理由」に寄せる</li>
+            <li>「友達に紹介する場面」想定文を 1 つ準備</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ビジネス意図 -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 1 / 基準 2</div>
+    <h3 class="crit-title">ビジネス意図 (Intent) の明確さ</h3>
+    <div class="crit-body">
+      <p>
+        評価観点: 解決したい課題、ターゲットユーザー、競合との違い、<b>Biz 視点</b>が AI-DLC に
+        反映されているか (AI-DLC は Biz / Dev / Domain Expert / Specialist の協働が前提)。
+      </p>
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>Slide 2 Problem: 課題 (35,000 / 94% / 40%) を <b>学術引用</b>で裏付け</li>
+            <li>3 ペルソナ (田中/佐藤/山田) を <code>aidlc-docs/inception/user-stories/personas.md</code> に定義</li>
+            <li>Slide 8 Business: 無料 + アフィリエイト 2 経路 / 単位経済 ¥56→ARPU ¥160 / 粗利 ¥104</li>
+            <li>沈黙ドメインでの広告非表示 = <b>倫理 × Biz 両立</b></li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>「<b>競合 / 類似サービス</b>との違い」がプレゼンに明示なし (SmartNews パーソナライズ等)</li>
+            <li>3 ペルソナがプレゼンに登場しない (README のみ)</li>
+            <li>「なぜ XX でなく YY を選択したか」(設計判断の Biz 根拠) の明示が薄い</li>
+            <li>Biz / Dev / Domain / Specialist の役割分担が <code>audit.md</code> に書かれているか不明</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li><b>Slide 2 と Slide 3 の間に「ターゲットペルソナ」スライドを追加</b> or Slide 2 にミニ統合</li>
+            <li>Slide 8 に「競合との差別化」1 列追加 (3 サービス × 3 軸の小型比較表)</li>
+            <li><code>audit.md</code> の冒頭に「チームメンバーの役割 (Biz/Dev/...)」を追記</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unit 分解 -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 1 / 基準 3</div>
+    <h3 class="crit-title">Unit 分解の適切さ</h3>
+    <div class="crit-body">
+      <p>
+        評価観点: AI の Unit 分解提案を<b>鵜呑みにせず人間が議論</b>したか。
+        <code>audit.md</code> の意思決定履歴を審査員が実際に読む。
+        <b>「承認します」だけの応答は減点</b>。
+      </p>
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li><code>audit.md</code> <b>5,414 行</b>の verbatim ログ</li>
+            <li>12 ユニット (U1〜U7d + U-Persona + U-Test) + 依存マトリクス + ストーリーマッピング</li>
+            <li>Inception 周回の痕跡 (anonymous-strangers feature 等で追加 spec を navigate)</li>
+            <li><code>application-design.drawio</code> 11 ページで階層 / シーケンス / Strategy+DI / UoW を視覚化</li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>「AI 提案を却下/修正した具体例」がプレゼンに登場しない (audit.md を読まないと伝わらない)</li>
+            <li>Slide 11 (AI-DLC) のカード 2 つに「Unit 分解で議論した話」が現状記述なし</li>
+            <li><code>audit.md</code> 5,414 行のうち、<b>"議論ハイライト" の抜粋</b>がどこにもまとまっていない</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li><b>audit.md ハイライト集</b>を作成: AI 提案を却下/修正した 3-5 例を抜粋</li>
+            <li>Slide 11 のカード 02「機能拡張で AI-DLC 強化」に「Unit 分解の議論例」を 1 行追加</li>
+            <li>Slide 11 全体を<b>当初 6 カードに戻す</b>選択肢検討 (Unit 分解カード復活)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ドキュメント品質 -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 1 / 基準 4</div>
+    <h3 class="crit-title">ドキュメントの品質</h3>
+    <div class="crit-body">
+      <p>
+        評価観点: <code>aidlc-docs/</code> の成果物のクオリティ。AI 提案を鵜呑みにせず、メリット/デメリットを
+        比較し議論を重ねた痕跡が重要。Inception 周回数が多いチームは高評価。
+      </p>
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>34 ユーザーストーリー × <b>86 Gherkin AC</b> (INVEST 検証)</li>
+            <li>drawio 多ページ: application-design 11p / ui-mockups 9p / persona-story-map 6p</li>
+            <li>FR-AI / FR-NUDGE / FR-LEARN / NFR-SEC 等 <b>12 セクションの要件定義</b></li>
+            <li>独自拡張: Construction Flow / Frontend Design 2 ルール</li>
+            <li><b>Post-CONSTRUCTION v3/v4 改修注記</b>で実装後の変更を spec に追記</li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>Inception 周回数の明示なし (README に「8 周したチーム」記述あり、対抗できるか不明)</li>
+            <li>各 spec の更新履歴 (diff log) がドキュメントに集約されていない</li>
+            <li>"AI に却下した提案 / 自分で書き換えた箇所" の<b>明示的タグ付け</b>がない</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li><code>aidlc-docs/INCEPTION_ITERATIONS.md</code> を作成: 各 spec の周回回数を明記</li>
+            <li>README の「AI-DLC による開発プロセス」セクションに「周回回数」表を追加</li>
+            <li><code>audit.md</code> 冒頭に「主な却下/修正例」サマリを追加</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 予選 4 基準ギャップ ============ -->
+  <h2 class="section-title">3. 予選 (5/30) 4 基準 — ギャップ分析</h2>
+
+  <!-- MVP デモ -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 2 / 基準 1</div>
+    <h3 class="crit-title">MVP デモの完成度</h3>
+    <div class="crit-body">
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>12 ユニット全実装、Mock/Claude CLI/LiteLLM/Ollama の 4 backend 切替可</li>
+            <li>合議 SSE streaming / Drill-down chain / 沈黙ガード / Voice / Yes nudge UX</li>
+            <li>ツアー動画 <code>~3:50</code> 撮影済</li>
+            <li><code>MOCK_SEED_DEMO_DECISIONS=true</code> で 30 日履歴投入済</li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li><b>本番デプロイ URL 不明</b> — 観客が QR スキャンしたとき動くか?</li>
+            <li>会場 Wi-Fi での AWS / LLM provider 接続テスト未実施</li>
+            <li>デモ中の障害想定 (LLM タイムアウト / SSE 切断) のフォールバックシナリオ未整理</li>
+            <li>5 分以内のデモ動線が <code>10 step</code> 想定 → 当日のタイムキープ厳しい</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li><b>本番 URL 確保 + Cognito 無し Mock User で即体験</b>できる導線整備</li>
+            <li>会場入りした際の <b>事前ネット疎通テスト</b>チェックリスト準備</li>
+            <li>デモシナリオを<b>必須 5 step + 任意 5 step</b>に分け、時間で取捨選択</li>
+            <li>LLM 障害時の即時切替手順 (env で Mock に retreat) をリハーサル</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI-DLC プロセス -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 2 / 基準 2</div>
+    <h3 class="crit-title">AI-DLC プロセスの実践と工夫</h3>
+    <div class="crit-body">
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>Slide 11 で 2 カードに圧縮: drawio&HTML 可視化 / opt-in 拡張 + Superpowers</li>
+            <li>独自拡張 2 ルール (Construction Flow / Frontend Design)</li>
+            <li>Anthropic Superpowers との合体 (TDD / brainstorming / executing-plans / parallel agents)</li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>「<b>AI を鵜呑みにせず議論した</b>」観点の訴求が薄い (Phase 1 と同根)</li>
+            <li><code>audit.md</code> 5,414 行のインパクトが <b>数字だけ</b>では伝わらない</li>
+            <li>削除した 4 カード (監査ログ / 12 ユニット分解 / 3-phase 人間レビュー) の復活余地</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li>Slide 11 のカードを <b>2 → 4 に戻す</b>: 監査ログ / Unit 分解議論 / 拡張 / Superpowers</li>
+            <li>"AI 却下例" のスクリーンショットを 1 枚スライドに追加検討</li>
+            <li>当日トークで「audit.md は 5,414 行、こんな却下議論をしました」と具体例を口頭で</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 創造性 (Phase 2 でも評価される) -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 2 / 基準 3</div>
+    <h3 class="crit-title">創造性とテーマ適合性 (再評価)</h3>
+    <div class="crit-body">
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>Phase 1 と同じく強い (How we spoil humans / 言い当て / 沈黙ガード)</li>
+            <li>ライブデモで <b>10 連 Yes → 🏆 大爆発 + 金色 confetti + 「素晴らしくダメに仕上がっています」</b>の演出</li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>会場ステージでの観客の<b>笑い / 拍手</b>を誘うピーク演出が明確化されていない</li>
+            <li>マスコット 🤵 が口頭で言及されない可能性</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li>デモ中の<b>笑いポイントを明示的に設計</b> (例: 沈黙ガード発動の瞬間、マスコットの「やった!」)</li>
+            <li>10 連 Yes の演出はデモ必須項目に</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- プレゼンテーション -->
+  <div class="crit">
+    <div class="crit-phase">PHASE 2 / 基準 4</div>
+    <h3 class="crit-title">プレゼンテーション</h3>
+    <div class="crit-body">
+      <div class="row3">
+        <div class="pill-section strength">
+          <div class="pill-label">✓ 現状の強み</div>
+          <ul>
+            <li>13 スライド / Claude 風 warm cream + terracotta デザイン</li>
+            <li>投影最適化済 (font-weight 強化 / border 強化 / shadow → border)</li>
+            <li>発表モード (P/B/F/?) + キーボード/タッチナビ実装</li>
+            <li><code>snapshot.sh</code> + <code>versions/</code> でバージョン管理</li>
+          </ul>
+        </div>
+        <div class="pill-section gap">
+          <div class="pill-label">⚠ ギャップ</div>
+          <ul>
+            <li>15 分 + デモで 13 スライドはやや過密 (Slide 5 削減推奨済)</li>
+            <li>本番 QR コードがダミー SVG のまま (Slide 13)</li>
+            <li>麻布台ヒルズの<b>プロジェクター解像度</b>を事前確認していない</li>
+            <li>当日のリハーサル動画なし</li>
+          </ul>
+        </div>
+        <div class="pill-section action">
+          <div class="pill-label">→ アクション</div>
+          <ul>
+            <li>Slide 13 QR を本番 URL に差し替え + スマホで実スキャン確認</li>
+            <li>15 分通しリハーサル (動画で録画 → 時間 over の箇所を特定)</li>
+            <li>Slide 5 を削るか、当日トークで触れる程度に短縮</li>
+            <li>会場プロジェクターのアスペクト比 / 解像度 を事前問い合わせ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 優先 TODO ============ -->
+  <h2 class="section-title">4. 本番までの優先 TODO (5/30 まで 4 日)</h2>
+  <table class="todo-table">
+    <thead>
+      <tr>
+        <th style="width: 60px;">優先</th>
+        <th style="width: 120px;">期限</th>
+        <th>項目</th>
+        <th style="width: 140px;">対応基準</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="pri pri-p0">P0</span></td>
+        <td>5/28 まで</td>
+        <td><b>本番デプロイ URL 確保 + Cognito Mock User で観客が即体験できる導線</b>。Slide 13 QR を本物 URL に差し替え、スマホで実スキャン確認。</td>
+        <td>MVP / プレゼン</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p0">P0</span></td>
+        <td>5/29 まで</td>
+        <td><b>15 分通しリハーサル</b> (デモ込み)。録画してタイム overrun の箇所を特定。Slide 5 を削るか短縮判断。</td>
+        <td>プレゼン</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p1">P1</span></td>
+        <td>5/27-28</td>
+        <td><b>audit.md ハイライト集</b>を作成: AI 提案を却下/修正した 3-5 例を <code>aidlc-docs/AUDIT_HIGHLIGHTS.md</code> として抜粋。</td>
+        <td>AI-DLC / Unit 分解</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p1">P1</span></td>
+        <td>5/27-28</td>
+        <td>Slide 11 の AI-DLC カードを <b>2 → 4</b> に戻す: 監査ログ 5,414 行 / Unit 分解議論 / opt-in 拡張 / Superpowers。</td>
+        <td>AI-DLC</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p1">P1</span></td>
+        <td>5/28</td>
+        <td><b>Slide 8 (Business) に競合比較を追加</b>: SmartNews パーソナライズ / ChatGPT 等との差別化を 3 軸 × 3 サービスの小型表で。</td>
+        <td>ビジネス意図</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p1">P1</span></td>
+        <td>5/28</td>
+        <td>3 ペルソナ (田中/佐藤/山田) を <b>Slide 2 末尾 or Slide 3 冒頭</b>に小型で挿入。</td>
+        <td>ビジネス意図</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p2">P2</span></td>
+        <td>5/29</td>
+        <td>会場 Wi-Fi での <b>事前疎通テスト</b>チェックリスト。LLM 障害時の Mock 切替手順を hand cheat sheet で持参。</td>
+        <td>MVP デモ</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p2">P2</span></td>
+        <td>5/29</td>
+        <td>デモシナリオを <b>必須 5 step + 任意 5 step</b> に分割し、時間で取捨選択できる稽古を 2 回。</td>
+        <td>MVP デモ</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p2">P2</span></td>
+        <td>5/29</td>
+        <td><code>aidlc-docs/INCEPTION_ITERATIONS.md</code> を作成: 各 spec の Inception 周回数を明記。</td>
+        <td>ドキュメント品質</td>
+      </tr>
+      <tr>
+        <td><span class="pri pri-p3">P3</span></td>
+        <td>5/30 朝</td>
+        <td>会場プロジェクターのアスペクト比 / 解像度 / HDMI 対応 を事前確認。フルスクリーン (F) + 発表モード (P) で投影テスト。</td>
+        <td>プレゼン</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ============ 最重要メッセージ ============ -->
+  <h2 class="section-title">5. 最重要メッセージ</h2>
+  <div class="callout">
+    <div class="callout-label">JUDGES READ AUDIT.MD</div>
+    <p>
+      審査員は <code>audit.md</code> の <b>議論履歴を実際に読む</b>。AI を鵜呑みにせず却下/修正した例が
+      最大の差別化要素。「承認します」だけの応答は減点。
+      <code>aidlc-docs/AUDIT_HIGHLIGHTS.md</code> を作成し、却下/修正例を 3-5 個抜粋する作業が
+      <b>最 ROI 高い投資</b>。
+    </p>
+  </div>
+
+  <footer>
+    YesMan × ぐうたラボ / AWS Summit Japan 2026 AI-DLC ハッカソン 予選対策 / 2026-05-26
+  </footer>
+
+</div>
+</body>
+</html>

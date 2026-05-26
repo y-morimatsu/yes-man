@@ -863,7 +863,7 @@
         <h1 class="title">YesMan.</h1>
         <div class="tagline">— 人間最後の仕事は、<em>YES</em> で承認すること。</div>
         <div class="sub">
-          <p>AI があなたの欲しい答えを<br/>予測して提案する。</p>
+          <p>AI があなたの欲しい答えを<br/>完璧に予測して提案する。</p>
           <p>あなたの仕事は、<em>YES</em> で承認するだけ。</p>
           <p>合議による多角的な言い当てと、議論履歴の透明性で、<br/>安心して任せられる — そして、心地よくダメになっていく。</p>
         </div>
@@ -1236,7 +1236,7 @@
               <div style="font-family: var(--mono); font-size: clamp(12px, 0.95vw, 15px); color: var(--ink-soft);">prompt ≥30 字 / 1 つ</div>
             </div>
             <div style="border-top: 1.5px solid var(--accent); padding-top: 8px;">
-              <div style="font-size: clamp(12px, 0.95vw, 14px); color: var(--ink-muted); font-style: italic; text-align: center;">● 推奨: 自分の信頼を細部まで形にしたい</div>
+              <div style="font-size: clamp(12px, 0.95vw, 14px); color: var(--ink-muted); font-style: italic; text-align: center;">● 推奨: 自分の信頼を完全に形にしたい</div>
             </div>
           </div>
         </div>
@@ -1432,7 +1432,7 @@
          ==================================================== -->
     <section class="slide" data-title="AWS Architecture">
 
-      <!-- 付箋: 航太さん作成 AWS 構成図 -->
+      <!-- 付箋: 航太さんの最新 AWS 構成で差し替え予定 -->
       <div style="
           position: absolute;
           top: 28px; right: 32px;
@@ -1469,84 +1469,133 @@
         </div>
       </div>
 
-      <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0;">
-        <img src="../architecture/yesman-aws-arch.png" alt="YesMan AWS Architecture" style="max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px;" />
-      </div>
-
-    </section>
-
-    <!-- ====================================================
-         Slide 10 — AI-DLC で工夫したこと
-         ==================================================== -->
-    <section class="slide" data-title="AI-DLC Approach">
-      <div class="slide-header">
-        <div class="left">
-          <div class="eyebrow">06 — AI-DLC Workflow</div>
-          <h2 class="section">AI-DLC で工夫したこと。</h2>
-          <p class="kicker" style="margin-top: 8px;">仕様 → 設計 → 実装の全工程を、AI と人間が協働。"言い当て" の精度を支える透明性。</p>
+      <div class="arch">
+        <!-- Row 1: User -->
+        <div class="arch-box user" style="grid-column: 1 / 3;">
+          <div class="svc">👤 User (PWA / Mobile Web)</div>
+          <div class="role">テキスト or 音声で「決めて」と伝える</div>
         </div>
-      </div>
+        <div style="grid-column: 3 / 4; display: flex; align-items: center; justify-content: center; color: var(--accent); font-family: var(--serif); font-size: clamp(16px, 1.3vw, 22px); font-weight: 600;">→ HTTPS →</div>
 
-      <div class="grid-2" style="gap: 22px;">
-        <div class="card">
-          <div class="num">01</div>
-          <h4>drawio &amp; HTML 可視化によるメンバーのコンテキスト共通化</h4>
-
-          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
-            <div>
-              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
-              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">Markdown 形式の資料だけでは、コンポーネント間の関係性や全体像が伝わらず、レビューで認識ズレが起きる。</div>
+        <!-- Edge group spans -->
+        <div class="arch-group edge" style="grid-column: 4 / 8;">
+          <div class="group-label">Edge / CDN</div>
+          <div class="arch-row">
+            <div class="arch-box">
+              <div class="svc">CloudFront</div>
+              <div class="role">CDN + キャッシュ</div>
             </div>
-            <div>
-              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
-              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">設計フェーズに <b>drawio</b> + <b>HTML 可視化</b> を組み込み、アーキ / UX / ストーリーを多層で見せる。</div>
+            <div class="arch-box">
+              <div class="svc">S3 Static</div>
+              <div class="role">PWA Bundle</div>
             </div>
-            <div>
-              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
-              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">設計レビューの認識ズレが激減。技術者にも非技術者にも、同じ仕様が違う深さで伝わる。</div>
+            <div class="arch-box">
+              <div class="svc">Cognito Hosted UI</div>
+              <div class="role">OAuth2 / PKCE</div>
             </div>
           </div>
         </div>
 
-        <div class="card">
-          <div class="num">02</div>
-          <h4>機能拡張で AI-DLC を強化</h4>
+        <!-- Mgmt -->
+        <div class="arch-group ops" style="grid-column: 8 / 13;">
+          <div class="group-label">Management</div>
+          <div class="arch-row">
+            <div class="arch-box">
+              <div class="svc">Secrets Manager</div>
+              <div class="role">API キー / DB 認証</div>
+            </div>
+            <div class="arch-box">
+              <div class="svc">CloudWatch + X-Ray</div>
+              <div class="role">監視 + tracing</div>
+            </div>
+            <div class="arch-box">
+              <div class="svc">KMS</div>
+              <div class="role">保存時暗号化</div>
+            </div>
+          </div>
+        </div>
 
-          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
-            <div>
-              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
-              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">AI-DLC コア単独では、Security / テスト / UI 品質などの観点が薄く、AI が自由気ままに進む傾向。</div>
+        <!-- VPC -->
+        <div class="arch-group vpc" style="grid-column: 1 / 7; grid-row: 2;">
+          <div class="group-label">VPC (新規)</div>
+          <div class="arch-row">
+            <div class="arch-box" style="flex: 0 0 38%;">
+              <div class="svc">ALB + ACM</div>
+              <div class="role">HTTPS termination</div>
             </div>
-            <div>
-              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
-              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;"><b>opt-in 拡張機能</b> と <b>Superpowers</b> を組み合わせ、品質ガードを多層化。</div>
-              <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px; font-size: clamp(12px, 0.9vw, 14px); color: var(--ink-muted);">
-                <div>opt-in: 🛡️ Security Baseline / 🔬 PBT / 🛠️ Construction Flow <span style="color: var(--accent); font-weight: 700;">(独自)</span> / 🎨 Frontend Design <span style="color: var(--accent); font-weight: 700;">(独自)</span></div>
-                <div>Superpowers: brainstorming / TDD / executing-plans / parallel agents</div>
-              </div>
+            <div class="arch-box" style="flex: 1;">
+              <div class="svc">ECS Fargate (FastAPI)</div>
+              <div class="role">モジュラー・モノリス本体<br/>合議 / SSE / 学習 / 沈黙ガード</div>
             </div>
-            <div>
-              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
-              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">品質ガード × スピード両立。AI の暴走を防ぎながら、4 週間で 12 ユニット完走。</div>
+            <div class="arch-box" style="flex: 0 0 32%;">
+              <div class="svc">Aurora Serverless v2</div>
+              <div class="role">PostgreSQL 16<br/>0.5 ACU から ScaleOut</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LLM Layer -->
+        <div class="arch-group llm" style="grid-column: 7 / 13; grid-row: 2;">
+          <div class="group-label">LLM Layer (LiteLLM Router)</div>
+          <div class="arch-row">
+            <div class="arch-box">
+              <div class="svc">Amazon Bedrock</div>
+              <div class="role">Claude / Nova + <b>Guardrails</b></div>
+            </div>
+            <div class="arch-box">
+              <div class="svc">Ollama (Local)</div>
+              <div class="role">offline fallback</div>
+            </div>
+            <div class="arch-box">
+              <div class="svc">CLI Bridges</div>
+              <div class="role">Claude Code / Codex / Gemini</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Async + Voice -->
+        <div class="arch-group" style="grid-column: 1 / 7; grid-row: 3; background: rgba(232, 119, 90, 0.05);">
+          <div class="group-label">Async</div>
+          <div class="arch-row">
+            <div class="arch-box" style="flex: 1;">
+              <div class="svc">EventBridge (yesman-bus)</div>
+              <div class="role">嗜好プロファイル更新 / 履歴集計 / API Destinations 経由で ALB へ</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch-group" style="grid-column: 7 / 13; grid-row: 3; background: rgba(232, 184, 106, 0.07);">
+          <div class="group-label">Voice</div>
+          <div class="arch-row">
+            <div class="arch-box">
+              <div class="svc">Amazon Polly</div>
+              <div class="role">TTS (合議読み上げ)</div>
+            </div>
+            <div class="arch-box">
+              <div class="svc">Amazon Transcribe</div>
+              <div class="role">Server STT (Premium)</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style="margin-top: 20px; padding: 14px 22px; border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
-        <p style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); color: var(--ink); font-style: italic; font-weight: 500;">
-          ▶ 結果: <b style="color: var(--accent-deep); font-style: normal;">4 週間 / 12 ユニット / 全工程の追跡可能性</b>を両立。
-        </p>
+      <div style="margin-top: 18px; display: flex; gap: 16px; align-items: center; padding: 12px 16px; border-radius: 8px; background: var(--bg-card-tint); border: 1px solid var(--line-soft);">
+        <div class="label">採用理由</div>
+        <div style="font-size: 15px; color: var(--ink-soft); line-height: 1.6;">
+          Fargate = Lambda 15 分制限を回避 / Aurora v2 = ハッカソン規模に最適化 /
+          LiteLLM = 障害時フォールバック + コスト柔軟 / Strategy+DI = ローカル時 AWS 不要 /
+          EventBridge = 学習を非同期化、提案レイテンシ無劣化。
+        </div>
       </div>
     </section>
 
     <!-- ====================================================
-         Slide 11 — Demo Scenario
+         Slide 10 — Demo Scenario
          ==================================================== -->
     <section class="slide" data-title="Demo">
       <div class="slide-header">
         <div class="left">
-          <div class="eyebrow">07 — Demo Scenario</div>
+          <div class="eyebrow">06 — Demo Scenario</div>
           <h2 class="section">デモシナリオ (5 分以内)。</h2>
           <p class="kicker" style="margin-top: 8px;"><code style="font-family: var(--mono); font-size: 15px; background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;">MOCK_SEED_DEMO_DECISIONS=true</code> で 30 日分の履歴 + 嗜好プロファイルが初期投入。</p>
         </div>
@@ -1632,6 +1681,71 @@
     </section>
 
     <!-- ====================================================
+         Slide 11 — AI-DLC で工夫したこと
+         ==================================================== -->
+    <section class="slide" data-title="AI-DLC Approach">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">07 — AI-DLC Workflow</div>
+          <h2 class="section">AI-DLC で工夫したこと。</h2>
+          <p class="kicker" style="margin-top: 8px;">仕様 → 設計 → 実装の全工程を、AI と人間が協働。"言い当て" の精度を支える透明性。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap: 22px;">
+        <div class="card">
+          <div class="num">01</div>
+          <h4>drawio &amp; HTML 可視化によるメンバーのコンテキスト共通化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">Markdown 形式の資料だけでは、コンポーネント間の関係性や全体像が伝わらず、レビューで認識ズレが起きる。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">設計フェーズに <b>drawio</b> + <b>HTML 可視化</b> を組み込み、アーキ / UX / ストーリーを多層で見せる。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">設計レビューの認識ズレが激減。技術者にも非技術者にも、同じ仕様が違う深さで伝わる。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="num">02</div>
+          <h4>機能拡張で AI-DLC を強化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">AI-DLC コア単独では、Security / テスト / UI 品質などの観点が薄く、AI が自由気ままに進む傾向。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;"><b>opt-in 拡張機能</b> と <b>Superpowers</b> を組み合わせ、品質ガードを多層化。</div>
+              <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px; font-size: clamp(12px, 0.9vw, 14px); color: var(--ink-muted);">
+                <div>opt-in: 🛡️ Security Baseline / 🔬 PBT / 🛠️ Construction Flow <span style="color: var(--accent); font-weight: 700;">(独自)</span> / 🎨 Frontend Design <span style="color: var(--accent); font-weight: 700;">(独自)</span></div>
+                <div>Superpowers: brainstorming / TDD / executing-plans / parallel agents</div>
+              </div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">品質ガード × スピード両立。AI の暴走を防ぎながら、4 週間で 12 ユニット完走。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; padding: 14px 22px; border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
+        <p style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); color: var(--ink); font-style: italic; font-weight: 500;">
+          ▶ 結果: <b style="color: var(--accent-deep); font-style: normal;">4 週間 / 12 ユニット / 全工程の追跡可能性</b>を両立。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
          Slide 12 — Future / Roadmap
          ==================================================== -->
     <section class="slide" data-title="Future">
@@ -1653,9 +1767,6 @@
             <li>Siri / Google Assistant 連携 (音声で起動)</li>
             <li>カレンダー連動 (今夜の予定を決めて)</li>
             <li>外部情報連動 (天気 / 交通 / 現在地) で文脈に応じた提案</li>
-            <li>Agentic 自動予約 (レストラン / 美容院 / 病院 を Yes ワンタップで完了)</li>
-            <li>Agentic 自動電話発信 (注文 / 問い合わせ / 予約確認を AI 音声が代行)</li>
-            <li>Agentic 自動購入 (Amazon / 楽天 / EC で Yes → 決済まで一気通貫)</li>
             <li>月次「あなたの判断レポート」(Premium)</li>
           </ul>
         </div>
@@ -1677,6 +1788,7 @@
           <h4>意思決定の社会インフラ化</h4>
           <ul>
             <li>API 公開 (他サービスに "Yes" を委譲)</li>
+            <li>Agentic 実行 (Yes を押すと予約・購入まで完了)</li>
             <li>長期人生イベントの段階的合議 (進学 / 転職 / 介護)</li>
             <li>"AI に任せた判断" の公的監査フレーム</li>
             <li>判断疲労ゼロの新しい働き方の提唱</li>
