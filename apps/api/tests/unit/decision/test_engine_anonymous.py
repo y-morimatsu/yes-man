@@ -242,8 +242,8 @@ async def test_anonymous_path_yields_3_personas():
     personas = personas_events[0].data["personas"]
     assert len(personas) == 3
     assert personas[0]["name"] == "あなたの声"
-    assert personas[1]["name"] == "世界の誰か #1"
-    assert personas[2]["name"] == "世界の誰か #2"
+    assert personas[1]["name"] == "知り合い #1"
+    assert personas[2]["name"] == "知り合い #2"
 
 
 @pytest.mark.asyncio

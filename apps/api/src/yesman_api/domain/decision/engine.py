@@ -10,6 +10,7 @@ FD §5 + spec 2026-05-21 parallel-persona-consensus + I6 (Yes/No 両方発火) �
 from __future__ import annotations
 
 import asyncio
+import re
 from datetime import datetime, timezone
 from typing import Any, AsyncIterator, Literal
 from uuid import UUID, uuid4
@@ -57,7 +58,7 @@ class _AnonymousProxy:
 
     属性:
         id   = AnonymousPersonaSpec.persona_id (UUID)
-        name = display 表示用ラベル (「あなたの声」 / 「世界の誰か #1」 等)
+        name = display 表示用ラベル (「あなたの声」 / 「知り合い #1」 等)
         spec = 派生元 spec (LLM prompt 用 metadata + primary_language / formality)
     """
 
@@ -71,7 +72,40 @@ class _AnonymousProxy:
 
 #: 2026-05-25 drill-down chain の最大深さ. depth 0 (root) から数えて MAX に到達したら is_final=true.
 #: 値の増減で UX の刻みが変わる (4 = 5 click で final、自然な絞り込みのレンジ).
+#: 2026-05-26 update: _detect_final_signal() で LLM が早期 final を signal した場合は
+#: MAX_DRILL_DEPTH 未満でも is_final=true になる. MAX は safety net.
 MAX_DRILL_DEPTH = 4
+
+
+#: 2026-05-26 drill-down 柔軟化 (A 案 + C 案): LLM が proposal 末尾に
+#: "開きますか?" / "決めますか?" / "決まり!" 等の **決定 signal** を含めた場合に
+#: depth が MAX 未満でも is_final=true にする (early-final).
+#: regex は末尾近辺 (句点・感嘆符の前後) を許容するが、語頭マッチは禁止.
+_FINAL_SIGNAL_RE = re.compile(
+    r"("
+    r"開きますか[??]?"
+    r"|決めますか[??]?"
+    r"|決まりますか[??]?"
+    r"|これで決まり[!!]?"
+    r"|これで決定[!!]?"
+    r"|これに決めよう"
+    r")\s*[。.]?\s*$"
+)
+
+
+def _detect_final_signal(proposal_text: str) -> bool:
+    """LLM が proposal 末尾に decisively "決定 OK" の signal を含めたか検出.
+
+    Returns True if proposal_text ends with one of:
+    - "〜開きますか?" / "〜決めますか?" / "〜決まりますか?" (疑問形・外部 service ありなしどちらでも OK)
+    - "これで決まり!" / "これで決定!" / "これに決めよう" (断定形)
+
+    末尾 (\\s*[。.]?\\s*$) なので 1 文 1 句点を破壊しない.
+    Returns False for 中間段の "〜にしよう" / "〜が おすすめ" / "〜どうですか?" 等.
+    """
+    if not proposal_text:
+        return False
+    return bool(_FINAL_SIGNAL_RE.search(proposal_text))
 
 
 class DecisionEngine:
@@ -273,45 +307,67 @@ class DecisionEngine:
             # depth == MAX_DRILL_DEPTH に厳密一致させる. depth=MAX-1 (= remaining=1) では
             # 中間段 guide を維持し、depth=MAX のみ疑問形 "開きますか?" 1 文を要求する.
             if depth == MAX_DRILL_DEPTH:
-                # final 段のみ: Amazon で開ける固有名 + 疑問形 "開きますか?"
+                # final 段 (MAX 到達): 外部 service ありなしどちらでも OK の最終提案.
+                # 2026-05-26 (C 案): service 強制紐づけを撤廃. 自宅完結 action も許可.
                 guide = (
-                    "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
-                    "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
-                    "を含む **疑問形 1 文** で出してください. "
-                    "**必ず末尾を「開きますか?」で締める** こと. "
-                    "例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
-                    "『「AMAZON Basic T シャツ 5 枚セット」を Amazon Fashion で 開きますか?』 / "
-                    "『「君たちはどう生きるか」を Kindle で 開きますか?』. "
-                    "Yes で外部サイトが新しいタブで開きます."
+                    "**最終段** (MAX 到達). 上の絞り込みを受けて **疑問形 1 文** で出してください.\n"
+                    "**case A: 外部サイトで購入 / 視聴 / 注文できる action** の場合:\n"
+                    "  → **「〜を XX で 開きますか?」** で締める (Yes で 外部サイトが 新しいタブで開く)\n"
+                    "  例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                    "『「貞子」を Amazon Prime Video で 開きますか?』 / "
+                    "『「君たちはどう生きるか」を Kindle で 開きますか?』.\n"
+                    "**case B: 自宅で完結する action** (自家調理 / 散歩 / 既存所有物利用 等) の場合:\n"
+                    "  → **「〜決まり!」 / 「〜決めますか?」** で締める (外部サイト不要)\n"
+                    "  例: 『「冷凍うどんを 茹でて めんつゆで 食べる」 で 決まり!』 / "
+                    "『「近所を 20 分 散歩する」 で 決まり!』 / "
+                    "『「家にある コーヒー豆で ハンドドリップする」 に 決めますか?』.\n"
+                    "**chain 内で 自宅完結意図が明確** (例: 『家にある物で〜』『冷蔵庫の〜』『手持ちの〜』) "
+                    "なら case B を選ぶ. 強引に外部 service に紐づけない."
                 )
             elif depth == 1:
                 # 最初の drill-down: 必ず media / channel / 入手経路を提案する.
                 guide = (
                     f"絞り込み chain 残 {remaining} 段. "
-                    "**今は media / channel / 場所 / 入手経路 を 1 つ提案する** 短い疑問 or 断定 1 文 (~40 字). "
-                    "user に「どの経路で実現するか」を **明示的に問う** 段階です.\n"
+                    "**今は media / channel / 場所 / 入手経路 を 1 つ提案する** 短い疑問 1 文 (~40 字). "
+                    "user に「どの経路で実現するか」を **やさしく問う** 段階です.\n"
                     "例:\n"
-                    "- 『映画見たい』 → 『配信で 観ますか?』 or 『劇場で 観に行きますか?』 or 『DVD/Blu-ray で 観ますか?』\n"
-                    "- 『服 買いたい』 → 『通販で 買いますか?』 or 『店舗で 試着して 買いますか?』\n"
-                    "- 『夜食』 → 『出前で 注文しますか?』 or 『コンビニで 買いますか?』 or 『家にある物で 済ましますか?』\n"
-                    "- 『音楽 聴きたい』 → 『配信サービスで 聴きますか?』 or 『CD を 買いますか?』\n"
-                    "**特定の media (劇場 / 通販 / 店舗 等) に決め打ちしない** — "
-                    "user 相談に合う **自然な 1 つの選択肢** を出す. "
-                    "service 名 (Amazon / Netflix 等) はまだ出さない. media 選択だけ."
+                    "- 『映画見たい』 → 『配信で 観るのは どう?』『劇場で 観に行く?』 のどちらか **1 つだけ**\n"
+                    "- 『服 買いたい』 → 『通販で 買う?』『店舗で 試着して 買う?』 のどちらか **1 つだけ**\n"
+                    "- 『夜食』 → 『出前で 注文する?』『コンビニで 買う?』『家にある物で 済ます?』 から **1 つだけ**\n"
+                    "**重要**: 前段の root proposal で示された **主要な対象 / 食材 / ジャンル / 目的** を "
+                    "**必ず維持** してください (NG: root 『卵料理にしよう』 → 中間段 『うどん 食べる?』 のような pivot 禁止).\n"
+                    "**1 つの media** を選んで提示する. "
+                    "`or` / `/` / `+` / `＋` / 『〜か〜』 / 『〜と〜』 / 『〜、〜』 等で "
+                    "**複数選択肢 / 複数要素を 1 文に詰めるのは 禁止** "
+                    "(NG: 『配信 or 劇場 で 観ますか?』『ごはん＋目玉焼き』 — 1 文に 2 つ並べない). "
+                    "user が No なら別案 (別 media) が出る仕組みなので、1 つに絞って OK.\n"
+                    "**1 文 / 句点 1 つ**. 投げ返し表現 (『〜決めてみよう』『〜から選ぼう』) は禁止. "
+                    "根拠説明 (『〜と満足度が上がるよ』『まずは〜』) は付加しない.\n"
+                    "**柔らかい提案調**: 『〜で 〜する?』『〜は どう?』 程度. "
+                    "**命令形 (『〜しろ』『今すぐ〜』『迷わず〜』) は禁止**. "
+                    "service 名 (Amazon / Netflix 等) はまだ出さない."
                 )
             else:
                 # depth >= 2 中間段: 前段の media を受け継いで subtype / ジャンル / 価格 等 1 軸絞り込み.
                 guide = (
                     f"絞り込み chain 残 {remaining} 段. "
-                    "前段までの絞り込み (特に media / channel 選択) を **必ず受け継いで** ください. "
+                    "**前段までの絞り込み (root の対象 / 食材 / ジャンル / 目的 + media / channel) "
+                    "を 1 つ残らず 受け継いで** ください. "
+                    "**chain で 既に確定した主題から の pivot (例: root 卵料理 → 中間段 うどん) は 厳禁**.\n"
                     "今は **subtype / ジャンル / 価格帯 / シーン 等 1 軸だけ絞る** "
-                    "短い断定 or 疑問 1 文 (~40 字). "
+                    "短い 提案 1 文 (~40 字). "
                     "前段で配信系 media が選ばれていれば Amazon Prime Video / Amazon Music / "
                     "Kindle / Amazon.co.jp 等の Amazon サービスへ自然に寄せ、合わない場合 "
                     "(劇場 / 店舗 / 出前 等) は無理に Amazon を出さず、user 相談に最も適した "
                     "他 service (TOHO シネマズ / 出前館 / Uber Eats / じゃらん 等) を選ぶ. "
                     "**お題と前段 media からの逸脱は厳禁**. "
-                    "極端に具体的な固有名は最終段まで温存."
+                    "極端に具体的な固有名は最終段まで温存.\n"
+                    "**1 つの subtype だけ** 提示. "
+                    "`or` / `/` / `+` / `＋` / 『〜か〜』 / 『〜と〜』 / 『〜、〜』 で **複数並べない** "
+                    "(NG: 『ごはん＋目玉焼き＋野菜』『丼か スープ』). "
+                    "**1 文 / 句点 1 つ**. 投げ返し表現 / 根拠説明の付加は禁止.\n"
+                    "**柔らかい提案調**: 『〜が おすすめ』『〜は どう?』 程度. "
+                    "**命令形 (『〜しろ』『今すぐ〜』 等) は禁止**."
                 )
             enriched_input = (
                 f"[これまでの絞り込み: {context_line}]\n"
@@ -430,7 +486,23 @@ class DecisionEngine:
                 "service への誘導は次段以降の役割.\n"
                 "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
                 "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
-                "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+                "- **1 つの 具体的な action だけ** 提示する. "
+                "複数選択肢 (`or` / `/` / `(または)` / 『〜か〜』 / 『〜と〜』) での列挙は **禁止**.\n"
+                "- **柔らかい提案調**: 『〜しよう』『〜が 良いよ』『〜どう?』 程度. "
+                "**命令形 (『〜しろ』『〜するな』『〜せよ』『即〜』『今すぐ〜』『迷わず〜』) は禁止**.\n"
+                "- **1 文 / 句点 (。) は 1 つだけ** — 2 文に分けない、複数情報を詰めない.\n"
+                "- **ユーザに 決定を 投げ返す表現は 禁止** ← yesman の本旨と矛盾するため最重要 "
+                "(NG: 『〜決めてみよう』『〜気軽に〜』『〜選んでみる?』『〜書き出して』 "
+                "『〜から 選ぼう』『〜どちらかに 寄せて』『〜を 軸に 決めて』). "
+                "→ YesMan が **代わりに 1 つに決めて** 提示する.\n"
+                "- **根拠 / 期待効果 / 説明の付加は 禁止** "
+                "(NG: 『〜と 満足度が 上がるよ』『〜が 効率的だよ』『〜したほうが 楽だよ』 "
+                "『まずは 〜』『すると 〜』). action 動詞 1 つで完結する短文に.\n"
+                "- **action 動詞 + 大まかな対象** で構成 "
+                "(OK: 『今夜は 温かい一品を 作ろう』『映画を 1 本 観よう』 のように 1 action 1 名詞).\n"
+                "- **root では 最終決定 signal を 絶対に 出さない** ← drill-down の起点なので最重要 "
+                "(NG: 『これで決まり!』『〜開きますか?』『〜決めますか?』 を末尾に置かない. "
+                "必ず『〜しよう』『〜どう?』『〜が 良いよ』 等の **継続 signal** で締める)."
             )
         try:
             raw_proposal = await asyncio.wait_for(
@@ -471,7 +543,12 @@ class DecisionEngine:
         # 2026-05-25 revert (A 案): Yes 連鎖で深堀り → 4 段目 (depth=3) で final.
         # depth >= MAX_DRILL_DEPTH (3) のときのみ is_final=true。
         # depth 0..2 は Yes で onDrillDown が起動し、chain_context を積んで再 stream。
-        is_final = depth >= MAX_DRILL_DEPTH
+        # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
+        # early-final で 5 段強制ではなく LLM 判断で 2-4 段で完結可能.
+        # depth=0 root は drill-down の起点であり、early-final は許可しない (signal 暴発防止).
+        is_final = depth >= MAX_DRILL_DEPTH or (
+            depth >= 1 and _detect_final_signal(proposal_text)
+        )
         yield StreamEvent(
             "proposal",
             {
@@ -787,7 +864,11 @@ class DecisionEngine:
                     "ユーザー相談に自然に合う場合のみ Amazon Prime Video / Music / Fashion / "
                     "Kindle / Prime Gaming / Amazon.co.jp に寄せる. 合わない場合は他 service "
                     "(Uber Eats / 出前館 / 食べログ / じゃらん 等). お題からの逸脱は禁止. "
-                    "極端に具体的すぎる固有名は最終段まで温存."
+                    "**前段までの絞り込み (root 対象 / media) を必ず継承 — pivot は厳禁**. "
+                    "極端に具体的すぎる固有名は最終段まで温存. "
+                    "**1 案のみ** (`or`/`/`/`+`/`＋`/『〜と〜』 で複数並べない). "
+                    "**1 文 / 句点 1 つ**. "
+                    "**提案調** (『〜が おすすめ』『〜は どう?』). **命令形は禁止**."
                 )
             chain_section = (
                 f"\n\nこれまでの絞り込み: {context_line}\n{guide}"
@@ -902,7 +983,7 @@ class DecisionEngine:
         specs: list[AnonymousPersonaSpec] = [self_spec, *sampled]
         proxies: list[_AnonymousProxy] = []
         for idx, spec in enumerate(specs):
-            name = "あなたの声" if idx == 0 else f"世界の誰か #{idx}"
+            name = "あなたの声" if idx == 0 else f"知り合い #{idx}"
             proxies.append(_AnonymousProxy(id_=spec.persona_id, name=name, spec=spec))
 
         # 3. personas event (frontend で bubble pre-render)
@@ -1008,21 +1089,40 @@ class DecisionEngine:
                 "service への誘導は次段以降の役割.\n"
                 "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
                 "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
-                "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+                "- **1 つの 具体的な action だけ** 提示する. "
+                "複数選択肢 (`or` / `/` / `(または)` / 『〜か〜』 / 『〜と〜』) での列挙は **禁止**.\n"
+                "- **柔らかい提案調**: 『〜しよう』『〜が 良いよ』『〜どう?』 程度. "
+                "**命令形 (『〜しろ』『〜するな』『〜せよ』『即〜』『今すぐ〜』『迷わず〜』) は禁止**.\n"
+                "- **1 文 / 句点 (。) は 1 つだけ** — 2 文に分けない、複数情報を詰めない.\n"
+                "- **ユーザに 決定を 投げ返す表現は 禁止** ← yesman の本旨と矛盾するため最重要 "
+                "(NG: 『〜決めてみよう』『〜気軽に〜』『〜選んでみる?』『〜書き出して』 "
+                "『〜から 選ぼう』『〜どちらかに 寄せて』『〜を 軸に 決めて』). "
+                "→ YesMan が **代わりに 1 つに決めて** 提示する.\n"
+                "- **根拠 / 期待効果 / 説明の付加は 禁止** "
+                "(NG: 『〜と 満足度が 上がるよ』『〜が 効率的だよ』『〜したほうが 楽だよ』 "
+                "『まずは 〜』『すると 〜』). action 動詞 1 つで完結する短文に.\n"
+                "- **action 動詞 + 大まかな対象** で構成 "
+                "(OK: 『今夜は 温かい一品を 作ろう』『映画を 1 本 観よう』 のように 1 action 1 名詞).\n"
+                "- **root では 最終決定 signal を 絶対に 出さない** ← drill-down の起点なので最重要 "
+                "(NG: 『これで決まり!』『〜開きますか?』『〜決めますか?』 を末尾に置かない. "
+                "必ず『〜しよう』『〜どう?』『〜が 良いよ』 等の **継続 signal** で締める)."
             )
         # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
         # 疑問形 "開きますか?" 1 文を要求 (builtin path と境界一致).
         elif len(request.chain_context) == MAX_DRILL_DEPTH:
             proposal_system += (
                 "\n\n"
-                "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
-                "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
-                "を含む **疑問形 1 文** で出してください. "
-                "**必ず末尾を「開きますか?」で締める** こと. "
-                "例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
-                "『「AMAZON Basic T シャツ 5 枚セット」を Amazon Fashion で 開きますか?』 / "
-                "『「君たちはどう生きるか」を Kindle で 開きますか?』. "
-                "Yes で外部サイトが新しいタブで開きます."
+                "**最終段** (MAX 到達). 上の絞り込みを受けて **疑問形 1 文** で出してください.\n"
+                "**case A: 外部サイトで購入 / 視聴 / 注文できる action** の場合:\n"
+                "  → **「〜を XX で 開きますか?」** で締める (Yes で 新しいタブで開く)\n"
+                "  例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                "『「貞子」を Amazon Prime Video で 開きますか?』.\n"
+                "**case B: 自宅で完結する action** (自家調理 / 散歩 / 既存所有物利用 等) の場合:\n"
+                "  → **「〜決まり!」 / 「〜決めますか?」** で締める (外部サイト不要)\n"
+                "  例: 『「冷凍うどんを 茹でて めんつゆで 食べる」 で 決まり!』 / "
+                "『「家にある コーヒー豆で ハンドドリップする」 に 決めますか?』.\n"
+                "chain 内で 自宅完結意図が明確 (例: 『家にある物で〜』『冷蔵庫の〜』) なら "
+                "case B を選ぶ. 強引に外部 service に紐づけない."
             )
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
         try:
@@ -1057,7 +1157,12 @@ class DecisionEngine:
                 "emoji": service.emoji,
             }
         # 2026-05-25 revert (A 案): builtin path と同じく depth >= MAX_DRILL_DEPTH のみ final.
-        is_final = depth >= MAX_DRILL_DEPTH
+        # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
+        # early-final で 5 段強制ではなく LLM 判断で 2-4 段で完結可能.
+        # depth=0 root は drill-down の起点であり、early-final は許可しない (signal 暴発防止).
+        is_final = depth >= MAX_DRILL_DEPTH or (
+            depth >= 1 and _detect_final_signal(proposal_text)
+        )
         yield StreamEvent(
             "proposal",
             {
@@ -1125,10 +1230,10 @@ class DecisionEngine:
                     continue
                 spec = self._pool_repo.get_by_id(ref.id, excluding_sub=sub)
                 if spec is not None:
-                    # display name: 「世界の誰か #N」
+                    # display name: 「知り合い #N」
                     idx = sum(1 for r in resolved if r[0] == "anonymous") + 1
                     resolved.append(
-                        ("anonymous", str(spec.persona_id), f"世界の誰か #{idx}", spec)
+                        ("anonymous", str(spec.persona_id), f"知り合い #{idx}", spec)
                     )
             else:
                 # builtin or my
@@ -1252,21 +1357,40 @@ class DecisionEngine:
                 "service への誘導は次段以降の役割.\n"
                 "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
                 "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
-                "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+                "- **1 つの 具体的な action だけ** 提示する. "
+                "複数選択肢 (`or` / `/` / `(または)` / 『〜か〜』 / 『〜と〜』) での列挙は **禁止**.\n"
+                "- **柔らかい提案調**: 『〜しよう』『〜が 良いよ』『〜どう?』 程度. "
+                "**命令形 (『〜しろ』『〜するな』『〜せよ』『即〜』『今すぐ〜』『迷わず〜』) は禁止**.\n"
+                "- **1 文 / 句点 (。) は 1 つだけ** — 2 文に分けない、複数情報を詰めない.\n"
+                "- **ユーザに 決定を 投げ返す表現は 禁止** ← yesman の本旨と矛盾するため最重要 "
+                "(NG: 『〜決めてみよう』『〜気軽に〜』『〜選んでみる?』『〜書き出して』 "
+                "『〜から 選ぼう』『〜どちらかに 寄せて』『〜を 軸に 決めて』). "
+                "→ YesMan が **代わりに 1 つに決めて** 提示する.\n"
+                "- **根拠 / 期待効果 / 説明の付加は 禁止** "
+                "(NG: 『〜と 満足度が 上がるよ』『〜が 効率的だよ』『〜したほうが 楽だよ』 "
+                "『まずは 〜』『すると 〜』). action 動詞 1 つで完結する短文に.\n"
+                "- **action 動詞 + 大まかな対象** で構成 "
+                "(OK: 『今夜は 温かい一品を 作ろう』『映画を 1 本 観よう』 のように 1 action 1 名詞).\n"
+                "- **root では 最終決定 signal を 絶対に 出さない** ← drill-down の起点なので最重要 "
+                "(NG: 『これで決まり!』『〜開きますか?』『〜決めますか?』 を末尾に置かない. "
+                "必ず『〜しよう』『〜どう?』『〜が 良いよ』 等の **継続 signal** で締める)."
             )
         # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
         # 疑問形 "開きますか?" 1 文を要求 (builtin / anonymous path と境界一致).
         elif len(request.chain_context) == MAX_DRILL_DEPTH:
             proposal_system += (
                 "\n\n"
-                "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
-                "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
-                "を含む **疑問形 1 文** で出してください. "
-                "**必ず末尾を「開きますか?」で締める** こと. "
-                "例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
-                "『「AMAZON Basic T シャツ 5 枚セット」を Amazon Fashion で 開きますか?』 / "
-                "『「君たちはどう生きるか」を Kindle で 開きますか?』. "
-                "Yes で外部サイトが新しいタブで開きます."
+                "**最終段** (MAX 到達). 上の絞り込みを受けて **疑問形 1 文** で出してください.\n"
+                "**case A: 外部サイトで購入 / 視聴 / 注文できる action** の場合:\n"
+                "  → **「〜を XX で 開きますか?」** で締める (Yes で 新しいタブで開く)\n"
+                "  例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                "『「貞子」を Amazon Prime Video で 開きますか?』.\n"
+                "**case B: 自宅で完結する action** (自家調理 / 散歩 / 既存所有物利用 等) の場合:\n"
+                "  → **「〜決まり!」 / 「〜決めますか?」** で締める (外部サイト不要)\n"
+                "  例: 『「冷凍うどんを 茹でて めんつゆで 食べる」 で 決まり!』 / "
+                "『「家にある コーヒー豆で ハンドドリップする」 に 決めますか?』.\n"
+                "chain 内で 自宅完結意図が明確 (例: 『家にある物で〜』『冷蔵庫の〜』) なら "
+                "case B を選ぶ. 強引に外部 service に紐づけない."
             )
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
         try:
@@ -1301,7 +1425,12 @@ class DecisionEngine:
                 "emoji": service.emoji,
             }
         # 2026-05-25 revert (A 案): mixed path も depth >= MAX_DRILL_DEPTH のみ final.
-        is_final = depth >= MAX_DRILL_DEPTH
+        # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
+        # early-final で 5 段強制ではなく LLM 判断で 2-4 段で完結可能.
+        # depth=0 root は drill-down の起点であり、early-final は許可しない (signal 暴発防止).
+        is_final = depth >= MAX_DRILL_DEPTH or (
+            depth >= 1 and _detect_final_signal(proposal_text)
+        )
 
         yield StreamEvent(
             "proposal",

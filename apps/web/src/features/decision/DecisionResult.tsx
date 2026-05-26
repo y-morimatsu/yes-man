@@ -400,10 +400,16 @@ export function DecisionResult({
                     <span className="font-bold">✨ 決まりました。</span>
                     <span className="ml-1">あとは行動するだけ ♪</span>
                   </>
-                ) : isFinal ? (
+                ) : isFinal && service ? (
                   <>
                     <span className="font-bold">✨ これで決定。</span>
                     <span className="ml-1">Yes で 外部サービスへ →</span>
+                  </>
+                ) : isFinal ? (
+                  // 2026-05-26 (C 案): service 強制撤廃. 自宅完結 final の文言.
+                  <>
+                    <span className="font-bold">✨ これで決定。</span>
+                    <span className="ml-1">Yes で 決まり ♪</span>
                   </>
                 ) : (
                   <>
