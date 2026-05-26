@@ -28,6 +28,9 @@ import { describeError } from "./describeError";
 import { t } from "./strings";
 import confetti from "canvas-confetti";
 
+// backend engine.py の MAX_DRILL_DEPTH と同期 (4). 増減時は両側更新.
+const MAX_DRILL_DEPTH = 4;
+
 export interface DecisionResultProps {
   utterances: Utterance[];
   proposal: string | null;
@@ -43,6 +46,8 @@ export interface DecisionResultProps {
   onDrillDown?: () => void;
   /** 2026-05-23 Drill-down chain: 現提案が最終かどうか. true なら Yes 採択 (choose API + 祝福). */
   isFinal?: boolean;
+  /** 2026-05-26 Drill-down hint: 現在の depth (= chain.length). pink-nudge で「あと N 段で決定」表示用. */
+  depth?: number;
   /** 2026-05-23 Drill-down chain: chain history (breadcrumb 表示用). */
   chain?: ChainNode[];
   /** 2026-05-23 Drill-down chain: final 提案に紐づく外部 service. CTA button で URL を開く. */
@@ -65,6 +70,7 @@ export function DecisionResult({
   onChoiceMade,
   onDrillDown,
   isFinal = true,
+  depth = 0,
   chain = [],
   service = null,
   hideUtterances = false,
@@ -326,6 +332,22 @@ export function DecisionResult({
                 onNo={() => handleChoose("no")}
                 disabled={choose.isPending}
                 showSwipeHint={!proposalCardPortal}
+                // 2026-05-26 drill-down-auto-open (FR-DAO-02/03/09 + NFR-DAO-06/07/10):
+                // final 段 (isFinal=true) + service≠null のみ自動 open + a11y override を有効化.
+                // window.open は SwipeChoice の onYesSync で user gesture chain 内同期発火 (popup block 回避).
+                // popup block されても CTA fallback (NFR-DAO-01) で復帰可能.
+                onYesSync={
+                  isFinal && service
+                    ? () => {
+                        window.open(service.url, "_blank", "noopener,noreferrer");
+                      }
+                    : undefined
+                }
+                yesAriaLabelOverride={
+                  isFinal && service
+                    ? `Yes、提案を採択 (新しいタブで ${service.name} を開きます)`
+                    : undefined
+                }
               >
                 <article
                   className="rounded-3xl overflow-hidden shadow-md flex flex-col"
@@ -357,24 +379,38 @@ export function DecisionResult({
             )}
 
             {/* INCEPTION 03-proposal-card.svg L46-49: 下部 pink nudge banner.
+                2026-05-26: drill-down 中は「あと N 段で決定」明示、最終段は「Yes で外部サービスへ」.
                 Yes 採択後は「✨ 決まりました」 にメッセージ切替. */}
             <div
               className="mt-2 rounded-xl border px-3 py-1.5 text-center"
-              style={{ background: "#FFD6E0", borderColor: "#FF8FAE" }}
+              style={{
+                background: isChosenYes || isFinal ? "#FFD6E0" : "#E7F0FF",
+                borderColor: isChosenYes || isFinal ? "#FF8FAE" : "#7BAEFF",
+              }}
               role="region"
               aria-label="合議メッセージ"
               data-testid="proposal-pink-nudge"
             >
-              <p className="text-[11px]" style={{ color: "#E8775A" }}>
+              <p
+                className="text-[11px]"
+                style={{ color: isChosenYes || isFinal ? "#E8775A" : "#3A66B5" }}
+              >
                 {isChosenYes ? (
                   <>
                     <span className="font-bold">✨ 決まりました。</span>
                     <span className="ml-1">あとは行動するだけ ♪</span>
                   </>
+                ) : isFinal ? (
+                  <>
+                    <span className="font-bold">✨ これで決定。</span>
+                    <span className="ml-1">Yes で 外部サービスへ →</span>
+                  </>
                 ) : (
                   <>
-                    <span className="font-bold">合議された結論です。</span>
-                    <span className="ml-1">迷う必要は ありません ♪</span>
+                    <span className="font-bold">🪜 まだ深堀り中。</span>
+                    <span className="ml-1">
+                      Yes で もっと絞る (あと {Math.max(1, MAX_DRILL_DEPTH - depth)} 段で決定)
+                    </span>
                   </>
                 )}
               </p>

@@ -360,6 +360,7 @@ export default function DecisionPage() {
           onChoiceMade={handleChoiceMade}
           // 2026-05-23 Drill-down chain
           isFinal={state.status === "completed" ? state.isFinal : false}
+          depth={state.status === "completed" ? state.depth : 0}
           chain={chain}
           service={state.status === "completed" ? state.service : null}
           onDrillDown={handleDrillDown}

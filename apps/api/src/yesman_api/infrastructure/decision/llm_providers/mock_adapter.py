@@ -34,8 +34,9 @@ class MockLLMProvider:
         2: "ジャパニーズホラーが 気分転換に おすすめです。",
         # depth=3: service routing (Amazon サービス指定)
         3: "Amazon Prime Video で 観ましょう。",
-        # depth=4: final (固有名 + Amazon サービス → CTA)
-        4: "『貞子 on the Movie』を Amazon Prime Video で 観ましょう。",
+        # depth=4 (final / drill-down-auto-open FR-DAO-08): 固有名 + Amazon サービス + 疑問形.
+        # 末尾「開きますか?」が frontend の window.open trigger と整合.
+        4: "『貞子 on the Movie』を Amazon Prime Video で 開きますか?",
     }
     DEFAULT_RESPONSE = "Mock response: unable to detect persona from prompt."
 

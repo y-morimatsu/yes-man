@@ -3,6 +3,11 @@
  * 2026-05-25: root proposal (depth=0) は is_final=false で返り、Yes を押すと
  * chain_context を積んで再 stream が走る。MAX_DRILL_DEPTH=4 のため depth=4 (5 回目の
  * Yes クリック) で NudgeBanner が表示される。
+ *
+ * 2026-05-26 drill-down-auto-open: 5 回目の Yes は final proposal「XXX で 開きますか?」
+ * への採択であり、window.open で外部サイトを新タブで開きつつ NudgeBanner も表示する.
+ * popup 発火を assert したい test は本 helper を使わず page.waitForEvent("popup") 経由で
+ * 5 click 目を直接呼ぶこと.
  */
 import { expect, type Page } from "@playwright/test";
 

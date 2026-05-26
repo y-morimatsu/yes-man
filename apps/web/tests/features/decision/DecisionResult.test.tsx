@@ -163,3 +163,107 @@ describe("DecisionResult — Yes confetti", () => {
     }
   });
 });
+
+// =====================================================================
+// 2026-05-26 drill-down-auto-open (FR-DAO-02/03/09 + NFR-DAO-06/10)
+// =====================================================================
+describe("DecisionResult — drill-down-auto-open (final 段 Yes 自動 open)", () => {
+  beforeAll(() => server.listen({ onUnhandledRequest: "warn" }));
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
+  const SERVICE_AMAZON = {
+    name: "Amazon Prime Video",
+    url: "https://www.amazon.co.jp/Amazon-Video",
+    emoji: "📺",
+  };
+
+  it("isFinal=true && service≠null: Yes click で window.open(_blank, noopener,noreferrer) を発火", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole } = setup({
+      isFinal: true,
+      service: SERVICE_AMAZON,
+      proposal: "『パターソン』を Amazon Prime Video で 開きますか?",
+    });
+
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    yesBtn.click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://www.amazon.co.jp/Amazon-Video",
+      "_blank",
+      "noopener,noreferrer",
+    );
+    openSpy.mockRestore();
+  });
+
+  it("isFinal=true && service=null: window.open は呼ばれない (FR-DAO-06)", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole } = setup({
+      isFinal: true,
+      service: null,
+    });
+
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    yesBtn.click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(openSpy).not.toHaveBeenCalled();
+    openSpy.mockRestore();
+  });
+
+  it("isFinal=false (drill-down 中): window.open は呼ばれない (FR-DAO-05)", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    const onDrillDown = vi.fn();
+
+    const { getByRole } = setup({
+      isFinal: false,
+      service: SERVICE_AMAZON,
+      onDrillDown,
+    });
+
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    yesBtn.click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    // isFinal=false なら onYesSync は SwipeChoice に渡されない (undefined) ので発火しない
+    expect(openSpy).not.toHaveBeenCalled();
+    // drill-down 経路では onDrillDown が呼ばれる
+    expect(onDrillDown).toHaveBeenCalledOnce();
+    openSpy.mockRestore();
+  });
+
+  it("isFinal=true && service≠null: Yes button aria-label に '新しいタブ' が含まれる (NFR-DAO-10)", () => {
+    const { container } = setup({
+      isFinal: true,
+      service: SERVICE_AMAZON,
+    });
+    const yesBtn = container.querySelector(
+      'button[aria-label*="新しいタブ"]',
+    ) as HTMLButtonElement | null;
+    expect(yesBtn).not.toBeNull();
+    expect(yesBtn).toHaveAttribute(
+      "aria-label",
+      "Yes、提案を採択 (新しいタブで Amazon Prime Video を開きます)",
+    );
+  });
+
+  it("isFinal=false: Yes button aria-label は default 'Yes、提案を採択'", () => {
+    const { getByRole } = setup({ isFinal: false, service: SERVICE_AMAZON });
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    expect(yesBtn).toHaveAttribute("aria-label", "Yes、提案を採択");
+  });
+});

@@ -269,16 +269,20 @@ class DecisionEngine:
         if request.chain_context:
             context_line = " → ".join(request.chain_context)
             remaining = MAX_DRILL_DEPTH - depth
-            if remaining <= 1:
-                # final 段の手前/到達: Amazon で実際に開ける固有名へ詰める
+            # 2026-05-26 drill-down-auto-open (FR-DAO-01): prompt と is_final の境界を
+            # depth == MAX_DRILL_DEPTH に厳密一致させる. depth=MAX-1 (= remaining=1) では
+            # 中間段 guide を維持し、depth=MAX のみ疑問形 "開きますか?" 1 文を要求する.
+            if depth == MAX_DRILL_DEPTH:
+                # final 段のみ: Amazon で開ける固有名 + 疑問形 "開きますか?"
                 guide = (
                     "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
                     "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
-                    "を含む断定 1 文を出してください. "
-                    "例: 『貞子 on the Movie を Amazon Prime Video で』 / "
-                    "『AMAZON Basic T シャツ 5 枚セット を Amazon Fashion で』 / "
-                    "『「君たちはどう生きるか」を Kindle で』. "
-                    "Yes で外部 service ボタンに進みます."
+                    "を含む **疑問形 1 文** で出してください. "
+                    "**必ず末尾を「開きますか?」で締める** こと. "
+                    "例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                    "『「AMAZON Basic T シャツ 5 枚セット」を Amazon Fashion で 開きますか?』 / "
+                    "『「君たちはどう生きるか」を Kindle で 開きますか?』. "
+                    "Yes で外部サイトが新しいタブで開きます."
                 )
             elif depth == 1:
                 # 最初の drill-down: 必ず media / channel / 入手経路を提案する.
@@ -768,10 +772,13 @@ class DecisionEngine:
             depth = len(chain_context)
             context_line = " → ".join(chain_context)
             remaining = MAX_DRILL_DEPTH - depth
-            if remaining <= 1:
+            # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
+            # 疑問形 "開きますか?" 1 文を要求 (builtin path と境界一致).
+            if depth == MAX_DRILL_DEPTH:
                 guide = (
                     "**最終段**. Amazon で実際に開ける固有名 (作品名 / 商品名 / "
-                    "ストア名 / 著者名 / アーティスト名) を含む具体的 1 文で提案."
+                    "ストア名 / 著者名 / アーティスト名) を含む **疑問形 1 文** で提案. "
+                    "**必ず末尾を「開きますか?」で締める**. Yes で外部サイトが新しいタブで開きます."
                 )
             else:
                 guide = (
@@ -1003,6 +1010,20 @@ class DecisionEngine:
                 "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
                 "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
             )
+        # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
+        # 疑問形 "開きますか?" 1 文を要求 (builtin path と境界一致).
+        elif len(request.chain_context) == MAX_DRILL_DEPTH:
+            proposal_system += (
+                "\n\n"
+                "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
+                "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
+                "を含む **疑問形 1 文** で出してください. "
+                "**必ず末尾を「開きますか?」で締める** こと. "
+                "例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                "『「AMAZON Basic T シャツ 5 枚セット」を Amazon Fashion で 開きますか?』 / "
+                "『「君たちはどう生きるか」を Kindle で 開きますか?』. "
+                "Yes で外部サイトが新しいタブで開きます."
+            )
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
         try:
             raw_proposal = await asyncio.wait_for(
@@ -1232,6 +1253,20 @@ class DecisionEngine:
                 "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
                 "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
                 "- **やや漠然とした入口** で OK — 後段で 『どこで?』『どんな?』『どれを?』 を絞っていきます."
+            )
+        # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
+        # 疑問形 "開きますか?" 1 文を要求 (builtin / anonymous path と境界一致).
+        elif len(request.chain_context) == MAX_DRILL_DEPTH:
+            proposal_system += (
+                "\n\n"
+                "**最終段** です. 上の絞り込みを受けて、Amazon で実際に開ける "
+                "**固有名** (作品名 / 商品名 / ストア名 / 著者名 / アーティスト名 等) "
+                "を含む **疑問形 1 文** で出してください. "
+                "**必ず末尾を「開きますか?」で締める** こと. "
+                "例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                "『「AMAZON Basic T シャツ 5 枚セット」を Amazon Fashion で 開きますか?』 / "
+                "『「君たちはどう生きるか」を Kindle で 開きますか?』. "
+                "Yes で外部サイトが新しいタブで開きます."
             )
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
         try:
