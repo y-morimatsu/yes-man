@@ -5405,3 +5405,10 @@ ai-dlcで要件を考え直しましょう。"
 **Next**: finishing-a-development-branch (commit 構成 / PR 化 / merge 判断). project memory `project_ideation_phase_no_auto_merge.md` 準拠で develop / main merge は user 明示承認待ち.
 
 ---
+
+## finishing — Option 3 (Keep as-is) + 動作確認モード
+**Timestamp**: 2026-05-26T15:15:00+09:00
+**User Input**: "マージはしない。動作確認する"
+**AI Response**: finishing-a-development-branch Option 3 を選択. branch feature/morimatsu-brushup に 2 新 commit 保留 (a9d6331 feat + 81bf425 docs). develop / main merge は実施せず. 動作確認用に API (Azure gpt-5.4-nano) + Web dev server を起動.
+
+---
