@@ -55,7 +55,7 @@ def _build_spec(sub: str, params: tuple) -> AnonymousPersonaSpec:
 )
 def test_sample_invariants(extras, n):
     """sample(n=k, excluding_sub=X) の不変条件を holds する."""
-    repo = MockPoolRepository(seed_fixtures=True)  # 5 fixtures
+    repo = MockPoolRepository(seed_fixtures=True)  # 4 fixtures
     # ランダムな extra specs を opt-in (sub-derived persona_id)
     for i, params in enumerate(extras):
         sub = f"sub-extra-{i}"

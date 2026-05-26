@@ -40,19 +40,21 @@ def _make_spec(
 # fixture-only behaviour
 # ============================================================
 class TestFixtureSeed:
-    def test_fixture_pool_has_5_languages(self):
+    # 2026-05-26: 多言語 5 fixture → ライフスタイル別 4 fixture (沖縄移住 / 料理研究家
+    # / FIRE達成 / 子育て中) に置換. language は全員 ja に統一.
+    def test_fixture_pool_has_4_ja_personas(self):
         specs = fixture_specs()
-        assert len(specs) == 5
+        assert len(specs) == 4
         languages = {s.primary_language for s in specs}
-        assert languages == {"ja", "en", "fr", "ar", "zh"}
+        assert languages == {"ja"}
 
     def test_fixture_pool_has_3_formalities(self):
         formalities = {s.formality for s in fixture_specs()}
         assert {"polite", "casual", "blunt"}.issubset(formalities)
 
-    def test_repo_starts_with_5_fixtures(self):
+    def test_repo_starts_with_4_fixtures(self):
         repo = MockPoolRepository(seed_fixtures=True)
-        assert len(repo.list_all()) == 5
+        assert len(repo.list_all()) == 4
 
     def test_repo_without_seed_is_empty(self):
         repo = MockPoolRepository(seed_fixtures=False)
@@ -119,7 +121,7 @@ class TestOptIn:
 # ============================================================
 class TestSample:
     def test_sample_returns_n_items(self):
-        repo = MockPoolRepository(seed_fixtures=True)  # 5 fixtures
+        repo = MockPoolRepository(seed_fixtures=True)  # 4 fixtures
         out = repo.sample(n=2, excluding_sub="sub-NONE")
         assert len(out) == 2
         # 全要素が pool 内
@@ -132,8 +134,8 @@ class TestSample:
         my = _make_spec("sub-A")
         my_canonical = repo.opt_in("sub-A", my)
         out = repo.sample(n=10, excluding_sub="sub-A")
-        # 5 fixture + 1 self = 6 candidates、self exclude で 5 件返る
-        assert len(out) == 5
+        # 4 fixture + 1 self = 5 candidates、self exclude で 4 件返る
+        assert len(out) == 4
         assert my_canonical.persona_id not in {s.persona_id for s in out}
 
     def test_sample_zero_returns_empty(self):

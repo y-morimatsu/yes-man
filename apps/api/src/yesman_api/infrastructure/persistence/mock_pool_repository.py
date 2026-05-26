@@ -176,7 +176,7 @@ class MockPoolRepository(PoolRepository):
                 if spec.persona_id != excluded_id
             ]
             # 不足分は fixture から補完 (NFR-1) — _by_id に既に fixture も入っている
-            # ので、足りないことは原則ない (fixture 5 + opt-in N ≧ n を満たす)
+            # ので、足りないことは原則ない (fixture 4 + opt-in N ≧ n を満たす)
             if len(candidates) < n:
                 # 究極の fallback: fixture 全部使ってもまだ足りない → 同じ persona を
                 # 複製しないように、できる分だけ返す (テストで偶発的に発生する想定)

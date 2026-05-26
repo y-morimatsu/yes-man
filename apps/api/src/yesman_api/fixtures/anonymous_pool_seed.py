@@ -1,10 +1,12 @@
-"""Anonymous persona pool — 5 hardcoded fixtures (ja/en/fr/ar/zh) + 5 seed citations.
+"""Anonymous persona pool — 4 hardcoded fixtures (ライフスタイル別「知り合い」) + 5 seed citations.
 
 派生元: aidlc-docs/inception/anonymous-strangers/application-design.md §Data Model.
+2026-05-26: ハッカソンデモ向けに 5 件多言語 fixture から 4 件ライフスタイル別
+「知り合い」 (沖縄移住 / 料理研究家 / FIRE達成 / 子育て中) に置換.
 
 これらは:
 - pool が 1 user only でも合議が成立するための seed
-- 多言語クオリティ (Arabic / Chinese) を LLM に依存させないための代替コンテンツ
+- 「知り合い」 タブで日常価値観の異なる ペルソナを呼べる demo 用 seed
 - US-2.2 「今日 N 件登場しました」を実装するための seed citation events
 """
 from __future__ import annotations
@@ -67,74 +69,68 @@ def _spec(
 
 
 # ============================================================
-# 5 hardcoded persona fixtures (en/fr/ar/zh/ja × formality)
+# 4 hardcoded persona fixtures (2026-05-26: ライフスタイル別「知り合い」 set)
+# 各 persona は「主タグ — 価値観の説明」 を value_tags 3 要素に分解.
+# language は全員 ja (知り合い = 日本語話者想定), formality は性格別.
 # ============================================================
 FIXTURE_POOL: tuple[AnonymousPoolFixture, ...] = (
+    # #沖縄移住 — ゆったりした暮らしを大切にする
     AnonymousPoolFixture(
         spec=_spec(
-            seed="anon:en:casual",
-            value_tags=("即決派", "肉好き", "自由人"),
-            language="en",
+            seed="anon:lifestyle:okinawa",
+            value_tags=("沖縄移住", "ゆったり暮らし", "スローライフ"),
+            language="ja",
             formality="casual",
             days_ago=14,
         ),
         utterance_sample=FixtureUtterance(
-            text="カレーいいよ! スパイスきいた元気でるやつ",
+            text="無理せず ゆっくり選ぼうよ。近場で 気持ちよく過ごせるのが いちばん。",
         ),
     ),
+    # #料理研究家 — 食を中心に生活設計する
     AnonymousPoolFixture(
         spec=_spec(
-            seed="anon:fr:polite",
-            value_tags=("和食派", "健康志向", "慎重派"),
-            language="fr",
+            seed="anon:lifestyle:cook",
+            value_tags=("料理研究家", "食中心", "生活設計"),
+            language="ja",
             formality="polite",
             days_ago=11,
         ),
         utterance_sample=FixtureUtterance(
-            text="和食 おいしいじゃん! 揚げ物 続いてるなら、お刺身とかさ、お味噌汁つきで",
+            text="旬の食材を活かした 一品が おすすめです。栄養バランスも整いますよ。",
         ),
     ),
+    # #FIRE 達成 — お金と時間の両立を重視する
     AnonymousPoolFixture(
         spec=_spec(
-            seed="anon:ar:polite",
-            value_tags=("家族派", "倹約家", "保守派"),
-            language="ar",
-            formality="polite",
-            days_ago=9,
-        ),
-        utterance_sample=FixtureUtterance(
-            text="家で 家族と簡単な 料理を 作りましょう、外食より そのほうが いいですよ",
-        ),
-    ),
-    AnonymousPoolFixture(
-        spec=_spec(
-            seed="anon:zh:blunt",
-            value_tags=("コスパ重視", "効率派", "現実派"),
-            language="zh",
+            seed="anon:lifestyle:fire",
+            value_tags=("FIRE達成", "経済自立", "時間優先"),
+            language="ja",
             formality="blunt",
             days_ago=6,
         ),
         utterance_sample=FixtureUtterance(
-            text="迷うな、下の ラーメン屋。20 分で 済む、コスパ最強",
+            text="費用対効果と 時間効率の 両方で 最適なものを 選ぼう。",
         ),
     ),
+    # #子育て中 — 家族と過ごす時間を最優先する
     AnonymousPoolFixture(
         spec=_spec(
-            seed="anon:ja:casual",
-            value_tags=("夜型", "ラーメン好き", "面倒くさがり"),
+            seed="anon:lifestyle:parenting",
+            value_tags=("子育て中", "家族時間", "育児優先"),
             language="ja",
             formality="casual",
             days_ago=3,
         ),
         utterance_sample=FixtureUtterance(
-            text="あー、ラーメンで いいんじゃない? もう めんどいし、あとで 寝るから 軽めで",
+            text="子どもも 一緒に楽しめるのが いいよね。家族で 過ごす時間を 大事にしよう。",
         ),
     ),
 )
 
 
 def fixture_specs() -> list[AnonymousPersonaSpec]:
-    """5 fixture specs を新しい list で返す (PoolRepository への seed 用)."""
+    """4 fixture specs を新しい list で返す (PoolRepository への seed 用)."""
     return [fix.spec for fix in FIXTURE_POOL]
 
 

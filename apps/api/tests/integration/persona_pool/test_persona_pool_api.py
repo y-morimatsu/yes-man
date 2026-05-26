@@ -203,10 +203,10 @@ class TestListForSelection:
         resp = client.get("/v1/persona-pool/list", headers=_headers())
         assert resp.status_code == 200
         personas = resp.json()["personas"]
-        # fixture seed 5 件 → 全件返る (limit 20 だが pool 5)
-        assert len(personas) == 5
+        # fixture seed 4 件 → 全件返る (limit 20 だが pool 4)
+        assert len(personas) == 4
         for p in personas:
-            assert p["primary_language"] in {"ja", "en", "fr", "ar", "zh"}
+            assert p["primary_language"] == "ja"
 
     def test_custom_limit(self, client):
         resp = client.get("/v1/persona-pool/list?limit=3", headers=_headers())
