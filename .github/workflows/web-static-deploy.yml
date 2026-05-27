@@ -45,7 +45,20 @@ jobs:
       # `pnpm -r build` は workspace の dep graph 順 (ui → api-client → web)
       # で build する. apps/web 単体 build だと @yesman/ui の dist/ が
       # 存在せず Vite が entry を resolve できない (run 26492744944 で踏んだ).
+      #
+      # apps/web/src/shell/env.ts は VITE_COGNITO_* 等を required() で必須化
+      # しているため build 時に env が無いと runtime で throw → blank screen.
+      # MVP では auth bypass mode で起動するため dummy 値を渡しつつ
+      # VITE_AUTH_BYPASS=true で Cognito をスキップ. F1 実装で env を optional
+      # 化したらこの dummy 注入は撤去する.
       - name: Build workspace packages
+        env:
+          VITE_API_BASE_URL: "/api"
+          VITE_COGNITO_REGION: "ap-northeast-1"
+          VITE_COGNITO_USER_POOL_ID: "disabled"
+          VITE_COGNITO_APP_CLIENT_ID: "disabled"
+          VITE_COGNITO_HOSTED_UI_URL: "https://disabled.invalid"
+          VITE_AUTH_BYPASS: "true"
         run: pnpm -r build
 
       # infra/ は pnpm-workspace.yaml から外されている (npm 独立管理).
