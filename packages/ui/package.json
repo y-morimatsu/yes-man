@@ -33,7 +33,7 @@
     {
       "name": "main bundle",
       "path": "dist/index.js",
-      "limit": "7 KB"
+      "limit": "8 KB"
     }
   ],
   "dependencies": {

@@ -13,8 +13,21 @@ function required(key: string): string {
   return value;
 }
 
+/**
+ * VITE_API_BASE_URL を absolute URL に解決する.
+ * `/api` のような relative path で渡された場合、runtime の window.location.origin
+ * を prepend する (CloudFront 配下で API を同 origin で配信する MVP 用).
+ */
+function resolveApiBaseUrl(): string {
+  const raw = required("VITE_API_BASE_URL");
+  if (raw.startsWith("/") && typeof window !== "undefined") {
+    return `${window.location.origin}${raw}`;
+  }
+  return raw;
+}
+
 export const env = {
-  apiBaseUrl: required("VITE_API_BASE_URL"),
+  apiBaseUrl: resolveApiBaseUrl(),
   cognitoRegion: required("VITE_COGNITO_REGION"),
   cognitoUserPoolId: required("VITE_COGNITO_USER_POOL_ID"),
   cognitoAppClientId: required("VITE_COGNITO_APP_CLIENT_ID"),

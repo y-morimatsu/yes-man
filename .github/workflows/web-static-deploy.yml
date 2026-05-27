@@ -1,0 +1,110 @@
+name: web-static / deploy
+
+# CloudFront + S3 だけの最小 deploy. apps/web を build して S3 にアップロード,
+# CloudFront 経由で配信する. backend (api / cognito) には依存しない.
+# UI 描画の動作確認用 (production 用ではない).
+
+on:
+  workflow_dispatch:
+    inputs:
+      envName:
+        description: 'Target env'
+        required: true
+        default: 'dev'
+        type: choice
+        options: [dev, staging, prod]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-1
+  NODE_VERSION: 20
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      # pnpm version は root package.json の `packageManager` field を
+      # source of truth に. v6 で重複指定が ERR_PNPM_BAD_PM_VERSION で
+      # reject されるため `with.version` を指定しない.
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install workspace deps
+        run: pnpm install --frozen-lockfile
+
+      # `pnpm -r build` は workspace の dep graph 順 (ui → api-client → web)
+      # で build する. apps/web 単体 build だと @yesman/ui の dist/ が
+      # 存在せず Vite が entry を resolve できない (run 26492744944 で踏んだ).
+      #
+      # apps/web/src/shell/env.ts は VITE_COGNITO_* 等を required() で必須化
+      # しているため build 時に env が無いと runtime で throw → blank screen.
+      # MVP では auth bypass mode で起動するため dummy 値を渡しつつ
+      # VITE_AUTH_BYPASS=true で Cognito をスキップ. F1 実装で env を optional
+      # 化したらこの dummy 注入は撤去する.
+      - name: Build workspace packages
+        env:
+          VITE_API_BASE_URL: "/api"
+          VITE_COGNITO_REGION: "ap-northeast-1"
+          VITE_COGNITO_USER_POOL_ID: "disabled"
+          VITE_COGNITO_APP_CLIENT_ID: "disabled"
+          VITE_COGNITO_HOSTED_UI_URL: "https://disabled.invalid"
+          VITE_AUTH_BYPASS: "true"
+        run: pnpm -r build
+
+      # infra/ は pnpm-workspace.yaml から外されている (npm 独立管理).
+      # root の pnpm install では infra/node_modules に aws-cdk-lib が入らず
+      # tsx 実行時に Cannot find module 'aws-cdk-lib' になる (run 26492917559).
+      - name: Install infra deps (npm)
+        working-directory: infra
+        run: npm install --no-audit --no-fund
+
+      # bedrock-proxy Lambda の node_modules を事前 install. CDK の bundling
+      # Docker を使わずに Code.fromAsset で zip 化するため.
+      - name: Install bedrock-proxy deps (production)
+        working-directory: apps/bedrock-proxy
+        run: npm install --omit=dev --no-audit --no-fund
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/gha-cdk-deploy-${{ inputs.envName }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: CDK Deploy (web-static only)
+        working-directory: infra
+        run: |
+          npx cdk deploy yesman-${{ inputs.envName }}-web-static \
+            --app "npx tsx bin/yesman-static.ts" \
+            --require-approval never \
+            --outputs-file /tmp/web-static-outputs.json \
+            -c envName=${{ inputs.envName }} \
+            -c awsAccount=${{ secrets.AWS_ACCOUNT_ID }} \
+            -c awsRegion=${{ env.AWS_REGION }}
+
+      - name: Summary
+        if: always()
+        working-directory: infra
+        run: |
+          {
+            echo "### web-static deploy (${{ inputs.envName }})"
+            if [[ -f /tmp/web-static-outputs.json ]]; then
+              python3 -c "
+          import json
+          d = json.load(open('/tmp/web-static-outputs.json'))
+          for stack, outs in d.items():
+              print(f'**{stack}**')
+              for k, v in outs.items():
+                  print(f'- {k}: \`{v}\`')
+              "
+            fi
+          } >> $GITHUB_STEP_SUMMARY
