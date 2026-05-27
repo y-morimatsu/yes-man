@@ -98,6 +98,12 @@ export class WebStaticStack extends cdk.Stack {
       // ための応急策として memory を 2048 に bump (CPU が memory に比例).
       // SSE / Bedrock 呼出が早く完了 → Lambda slot を早く開放 → throttle 軽減.
       memorySize: 2048,
+      // 2026-05-27 fix: STORAGE_BACKEND=mock は in-memory のため、複数 Lambda
+      // instance が立つと decision が instance 間で共有されず 404 (decision_not_found)
+      // を返してしまう (Yes/No 深堀り中の yes-nudge 等で発生). 単一 instance に固定して
+      // mock storage の一貫性を担保する. hackathon demo は single user 想定なので
+      // serial 処理で十分.
+      reservedConcurrentExecutions: 1,
       // SSE で長く繋ぐので timeout は長め. CloudFront origin response timeout
       // 60s が cap になるため 60s に合わせる.
       timeout: cdk.Duration.seconds(60),
