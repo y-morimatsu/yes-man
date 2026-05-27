@@ -73,10 +73,10 @@ jobs:
         working-directory: infra
         run: npm install --no-audit --no-fund
 
-      # 2026-05-27: apps/bedrock-proxy は撤去 (FastAPI Lambda 内で Bedrock 呼出).
-      # CDK の Python 3.12 ARM64 bundling Docker を使うため、GHA runner で
-      # Docker buildx + QEMU emulation を有効化する.
-      - name: Set up Docker Buildx (for CDK Python bundling)
+      # 2026-05-27: FastAPI Lambda は container image 方式 (Dockerfile).
+      # CDK が apps/api/Dockerfile を build → ECR push → Lambda が pull.
+      # ARM64 image を x86_64 GHA runner で build するため QEMU emulation 必須.
+      - name: Set up Docker Buildx (for CDK container image asset)
         uses: docker/setup-buildx-action@v3
 
       - name: Set up QEMU (arm64 emulation on x86_64 runner)

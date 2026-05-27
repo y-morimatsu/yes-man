@@ -74,40 +74,30 @@ export class WebStaticStack extends cdk.Stack {
     });
 
     // ─────────────────────────────────────────────────────────────
-    // Lambda: FastAPI on Lambda Web Adapter (Python 3.12, ARM64)
+    // Lambda: FastAPI on Lambda Web Adapter (Container Image, Python 3.12 ARM64)
     //
-    // Lambda Web Adapter (LWA) layer を attach することで、handler を `run.sh`
-    // に指定するだけで uvicorn が起動し、Lambda invoke → HTTP request に
-    // 変換されて FastAPI が処理する.
+    // zip deploy では 250 MiB unzipped 上限を超えるため container image 方式.
+    // Dockerfile (apps/api/Dockerfile) で:
+    //   - python:3.12 base
+    //   - LWA を /opt/extensions/lambda-adapter に COPY (extension として attach)
+    //   - pip install で全 deps を install (litellm + sqlalchemy 等含む)
+    //   - run.sh を CMD として起動
+    // CDK が apps/api/Dockerfile を build → ECR push → Lambda が pull.
     //
     // SSE 対応のため Function URL の invokeMode を RESPONSE_STREAM に設定.
     // ─────────────────────────────────────────────────────────────
 
-    // LWA Layer (ap-northeast-1, ARM64, v0.9.x).
-    // https://github.com/awslabs/aws-lambda-web-adapter/releases
-    // 数字 (v25) は public layer version. 上書き不可なので安定.
-    const lwaLayer = lambda.LayerVersion.fromLayerVersionArn(
-      this,
-      'LwaLayer',
-      'arn:aws:lambda:ap-northeast-1:753240598075:layer:LambdaAdapterLayerArm64:25',
-    );
-
-    const fastApiFn = new lambda.Function(this, 'FastApiFn', {
-      runtime: lambda.Runtime.PYTHON_3_12,
-      architecture: lambda.Architecture.ARM_64,
+    const fastApiFn = new lambda.DockerImageFunction(this, 'FastApiFn', {
       memorySize: 1024,
-      // SSE で長く繋ぐので timeout は長め (Lambda max 900s).
-      // CloudFront 側 origin response timeout は別途 60s なので、実質 60s が cap.
+      // SSE で長く繋ぐので timeout は長め. CloudFront origin response timeout
+      // 60s が cap になるため 60s に合わせる.
       timeout: cdk.Duration.seconds(60),
-      handler: 'run.sh',
-      // CDK Docker bundling: apps/api を Python 3.12 ARM64 環境で pip install
-      // して /asset-output に site-packages 込みで配置する.
-      // pyproject.toml に [tool.setuptools.packages.find] where=["src"] が
-      // 設定済なので、`pip install /asset-input` で yesman_api package +
-      // 全依存が target に展開される.
-      code: lambda.Code.fromAsset(
+      architecture: lambda.Architecture.ARM_64,
+      code: lambda.DockerImageCode.fromImageAsset(
         path.join(__dirname, '../../../apps/api'),
         {
+          platform: cdk.aws_ecr_assets.Platform.LINUX_ARM64,
+          // Docker build context から除外 (asset hash 安定 + image 軽量化)
           exclude: [
             '.venv',
             '.pytest_cache',
@@ -122,36 +112,16 @@ export class WebStaticStack extends cdk.Stack {
             'alembic',
             'uv.lock',
             '.python-version',
-            'Dockerfile*',
             '.lambda-build',
           ],
-          bundling: {
-            image: lambda.Runtime.PYTHON_3_12.bundlingImage,
-            platform: 'linux/arm64',
-            command: [
-              'bash',
-              '-c',
-              [
-                // 1. yesman_api package + deps を /asset-output に install
-                'pip install --no-cache-dir --target /asset-output /asset-input',
-                // 2. Lambda handler 用 run.sh を /asset-output 直下に配置
-                'cp /asset-input/run.sh /asset-output/run.sh',
-                'chmod +x /asset-output/run.sh',
-              ].join(' && '),
-            ],
-          },
         },
       ),
-      layers: [lwaLayer],
       environment: {
-        // LWA bootstrap 起動
-        AWS_LAMBDA_EXEC_WRAPPER: '/opt/bootstrap',
-        // LWA が listen する port (run.sh の PORT と一致)
+        // LWA は Dockerfile で /opt/extensions/lambda-adapter として配置済.
+        // extension は自動 load されるため AWS_LAMBDA_EXEC_WRAPPER 不要.
+
+        // LWA が listen する port (Dockerfile ENV + run.sh の PORT と一致)
         PORT: '8080',
-        // pip install --target=/asset-output で yesman_api + deps が /var/task/
-        // 直下に展開される. Lambda runtime は default で /var/task を sys.path に
-        // 含めるが、明示しておく.
-        PYTHONPATH: '/var/task',
 
         // ─── yesman AppConfig env ───
         APP_ENV: 'dev',
