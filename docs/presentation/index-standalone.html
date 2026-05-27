@@ -1476,13 +1476,94 @@
     </section>
 
     <!-- ====================================================
-         Slide 10 — AI-DLC で工夫したこと
+         Slide 10 — AI-DLC で工夫したこと (認知負債の軽減)
          ==================================================== -->
     <section class="slide" data-title="AI-DLC Approach">
-      <div class="slide-header">
+      <div class="slide-header" style="margin-bottom: 22px;">
         <div class="left">
           <div class="eyebrow">06 — AI-DLC Workflow</div>
           <h2 class="section">AI-DLC で工夫したこと。</h2>
+          <p class="kicker" style="margin-top: 10px; margin-bottom: 0;">テーマは <b style="color: var(--accent-deep); font-style: normal;">チーム内の認知負債を、軽減する</b>。 AI で <b>ひとりでできること</b> が広がる分、<b>チーム内の理解差</b> も広がる。AI-DLC のプロセスを通じて、その差を縮める設計を試みた。</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="gap: 20px;">
+        <div class="card">
+          <div class="num">01</div>
+          <h4 style="font-size: clamp(18px, 1.45vw, 23px);">毎日のモブで、設計知見を全員に</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">AI × 個人での開発が中心になり、設計判断や仕様の理解が <b>個人に閉じやすい</b>。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">メンバ全員で <b>モブする時間を毎日確保</b>。設計フェーズから合議する場をルーチン化。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">全員の知見を <b>設計時点で取り込み</b>、認知負債が蓄積する前に解消できる。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="num">02</div>
+          <h4 style="font-size: clamp(18px, 1.45vw, 23px);">大きな判断は ADR で資産化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">モブに不在のメンバが「いつ・何が・<b>なぜ</b> 変わったか」を後から辿れない。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">大きな修正時は <b>Architecture Decision Record (ADR)</b> の発行をルール化。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">判断の <b>経緯と理由</b> がリポジトリに残り、後追いでも文脈を再構築できる。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="num">03</div>
+          <h4 style="font-size: clamp(18px, 1.45vw, 23px);">Skill + hooks で "今の仕様" を最新化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">ADR は判断の履歴。<b>現時点の正しい仕様</b> は別途追わないと把握できない。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">プロジェクト全体ドキュメントを更新する <b>Skill</b> を作成。ソース変更時に <b>hooks で自動実行</b>。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">ドキュメントが <b>常に最新</b>。誰でも・いつでも、現在の仕様にアクセスできる。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; padding: 12px 22px; border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
+        <p style="font-family: var(--serif); font-size: clamp(16px, 1.35vw, 22px); color: var(--ink); font-style: italic; font-weight: 500;">
+          ▶ ひとりが速くなるだけでは足りない。<b style="color: var(--accent-deep); font-style: normal;">チームの理解を、同じ速度で更新する</b>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 10b — AI-DLC で工夫したこと (補足: その他)
+         ==================================================== -->
+    <section class="slide" data-title="AI-DLC Approach (補足)">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">06 · 補足 — Other Practices</div>
+          <h2 class="section">他にも、こんな工夫を。</h2>
           <p class="kicker" style="margin-top: 8px;">仕様 → 設計 → 実装の全工程を、AI と人間が協働。"言い当て" の精度を支える透明性。</p>
         </div>
       </div>
