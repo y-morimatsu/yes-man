@@ -51,8 +51,7 @@ export default function ProfilePage() {
       <h1
         className="text-lg font-bold"
         style={{
-          fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-          fontStyle: "italic",
+          fontFamily: "var(--font-sans)",
           color: "#2E2418",
         }}
       >
@@ -85,7 +84,7 @@ export default function ProfilePage() {
 
       {/* 音声入力 backend 切替 (A: Web Speech API / B: Server STT) */}
       <Card>
-        <h2 className="font-serif font-semibold mb-3">🎤 音声入力 backend</h2>
+        <h2 className="font-sans font-semibold mb-3">🎤 音声入力 backend</h2>
         <VoiceBackendSelector />
       </Card>
 
@@ -98,7 +97,7 @@ export default function ProfilePage() {
       </Card>
 
       <Card className="border-l-4 border-danger">
-        <h2 className="font-serif font-semibold mb-3">{t("deleteSectionTitle")}</h2>
+        <h2 className="font-sans font-semibold mb-3">{t("deleteSectionTitle")}</h2>
         <Button variant="danger" onClick={() => setModalOpen(true)}>
           {t("deleteButton")}
         </Button>
@@ -173,7 +172,7 @@ function VoiceBackendSelector() {
           <span className="block text-xs text-neutral-600 mt-0.5">
             オフラインで日本語音声を即時テキスト化。サーバ STT を呼ばない。
             {!webSpeechSupported && (
-              <span className="block text-danger italic mt-0.5">
+              <span className="block text-danger mt-0.5">
                 ⚠ お使いのブラウザは非対応です (Chrome / Edge / Safari 14.1+ をお試しください)
               </span>
             )}
@@ -201,7 +200,7 @@ function VoiceBackendSelector() {
         </span>
       </label>
 
-      <p className="text-xs italic text-neutral-500 mt-1">
+      <p className="text-xs text-neutral-500 mt-1">
         変更は localStorage に保存され、次回以降の音声入力に反映されます。
       </p>
     </div>

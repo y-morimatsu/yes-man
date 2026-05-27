@@ -61,7 +61,7 @@ export function NudgeBanner({
         >
           ✨🎉✨
         </div>
-        <h3 className="font-serif text-xl font-bold text-brand-700 mb-1">
+        <h3 className="font-sans text-xl font-bold text-brand-700 mb-1">
           Yes 採択 — 素晴らしい従順さです
         </h3>
         {/* 2026-05-24: 採択された proposal text を「決まったこと」として表示.
@@ -85,8 +85,7 @@ export function NudgeBanner({
             <p
               className="font-medium"
               style={{
-                fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                fontStyle: "italic",
+                fontFamily: "var(--font-sans)",
                 fontSize: 16,
                 lineHeight: 1.4,
                 color: "#2E2418",
@@ -104,7 +103,7 @@ export function NudgeBanner({
         </p>
         {/* AI 生成 nudge コメント (可変文、 fallback) */}
         {!isPending && data?.status === "ready" && (
-          <p className="mt-3 text-xs italic text-neutral-700 whitespace-pre-wrap">
+          <p className="mt-3 text-xs text-neutral-700 whitespace-pre-wrap">
             {data.message}
           </p>
         )}
@@ -142,10 +141,10 @@ export function NudgeBanner({
       aria-label="No 棄却 nudge"
       data-no-attempt-count={count}
     >
-      <h3 className="font-serif text-lg font-bold mb-2 text-neutral-800">
+      <h3 className="font-sans text-lg font-bold mb-2 text-neutral-800">
         {headingByStage}
       </h3>
-      <p className="font-serif italic text-neutral-700 dark:text-neutral-200">
+      <p className="font-sans text-neutral-700 dark:text-neutral-200">
         {t(stageKey)}
       </p>
       {count === 1 && (
@@ -155,7 +154,7 @@ export function NudgeBanner({
       {count >= 5 && (
         <>
           {isPending || data?.status === "pending" ? (
-            <p className="mt-2 text-xs text-neutral-500 italic">
+            <p className="mt-2 text-xs text-neutral-500">
               {t("nudgePending")}
             </p>
           ) : data?.status === "ready" ? (

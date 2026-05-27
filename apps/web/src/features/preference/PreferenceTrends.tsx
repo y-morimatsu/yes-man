@@ -62,7 +62,7 @@ export function PreferenceTrends({ density = "full" }: PreferenceTrendsProps) {
   if (!data) {
     return (
       <p
-        className="text-sm text-neutral-500 italic"
+        className="text-sm text-neutral-500"
         data-testid="preference-trends-empty"
       >
         {t("empty")}
@@ -90,7 +90,7 @@ export function PreferenceTrends({ density = "full" }: PreferenceTrendsProps) {
   if (isEmpty) {
     return (
       <p
-        className="text-sm text-neutral-500 italic"
+        className="text-sm text-neutral-500"
         data-testid="preference-trends-empty"
       >
         {t("empty")}
@@ -100,8 +100,8 @@ export function PreferenceTrends({ density = "full" }: PreferenceTrendsProps) {
 
   const headingClass =
     density === "compact"
-      ? "font-serif font-semibold mb-2 text-sm"
-      : "font-serif font-semibold mb-2";
+      ? "font-sans font-semibold mb-2 text-sm"
+      : "font-sans font-semibold mb-2";
 
   return (
     <div className="flex flex-col gap-3" data-testid="preference-trends">
@@ -114,7 +114,7 @@ export function PreferenceTrends({ density = "full" }: PreferenceTrendsProps) {
           </span>
         </h3>
         {acceptedDomains.length === 0 ? (
-          <p className="text-sm text-neutral-400 italic">
+          <p className="text-sm text-neutral-400">
             まだデータがありません
           </p>
         ) : (
@@ -143,7 +143,7 @@ export function PreferenceTrends({ density = "full" }: PreferenceTrendsProps) {
           </span>
         </h3>
         {rejectedDomains.length === 0 ? (
-          <p className="text-sm text-neutral-400 italic">
+          <p className="text-sm text-neutral-400">
             まだデータがありません
           </p>
         ) : (
@@ -167,7 +167,7 @@ export function PreferenceTrends({ density = "full" }: PreferenceTrendsProps) {
       <Card>
         <h3 className={headingClass}>🎭 {t("labelPersonaStyle")}</h3>
         {personaEntries.length === 0 ? (
-          <p className="text-sm text-neutral-400 italic">
+          <p className="text-sm text-neutral-400">
             まだデータがありません
           </p>
         ) : (

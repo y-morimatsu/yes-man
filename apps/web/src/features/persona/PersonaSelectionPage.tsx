@@ -78,7 +78,7 @@ export default function PersonaSelectionPage() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-serif text-lg font-bold">{t("selectionPageTitle")}</h1>
+        <h1 className="font-sans text-lg font-bold">{t("selectionPageTitle")}</h1>
         <Button
           variant="primary"
           size="sm"
@@ -113,7 +113,7 @@ export default function PersonaSelectionPage() {
           aria-labelledby="persona-source-tab-anonymous"
           className="flex flex-col gap-3"
         >
-          <p className="text-xs italic text-neutral-500">
+          <p className="text-xs text-neutral-500">
             🤝 opt-in 中の 知り合い (caller は除外)
           </p>
           <AnonymousSelectionList />
@@ -128,7 +128,7 @@ export default function PersonaSelectionPage() {
           className="flex flex-col gap-4"
         >
           {recommendedNames.size > 0 && (
-            <p className="text-xs italic text-neutral-500">
+            <p className="text-xs text-neutral-500">
               💡 嗜好プロファイルから推奨:{" "}
               <span
                 className="font-semibold not-italic"
@@ -182,7 +182,7 @@ export default function PersonaSelectionPage() {
               <p className="text-sm text-neutral-600">
                 まだ自作ペルソナがありません
               </p>
-              <p className="text-xs text-neutral-500 italic">
+              <p className="text-xs text-neutral-500">
                 右上の「＋ 新規」から、あなただけの相談相手を作れます
               </p>
               <Button
@@ -196,7 +196,7 @@ export default function PersonaSelectionPage() {
             </div>
           ) : (
             <>
-              <p className="text-xs italic text-neutral-500">
+              <p className="text-xs text-neutral-500">
                 ✨ あなたが作成したペルソナ ({myList.length} 件)
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

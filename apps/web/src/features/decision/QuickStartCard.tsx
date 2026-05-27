@@ -50,7 +50,7 @@ export function QuickStartCard({
           aria-atomic="true"
         >
           <p className="text-3xl" aria-hidden="true">💭</p>
-          <p className="font-serif text-xl font-bold text-neutral-900">
+          <p className="font-sans text-xl font-bold text-neutral-900">
             {title}
           </p>
         </div>
@@ -61,7 +61,7 @@ export function QuickStartCard({
         onClick={onSwitchToText}
         data-testid="quickstart-switch-to-text"
         className="
-          self-center text-sm italic text-neutral-500 underline underline-offset-4
+          self-center text-sm text-neutral-500 underline underline-offset-4
           hover:text-neutral-700 hover:no-underline
         "
       >
@@ -70,7 +70,7 @@ export function QuickStartCard({
 
       {noCount > 0 && noCount < NO_LIMIT && (
         <p
-          className="text-center text-[13px] italic text-neutral-400"
+          className="text-center text-[13px] text-neutral-400"
           data-testid="quickstart-no-count"
         >
           ▼ NO {noCount} / {NO_LIMIT}

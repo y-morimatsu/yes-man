@@ -93,7 +93,7 @@ export function OptInCard() {
           {/* I-2 fix: aria-labelledby で switch button と紐付け */}
           <h2
             id="opt-in-card-title"
-            className="font-serif font-semibold text-base"
+            className="font-sans font-semibold text-base"
           >
             🌐 他の人の 決め事に 参加する
           </h2>
@@ -103,7 +103,7 @@ export function OptInCard() {
           >
             あなたの 価値観タグが、世界の だれかの 決め事に 使われます。
             <br />
-            <span className="text-[12px] italic text-neutral-500">
+            <span className="text-[12px] text-neutral-500">
               email / 表示名 は 絶対に 送信されません。
             </span>
           </p>
@@ -159,7 +159,7 @@ export function OptInCard() {
               <p className="text-[12px] text-neutral-500 mb-0.5">価値観タグ</p>
               <div className="flex flex-wrap gap-1">
                 {preview.value_tags.length === 0 ? (
-                  <span className="text-xs italic text-neutral-400">
+                  <span className="text-xs text-neutral-400">
                     (まだ ありません)
                   </span>
                 ) : (
@@ -190,7 +190,7 @@ export function OptInCard() {
       {/* US-2.2: 「今日 N 件の決め事に登場しました」 (opt-in 中のみ意味あり) */}
       {optedIn && (
         <p
-          className="mt-3 text-xs italic"
+          className="mt-3 text-xs"
           style={{ color: MK_ORANGE }}
           data-testid="opt-in-today-count"
         >

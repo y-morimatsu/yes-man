@@ -71,8 +71,7 @@ export function StageHeader({
                 data-testid="stage-header-topic-text"
                 className="text-sm leading-tight truncate min-w-0"
                 style={{
-                  fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                  fontStyle: "italic",
+                  fontFamily: "var(--font-sans)",
                   color: "rgba(46, 36, 24, 0.7)",
                 }}
               >

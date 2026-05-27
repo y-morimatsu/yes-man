@@ -28,7 +28,7 @@ export default function PreferencePage() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-serif text-lg font-bold">{t("pageTitle")}</h1>
+        <h1 className="font-sans text-lg font-bold">{t("pageTitle")}</h1>
         <Button variant="danger" size="sm" onClick={() => setModalOpen(true)}>
           {t("resetButton")}
         </Button>

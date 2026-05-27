@@ -396,7 +396,7 @@ export function DecisionResult({
           confirmStep && confirmStep.onYes.kind === "open" && !!service;
         const proposalCardBlock = (
           <>
-            {/* mockup §6 結論カード — italic 結論 (overlay 用に mini-stage は省略).
+            {/* mockup §6 結論カード — 結論 (overlay 用に mini-stage は省略).
                 Yes 採択後は SwipeChoice を外し、card と「✨ 決まりました」 nudge のみ残置. */}
             {isChosenYes ? (
               <article
@@ -420,8 +420,7 @@ export function DecisionResult({
                   <p
                     className="font-medium"
                     style={{
-                      fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                      fontStyle: "italic",
+                      fontFamily: "var(--font-sans)",
                       fontSize: 20,
                       lineHeight: 1.3,
                       color: "#2E2418",
@@ -473,8 +472,7 @@ export function DecisionResult({
                     <p
                       className="font-medium"
                       style={{
-                        fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                        fontStyle: "italic",
+                        fontFamily: "var(--font-sans)",
                         fontSize: 20,
                         lineHeight: 1.3,
                         color: "#2E2418",
@@ -525,8 +523,7 @@ export function DecisionResult({
                     <p
                       className="font-medium"
                       style={{
-                        fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                        fontStyle: "italic",
+                        fontFamily: "var(--font-sans)",
                         fontSize: 20,
                         lineHeight: 1.3,
                         color: "#2E2418",

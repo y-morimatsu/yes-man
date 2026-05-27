@@ -61,12 +61,12 @@ export function NoMicroCopyBanner({
       data-testid="no-microcopy-banner"
       data-no-attempt-count={stage}
     >
-      <p className="font-serif italic text-sm text-neutral-700">{microcopy}</p>
+      <p className="font-sans text-sm text-neutral-700">{microcopy}</p>
       <p className="mt-1 text-xs text-neutral-400" aria-hidden>
         ・・・・・・・・・・・
       </p>
       {regenerating && (
-        <p className="mt-1 text-xs italic text-neutral-500">
+        <p className="mt-1 text-xs text-neutral-500">
           別案を生成中… (LiteLLM 応答待ち)
         </p>
       )}

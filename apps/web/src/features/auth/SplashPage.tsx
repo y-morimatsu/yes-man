@@ -4,9 +4,9 @@
  * mockup §1 構成:
  *   - 上下中央配置
  *   - 3 blob (orange / green / blue) 横並び (size 44 + 2 eyes)
- *   - YesMan italic serif title (大、Crimson Pro)
- *   - 「人間最後の仕事は、YES で承認すること。」 italic serif tagline
- *   - 黒楕円 button「はじめる」 (cream-lt text、Crimson Pro italic)
+ *   - YesMan italic serif title (大、Crimson Pro — 唯一残存ブランド要素)
+ *   - 「人間最後の仕事は、YES で承認すること。」 tagline (2026-05-27: sans 化)
+ *   - 黒楕円 button「はじめる」 (cream-lt text, sans-serif)
  *   - 「すでにアカウントがある方は ログイン」 link
  *   - 画面下部に地球地平線 (緑 / オレンジ / 青の半円 3 つが重なる)
  */
@@ -103,8 +103,7 @@ export default function SplashPage() {
         <p
           className="text-xs leading-relaxed mb-4"
           style={{
-            fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-            fontStyle: "italic",
+            fontFamily: "var(--font-sans)",
             color: MK_UMBER,
             opacity: 0.75,
           }}
@@ -122,8 +121,7 @@ export default function SplashPage() {
           style={{
             background: MK_UMBER,
             color: MK_CREAM,
-            fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-            fontStyle: "italic",
+            fontFamily: "var(--font-sans)",
             fontSize: 15,
             letterSpacing: "0.05em",
             fontWeight: 500,
@@ -136,8 +134,7 @@ export default function SplashPage() {
         <p
           className="mt-2 text-[12px]"
           style={{
-            fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-            fontStyle: "italic",
+            fontFamily: "var(--font-sans)",
             color: MK_MUTED,
           }}
         >

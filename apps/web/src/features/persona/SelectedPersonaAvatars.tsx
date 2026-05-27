@@ -151,8 +151,7 @@ export function SelectedPersonaAvatars({
                 height: size,
                 background: r.iconBackground!,
                 border: "1.5px solid #FFFCF4",
-                fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                fontStyle: "italic",
+                fontFamily: "var(--font-sans)",
                 fontWeight: 600,
                 // emoji は kanji より少し大きく見えるよう調整 (0.55 倍 vs 0.4)
                 fontSize: r.initial && r.initial.length > 1 ? Math.round(size * 0.55) : Math.round(size * 0.4),

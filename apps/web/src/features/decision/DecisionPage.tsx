@@ -255,7 +255,7 @@ export default function DecisionPage() {
           status={state.status === "completed" ? "completed" : "streaming"}
         />
       ) : (
-        <h1 className="font-serif text-lg font-bold">{t("pageTitle")}</h1>
+        <h1 className="font-sans text-lg font-bold">{t("pageTitle")}</h1>
       )}
 
       {showQuickStart && quick.current && (
@@ -404,7 +404,7 @@ export default function DecisionPage() {
             </svg>
           </div>
           <p
-            className="text-sm italic mt-1"
+            className="text-sm mt-1"
             style={{ color: "#78909C" }}
           >
             （沈黙）
@@ -440,7 +440,7 @@ export default function DecisionPage() {
           <button
             type="button"
             onClick={handleFullReset}
-            className="mt-6 text-xs italic underline"
+            className="mt-6 text-xs underline"
             style={{ color: "#455A64" }}
           >
             タップで Home へ もどる
@@ -456,7 +456,7 @@ export default function DecisionPage() {
 
       {/* INCEPTION screen-01 bottom hint (whisper copy、決定の重さを優しく問いかける) */}
       {showInputArea && (
-        <p className="mt-8 text-center text-xs italic text-neutral-400">
+        <p className="mt-8 text-center text-xs text-neutral-400">
           {t("bottomHint")}
         </p>
       )}

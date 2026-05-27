@@ -61,7 +61,7 @@ export function AnonymousSelectionList() {
 
   if (list.isError) {
     return (
-      <p className="text-xs text-error italic" role="alert">
+      <p className="text-xs text-error" role="alert">
         知り合い一覧を取得できませんでした
       </p>
     );
@@ -73,7 +73,7 @@ export function AnonymousSelectionList() {
         className="rounded-xl border border-dashed border-neutral-300 p-4 text-center"
         data-testid="anonymous-selection-empty"
       >
-        <p className="text-sm italic text-neutral-500">
+        <p className="text-sm text-neutral-500">
           まだ「知り合い」 はいません
         </p>
         <p className="text-xs text-neutral-400 mt-1">

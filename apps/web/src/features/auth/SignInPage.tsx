@@ -107,10 +107,10 @@ export default function SignInPage() {
       style={{ animationDelay: "0ms" }}
     >
       <div className="text-center">
-        <p className="font-serif text-sm text-neutral-700/70" aria-hidden="true">
+        <p className="font-sans text-sm text-neutral-700/70" aria-hidden="true">
           🪞 YesMan
         </p>
-        <h1 className="font-serif text-base font-bold text-neutral-800">
+        <h1 className="font-sans text-base font-bold text-neutral-800">
           サインイン
         </h1>
       </div>
@@ -164,7 +164,7 @@ export default function SignInPage() {
           </div>
           {users.length === 0 ? (
             <div className="rounded-xl border border-dashed border-neutral-300 p-2 text-center">
-              <p className="italic text-neutral-500 text-[13px]">
+              <p className="text-neutral-500 text-[13px]">
                 まだ登録ユーザはいません
               </p>
             </div>

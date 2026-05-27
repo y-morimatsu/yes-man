@@ -210,7 +210,7 @@ export function SwipeChoice({
           }}
         >
           {children ?? (
-            <div className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 p-6 text-center font-serif text-2xl font-bold text-neutral-900 shadow-md">
+            <div className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 p-6 text-center font-sans text-2xl font-bold text-neutral-900 shadow-md">
               {proposalText}
             </div>
           )}
@@ -221,7 +221,7 @@ export function SwipeChoice({
           dx=0 (未スワイプ) の間のみアニメ表示、スワイプ開始で hide. */}
       {showSwipeHint && dx === 0 && !confirming && (
         <div
-          className="flex items-center gap-2 text-xs italic text-neutral-500"
+          className="flex items-center gap-2 text-xs text-neutral-500"
           aria-hidden
           data-testid="swipe-hint-right"
           data-ym-anim
