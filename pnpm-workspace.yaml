@@ -2,3 +2,8 @@ packages:
   - "apps/*"
   - "packages/*"
   - "tests/e2e"
+  # apps/bedrock-proxy は Lambda にそのまま deploy する独立 npm package.
+  # pnpm workspace に含めると pnpm-lock.yaml の管理が必要になるため除外し、
+  # workflow で `cd apps/bedrock-proxy && npm install --omit=dev` を実行する.
+  # (infra/ と同じ扱い)
+  - "!apps/bedrock-proxy"

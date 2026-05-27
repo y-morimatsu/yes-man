@@ -68,6 +68,12 @@ jobs:
         working-directory: infra
         run: npm install --no-audit --no-fund
 
+      # bedrock-proxy Lambda の node_modules を事前 install. CDK の bundling
+      # Docker を使わずに Code.fromAsset で zip 化するため.
+      - name: Install bedrock-proxy deps (production)
+        working-directory: apps/bedrock-proxy
+        run: npm install --omit=dev --no-audit --no-fund
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
         with:
