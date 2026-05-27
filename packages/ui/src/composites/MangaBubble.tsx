@@ -66,7 +66,8 @@ const SIZE_STYLE: Record<MangaBubbleSize, CSSProperties> = {
     opacity: 0.3,
     boxShadow: "none",
     // mockup §5: 既出 bubble は font も少し小さくして「過去発言」感を強化
-    fontSize: 12,
+    // 2026-05-27 typography-redesign: 12→14px (foreground と相対的に小さい比率は維持)
+    fontSize: 14,
     // 過去 bubble は scale down で更に奥にある印象 (mockup §5 で T → 青 へ移った際の orange/T 残像が小さく見える)
     transform: "scale(0.9)",
     transformOrigin: "center bottom",
@@ -120,7 +121,7 @@ export function MangaBubble({
     position: "absolute",
     width: 184,
     padding: "13px 16px",
-    fontSize: 13.5,
+    fontSize: 15,
     lineHeight: 1.55,
     color: COLORS.umber,
     background: bg,

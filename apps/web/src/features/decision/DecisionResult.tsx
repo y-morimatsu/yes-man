@@ -403,7 +403,7 @@ export function DecisionResult({
                 className="rounded-3xl overflow-hidden shadow-md flex flex-col"
                 style={{
                   background: "#FFFCF4",
-                  border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                  border: "0.5px solid rgba(46, 36, 24, 0.30)",
                   boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
                 }}
                 aria-label="採択された結論"
@@ -412,7 +412,7 @@ export function DecisionResult({
               >
                 <div className="px-4 pt-3 pb-2 text-center">
                   <p
-                    className="text-[10px] uppercase tracking-widest mb-1"
+                    className="text-[12px] uppercase tracking-widest mb-1"
                     style={{ color: "rgba(46, 36, 24, 0.55)" }}
                   >
                     決まったこと
@@ -422,8 +422,8 @@ export function DecisionResult({
                     style={{
                       fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
                       fontStyle: "italic",
-                      fontSize: 18,
-                      lineHeight: 1.25,
+                      fontSize: 20,
+                      lineHeight: 1.3,
                       color: "#2E2418",
                     }}
                   >
@@ -456,7 +456,7 @@ export function DecisionResult({
                   className="rounded-3xl overflow-hidden shadow-md flex flex-col"
                   style={{
                     background: "#FFFCF4",
-                    border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                    border: "0.5px solid rgba(46, 36, 24, 0.30)",
                     boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
                   }}
                   aria-label="確認質問"
@@ -465,7 +465,7 @@ export function DecisionResult({
                 >
                   <div className="px-4 pt-3 pb-2 text-center">
                     <p
-                      className="text-[10px] uppercase tracking-widest mb-1"
+                      className="text-[12px] uppercase tracking-widest mb-1"
                       style={{ color: "rgba(46, 36, 24, 0.55)" }}
                     >
                       確認
@@ -475,8 +475,8 @@ export function DecisionResult({
                       style={{
                         fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
                         fontStyle: "italic",
-                        fontSize: 18,
-                        lineHeight: 1.25,
+                        fontSize: 20,
+                        lineHeight: 1.3,
                         color: "#2E2418",
                       }}
                     >
@@ -514,7 +514,7 @@ export function DecisionResult({
                   className="rounded-3xl overflow-hidden shadow-md flex flex-col"
                   style={{
                     background: "#FFFCF4",
-                    border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                    border: "0.5px solid rgba(46, 36, 24, 0.30)",
                     boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
                   }}
                   aria-label="提案"
@@ -527,8 +527,8 @@ export function DecisionResult({
                       style={{
                         fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
                         fontStyle: "italic",
-                        fontSize: 18,
-                        lineHeight: 1.25,
+                        fontSize: 20,
+                        lineHeight: 1.3,
                         color: "#2E2418",
                       }}
                     >
@@ -553,7 +553,7 @@ export function DecisionResult({
               data-testid="proposal-pink-nudge"
             >
               <p
-                className="text-[11px]"
+                className="text-[13px]"
                 style={{ color: isChosenYes || isFinal ? "#E8775A" : "#3A66B5" }}
               >
                 {isChosenYes ? (

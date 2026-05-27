@@ -426,10 +426,10 @@ export default function DecisionPage() {
             <span>⚔️</span>
             <span>🔞</span>
           </div>
-          <p className="text-[10px] mt-2" style={{ color: "#546E7A" }}>
+          <p className="text-[12px] mt-2" style={{ color: "#546E7A" }}>
             宗教 / 選挙 / 暴力 / 卑猥
           </p>
-          <p className="text-[10px]" style={{ color: "#546E7A" }}>
+          <p className="text-[12px]" style={{ color: "#546E7A" }}>
             ＝ ご自身で 判断する 領域
           </p>
           {state.message && (

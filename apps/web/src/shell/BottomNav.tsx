@@ -36,7 +36,7 @@ const TABS: Tab[] = [
 const MK_CREAM_LT = "#FAF6EC";
 const MK_ORANGE = "#EF7A62";
 const MK_MUTED = "rgba(46, 36, 24, 0.55)";
-const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.08)";
+const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.18)";
 
 function isActive(pathname: string, tab: Tab): boolean {
   if (tab.to === "/") return pathname === "/";
@@ -80,7 +80,7 @@ export function BottomNav() {
                 >
                   {TAB_ICONS[tab.label]}
                 </span>
-                <span className="text-[10px] leading-tight tracking-wide">
+                <span className="text-[12px] leading-tight tracking-wide">
                   {tab.label}
                 </span>
               </Link>

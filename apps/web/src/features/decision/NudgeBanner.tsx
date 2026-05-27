@@ -71,13 +71,13 @@ export function NudgeBanner({
             className="mt-3 mb-2 mx-auto max-w-md rounded-2xl px-4 py-3 text-left"
             style={{
               background: "#FFFCF4",
-              border: "0.5px solid rgba(46, 36, 24, 0.15)",
-              boxShadow: "0 4px 14px rgba(46, 36, 24, 0.08)",
+              border: "0.5px solid rgba(46, 36, 24, 0.30)",
+              boxShadow: "0 4px 14px rgba(46, 36, 24, 0.18)",
             }}
             data-testid="nudge-banner-proposal"
           >
             <p
-              className="text-[10px] uppercase tracking-widest mb-1"
+              className="text-[12px] uppercase tracking-widest mb-1"
               style={{ color: "rgba(46, 36, 24, 0.55)" }}
             >
               決まったこと

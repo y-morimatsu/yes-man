@@ -151,7 +151,7 @@ export function MangaStage({
         overflow: "hidden",
         background: "#FFFCF4",
         borderRadius: 12,
-        border: "0.5px solid rgba(46, 36, 24, 0.08)",
+        border: "0.5px solid rgba(46, 36, 24, 0.18)",
         display: "flex",
         flexDirection: "column",
       }}
@@ -398,7 +398,7 @@ function TypingBubble({
         zIndex: 2,
         padding: "6px 10px",
         background: "#FFFCF4",
-        border: "0.5px solid rgba(46, 36, 24, 0.15)",
+        border: "0.5px solid rgba(46, 36, 24, 0.30)",
         borderRadius: 14,
         display: "flex",
         gap: 4,

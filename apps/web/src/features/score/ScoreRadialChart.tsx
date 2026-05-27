@@ -59,7 +59,7 @@ export function ScoreRadialChart({ ratio, caption }: ScoreRadialChartProps) {
       >
         {pct}
         <tspan
-          fontSize="14"
+          fontSize="15"
           fontWeight="700"
           dx="2"
           dy="-12"
@@ -68,8 +68,8 @@ export function ScoreRadialChart({ ratio, caption }: ScoreRadialChartProps) {
           %
         </tspan>
       </text>
-      {/* キャプション */}
-      <text x="0" y="34" textAnchor="middle" fontSize="10" fill={CAP_COLOR}>
+      {/* キャプション (2026-05-27 typography-redesign: 10→12px で読みやすく) */}
+      <text x="0" y="34" textAnchor="middle" fontSize="12" fill={CAP_COLOR}>
         {caption}
       </text>
     </svg>

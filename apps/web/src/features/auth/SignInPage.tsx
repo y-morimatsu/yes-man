@@ -117,7 +117,7 @@ export default function SignInPage() {
 
       <Card className="!p-3 border-[#E0D5BC] shadow-[0_4px_16px_rgba(212,165,93,0.08)]">
         <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-          <label className="flex flex-col gap-0.5 text-[11px]">
+          <label className="flex flex-col gap-0.5 text-[13px]">
             <span className="font-semibold">Email</span>
             <Input
               type="email"
@@ -130,7 +130,7 @@ export default function SignInPage() {
             />
           </label>
           {env.authBypass && (
-            <label className="flex flex-col gap-0.5 text-[11px]">
+            <label className="flex flex-col gap-0.5 text-[13px]">
               <span className="font-semibold">表示名 (新規・任意)</span>
               <Input
                 type="text"
@@ -159,12 +159,12 @@ export default function SignInPage() {
         <div className="flex flex-col gap-1 min-h-0 flex-1">
           <div className="flex items-center gap-2">
             <hr className="flex-1 border-[#E0D5BC]" />
-            <p className="text-[10px] text-neutral-500">前回サインインしたユーザ</p>
+            <p className="text-[12px] text-neutral-500">前回サインインしたユーザ</p>
             <hr className="flex-1 border-[#E0D5BC]" />
           </div>
           {users.length === 0 ? (
             <div className="rounded-xl border border-dashed border-neutral-300 p-2 text-center">
-              <p className="italic text-neutral-500 text-[11px]">
+              <p className="italic text-neutral-500 text-[13px]">
                 まだ登録ユーザはいません
               </p>
             </div>
@@ -186,11 +186,11 @@ export default function SignInPage() {
                     disabled={submitting}
                   >
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[11px] font-medium text-neutral-700 truncate">
+                      <span className="block text-[13px] font-medium text-neutral-700 truncate">
                         {u.email}
                       </span>
                       {u.display_name && (
-                        <span className="block text-[10px] text-neutral-500 truncate">
+                        <span className="block text-[12px] text-neutral-500 truncate">
                           {u.display_name}
                         </span>
                       )}

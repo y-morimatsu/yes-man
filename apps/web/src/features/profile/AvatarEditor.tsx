@@ -58,7 +58,7 @@ export function AvatarEditor({ value, onChange, fallbackLetter }: AvatarEditorPr
         <Avatar size={56} config={value} fallbackLetter={fallbackLetter} />
         <div className="text-xs text-neutral-600">
           <p className="font-semibold">アバター preview</p>
-          <p className="text-[10px] text-neutral-500">
+          <p className="text-[12px] text-neutral-500">
             保存すると profile / home で反映されます
           </p>
         </div>
@@ -196,7 +196,7 @@ export function AvatarEditor({ value, onChange, fallbackLetter }: AvatarEditorPr
           </label>
           {/* color picker (emoji 背景にも使用) */}
           <div className="flex flex-col gap-1">
-            <span className="text-[10px] text-neutral-500">背景色:</span>
+            <span className="text-[12px] text-neutral-500">背景色:</span>
             <div className="flex flex-wrap gap-1.5">
               {AVATAR_COLOR_KEYS.map((key) => {
                 const selected = (value.color ?? "green") === key;

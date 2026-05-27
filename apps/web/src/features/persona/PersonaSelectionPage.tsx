@@ -97,7 +97,7 @@ export default function PersonaSelectionPage() {
       >
         選択中: <span className="font-bold">{selection.length}</span> / {MAX_SELECTION}
         {selection.length > 0 && (
-          <span className="ml-2 text-[10px] text-neutral-500">
+          <span className="ml-2 text-[12px] text-neutral-500">
             (ビルトイン:{countBySource.builtin} ・ 世界:{countBySource.anonymous} ・
             自作:{countBySource.my})
           </span>
@@ -143,7 +143,7 @@ export default function PersonaSelectionPage() {
               <div key={p.id} className="relative">
                 {recommendedNames.has(p.name) && (
                   <span
-                    className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
+                    className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[12px] font-bold shadow-sm"
                     style={{ background: "#FFD6E0", color: "#E8775A" }}
                   >
                     💡 おすすめ
@@ -204,7 +204,7 @@ export default function PersonaSelectionPage() {
                   <div key={p.id} className="relative">
                     {recommendedNames.has(p.name) && (
                       <span
-                        className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
+                        className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[12px] font-bold shadow-sm"
                         style={{ background: "#FFD6E0", color: "#E8775A" }}
                       >
                         💡 おすすめ

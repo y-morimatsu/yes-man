@@ -39,7 +39,7 @@ import { AvatarEditor } from "./AvatarEditor";
 
 const MK_UMBER = "#2E2418";
 const MK_ORANGE = "#EF7A62";
-const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.08)";
+const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.18)";
 
 interface ProfileDraft {
   display_name: string;
@@ -184,7 +184,7 @@ export function ProfileCard() {
             {displayName}
           </span>
           <span
-            className="text-[10px] tracking-wide"
+            className="text-[12px] tracking-wide"
             style={{ color: "rgba(46, 36, 24, 0.55)" }}
             data-testid="profile-card-stat"
           >
@@ -231,7 +231,7 @@ function ViewMode({
       >
         <h2
           id="profile-card-tags-heading"
-          className="text-[10px] font-bold uppercase tracking-widest"
+          className="text-[12px] font-bold uppercase tracking-widest"
           style={{ color: MK_ORANGE }}
         >
           価値観タグ
@@ -339,7 +339,7 @@ function EditMode({
         className="pb-3"
         style={{ borderBottom: `0.5px solid ${MK_HAIRLINE_2}` }}
       >
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: MK_ORANGE }}>
+        <p className="text-[12px] font-bold uppercase tracking-widest mb-2" style={{ color: MK_ORANGE }}>
           アバター
         </p>
         <AvatarEditor

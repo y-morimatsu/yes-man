@@ -156,7 +156,7 @@ export function PersonaCreateModal({
             rows={6}
           />
           <span
-            className={`block mt-1 text-[10px] ${
+            className={`block mt-1 text-[12px] ${
               promptText.length >= 10 ? "text-neutral-500" : "text-orange-600"
             }`}
           >

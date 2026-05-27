@@ -38,14 +38,16 @@ export function Layout() {
           color: "#2E2418",
           paddingTop: "max(0.5rem, env(safe-area-inset-top))",
           paddingBottom: "0.5rem",
-          borderBottom: "0.5px solid rgba(46, 36, 24, 0.08)",
+          borderBottom: "0.5px solid rgba(46, 36, 24, 0.18)",
         }}
       >
         <div className="flex justify-between items-center max-w-md mx-auto w-full px-4">
           <Link
             to="/"
             viewTransition
-            className="text-base font-bold active:opacity-70 leading-none"
+            // 2026-05-27 typography-redesign: 全体スケール変更からの header 据置 (FR-TYP-02).
+            // text-base は scale C で不変だが、将来の token 変更からも保護するため絶対 px に pin.
+            className="text-[16px] font-bold active:opacity-70 leading-none"
             style={{
               fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
               fontStyle: "italic",
@@ -55,7 +57,14 @@ export function Layout() {
             YesMan
           </Link>
           {isAuthed && (
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
+            // 2026-05-27 typography-redesign: Button size="sm" 内部の text-sm が scale C で
+            // 14→15px に微増するため、text-[14px] で pin して header サイズ据置.
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-[14px]"
+              onClick={handleSignOut}
+            >
               Sign out
             </Button>
           )}

@@ -124,7 +124,7 @@ export default function SplashPage() {
             color: MK_CREAM,
             fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
             fontStyle: "italic",
-            fontSize: 13,
+            fontSize: 15,
             letterSpacing: "0.05em",
             fontWeight: 500,
           }}
@@ -134,7 +134,7 @@ export default function SplashPage() {
         </button>
 
         <p
-          className="mt-2 text-[10px]"
+          className="mt-2 text-[12px]"
           style={{
             fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
             fontStyle: "italic",

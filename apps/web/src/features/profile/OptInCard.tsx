@@ -103,7 +103,7 @@ export function OptInCard() {
           >
             あなたの 価値観タグが、世界の だれかの 決め事に 使われます。
             <br />
-            <span className="text-[10px] italic text-neutral-500">
+            <span className="text-[12px] italic text-neutral-500">
               email / 表示名 は 絶対に 送信されません。
             </span>
           </p>
@@ -149,14 +149,14 @@ export function OptInCard() {
           className="mt-3 rounded-xl border border-neutral-200 bg-neutral-50 p-3"
           data-testid="opt-in-preview"
         >
-          <p className="text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-2">
+          <p className="text-[12px] font-bold uppercase tracking-widest text-neutral-500 mb-2">
             {optedIn
               ? "📤 現在 流通中の あなたのデータ"
               : "👀 もし ON にすると 以下が 流通します"}
           </p>
           <div className="flex flex-col gap-2">
             <div>
-              <p className="text-[10px] text-neutral-500 mb-0.5">価値観タグ</p>
+              <p className="text-[12px] text-neutral-500 mb-0.5">価値観タグ</p>
               <div className="flex flex-wrap gap-1">
                 {preview.value_tags.length === 0 ? (
                   <span className="text-xs italic text-neutral-400">
@@ -166,7 +166,7 @@ export function OptInCard() {
                   preview.value_tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full px-2 py-0.5 text-[10px]"
+                      className="rounded-full px-2 py-0.5 text-[12px]"
                       style={{
                         background: "rgba(239, 122, 98, 0.12)",
                         color: "#2E2418",
@@ -179,7 +179,7 @@ export function OptInCard() {
                 )}
               </div>
             </div>
-            <div className="text-[10px] text-neutral-500 mt-1">
+            <div className="text-[12px] text-neutral-500 mt-1">
               話す言語: {LANGUAGE_LABEL[preview.primary_language] ?? preview.primary_language} ・
               話し方: {FORMALITY_LABEL[preview.formality] ?? preview.formality}
             </div>

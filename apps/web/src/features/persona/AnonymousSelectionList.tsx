@@ -111,7 +111,7 @@ export function AnonymousSelectionList() {
                 {p.value_tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full px-2 py-0.5 text-[10px]"
+                    className="rounded-full px-2 py-0.5 text-[12px]"
                     style={{
                       background: "rgba(239, 122, 98, 0.12)",
                       color: "#2E2418",
@@ -121,7 +121,7 @@ export function AnonymousSelectionList() {
                   </span>
                 ))}
               </div>
-              <p className="text-[10px] text-neutral-500">
+              <p className="text-[12px] text-neutral-500">
                 {LANGUAGE_LABEL[p.primary_language] ?? p.primary_language} ・{" "}
                 {FORMALITY_LABEL[p.formality] ?? p.formality}
               </p>

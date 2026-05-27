@@ -70,7 +70,7 @@ export function QuickStartCard({
 
       {noCount > 0 && noCount < NO_LIMIT && (
         <p
-          className="text-center text-[11px] italic text-neutral-400"
+          className="text-center text-[13px] italic text-neutral-400"
           data-testid="quickstart-no-count"
         >
           ▼ NO {noCount} / {NO_LIMIT}

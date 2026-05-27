@@ -65,18 +65,18 @@
   },
   "suites": [
     {
-      "title": "demo/onboarding-full-demo.spec.ts",
-      "file": "demo/onboarding-full-demo.spec.ts",
+      "title": "demo/typography-redesign-check.spec.ts",
+      "file": "demo/typography-redesign-check.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "起動 → 新規登録 → 全画面 walkthrough demo",
+          "title": "5 画面を screenshot — typography 拡大後",
           "ok": true,
           "tags": [],
           "tests": [
             {
-              "timeout": 420000,
+              "timeout": 120000,
               "annotations": [],
               "expectedStatus": "passed",
               "projectId": "mobile-chrome",
@@ -86,49 +86,22 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 73287,
+                  "duration": 17007,
                   "errors": [],
-                  "stdout": [
-                    {
-                      "text": "[diag] post-signin url=http://localhost:5173/onboarding\n"
-                    },
-                    {
-                      "text": "[diag] post-onboarding url=http://localhost:5173/\n"
-                    },
-                    {
-                      "text": "[diag] quickstart-card visible=true\n"
-                    },
-                    {
-                      "text": "[diag] textbox visible=true\n"
-                    },
-                    {
-                      "text": "✅ popup opened: https://www.amazon.co.jp/gp/video/storefront\n"
-                    }
-                  ],
+                  "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-05-26T13:36:44.503Z",
+                  "startTime": "2026-05-27T03:00:55.507Z",
                   "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/demo-onboarding-full-demo-起動-→-新規登録-→-全画面-walkthrough-demo-mobile-chrome/video-1.webm"
-                    },
-                    {
-                      "name": "video",
-                      "contentType": "video/webm",
-                      "path": "/Users/morimatsu/lab/ai-dlc-hackathon/tests/e2e/test-results/demo-onboarding-full-demo-起動-→-新規登録-→-全画面-walkthrough-demo-mobile-chrome/video.webm"
-                    }
-                  ]
+                  "attachments": []
                 }
               ],
               "status": "expected"
             }
           ],
-          "id": "657ca0d37a9de1aa03a0-4755d65d9ef88646a34d",
-          "file": "demo/onboarding-full-demo.spec.ts",
-          "line": 34,
+          "id": "0a7b7b0f5302a7a1ce33-cd4e92d599f61870fa77",
+          "file": "demo/typography-redesign-check.spec.ts",
+          "line": 20,
           "column": 1
         }
       ]
@@ -136,8 +109,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-05-26T13:36:44.182Z",
-    "duration": 73826.79699999999,
+    "startTime": "2026-05-27T03:00:55.247Z",
+    "duration": 17473.010000000002,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

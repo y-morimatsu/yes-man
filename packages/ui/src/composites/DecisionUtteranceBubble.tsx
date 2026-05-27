@@ -63,7 +63,7 @@ export function DecisionUtteranceBubble({
         </span>
         {streaming && (
           <span
-            className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 animate-pulse motion-reduce:animate-none"
+            className="text-[12px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 animate-pulse motion-reduce:animate-none"
             aria-hidden
           >
             発言中…

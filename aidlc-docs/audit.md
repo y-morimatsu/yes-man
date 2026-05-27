@@ -5412,3 +5412,42 @@ ai-dlcで要件を考え直しましょう。"
 **AI Response**: finishing-a-development-branch Option 3 を選択. branch feature/morimatsu-brushup に 2 新 commit 保留 (a9d6331 feat + 81bf425 docs). develop / main merge は実施せず. 動作確認用に API (Azure gpt-5.4-nano) + Web dev server を起動.
 
 ---
+
+## typography-redesign — Requirements Analysis 開始
+**Timestamp**: 2026-05-27T10:50:00+09:00
+**User Input**: "実機(iPhone13)スマホで確認しました。文字が小さいので目がつかれます。\n全体的に大きくしたい。ai-dlcでデザインを見直したい。\nヘッダの(YESManのタイトル文字やsigenout)の大きさは現状のままでOK"
+**AI Response**: AI-DLC Inception flow に従い `aidlc-docs/inception/typography-redesign/` を新設、Requirements Analysis (Standard depth) から開始. 制約事項として「ヘッダ (YesMan title + Sign out) はサイズ据置」を明文化.
+**Context**: 新 feature workflow start (typography redesign, iPhone 13 実機 ergonomics 改善)
+
+---
+
+## typography-redesign — Gate 1 承認 (Requirements + Q1=C / Q2=A)
+**Timestamp**: 2026-05-27T11:00:00+09:00
+**User Input**: "Q1=小サイズ重点 (最小 diff) / Q2=絶対 px class で直接 pin (推奨)" (AskUserQuestion 経由)
+**AI Response**: requirements.md Gate 1 承認確定. Scale=C (text-xs 12→14, sm 14→15), Header pin=A. application-design.md 作成へ進む.
+
+---
+
+## typography-redesign — Gate 2 承認 (Application Design)
+**Timestamp**: 2026-05-27T11:10:00+09:00
+**User Input**: "OK"
+**AI Response**: application-design.md 承認確定. Code Generation Plan に進み、token / header pin / インライン fontSize 補正を実装.
+
+---
+
+## typography-redesign — Gate 5 視覚確認完了
+**Timestamp**: 2026-05-27T11:15:00+09:00
+**User Input**: (continuation, no new user input — AI execution)
+**AI Response**:
+1. typography.ts: xs 12→14 / sm 14→15 に更新
+2. @yesman/ui 再 build
+3. Layout.tsx header pin: text-[16px] / text-[14px]
+4. インライン補正一括: 9→11, 10→12, 11→13 (10 files), fontSize 18→20 (DecisionResult), 13→15 (Splash button), MangaBubble 12→14 / 13.5→15
+5. ScoreRadialChart: caption 10→12, % superscript 14→15
+6. web test 272 件全 PASS
+7. mobile viewport 390x844 で screenshot 取得 (docs/screens/typography-redesign/, 6 画面)
+8. Header 据置 + 本文拡大が視覚確認できた (especially caption 系の可読性向上)
+
+**Context**: Gate 5 (Acceptance) 達成. typography-redesign feature 完了.
+
+---
