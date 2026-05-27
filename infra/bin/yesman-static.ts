@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
+// source-map-support/register は optional. infra/node_modules に
+// hoist されない環境があるため import しない (stack trace 改善のみ).
 import * as cdk from 'aws-cdk-lib';
 import { WebStaticStack } from '../lib/stacks/web-static-stack';
 
