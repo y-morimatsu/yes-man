@@ -8,16 +8,24 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      // 2026-05-27: iPhone 実機確認時 dev server からも PWA としてインストール可能にする.
+      // 本番 build とは独立して dev SW を有効化.
+      devOptions: { enabled: true, type: "module" },
       manifest: {
         name: "YesMan",
         short_name: "YesMan",
+        description: "迷ったら任せて — Yes/No 委任で意思決定を任せる",
+        lang: "ja",
         theme_color: "#ea580c",
-        background_color: "#ffffff",
+        background_color: "#F2EEE2",
         display: "standalone",
+        orientation: "portrait",
         start_url: "/",
+        scope: "/",
         icons: [
-          { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
-          { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+          { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
+          { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },
+          { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
       },
       workbox: {
