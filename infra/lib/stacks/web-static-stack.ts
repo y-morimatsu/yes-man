@@ -49,9 +49,13 @@ export class WebStaticStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: WebStaticStackProps) {
     super(scope, id, props);
 
+    // ap-northeast-1 で使える JP inference profile.
+    // (`apac.` ではなく `jp.` prefix. APAC profile は別 region).
+    // 速度/コスト重視で Haiku 4.5. Sonnet が必要なら
+    // `jp.anthropic.claude-sonnet-4-5-20250929-v1:0` に変更.
     const modelId =
       props.bedrockModelId ??
-      'apac.anthropic.claude-sonnet-4-5-20250929-v1:0';
+      'jp.anthropic.claude-haiku-4-5-20251001-v1:0';
     const maxPromptLength = props.maxPromptLength ?? 2000;
 
     // MVP: hardcoded secret. production では SecretsManager で管理する.

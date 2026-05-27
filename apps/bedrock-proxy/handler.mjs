@@ -35,7 +35,7 @@ const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? "*";
 const MAX_PROMPT_LENGTH = Number(process.env.MAX_PROMPT_LENGTH ?? 2000);
 const MODEL_ID =
   process.env.BEDROCK_MODEL_ID ??
-  "apac.anthropic.claude-sonnet-4-5-20250929-v1:0";
+  "jp.anthropic.claude-haiku-4-5-20251001-v1:0";
 
 const corsHeaders = (extra = {}) => ({
   "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
