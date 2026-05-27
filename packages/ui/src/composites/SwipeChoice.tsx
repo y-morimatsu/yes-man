@@ -126,11 +126,12 @@ export function SwipeChoice({
         setDx(0);
         return;
       }
+      // 2026-05-27: iPhone Safari popup blocker 回避のため window.open を
+      // setState / vibrate / setTimeout より **前** に発火.
+      invokeYesSync();
       setConfirming("yes");
       setDx(MAX_DRAG_PX);
       tryHaptic();
-      // FR-DAO-09: setTimeout の前に同期発火 (user gesture chain 内で window.open OK)
-      invokeYesSync();
       setTimeout(() => onYes(), 180);
     },
     onSwiped: () => {
@@ -272,11 +273,13 @@ export function SwipeChoice({
           size="lg"
           onClick={() => {
             if (disabled || confirming) return;
+            // 2026-05-27: iPhone Safari の popup blocker が user gesture chain を
+            // 厳しく評価するため、window.open は click handler の **最初**
+            // (setState / vibrate より前) に発火する. setState / vibrate が先に
+            // 走ると Safari が「直接の click 結果ではない」と判断して popup を block.
+            invokeYesSync();
             setConfirming("yes");
             tryHaptic();
-            // FR-DAO-09: onYes 同期発火の直前に invokeYesSync (button click は元々同期だが、
-            // 順序を 3 path 統一するために明示挿入).
-            invokeYesSync();
             onYes();
           }}
           disabled={disabled || confirming !== null}
