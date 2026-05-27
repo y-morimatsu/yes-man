@@ -231,6 +231,41 @@ function handler(event) {
     });
 
     // ─────────────────────────────────────────────────────────────
+    // SPA Fallback Function — default behavior 用.
+    //   2026-05-27 fix: distribution-wide な errorResponses (404→/index.html) を
+    //   廃止. 理由: errorResponses は behavior 横断で適用されるため、Lambda が
+    //   返す 404/403 (JSON) まで HTML に置換され、frontend で
+    //   "Unexpected token '<'" エラーになっていた.
+    //   代替として、S3 OAC で 404 になる SPA deep link を viewer-request 段階で
+    //   /index.html に書き換える. /api/* は別 behavior なのでこの Function は付かない.
+    // ─────────────────────────────────────────────────────────────
+    const spaFallbackFn = new cloudfront.Function(this, 'SpaFallbackFn', {
+      code: cloudfront.FunctionCode.fromInline(`
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+  // ルート / は defaultRootObject で /index.html に解決される (このまま素通し)
+  if (uri === '/') {
+    return request;
+  }
+  // 末尾 / の path (e.g., /decision/) → /index.html
+  if (uri.charAt(uri.length - 1) === '/') {
+    request.uri = '/index.html';
+    return request;
+  }
+  // 最後の / 以降のセグメントに . が含まれない → 拡張子なし → SPA route
+  var lastSlash = uri.lastIndexOf('/');
+  var lastSegment = uri.substring(lastSlash + 1);
+  if (lastSegment.indexOf('.') === -1) {
+    request.uri = '/index.html';
+  }
+  return request;
+}
+      `),
+      runtime: cloudfront.FunctionRuntime.JS_2_0,
+    });
+
+    // ─────────────────────────────────────────────────────────────
     // CloudFront distribution
     // ─────────────────────────────────────────────────────────────
     const distribution = new cloudfront.Distribution(this, 'WebDistribution', {
@@ -240,6 +275,12 @@ function handler(event) {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         compress: true,
+        functionAssociations: [
+          {
+            function: spaFallbackFn,
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+          },
+        ],
       },
       additionalBehaviors: {
         '/api/*': {
@@ -267,20 +308,11 @@ function handler(event) {
         },
       },
       defaultRootObject: 'index.html',
-      errorResponses: [
-        {
-          httpStatus: 404,
-          responseHttpStatus: 200,
-          responsePagePath: '/index.html',
-          ttl: cdk.Duration.minutes(1),
-        },
-        {
-          httpStatus: 403,
-          responseHttpStatus: 200,
-          responsePagePath: '/index.html',
-          ttl: cdk.Duration.minutes(1),
-        },
-      ],
+      // 2026-05-27 fix: distribution-wide な errorResponses を廃止.
+      // 理由: 404/403 が behavior 横断で /index.html (200) に置換され、
+      // Lambda が返す 404/403 (JSON) まで HTML 化して frontend が
+      // "Unexpected token '<'" になっていた. SPA deep link の fallback は
+      // 上記 spaFallbackFn が viewer-request 段階で /index.html に rewrite する.
       priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
     });
 
