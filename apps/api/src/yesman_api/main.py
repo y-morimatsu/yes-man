@@ -142,14 +142,27 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # Mock backend + MOCK_SEED_DEMO_DECISIONS=true で、デモ用の過去 30 日履歴を投入
     # (ScoreLineChart の右肩上がりトレンド可視化用)
+    # 2026-05-27: S3 永続化が有効な場合、既存 state があれば seed をスキップし
+    # 他 instance の state を尊重する (multi-instance での重複 seed 防止).
     if config.mock_seed_demo_decisions and repo_factory.mock_store is not None:
-        seeded = repo_factory.mock_store.seed_demo_decisions(user_id=config.mock_user_sub)
-        if seeded > 0:
+        store = repo_factory.mock_store
+        loaded_from_s3 = store.load_from_s3()
+        if loaded_from_s3 and len(store.decisions) > 0:
             get_logger("startup").info(
-                "mock.seed_demo_decisions",
-                user_id=str(config.mock_user_sub),
-                seeded_count=seeded,
+                "mock.s3_state_loaded",
+                source="s3",
+                decision_count=len(store.decisions),
             )
+        else:
+            seeded = store.seed_demo_decisions(user_id=config.mock_user_sub)
+            if seeded > 0:
+                get_logger("startup").info(
+                    "mock.seed_demo_decisions",
+                    user_id=str(config.mock_user_sub),
+                    seeded_count=seeded,
+                )
+                # 初回 seed を S3 に保存 → 後続 instance は load_from_s3 で同じ state を共有
+                store.save_to_s3()
 
     app.state.repo_factory = repo_factory
     app.state.auth_factory = auth_factory

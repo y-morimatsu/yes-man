@@ -38,7 +38,13 @@ def _utcnow() -> datetime:
 class MockStore:
     """Shared in-memory storage backing all Mock*Repository instances."""
 
-    def __init__(self, *, seed_builtin: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        seed_builtin: bool = False,
+        s3_bucket: str | None = None,
+        s3_key: str = "mock-store.pickle",
+    ) -> None:
         # default False — unit test conftest 互換性のため。Production (RepositoryFactory) で True 指定.
         self.profiles: dict[UUID, Profile] = {}
         self.decisions: dict[UUID, Decision] = {}
@@ -47,8 +53,75 @@ class MockStore:
         self.personas: dict[UUID, Persona] = {}
         self.persona_reports: dict[UUID, PersonaReport] = {}
         self.user_persona_selections: dict[UUID, UserPersonaSelection] = {}
+        # 2026-05-27: S3 永続化 (AWS Lambda multi-instance 対応). 未設定なら no-op.
+        self._s3_bucket = s3_bucket
+        self._s3_key = s3_key
+        self._s3 = None
+        if s3_bucket:
+            import boto3  # lazy import (local dev / unit test では import すらしない)
+
+            self._s3 = boto3.client("s3")
         if seed_builtin:
             self._seed_builtin_personas()
+
+    # ------------------------------------------------------------------
+    # S3 永続化 (AWS Lambda multi-instance 対応)
+    # ------------------------------------------------------------------
+    def load_from_s3(self) -> bool:
+        """S3 から state を復元. 成功時 True, S3 未設定 / NoSuchKey / 例外時 False.
+
+        bundle() 開始時に呼び、別 instance の最新変更を取り込む. 失敗時は
+        現状の in-memory state を保持 (壊れた pickle 等で空にしない安全策).
+        """
+        if not self._s3 or not self._s3_bucket:
+            return False
+        try:
+            import pickle
+
+            obj = self._s3.get_object(Bucket=self._s3_bucket, Key=self._s3_key)
+            data = pickle.loads(obj["Body"].read())
+            self.profiles = data.get("profiles", {})
+            self.decisions = data.get("decisions", {})
+            self.preference_profiles = data.get("preference_profiles", {})
+            self.silence_logs = data.get("silence_logs", {})
+            self.personas = data.get("personas", {})
+            self.persona_reports = data.get("persona_reports", {})
+            self.user_persona_selections = data.get("user_persona_selections", {})
+            return True
+        except self._s3.exceptions.NoSuchKey:
+            return False
+        except Exception:
+            # 壊れた pickle 等は無視 (現状の in-memory state を維持)
+            return False
+
+    def save_to_s3(self) -> bool:
+        """現在の state を S3 に pickle 保存. 成功時 True, 失敗時 False.
+
+        bundle() 終了時に呼ぶ. 失敗は best-effort で握り潰す
+        (本筋の request response を阻害しないため).
+        """
+        if not self._s3 or not self._s3_bucket:
+            return False
+        try:
+            import pickle
+
+            data = {
+                "profiles": self.profiles,
+                "decisions": self.decisions,
+                "preference_profiles": self.preference_profiles,
+                "silence_logs": self.silence_logs,
+                "personas": self.personas,
+                "persona_reports": self.persona_reports,
+                "user_persona_selections": self.user_persona_selections,
+            }
+            self._s3.put_object(
+                Bucket=self._s3_bucket,
+                Key=self._s3_key,
+                Body=pickle.dumps(data),
+            )
+            return True
+        except Exception:
+            return False
 
     def reset(self, *, seed_builtin: bool = False) -> None:
         self.profiles.clear()

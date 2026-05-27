@@ -77,6 +77,13 @@ class AppConfig(BaseSettings):
     # MOCK 起動時にデモ用の過去 30 日履歴を mock_user_sub に投入する (Yes 比率推移グラフの可視化用)
     mock_seed_demo_decisions: bool = False
 
+    # 2026-05-27: AWS Lambda 上で multi-instance による mock storage 分断を回避するため、
+    # S3 で MockStore の dict 全体を pickle 永続化する. 設定すれば bundle() 毎に
+    # S3 load (request 開始) + save (request 終了) で全 instance 間に最終状態を共有.
+    # 未設定 (local dev / unit test) では in-memory のまま.
+    mock_store_s3_bucket: str | None = None
+    mock_store_s3_key: str = "mock-store.pickle"
+
     cors_allowed_origins: list[str] = Field(default_factory=list)
     auth_bypass_paths_extra: list[str] = Field(default_factory=list)
 

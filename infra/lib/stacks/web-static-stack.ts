@@ -80,6 +80,24 @@ export class WebStaticStack extends cdk.Stack {
     });
 
     // ─────────────────────────────────────────────────────────────
+    // S3 bucket for Mock storage state (Lambda multi-instance 共有)
+    //   2026-05-27: account 同時実行クォータ 10 のため reservedConcurrentExecutions=1
+    //   が不可、複数 Lambda instance 間で mock storage を共有する必要があった.
+    //   MockStore の dict 全体を pickle 化して `mock-store.pickle` に保存し、
+    //   各 instance が bundle() 毎に load+save する形で last-write-wins な共有を実現.
+    // ─────────────────────────────────────────────────────────────
+    const mockStateBucket = new s3.Bucket(this, 'MockStateBucket', {
+      bucketName: `yesman-${props.envName}-mock-state-${this.account}`,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+      // 古い state は不要なので 7 日で自動削除
+      lifecycleRules: [{ expiration: cdk.Duration.days(7) }],
+    });
+
+    // ─────────────────────────────────────────────────────────────
     // Lambda: FastAPI on Lambda Web Adapter (Container Image, Python 3.12 ARM64)
     //
     // zip deploy では 250 MiB unzipped 上限を超えるため container image 方式.
@@ -182,6 +200,10 @@ export class WebStaticStack extends cdk.Stack {
         // FastAPI 側からは / route として処理される. root_path は OpenAPI URL
         // 生成用の補助.
         FASTAPI_ROOT_PATH: '/api',
+
+        // 2026-05-27: Mock storage S3 永続化 (Lambda multi-instance 対応)
+        MOCK_STORE_S3_BUCKET: mockStateBucket.bucketName,
+        MOCK_STORE_S3_KEY: 'mock-store.pickle',
       },
       logRetention: logs.RetentionDays.ONE_WEEK,
     });
@@ -202,6 +224,9 @@ export class WebStaticStack extends cdk.Stack {
         ],
       }),
     );
+
+    // 2026-05-27: Mock state bucket への read/write 権限 (multi-instance state 共有用)
+    mockStateBucket.grantReadWrite(fastApiFn);
 
     // Function URL — SSE 対応のため RESPONSE_STREAM mode
     const fastApiFnUrl = fastApiFn.addFunctionUrl({
