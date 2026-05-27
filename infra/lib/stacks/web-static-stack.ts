@@ -52,14 +52,16 @@ export class WebStaticStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: WebStaticStackProps) {
     super(scope, id, props);
 
-    // ap-northeast-1 で使える JP inference profile (Claude Haiku 4.5).
-    // 2026-05-27: Haiku 4.5 は AWS Marketplace subscription を account-wide で
-    // 一度有効化 (admin user が invoke) 済のため、Lambda role からも呼出可能.
-    // 速度/コスト重視で Haiku 4.5 を default に. Sonnet が必要なら BEDROCK_MODEL_ID
-    // env で 'jp.anthropic.claude-sonnet-4-5-20250929-v1:0' 等に上書き可能.
+    // 2026-05-27: ap-northeast-1 の Google Gemma 3 12B IT を採用.
+    //   - 新規 account でも RPM=1000 / TPM=100M が default (制限緩い)
+    //   - Latency 200ms 前後で Haiku 並 (むしろ速い)
+    //   - On-demand 直接呼出 (cross-region profile 不要、subscription 不要)
+    // 旧 Haiku 4.5 (jp.anthropic.claude-haiku-4-5-20251001-v1:0) は
+    // cross-region RPM が new account default 50 で SSE drill-down に不足、
+    // AWS Support 経由の quota raise 待ちが必要だった.
     const modelId =
       props.bedrockModelId ??
-      'jp.anthropic.claude-haiku-4-5-20251001-v1:0';
+      'google.gemma-3-12b-it';
     const maxPromptLength = props.maxPromptLength ?? 2000;
 
     // MVP: hardcoded secret. production では SecretsManager で管理する.
