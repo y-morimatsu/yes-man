@@ -48,7 +48,12 @@ export default defineConfig({
       brotliSize: true,
     }),
   ],
-  server: { port: 5173 },
+  server: {
+    port: 5173,
+    // 2026-05-27 dev/demo: iPhone 実機確認のため Cloudflare Quick Tunnel
+    // (*.trycloudflare.com) からの request を許可. 本番 build には影響なし.
+    allowedHosts: [".trycloudflare.com"],
+  },
   build: {
     target: "es2022",
     sourcemap: true,
