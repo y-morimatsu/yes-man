@@ -48,6 +48,13 @@ jobs:
       - name: Build workspace packages
         run: pnpm -r build
 
+      # infra/ は pnpm-workspace.yaml から外されている (npm 独立管理).
+      # root の pnpm install では infra/node_modules に aws-cdk-lib が入らず
+      # tsx 実行時に Cannot find module 'aws-cdk-lib' になる (run 26492917559).
+      - name: Install infra deps (npm)
+        working-directory: infra
+        run: npm install --no-audit --no-fund
+
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
         with:
