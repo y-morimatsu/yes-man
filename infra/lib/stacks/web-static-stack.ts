@@ -92,7 +92,10 @@ export class WebStaticStack extends cdk.Stack {
     // ─────────────────────────────────────────────────────────────
 
     const fastApiFn = new lambda.DockerImageFunction(this, 'FastApiFn', {
-      memorySize: 1024,
+      // 2026-05-27: account 同時実行クォータ 10 (新規 account default) を緩和する
+      // ための応急策として memory を 2048 に bump (CPU が memory に比例).
+      // SSE / Bedrock 呼出が早く完了 → Lambda slot を早く開放 → throttle 軽減.
+      memorySize: 2048,
       // SSE で長く繋ぐので timeout は長め. CloudFront origin response timeout
       // 60s が cap になるため 60s に合わせる.
       timeout: cdk.Duration.seconds(60),
