@@ -1,0 +1,81 @@
+name: web-static / deploy
+
+# CloudFront + S3 だけの最小 deploy. apps/web を build して S3 にアップロード,
+# CloudFront 経由で配信する. backend (api / cognito) には依存しない.
+# UI 描画の動作確認用 (production 用ではない).
+
+on:
+  workflow_dispatch:
+    inputs:
+      envName:
+        description: 'Target env'
+        required: true
+        default: 'dev'
+        type: choice
+        options: [dev, staging, prod]
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-1
+  NODE_VERSION: 20
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install workspace deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Build apps/web
+        working-directory: apps/web
+        run: pnpm build
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/gha-cdk-deploy-${{ inputs.envName }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: CDK Deploy (web-static only)
+        working-directory: infra
+        run: |
+          npx cdk deploy yesman-${{ inputs.envName }}-web-static \
+            --app "npx tsx bin/yesman-static.ts" \
+            --require-approval never \
+            --outputs-file /tmp/web-static-outputs.json \
+            -c envName=${{ inputs.envName }} \
+            -c awsAccount=${{ secrets.AWS_ACCOUNT_ID }} \
+            -c awsRegion=${{ env.AWS_REGION }}
+
+      - name: Summary
+        if: always()
+        working-directory: infra
+        run: |
+          {
+            echo "### web-static deploy (${{ inputs.envName }})"
+            if [[ -f /tmp/web-static-outputs.json ]]; then
+              python3 -c "
+          import json
+          d = json.load(open('/tmp/web-static-outputs.json'))
+          for stack, outs in d.items():
+              print(f'**{stack}**')
+              for k, v in outs.items():
+                  print(f'- {k}: \`{v}\`')
+              "
+            fi
+          } >> $GITHUB_STEP_SUMMARY
