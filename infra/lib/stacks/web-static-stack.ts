@@ -123,6 +123,12 @@ export class WebStaticStack extends cdk.Stack {
         // LWA が listen する port (Dockerfile ENV + run.sh の PORT と一致)
         PORT: '8080',
 
+        // Function URL の invokeMode=RESPONSE_STREAM と LWA mode を合わせる.
+        // Default は BUFFERED で、その場合 Lambda Function URL のレスポンス envelope
+        // (statusCode/headers/body) がそのまま CloudFront 経由でブラウザに届いてしまう.
+        // response_stream に切替えると LWA が HTTP response をそのまま stream で返す.
+        AWS_LWA_INVOKE_MODE: 'response_stream',
+
         // ─── yesman AppConfig env ───
         APP_ENV: 'dev',
         LOG_LEVEL: 'INFO',
