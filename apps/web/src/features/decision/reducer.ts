@@ -33,10 +33,13 @@ export interface Utterance {
 export type StageMode = "chat" | "manga";
 
 // 2026-05-23 Drill-down chain: proposal に紐づく外部 service 情報
+// 2026-05-26: category を追加 (frontend で「持っていますか?/購入しますか?」 確認 step を出すため)
 export interface ExternalServiceLink {
   name: string;
   url: string;
   emoji: string;
+  /** service_catalog のカテゴリ key. 例: "fashion" | "books" | "audio_books" | "movie" | ... */
+  category?: string;
 }
 
 // 2026-05-23 Drill-down chain: chain 中の 1 ノード (完了済 proposal の履歴)

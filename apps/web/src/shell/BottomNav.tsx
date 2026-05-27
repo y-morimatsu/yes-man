@@ -10,7 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import { HomeIcon, PersonaIcon, ProfileIcon, ScoreIcon } from "./icons";
 
 const TAB_ICONS: Record<string, ReactNode> = {
-  Home: <HomeIcon />,
+  ホーム: <HomeIcon />,
   スコア: <ScoreIcon />,
   ペルソナ: <PersonaIcon />,
   プロフィール: <ProfileIcon />,
@@ -23,7 +23,7 @@ const TAB_ICONS: Record<string, ReactNode> = {
 type Tab = { to: string; label: string; activePaths?: string[] };
 
 const TABS: Tab[] = [
-  { to: "/", label: "Home" },
+  { to: "/", label: "ホーム" },
   { to: "/score", label: "スコア" },
   {
     to: "/personas/selection",
@@ -36,7 +36,7 @@ const TABS: Tab[] = [
 const MK_CREAM_LT = "#FAF6EC";
 const MK_ORANGE = "#EF7A62";
 const MK_MUTED = "rgba(46, 36, 24, 0.55)";
-const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.08)";
+const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.18)";
 
 function isActive(pathname: string, tab: Tab): boolean {
   if (tab.to === "/") return pathname === "/";
@@ -80,7 +80,7 @@ export function BottomNav() {
                 >
                   {TAB_ICONS[tab.label]}
                 </span>
-                <span className="text-[10px] leading-tight tracking-wide">
+                <span className="text-[12px] leading-tight tracking-wide">
                   {tab.label}
                 </span>
               </Link>

@@ -1,5 +1,5 @@
 /**
- * BottomNav — 4-tab (Home / スコア / ペルソナ / プロフィール).
+ * BottomNav — 4-tab (ホーム / スコア / ペルソナ / プロフィール).
  * 2026-05-24 v2: 「ペルソナ」 tab を追加 (/personas/selection).
  */
 import { describe, expect, it } from "vitest";
@@ -16,17 +16,17 @@ function setup(initialEntry: string) {
 }
 
 describe("BottomNav (4-tab)", () => {
-  it("renders 4 tabs (Home / スコア / ペルソナ / プロフィール)", () => {
+  it("renders 4 tabs (ホーム / スコア / ペルソナ / プロフィール)", () => {
     setup("/");
-    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(screen.getByText("ホーム")).toBeInTheDocument();
     expect(screen.getByText("スコア")).toBeInTheDocument();
     expect(screen.getByText("ペルソナ")).toBeInTheDocument();
     expect(screen.getByText("プロフィール")).toBeInTheDocument();
   });
 
-  it("marks Home tab active when on /", () => {
+  it("marks ホーム tab active when on /", () => {
     setup("/");
-    const homeLink = screen.getByText("Home").closest("a");
+    const homeLink = screen.getByText("ホーム").closest("a");
     expect(homeLink).toHaveAttribute("aria-current", "page");
   });
 
@@ -56,7 +56,7 @@ describe("BottomNav (4-tab)", () => {
 
   it("each tab href points to correct route", () => {
     setup("/");
-    expect(screen.getByText("Home").closest("a")).toHaveAttribute("href", "/");
+    expect(screen.getByText("ホーム").closest("a")).toHaveAttribute("href", "/");
     expect(screen.getByText("スコア").closest("a")).toHaveAttribute(
       "href",
       "/score",

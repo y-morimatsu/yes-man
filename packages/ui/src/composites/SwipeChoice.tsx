@@ -31,6 +31,22 @@ export interface SwipeChoiceProps {
    * default true。onboarding 等で連続出題時は false で消すと UI がすっきり。
    */
   showSwipeHint?: boolean;
+  /**
+   * 2026-05-26 drill-down-auto-open (FR-DAO-09): Yes confirm 直後、`onYes` の
+   * `setTimeout(180ms)` の **前** に同期実行される callback. user gesture chain 内での
+   * 副作用 (例: `window.open`) に使用. 3 Yes path (right-swipe / fallback button click /
+   * ArrowRight) すべてで発火.
+   *
+   * 例外を投げても `onYes` は呼ばれる (try-catch で保護). 副作用のみに留めること.
+   */
+  onYesSync?: () => void;
+  /**
+   * 2026-05-26 drill-down-auto-open (NFR-DAO-10): Yes button の aria-label を override.
+   * 未指定なら default "Yes、提案を採択".
+   * isFinal + service 時に "Yes、提案を採択 (新しいタブで XXX を開きます)" 等を渡し、
+   * スクリーンリーダー利用者に「Yes 押下 = 外部遷移」を事前通知.
+   */
+  yesAriaLabelOverride?: string;
 }
 
 const SWIPE_THRESHOLD_DEFAULT = 100;
@@ -55,7 +71,22 @@ export function SwipeChoice({
   threshold = SWIPE_THRESHOLD_DEFAULT,
   children,
   showSwipeHint = true,
+  onYesSync,
+  yesAriaLabelOverride,
 }: SwipeChoiceProps) {
+  // 2026-05-26 (FR-DAO-09): user gesture chain 内同期発火 helper.
+  // 3 Yes path で onYes より前に呼ぶ:
+  //   - swipe / keyboard path: setTimeout(onYes, 180) の前
+  //   - fallback button click path: onYes() の直前 (button click 自体は同期)
+  // 例外は握り潰し、onYes の発火を阻害しない (try/catch).
+  const invokeYesSync = (): void => {
+    if (!onYesSync) return;
+    try {
+      onYesSync();
+    } catch {
+      // popup block / DOM error 等は CTA fallback (NFR-DAO-01) で復帰
+    }
+  };
   const [dx, setDx] = useState(0);
   const [confirming, setConfirming] = useState<"yes" | "no" | null>(null);
 
@@ -98,6 +129,8 @@ export function SwipeChoice({
       setConfirming("yes");
       setDx(MAX_DRAG_PX);
       tryHaptic();
+      // FR-DAO-09: setTimeout の前に同期発火 (user gesture chain 内で window.open OK)
+      invokeYesSync();
       setTimeout(() => onYes(), 180);
     },
     onSwiped: () => {
@@ -170,12 +203,14 @@ export function SwipeChoice({
               setConfirming("yes");
               setDx(MAX_DRAG_PX);
               tryHaptic();
+              // FR-DAO-09: setTimeout の前に同期発火
+              invokeYesSync();
               setTimeout(() => onYes(), 180);
             }
           }}
         >
           {children ?? (
-            <div className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 p-6 text-center font-serif text-2xl font-bold text-neutral-900 shadow-md">
+            <div className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 p-6 text-center font-sans text-2xl font-bold text-neutral-900 shadow-md">
               {proposalText}
             </div>
           )}
@@ -186,7 +221,7 @@ export function SwipeChoice({
           dx=0 (未スワイプ) の間のみアニメ表示、スワイプ開始で hide. */}
       {showSwipeHint && dx === 0 && !confirming && (
         <div
-          className="flex items-center gap-2 text-xs italic text-neutral-500"
+          className="flex items-center gap-2 text-xs text-neutral-500"
           aria-hidden
           data-testid="swipe-hint-right"
           data-ym-anim
@@ -239,10 +274,13 @@ export function SwipeChoice({
             if (disabled || confirming) return;
             setConfirming("yes");
             tryHaptic();
+            // FR-DAO-09: onYes 同期発火の直前に invokeYesSync (button click は元々同期だが、
+            // 順序を 3 path 統一するために明示挿入).
+            invokeYesSync();
             onYes();
           }}
           disabled={disabled || confirming !== null}
-          aria-label="Yes、提案を採択"
+          aria-label={yesAriaLabelOverride ?? "Yes、提案を採択"}
         >
           Yes →
         </Button>

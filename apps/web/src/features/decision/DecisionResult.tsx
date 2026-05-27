@@ -26,7 +26,11 @@ import { YesComboBadge } from "./YesComboBadge";
 import { useYesCombo } from "./useYesCombo";
 import { describeError } from "./describeError";
 import { t } from "./strings";
+import { getConfirmFlow, type ConfirmAction } from "./confirmQuestions";
 import confetti from "canvas-confetti";
+
+// backend engine.py の MAX_DRILL_DEPTH と同期 (4). 増減時は両側更新.
+const MAX_DRILL_DEPTH = 4;
 
 export interface DecisionResultProps {
   utterances: Utterance[];
@@ -43,6 +47,8 @@ export interface DecisionResultProps {
   onDrillDown?: () => void;
   /** 2026-05-23 Drill-down chain: 現提案が最終かどうか. true なら Yes 採択 (choose API + 祝福). */
   isFinal?: boolean;
+  /** 2026-05-26 Drill-down hint: 現在の depth (= chain.length). pink-nudge で「あと N 段で決定」表示用. */
+  depth?: number;
   /** 2026-05-23 Drill-down chain: chain history (breadcrumb 表示用). */
   chain?: ChainNode[];
   /** 2026-05-23 Drill-down chain: final 提案に紐づく外部 service. CTA button で URL を開く. */
@@ -65,6 +71,7 @@ export function DecisionResult({
   onChoiceMade,
   onDrillDown,
   isFinal = true,
+  depth = 0,
   chain = [],
   service = null,
   hideUtterances = false,
@@ -76,6 +83,12 @@ export function DecisionResult({
   const [noCount, setNoCount] = useState<number>(0);
   // INCEPTION FR-CV-04: 議論を見る default closed、採択後も visible
   const [discussionOpen, setDiscussionOpen] = useState(false);
+  // 2026-05-26: final 後の「持っていますか? / 購入しますか?」 確認 step 用 state.
+  //   confirmStepId !== null = 確認 step 表示中 (SwipeChoice の proposalText を上書き).
+  //   confirmDone="stop" = ユーザーが No で打ち切った → 「今回は やめておこう」 banner.
+  const confirmFlow = isFinal && service ? getConfirmFlow(service.category) : null;
+  const [confirmStepId, setConfirmStepId] = useState<string | null>(null);
+  const [confirmDone, setConfirmDone] = useState<"open" | "stop" | null>(null);
   // Hackathon: Yes 連続採択 combo (localStorage 日次 reset)
   const combo = useYesCombo();
   // Hackathon: proposal 初到着時の「合議完了」notification (1 回だけ表示)
@@ -170,6 +183,13 @@ export function DecisionResult({
       onDrillDown();
       return;
     }
+    // 2026-05-26: final Yes で category confirm flow がある場合は popup を直開せず
+    // confirm step に遷移. choose API も confirm 終了後に呼ぶ.
+    if (choice === "yes" && isFinal && confirmFlow && confirmStepId === null) {
+      onChoiceMade?.("yes");
+      setConfirmStepId(confirmFlow.start);
+      return;
+    }
     try {
       const result = await choose.mutateAsync({ id: decisionId, choice });
       const count = result?.no_attempt_count ?? 0;
@@ -188,6 +208,48 @@ export function DecisionResult({
     } catch (err) {
       push({ message: `${t("errorDefault")}: ${describeError(err)}`, variant: "error" });
     }
+  };
+
+  /** 2026-05-26: confirm step (Yes/No) の遷移. action に基づき次 step / open / stop を実行. */
+  const applyConfirmAction = (action: ConfirmAction) => {
+    if (action.kind === "next") {
+      setConfirmStepId(action.stepId);
+      return;
+    }
+    // open / stop はどちらも flow 完了 → chosen=yes をセットして choose API 呼ぶ.
+    setConfirmStepId(null);
+    setConfirmDone(action.kind);
+    if (!decisionId) return;
+    void (async () => {
+      try {
+        const result = await choose.mutateAsync({ id: decisionId, choice: "yes" });
+        const count = result?.no_attempt_count ?? 0;
+        const newCombo = combo.recordYes();
+        setChosen("yes");
+        setNoCount(count);
+        // open のときだけ大盛 confetti、stop でも採択は採択なので軽め celebration
+        fireConfetti(action.kind === "open" ? newCombo : 1);
+      } catch (err) {
+        push({
+          message: `${t("errorDefault")}: ${describeError(err)}`,
+          variant: "error",
+        });
+      }
+    })();
+  };
+
+  const handleConfirmYes = () => {
+    if (!confirmFlow || !confirmStepId) return;
+    const step = confirmFlow.steps[confirmStepId];
+    if (!step) return;
+    applyConfirmAction(step.onYes);
+  };
+
+  const handleConfirmNo = () => {
+    if (!confirmFlow || !confirmStepId) return;
+    const step = confirmFlow.steps[confirmStepId];
+    if (!step) return;
+    applyConfirmAction(step.onNo);
   };
 
   const isStreaming = proposal === null;
@@ -217,6 +279,48 @@ export function DecisionResult({
             ))}
           </div>
         </nav>
+      )}
+
+      {/* 2026-05-26: 外部サービス CTA は「これまでの決定」直下に表示 (NudgeBanner より上).
+          画面下までスクロールしなくても押せるようにするための位置改善.
+          confirmDone === "stop" の場合は popup を開かなかったので CTA は隠す. */}
+      {chosen === "yes" && service && confirmDone !== "stop" && (
+        <a
+          href={service.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="self-stretch rounded-2xl border-2 border-success bg-success/10 px-4 py-3 text-center text-base font-bold text-success-700 hover:bg-success/20 transition-colors shadow-md flex items-center justify-center gap-2"
+          style={{
+            background: "linear-gradient(135deg, #ECFDF5, #86EFAC33)",
+            borderColor: "#22C55E",
+            color: "#065F46",
+          }}
+          aria-label={`${service.name} で開く (外部リンク)`}
+          data-testid="external-service-cta"
+        >
+          <span aria-hidden className="text-2xl">
+            {service.emoji}
+          </span>
+          <span>{service.name} で開く →</span>
+        </a>
+      )}
+
+      {/* 2026-05-26: confirm No で stop した場合の「やめておこう」 banner. */}
+      {chosen === "yes" && confirmDone === "stop" && (
+        <div
+          className="self-stretch rounded-2xl border-2 px-4 py-3 text-center text-sm font-medium shadow-sm flex items-center justify-center gap-2"
+          style={{
+            background: "#FFF8E7",
+            borderColor: "#E0D5BC",
+            color: "#7A5C2A",
+          }}
+          role="status"
+          aria-label="今回はやめておこう"
+          data-testid="confirm-stop-banner"
+        >
+          <span aria-hidden>🙆</span>
+          <span>今回は やめておこう ♪</span>
+        </div>
       )}
 
       {/* Hackathon: Yes 連続採択 combo badge (chosen=yes 時 + 2 連以上 or break 時) */}
@@ -281,16 +385,25 @@ export function DecisionResult({
           ─ 「ばーんと消える」体感を抑制し、結果を視覚的に持続表示. */}
       {proposal && (() => {
         const isChosenYes = chosen === "yes";
+        // 2026-05-26: confirm phase 中は SwipeChoice の text を confirm 質問に差し替える.
+        const confirmStep = confirmFlow && confirmStepId
+          ? confirmFlow.steps[confirmStepId] ?? null
+          : null;
+        // window.open は confirm phase の最終 Yes (action="open") かつ "buy" 系 step の
+        // onYesSync で user gesture chain 内同期発火する (popup block 回避).
+        // confirmFlow 無しの旧経路 (例: confirmFlow=null) は従来通り SwipeChoice の Yes で即 open.
+        const isOpenStep =
+          confirmStep && confirmStep.onYes.kind === "open" && !!service;
         const proposalCardBlock = (
           <>
-            {/* mockup §6 結論カード — italic 結論 (overlay 用に mini-stage は省略).
+            {/* mockup §6 結論カード — 結論 (overlay 用に mini-stage は省略).
                 Yes 採択後は SwipeChoice を外し、card と「✨ 決まりました」 nudge のみ残置. */}
             {isChosenYes ? (
               <article
                 className="rounded-3xl overflow-hidden shadow-md flex flex-col"
                 style={{
                   background: "#FFFCF4",
-                  border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                  border: "0.5px solid rgba(46, 36, 24, 0.30)",
                   boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
                 }}
                 aria-label="採択された結論"
@@ -299,7 +412,7 @@ export function DecisionResult({
               >
                 <div className="px-4 pt-3 pb-2 text-center">
                   <p
-                    className="text-[10px] uppercase tracking-widest mb-1"
+                    className="text-[12px] uppercase tracking-widest mb-1"
                     style={{ color: "rgba(46, 36, 24, 0.55)" }}
                   >
                     決まったこと
@@ -307,10 +420,9 @@ export function DecisionResult({
                   <p
                     className="font-medium"
                     style={{
-                      fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                      fontStyle: "italic",
-                      fontSize: 18,
-                      lineHeight: 1.25,
+                      fontFamily: "var(--font-sans)",
+                      fontSize: 20,
+                      lineHeight: 1.3,
                       color: "#2E2418",
                     }}
                   >
@@ -318,6 +430,59 @@ export function DecisionResult({
                   </p>
                 </div>
               </article>
+            ) : confirmStep ? (
+              <SwipeChoice
+                key={`confirm-${confirmStepId}`}
+                proposalText={confirmStep.question}
+                onYes={handleConfirmYes}
+                onNo={handleConfirmNo}
+                disabled={choose.isPending}
+                showSwipeHint={!proposalCardPortal}
+                onYesSync={
+                  isOpenStep && service
+                    ? () => {
+                        window.open(service.url, "_blank", "noopener,noreferrer");
+                      }
+                    : undefined
+                }
+                yesAriaLabelOverride={
+                  isOpenStep && service
+                    ? `Yes (新しいタブで ${service.name} を開きます)`
+                    : undefined
+                }
+              >
+                <article
+                  className="rounded-3xl overflow-hidden shadow-md flex flex-col"
+                  style={{
+                    background: "#FFFCF4",
+                    border: "0.5px solid rgba(46, 36, 24, 0.30)",
+                    boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
+                  }}
+                  aria-label="確認質問"
+                  role="article"
+                  data-testid="confirm-step-card"
+                >
+                  <div className="px-4 pt-3 pb-2 text-center">
+                    <p
+                      className="text-[12px] uppercase tracking-widest mb-1"
+                      style={{ color: "rgba(46, 36, 24, 0.55)" }}
+                    >
+                      確認
+                    </p>
+                    <p
+                      className="font-medium"
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: 20,
+                        lineHeight: 1.3,
+                        color: "#2E2418",
+                      }}
+                    >
+                      {confirmStep.question}
+                    </p>
+                  </div>
+                </article>
+              </SwipeChoice>
             ) : (
               <SwipeChoice
                 key={decisionId ?? "no-decision"}
@@ -326,12 +491,28 @@ export function DecisionResult({
                 onNo={() => handleChoose("no")}
                 disabled={choose.isPending}
                 showSwipeHint={!proposalCardPortal}
+                // 2026-05-26 drill-down-auto-open (FR-DAO-02/03/09 + NFR-DAO-06/07/10):
+                // final 段 (isFinal=true) + service≠null のみ自動 open + a11y override を有効化.
+                // 2026-05-26 (confirm phase): confirmFlow がある category は Yes で confirm step に
+                // 遷移するので window.open しない. confirmFlow=null なら従来通り即 open.
+                onYesSync={
+                  isFinal && service && !confirmFlow
+                    ? () => {
+                        window.open(service.url, "_blank", "noopener,noreferrer");
+                      }
+                    : undefined
+                }
+                yesAriaLabelOverride={
+                  isFinal && service && !confirmFlow
+                    ? `Yes、提案を採択 (新しいタブで ${service.name} を開きます)`
+                    : undefined
+                }
               >
                 <article
                   className="rounded-3xl overflow-hidden shadow-md flex flex-col"
                   style={{
                     background: "#FFFCF4",
-                    border: "0.5px solid rgba(46, 36, 24, 0.15)",
+                    border: "0.5px solid rgba(46, 36, 24, 0.30)",
                     boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
                   }}
                   aria-label="提案"
@@ -342,10 +523,9 @@ export function DecisionResult({
                     <p
                       className="font-medium"
                       style={{
-                        fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                        fontStyle: "italic",
-                        fontSize: 18,
-                        lineHeight: 1.25,
+                        fontFamily: "var(--font-sans)",
+                        fontSize: 20,
+                        lineHeight: 1.3,
                         color: "#2E2418",
                       }}
                     >
@@ -357,24 +537,65 @@ export function DecisionResult({
             )}
 
             {/* INCEPTION 03-proposal-card.svg L46-49: 下部 pink nudge banner.
+                2026-05-26: drill-down 中は「あと N 段で決定」明示、最終段は「Yes で外部サービスへ」.
                 Yes 採択後は「✨ 決まりました」 にメッセージ切替. */}
             <div
               className="mt-2 rounded-xl border px-3 py-1.5 text-center"
-              style={{ background: "#FFD6E0", borderColor: "#FF8FAE" }}
+              style={{
+                background: isChosenYes || isFinal ? "#FFD6E0" : "#E7F0FF",
+                borderColor: isChosenYes || isFinal ? "#FF8FAE" : "#7BAEFF",
+              }}
               role="region"
               aria-label="合議メッセージ"
               data-testid="proposal-pink-nudge"
             >
-              <p className="text-[11px]" style={{ color: "#E8775A" }}>
+              <p
+                className="text-[13px]"
+                style={{ color: isChosenYes || isFinal ? "#E8775A" : "#3A66B5" }}
+              >
                 {isChosenYes ? (
                   <>
                     <span className="font-bold">✨ 決まりました。</span>
                     <span className="ml-1">あとは行動するだけ ♪</span>
                   </>
+                ) : confirmStep ? (
+                  // 2026-05-26 confirm phase: 「持っていますか?」 等の確認 step 中.
+                  isOpenStep && service ? (
+                    <>
+                      <span className="font-bold">📍 最終確認。</span>
+                      <span className="ml-1">
+                        Yes で {service.name} を開きます
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="font-bold">📍 確認です。</span>
+                      <span className="ml-1">Yes / No で答えてね</span>
+                    </>
+                  )
+                ) : isFinal && service && confirmFlow ? (
+                  // 2026-05-26: confirm flow がある category は Yes で confirm step に進む.
+                  <>
+                    <span className="font-bold">✨ これで決定。</span>
+                    <span className="ml-1">Yes で 確認に 進みます</span>
+                  </>
+                ) : isFinal && service ? (
+                  <>
+                    <span className="font-bold">✨ これで決定。</span>
+                    <span className="ml-1">Yes で 外部サービスへ →</span>
+                  </>
+                ) : isFinal ? (
+                  // 2026-05-26 (C 案): service 強制撤廃. 自宅完結 final の文言.
+                  <>
+                    <span className="font-bold">✨ これで決定。</span>
+                    <span className="ml-1">Yes で 決まり ♪</span>
+                  </>
                 ) : (
                   <>
-                    <span className="font-bold">合議された結論です。</span>
-                    <span className="ml-1">迷う必要は ありません ♪</span>
+                    <span className="font-bold">🪜 まだ深堀り中。</span>
+                    <span className="ml-1">
+                      Yes で もっと絞る (あと {Math.max(1, MAX_DRILL_DEPTH - depth)} 段で決定)
+                    </span>
                   </>
                 )}
               </p>
@@ -413,27 +634,6 @@ export function DecisionResult({
         />
       )}
 
-      {/* 2026-05-23 Drill-down chain: final proposal + service があれば外部 service CTA */}
-      {chosen === "yes" && service && (
-        <a
-          href={service.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="self-stretch rounded-2xl border-2 border-success bg-success/10 px-4 py-3 text-center text-base font-bold text-success-700 hover:bg-success/20 transition-colors shadow-md flex items-center justify-center gap-2"
-          style={{
-            background: "linear-gradient(135deg, #ECFDF5, #86EFAC33)",
-            borderColor: "#22C55E",
-            color: "#065F46",
-          }}
-          aria-label={`${service.name} で開く (外部リンク)`}
-          data-testid="external-service-cta"
-        >
-          <span aria-hidden className="text-2xl">
-            {service.emoji}
-          </span>
-          <span>{service.name} で開く →</span>
-        </a>
-      )}
     </div>
   );
 }

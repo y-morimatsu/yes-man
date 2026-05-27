@@ -5,7 +5,7 @@
  *   - 「決めてもらう人」 card
  *     - 「決めてもらう人」 label + 3 アバター stack (T + orange blob + blue blob) + ↻
  *     - 入力 box (cream-lt + green mic)
- *     - 「決めてもらう」 黒楕円 button (Crimson Pro italic)
+ *     - 「決めてもらう」 黒楕円 button (2026-05-27: sans-serif 通常装飾に変更)
  *   - 「最近の決定」 section + 履歴 list (3 件)
  *   - 「委任率 N%」 strip (cream-lt 背景、orange % text)
  */
@@ -15,11 +15,13 @@ import { useDecisionHistory } from "../decision/useDecision";
 import { SelectedPersonaAvatars } from "../persona/SelectedPersonaAvatars";
 import { PersonaIcon } from "../../shell/icons";
 
-const MK_CREAM_LT = "#FFFCF4";
+// 2026-05-27 typography-redesign: Score / Persona 画面と一貫させるため box 背景を白に
+// (旧 cream #FFFCF4 から #FFFFFF へ. constant 名は legacy 維持).
+const MK_CREAM_LT = "#FFFFFF";
 const MK_UMBER = "#2E2418";
 const MK_ORANGE = "#EF7A62";
-const MK_HAIRLINE = "rgba(46, 36, 24, 0.15)";
-const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.08)";
+const MK_HAIRLINE = "rgba(46, 36, 24, 0.30)";
+const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.18)";
 const MK_MUTED = "rgba(46, 36, 24, 0.55)";
 
 function relativeFromIso(iso: string): string {
@@ -51,6 +53,16 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-4" data-testid="home-page">
+      <h1
+        className="text-lg font-bold"
+        style={{
+          fontFamily: "var(--font-sans)",
+          color: MK_UMBER,
+        }}
+      >
+        ホーム
+      </h1>
+
       {/* 委任率 / welcome strip — 2026-05-24: 先頭配置 (achievement を最初に visible 化) */}
       {score && score.total === 0 ? (
         // 新規ユーザー (まだ 1 度も委任していない) 専用 welcome strip.
@@ -64,28 +76,23 @@ export default function HomePage() {
           data-testid="home-welcome-strip"
         >
           <span
-            className="text-[9px] uppercase tracking-widest"
+            className="text-[13px] uppercase tracking-widest shrink-0"
             style={{ color: MK_MUTED }}
           >
-            はじめまして
+            ようこそ
           </span>
           <span
             aria-hidden
-            className="text-lg"
+            className="text-xl shrink-0"
             style={{ color: MK_ORANGE }}
           >
             ✨
           </span>
           <span
-            className="ml-auto text-[10px] leading-relaxed text-right"
-            style={{
-              fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-              fontStyle: "italic",
-              color: MK_MUTED,
-            }}
+            className="text-[14px] leading-relaxed"
+            style={{ color: MK_MUTED }}
           >
-            下の「決めてもらう」を押すと、
-            <br />3 人で あなたの決定を 任されます。
+            「決めてもらう」を押して、あなたの決定を 任せましょう。
           </span>
         </div>
       ) : (
@@ -99,28 +106,20 @@ export default function HomePage() {
             data-testid="home-score-strip"
           >
             <span
-              className="text-[9px] uppercase tracking-widest"
+              className="text-[13px] uppercase tracking-widest"
               style={{ color: MK_MUTED }}
             >
               委任率
             </span>
             <span
-              className="text-lg font-medium"
-              style={{
-                fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                fontStyle: "italic",
-                color: MK_ORANGE,
-              }}
+              className="text-xl font-medium"
+              style={{ color: MK_ORANGE }}
             >
               {ratioPct}%
             </span>
             <span
-              className="ml-auto text-[10px]"
-              style={{
-                fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                fontStyle: "italic",
-                color: MK_MUTED,
-              }}
+              className="ml-auto text-[14px]"
+              style={{ color: MK_MUTED }}
             >
               {score?.message ?? "うまく任せられてます"}
             </span>
@@ -139,7 +138,7 @@ export default function HomePage() {
           style={{ borderBottom: `0.5px solid ${MK_HAIRLINE_2}` }}
         >
           <span
-            className="text-[9px] uppercase tracking-widest"
+            className="text-[13px] uppercase tracking-widest"
             style={{ color: MK_MUTED }}
           >
             決めてもらう人
@@ -175,8 +174,6 @@ export default function HomePage() {
           style={{
             background: MK_UMBER,
             color: "#FAF6EC",
-            fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-            fontStyle: "italic",
             fontSize: 14,
             letterSpacing: "0.05em",
             fontWeight: 500,
@@ -189,7 +186,7 @@ export default function HomePage() {
       {/* 最近の決定 section */}
       <div className="flex flex-col gap-1">
         <p
-          className="text-[9px] uppercase tracking-widest px-1"
+          className="text-[13px] uppercase tracking-widest px-1"
           style={{ color: MK_MUTED }}
         >
           最近の決定
@@ -197,7 +194,7 @@ export default function HomePage() {
         <ul className="flex flex-col" data-testid="home-history">
           {decisions.length === 0 ? (
             <li
-              className="text-xs italic py-3"
+              className="text-sm py-3"
               style={{ color: MK_MUTED }}
             >
               (まだ決定がありません)
@@ -211,7 +208,7 @@ export default function HomePage() {
               >
                 <span
                   aria-hidden
-                  className="inline-flex items-center justify-center rounded-full text-white text-[10px] shrink-0"
+                  className="inline-flex items-center justify-center rounded-full text-white text-[14px] shrink-0"
                   style={{
                     width: 16,
                     height: 16,
@@ -222,17 +219,13 @@ export default function HomePage() {
                   ✓
                 </span>
                 <span
-                  className="flex-1 text-xs"
-                  style={{
-                    fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                    fontStyle: "italic",
-                    color: MK_UMBER,
-                  }}
+                  className="flex-1 text-sm"
+                  style={{ color: MK_UMBER }}
                 >
                   {d.proposal_text}
                 </span>
                 <span
-                  className="text-[9px] tracking-wide"
+                  className="text-[13px] tracking-wide"
                   style={{ color: MK_MUTED }}
                 >
                   {relativeFromIso(d.created_at)}

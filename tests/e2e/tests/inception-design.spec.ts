@@ -106,10 +106,10 @@ test.describe("INCEPTION Decision Input (screen-01 home-input.svg)", () => {
 });
 
 test.describe("INCEPTION Score Dashboard (screen-04 score-dashboard.svg)", () => {
-  test("ページ title = 「委任度 スコア」 (NOT 主体性スコア)", async ({ page }) => {
+  test("ページ title = 「YesMan スコア」 (NOT 主体性スコア)", async ({ page }) => {
     await gotoAuthenticated(page, "/score");
     await expect(
-      page.getByRole("heading", { name: /委任度 スコア/ }),
+      page.getByRole("heading", { name: /YesMan スコア/ }),
     ).toBeVisible();
   });
 

@@ -255,7 +255,7 @@ export default function DecisionPage() {
           status={state.status === "completed" ? "completed" : "streaming"}
         />
       ) : (
-        <h1 className="font-serif text-lg font-bold">{t("pageTitle")}</h1>
+        <h1 className="font-sans text-lg font-bold">{t("pageTitle")}</h1>
       )}
 
       {showQuickStart && quick.current && (
@@ -360,6 +360,7 @@ export default function DecisionPage() {
           onChoiceMade={handleChoiceMade}
           // 2026-05-23 Drill-down chain
           isFinal={state.status === "completed" ? state.isFinal : false}
+          depth={state.status === "completed" ? state.depth : 0}
           chain={chain}
           service={state.status === "completed" ? state.service : null}
           onDrillDown={handleDrillDown}
@@ -403,7 +404,7 @@ export default function DecisionPage() {
             </svg>
           </div>
           <p
-            className="text-sm italic mt-1"
+            className="text-sm mt-1"
             style={{ color: "#78909C" }}
           >
             （沈黙）
@@ -425,10 +426,10 @@ export default function DecisionPage() {
             <span>⚔️</span>
             <span>🔞</span>
           </div>
-          <p className="text-[10px] mt-2" style={{ color: "#546E7A" }}>
+          <p className="text-[12px] mt-2" style={{ color: "#546E7A" }}>
             宗教 / 選挙 / 暴力 / 卑猥
           </p>
-          <p className="text-[10px]" style={{ color: "#546E7A" }}>
+          <p className="text-[12px]" style={{ color: "#546E7A" }}>
             ＝ ご自身で 判断する 領域
           </p>
           {state.message && (
@@ -439,7 +440,7 @@ export default function DecisionPage() {
           <button
             type="button"
             onClick={handleFullReset}
-            className="mt-6 text-xs italic underline"
+            className="mt-6 text-xs underline"
             style={{ color: "#455A64" }}
           >
             タップで Home へ もどる
@@ -455,7 +456,7 @@ export default function DecisionPage() {
 
       {/* INCEPTION screen-01 bottom hint (whisper copy、決定の重さを優しく問いかける) */}
       {showInputArea && (
-        <p className="mt-8 text-center text-xs italic text-neutral-400">
+        <p className="mt-8 text-center text-xs text-neutral-400">
           {t("bottomHint")}
         </p>
       )}

@@ -52,7 +52,7 @@ export default function ScorePage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="font-serif text-lg font-bold">{t("pageTitle")}</h1>
+      <h1 className="font-sans text-lg font-bold">{t("pageTitle")}</h1>
 
       <Card className={borderClass}>
         {level === "danger" && (
@@ -103,19 +103,19 @@ export default function ScorePage() {
       </Card>
 
       {/* INCEPTION screen-04 (5): footnote */}
-      <p className="text-center text-xs italic text-neutral-400">
+      <p className="text-center text-xs text-neutral-400">
         {t("footnote")}
       </p>
 
       {/* INCEPTION screen-04 (6): 解釈ガイド (Yes 比率モデルの説明) */}
-      <p className="text-center text-xs italic text-neutral-500">
+      <p className="text-center text-xs text-neutral-500">
         {t("paradoxNote")}
       </p>
 
       {/* 2026-05-24: 過去の傾向 (PreferenceTrends を ScorePage に embed).
           採択 / 棄却 / ペルソナ嗜好 / 推定タグ を表示 (詳細編集は /preferences). */}
       <section className="flex flex-col gap-2">
-        <h2 className="font-serif text-base font-bold">📊 過去の傾向</h2>
+        <h2 className="font-sans text-base font-bold">📊 過去の傾向</h2>
         <PreferenceTrends density="compact" />
       </section>
 

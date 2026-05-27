@@ -91,7 +91,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     voice_provider = await voice_factory.create()
 
     # v3-γ anonymous-strangers: in-memory pool singleton (NFR-1)
-    # 1 user only でも合議が成立するよう fixture 5 名分を seed (en/fr/ar/zh/ja)。
+    # 1 user only でも合議が成立するよう fixture 4 名分を seed (ja, ライフスタイル別「知り合い」)。
     # SqlModel backend 経路は MVP 未実装、本番化時に追加する TODO は NFR-1 に記録済。
     anonymous_pool = MockPoolRepository(seed_fixtures=True)
 

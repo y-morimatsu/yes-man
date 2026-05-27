@@ -46,10 +46,11 @@ export function ScoreRadialChart({ ratio, caption }: ScoreRadialChartProps) {
         strokeDashoffset={CIRC / 4}
         transform="rotate(-90)"
       />
-      {/* 中央: 数字 + % */}
+      {/* 中央: 数字 + % (2026-05-26: 3 桁 (100) で重なる issue 解消のため
+          tspan superscript で 1 つの text にまとめて center 揃え). */}
       <text
-        x="-6"
-        y="6"
+        x="0"
+        y="8"
         textAnchor="middle"
         fontSize="34"
         fontWeight="800"
@@ -57,19 +58,18 @@ export function ScoreRadialChart({ ratio, caption }: ScoreRadialChartProps) {
         fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
       >
         {pct}
+        <tspan
+          fontSize="15"
+          fontWeight="700"
+          dx="2"
+          dy="-12"
+          fontFamily="system-ui, sans-serif"
+        >
+          %
+        </tspan>
       </text>
-      <text
-        x="22"
-        y="-6"
-        textAnchor="middle"
-        fontSize="14"
-        fontWeight="700"
-        fill={ARC_FG}
-      >
-        %
-      </text>
-      {/* キャプション */}
-      <text x="0" y="34" textAnchor="middle" fontSize="10" fill={CAP_COLOR}>
+      {/* キャプション (2026-05-27 typography-redesign: 10→12px で読みやすく) */}
+      <text x="0" y="34" textAnchor="middle" fontSize="12" fill={CAP_COLOR}>
         {caption}
       </text>
     </svg>

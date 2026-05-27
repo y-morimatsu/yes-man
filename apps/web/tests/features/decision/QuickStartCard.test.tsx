@@ -17,10 +17,11 @@ function renderCard(overrides: Partial<React.ComponentProps<typeof QuickStartCar
 }
 
 describe("QuickStartCard (v3: SwipeChoice 統一)", () => {
-  it("title + してみますか? + SwipeChoice の fallback button (← No / Yes →) + 自分で入力 link を表示", () => {
+  it("title + SwipeChoice の fallback button (← No / Yes →) + 自分で入力 link を表示", () => {
     renderCard();
     expect(screen.getByText("今日のランチ")).toBeInTheDocument();
-    expect(screen.getByText(/してみますか/)).toBeInTheDocument();
+    // 2026-05-26: "してみますか?" fixed suffix は user 指示で削除. title 単独表示.
+    expect(screen.queryByText(/してみますか/)).not.toBeInTheDocument();
     expect(screen.getByTestId("quickstart-card")).toBeInTheDocument();
     expect(screen.getByTestId("swipe-choice")).toBeInTheDocument();
     // SwipeChoice の WCAG fallback button (aria-label で識別)

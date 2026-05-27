@@ -22,7 +22,22 @@ class MockLLMProvider:
         "楽観派": "楽観派の意見: その選択肢は前向きで良いと思います。",
         "効率派": "効率派の意見: 短時間で完了する案を選ぶのが効率的です。",
     }
-    PROPOSAL_RESPONSE = "その選択肢で進めてください。"
+    # 2026-05-25 外部サービス誘導: root proposal も action 志向で次段 (Amazon サービス) に繋がりやすく.
+    PROPOSAL_RESPONSE = "映画を 観ましょう。"
+    # 2026-05-25 外部サービス誘導 (MAX_DRILL_DEPTH=4): 自然な絞り込みを 4 段で展開.
+    # root proposal (chain_len=0) → action 志向、Yes 連鎖で genre → service → subtype → instance.
+    # 最終 (chain_len=4) で Amazon サービス + 固有名に到達して CTA 表示.
+    DRILL_DOWN_PROPOSALS: dict[int, str] = {
+        # depth=1: 一段だけ具体化 (ジャンル / subtype 1 軸)
+        1: "ホラー映画は どうですか?",
+        # depth=2: もう一段 (subtype 詳細)
+        2: "ジャパニーズホラーが 気分転換に おすすめです。",
+        # depth=3: service routing (Amazon サービス指定)
+        3: "Amazon Prime Video で 観ましょう。",
+        # depth=4 (final / drill-down-auto-open FR-DAO-08): 固有名 + Amazon サービス + 疑問形.
+        # 末尾「開きますか?」が frontend の window.open trigger と整合.
+        4: "『貞子 on the Movie』を Amazon Prime Video で 開きますか?",
+    }
     DEFAULT_RESPONSE = "Mock response: unable to detect persona from prompt."
 
     def __init__(
@@ -50,6 +65,27 @@ class MockLLMProvider:
                 return persona_name
         return None
 
+    def _pick_proposal(self, messages: list[dict[str, str]]) -> str:
+        """user message から drill-down depth を推定して proposal を選ぶ.
+
+        engine.py は chain_context 有り時に user_input を
+        ``[これまでの絞り込み: A → B → ...]\\n...\\n元の要望: ...`` に enriching する。
+        block 内の ``→`` 区切り個数 + 1 が次の depth (= len(chain_context))。
+        chain 無し (root submit) は PROPOSAL_RESPONSE を返す。
+        """
+        joined = "\n".join(m.get("content", "") for m in messages)
+        marker = "[これまでの絞り込み: "
+        start = joined.find(marker)
+        if start < 0:
+            return self.PROPOSAL_RESPONSE
+        end = joined.find("]", start)
+        if end < 0:
+            return self.PROPOSAL_RESPONSE
+        chain_str = joined[start + len(marker) : end]
+        # "A" → 1 件, "A → B" → 2 件, "A → B → C" → 3 件
+        chain_len = len([s for s in chain_str.split("→") if s.strip()])
+        return self.DRILL_DOWN_PROPOSALS.get(chain_len, self.PROPOSAL_RESPONSE)
+
     def _detect_proposal(self, system: str) -> bool:
         """proposal prompt 判定.
 
@@ -76,9 +112,9 @@ class MockLLMProvider:
                 await asyncio.sleep(delay)
             return self.PERSONA_RESPONSES[persona]
 
-        # proposal prompt → proposal canned text
+        # proposal prompt → proposal canned text (drill-down depth に応じて切替)
         if self._detect_proposal(system):
-            return self.PROPOSAL_RESPONSE
+            return self._pick_proposal(messages)
 
         # fallback
         return self.DEFAULT_RESPONSE

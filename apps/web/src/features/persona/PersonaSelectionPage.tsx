@@ -78,7 +78,7 @@ export default function PersonaSelectionPage() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-serif text-lg font-bold">{t("selectionPageTitle")}</h1>
+        <h1 className="font-sans text-lg font-bold">{t("selectionPageTitle")}</h1>
         <Button
           variant="primary"
           size="sm"
@@ -97,7 +97,7 @@ export default function PersonaSelectionPage() {
       >
         選択中: <span className="font-bold">{selection.length}</span> / {MAX_SELECTION}
         {selection.length > 0 && (
-          <span className="ml-2 text-[10px] text-neutral-500">
+          <span className="ml-2 text-[12px] text-neutral-500">
             (ビルトイン:{countBySource.builtin} ・ 世界:{countBySource.anonymous} ・
             自作:{countBySource.my})
           </span>
@@ -113,8 +113,8 @@ export default function PersonaSelectionPage() {
           aria-labelledby="persona-source-tab-anonymous"
           className="flex flex-col gap-3"
         >
-          <p className="text-xs italic text-neutral-500">
-            🌐 opt-in 中の世界の誰か (caller は除外)
+          <p className="text-xs text-neutral-500">
+            🤝 opt-in 中の 知り合い (caller は除外)
           </p>
           <AnonymousSelectionList />
         </div>
@@ -128,7 +128,7 @@ export default function PersonaSelectionPage() {
           className="flex flex-col gap-4"
         >
           {recommendedNames.size > 0 && (
-            <p className="text-xs italic text-neutral-500">
+            <p className="text-xs text-neutral-500">
               💡 嗜好プロファイルから推奨:{" "}
               <span
                 className="font-semibold not-italic"
@@ -143,7 +143,7 @@ export default function PersonaSelectionPage() {
               <div key={p.id} className="relative">
                 {recommendedNames.has(p.name) && (
                   <span
-                    className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
+                    className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[12px] font-bold shadow-sm"
                     style={{ background: "#FFD6E0", color: "#E8775A" }}
                   >
                     💡 おすすめ
@@ -182,7 +182,7 @@ export default function PersonaSelectionPage() {
               <p className="text-sm text-neutral-600">
                 まだ自作ペルソナがありません
               </p>
-              <p className="text-xs text-neutral-500 italic">
+              <p className="text-xs text-neutral-500">
                 右上の「＋ 新規」から、あなただけの相談相手を作れます
               </p>
               <Button
@@ -196,7 +196,7 @@ export default function PersonaSelectionPage() {
             </div>
           ) : (
             <>
-              <p className="text-xs italic text-neutral-500">
+              <p className="text-xs text-neutral-500">
                 ✨ あなたが作成したペルソナ ({myList.length} 件)
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -204,7 +204,7 @@ export default function PersonaSelectionPage() {
                   <div key={p.id} className="relative">
                     {recommendedNames.has(p.name) && (
                       <span
-                        className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-sm"
+                        className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[12px] font-bold shadow-sm"
                         style={{ background: "#FFD6E0", color: "#E8775A" }}
                       >
                         💡 おすすめ

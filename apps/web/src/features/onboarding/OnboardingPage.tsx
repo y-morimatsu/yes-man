@@ -82,10 +82,10 @@ export default function OnboardingPage() {
   if (submitting || onboarding.current === null) {
     return (
       <div className="flex flex-col items-center gap-4 py-12">
-        <p className="font-serif text-2xl text-neutral-700">
+        <p className="font-sans text-2xl text-neutral-700">
           🎉 嗜好を 記憶しました
         </p>
-        <p className="text-sm italic text-neutral-500">
+        <p className="text-sm text-neutral-500">
           Home へ 移動しています…
         </p>
       </div>
@@ -99,10 +99,10 @@ export default function OnboardingPage() {
   return (
     <div className="flex flex-col gap-4 py-2" data-testid="onboarding-page">
       <header className="flex flex-col items-center gap-1">
-        <h1 className="font-serif text-2xl font-bold text-neutral-800">
+        <h1 className="font-sans text-2xl font-bold text-neutral-800">
           嗜好を 教えてください
         </h1>
-        <p className="text-xs italic text-neutral-500">
+        <p className="text-xs text-neutral-500">
           YesMan が あなた専用の 合議を つくります
         </p>
         <p
@@ -160,7 +160,7 @@ export default function OnboardingPage() {
             {q.kind === "service" ? "🎯 行動 傾向" : "🧠 人格 傾向"} ・{" "}
             {q.category}
           </span>
-          <p className="font-serif text-xl font-bold text-neutral-900 text-center leading-relaxed">
+          <p className="font-sans text-xl font-bold text-neutral-900 text-center leading-relaxed">
             {q.text}
           </p>
         </article>
@@ -169,7 +169,7 @@ export default function OnboardingPage() {
       {/* スキップ + 確信ライン到達 CTA */}
       <div className="flex flex-col items-center gap-2 mt-2">
         {confidenceEnough && (
-          <p className="text-xs italic text-success" role="status">
+          <p className="text-xs text-success" role="status">
             ✓ ある程度 把握できました。 続けても、 ここで止めても OK
           </p>
         )}

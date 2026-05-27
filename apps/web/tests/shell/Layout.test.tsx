@@ -25,38 +25,14 @@ function renderWithRoute(path: string) {
 }
 
 describe("Layout", () => {
-  it("renders sticky header with brand logo", () => {
+  it("ヘッダーは描画されない (2026-05-26 撤去、Sign out は Profile 画面に移管)", () => {
     vi.mocked(useAuth).mockReturnValue({
       status: "authenticated",
       refresh: vi.fn(),
     } as ReturnType<typeof useAuth>);
 
     renderWithRoute("/");
-    const logo = screen.getByText(/YesMan/);
-    expect(logo).toBeInTheDocument();
-    const header = logo.closest("header");
-    expect(header?.className).toContain("sticky");
-    expect(header?.className).toContain("top-0");
-    expect(header?.className).toContain("z-40");
-  });
-
-  it("renders Sign out button when authenticated", () => {
-    vi.mocked(useAuth).mockReturnValue({
-      status: "authenticated",
-      refresh: vi.fn(),
-    } as ReturnType<typeof useAuth>);
-
-    renderWithRoute("/");
-    expect(screen.getByRole("button", { name: /Sign out/ })).toBeInTheDocument();
-  });
-
-  it("hides Sign out button when unauthenticated", () => {
-    vi.mocked(useAuth).mockReturnValue({
-      status: "unauthenticated",
-      refresh: vi.fn(),
-    } as ReturnType<typeof useAuth>);
-
-    renderWithRoute("/auth/splash");
+    expect(screen.queryByRole("banner")).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Sign out/ })).not.toBeInTheDocument();
   });
 
@@ -78,18 +54,5 @@ describe("Layout", () => {
 
     renderWithRoute("/auth/splash");
     expect(screen.queryByRole("navigation", { name: "メインナビゲーション" })).not.toBeInTheDocument();
-  });
-
-  it("Top header has no nav icons (⚙️📊👤 removed)", () => {
-    vi.mocked(useAuth).mockReturnValue({
-      status: "authenticated",
-      refresh: vi.fn(),
-    } as ReturnType<typeof useAuth>);
-
-    renderWithRoute("/");
-    const header = screen.getByText(/YesMan/).closest("header");
-    expect(header?.textContent).not.toContain("⚙️");
-    expect(header?.textContent).not.toContain("📊");
-    expect(header?.textContent).not.toContain("👤");
   });
 });

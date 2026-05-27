@@ -5,7 +5,7 @@ import { gotoAuthenticated } from "../fixtures/auth";
 test.describe("ScorePage", () => {
   test("ScorePage renders for initial state (no decisions)", async ({ page }) => {
     await gotoAuthenticated(page, "/score");
-    await expect(page.getByRole("heading", { name: /委任度 スコア/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /YesMan スコア/ })).toBeVisible();
   });
 
   // skip: Mock storage backend の workers 間共有で HTTP 500 が出る (Issue #80)

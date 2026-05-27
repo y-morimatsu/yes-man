@@ -61,8 +61,8 @@ export function AnonymousSelectionList() {
 
   if (list.isError) {
     return (
-      <p className="text-xs text-error italic" role="alert">
-        世界の誰か一覧を取得できませんでした
+      <p className="text-xs text-error" role="alert">
+        知り合い一覧を取得できませんでした
       </p>
     );
   }
@@ -73,8 +73,8 @@ export function AnonymousSelectionList() {
         className="rounded-xl border border-dashed border-neutral-300 p-4 text-center"
         data-testid="anonymous-selection-empty"
       >
-        <p className="text-sm italic text-neutral-500">
-          まだ「世界の誰か」 はいません
+        <p className="text-sm text-neutral-500">
+          まだ「知り合い」 はいません
         </p>
         <p className="text-xs text-neutral-400 mt-1">
           誰かが opt-in するとここに表示されます
@@ -104,14 +104,14 @@ export function AnonymousSelectionList() {
               size={36}
               color={colorFor(p.persona_id)}
               gaze="center"
-              name="世界の誰か"
+              name="知り合い"
             />
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap gap-1 mb-1">
                 {p.value_tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full px-2 py-0.5 text-[10px]"
+                    className="rounded-full px-2 py-0.5 text-[12px]"
                     style={{
                       background: "rgba(239, 122, 98, 0.12)",
                       color: "#2E2418",
@@ -121,7 +121,7 @@ export function AnonymousSelectionList() {
                   </span>
                 ))}
               </div>
-              <p className="text-[10px] text-neutral-500">
+              <p className="text-[12px] text-neutral-500">
                 {LANGUAGE_LABEL[p.primary_language] ?? p.primary_language} ・{" "}
                 {FORMALITY_LABEL[p.formality] ?? p.formality}
               </p>

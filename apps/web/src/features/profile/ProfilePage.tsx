@@ -4,6 +4,7 @@
  * ultrathink U7d FD Imp3: 二段階削除確認 (Modal + checkbox + final button).
  */
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Card, Modal, useToast } from "@yesman/ui";
 import { useDeleteProfile } from "./useProfile";
 import { useAuth } from "../../shell/AuthProvider";
@@ -16,7 +17,8 @@ import { OptInCard } from "./OptInCard";
 import { ProfileCard } from "./ProfileCard";
 
 export default function ProfilePage() {
-  const { sub, email } = useAuth();
+  const { sub, email, refresh } = useAuth();
+  const navigate = useNavigate();
   const deleteMe = useDeleteProfile();
   const { push } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,13 +34,24 @@ export default function ProfilePage() {
     }
   };
 
+  // refresh 前に splash へ明示 navigate することで RequireAuth の state.from 自動埋めを回避.
+  // (state.from が立つと再 sign in 後 /profile に戻されてしまう)
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      navigate("/auth/splash", { replace: true });
+      await refresh();
+    } catch (err) {
+      push({ message: `ログアウトに失敗しました: ${String(err)}`, variant: "error" });
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <h1
         className="text-lg font-bold"
         style={{
-          fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-          fontStyle: "italic",
+          fontFamily: "var(--font-sans)",
           color: "#2E2418",
         }}
       >
@@ -71,12 +84,20 @@ export default function ProfilePage() {
 
       {/* 音声入力 backend 切替 (A: Web Speech API / B: Server STT) */}
       <Card>
-        <h2 className="font-serif font-semibold mb-3">🎤 音声入力 backend</h2>
+        <h2 className="font-sans font-semibold mb-3">🎤 音声入力 backend</h2>
         <VoiceBackendSelector />
       </Card>
 
+      {/* 2026-05-26: Layout header から移管した sign out. */}
+      <Card>
+        <h2 className="font-sans font-semibold mb-3">ログアウト</h2>
+        <Button variant="secondary" onClick={handleSignOut} data-testid="profile-sign-out">
+          ログアウト
+        </Button>
+      </Card>
+
       <Card className="border-l-4 border-danger">
-        <h2 className="font-serif font-semibold mb-3">{t("deleteSectionTitle")}</h2>
+        <h2 className="font-sans font-semibold mb-3">{t("deleteSectionTitle")}</h2>
         <Button variant="danger" onClick={() => setModalOpen(true)}>
           {t("deleteButton")}
         </Button>
@@ -151,7 +172,7 @@ function VoiceBackendSelector() {
           <span className="block text-xs text-neutral-600 mt-0.5">
             オフラインで日本語音声を即時テキスト化。サーバ STT を呼ばない。
             {!webSpeechSupported && (
-              <span className="block text-danger italic mt-0.5">
+              <span className="block text-danger mt-0.5">
                 ⚠ お使いのブラウザは非対応です (Chrome / Edge / Safari 14.1+ をお試しください)
               </span>
             )}
@@ -179,7 +200,7 @@ function VoiceBackendSelector() {
         </span>
       </label>
 
-      <p className="text-xs italic text-neutral-500 mt-1">
+      <p className="text-xs text-neutral-500 mt-1">
         変更は localStorage に保存され、次回以降の音声入力に反映されます。
       </p>
     </div>

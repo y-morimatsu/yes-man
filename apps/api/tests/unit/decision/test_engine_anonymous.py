@@ -242,8 +242,8 @@ async def test_anonymous_path_yields_3_personas():
     personas = personas_events[0].data["personas"]
     assert len(personas) == 3
     assert personas[0]["name"] == "あなたの声"
-    assert personas[1]["name"] == "世界の誰か #1"
-    assert personas[2]["name"] == "世界の誰か #2"
+    assert personas[1]["name"] == "知り合い #1"
+    assert personas[2]["name"] == "知り合い #2"
 
 
 @pytest.mark.asyncio
@@ -268,7 +268,7 @@ async def test_anonymous_utterance_carries_metadata():
         assert "original" not in data
         assert "primary_language" in data
         assert "formality" in data
-        assert data["primary_language"] in {"ja", "en", "fr", "ar", "zh"}
+        assert data["primary_language"] == "ja"
         assert data["formality"] in {"polite", "casual", "blunt"}
 
 
@@ -276,7 +276,7 @@ async def test_anonymous_utterance_carries_metadata():
 async def test_fixture_personas_do_not_invoke_llm():
     """fixture spec は LLM 呼ばずに hardcoded を使う (call count で検証)."""
     llm = _FakeAnonymousLLM()
-    # pool に fixture 5 のみ → sample で必ず fixture から 2 件 sampled
+    # pool に fixture 4 のみ → sample で必ず fixture から 2 件 sampled
     engine = _make_engine(llm=llm)
     await _collect(engine, decision_id=uuid4(), request=_anonymous_request())
 

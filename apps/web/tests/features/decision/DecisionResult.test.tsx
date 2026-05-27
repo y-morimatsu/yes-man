@@ -163,3 +163,260 @@ describe("DecisionResult — Yes confetti", () => {
     }
   });
 });
+
+// =====================================================================
+// 2026-05-26 drill-down-auto-open (FR-DAO-02/03/09 + NFR-DAO-06/10)
+// =====================================================================
+describe("DecisionResult — drill-down-auto-open (final 段 Yes 自動 open)", () => {
+  beforeAll(() => server.listen({ onUnhandledRequest: "warn" }));
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
+  const SERVICE_AMAZON = {
+    name: "Amazon Prime Video",
+    url: "https://www.amazon.co.jp/gp/video/storefront",
+    emoji: "📺",
+  };
+
+  it("isFinal=true && service≠null: Yes click で window.open(_blank, noopener,noreferrer) を発火", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole } = setup({
+      isFinal: true,
+      service: SERVICE_AMAZON,
+      proposal: "『パターソン』を Amazon Prime Video で 開きますか?",
+    });
+
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    yesBtn.click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      "https://www.amazon.co.jp/gp/video/storefront",
+      "_blank",
+      "noopener,noreferrer",
+    );
+    openSpy.mockRestore();
+  });
+
+  it("isFinal=true && service=null: window.open は呼ばれない (FR-DAO-06)", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole } = setup({
+      isFinal: true,
+      service: null,
+    });
+
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    yesBtn.click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(openSpy).not.toHaveBeenCalled();
+    openSpy.mockRestore();
+  });
+
+  it("isFinal=false (drill-down 中): window.open は呼ばれない (FR-DAO-05)", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    const onDrillDown = vi.fn();
+
+    const { getByRole } = setup({
+      isFinal: false,
+      service: SERVICE_AMAZON,
+      onDrillDown,
+    });
+
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    yesBtn.click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    // isFinal=false なら onYesSync は SwipeChoice に渡されない (undefined) ので発火しない
+    expect(openSpy).not.toHaveBeenCalled();
+    // drill-down 経路では onDrillDown が呼ばれる
+    expect(onDrillDown).toHaveBeenCalledOnce();
+    openSpy.mockRestore();
+  });
+
+  it("isFinal=true && service≠null: Yes button aria-label に '新しいタブ' が含まれる (NFR-DAO-10)", () => {
+    const { container } = setup({
+      isFinal: true,
+      service: SERVICE_AMAZON,
+    });
+    const yesBtn = container.querySelector(
+      'button[aria-label*="新しいタブ"]',
+    ) as HTMLButtonElement | null;
+    expect(yesBtn).not.toBeNull();
+    expect(yesBtn).toHaveAttribute(
+      "aria-label",
+      "Yes、提案を採択 (新しいタブで Amazon Prime Video を開きます)",
+    );
+  });
+
+  it("isFinal=false: Yes button aria-label は default 'Yes、提案を採択'", () => {
+    const { getByRole } = setup({ isFinal: false, service: SERVICE_AMAZON });
+    const yesBtn = getByRole("button", { name: /Yes/ });
+    expect(yesBtn).toHaveAttribute("aria-label", "Yes、提案を採択");
+  });
+});
+
+// ============================================================
+// 2026-05-26: confirm phase (Yes で外部サービスに飛ぶ前の category 別確認 step).
+// ============================================================
+describe("DecisionResult — confirm phase (post-final Yes 前の Yes/No 確認)", () => {
+  beforeAll(() => server.listen({ onUnhandledRequest: "warn" }));
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
+  const SERVICE_FASHION = {
+    name: "Amazon Fashion",
+    url: "https://www.amazon.co.jp/fashion",
+    emoji: "👔",
+    category: "fashion",
+  };
+  const SERVICE_MOVIE = {
+    name: "Amazon Prime Video",
+    url: "https://www.amazon.co.jp/gp/video/storefront",
+    emoji: "📺",
+    category: "movie",
+  };
+
+  it("category=fashion で final Yes → confirm step (持っていないなら 買いますか?) が出る、window.open は呼ばれない", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+
+    const { getByRole, queryByTestId, findByText } = setup({
+      isFinal: true,
+      service: SERVICE_FASHION,
+      proposal: "明日は 軽めのジャケット で 決まり!",
+    });
+
+    // 最初の Yes click → confirm step に遷移、popup は開かない
+    getByRole("button", { name: /Yes/ }).click();
+    await findByText("持っていないなら 買いますか?");
+    expect(openSpy).not.toHaveBeenCalled();
+    expect(queryByTestId("proposal-result-card-chosen")).toBeNull();
+    openSpy.mockRestore();
+  });
+
+  it("category=fashion で 持っていないなら 買いますか? に Yes → window.open", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole, findByText } = setup({
+      isFinal: true,
+      service: SERVICE_FASHION,
+      proposal: "明日は 軽めのジャケット で 決まり!",
+    });
+
+    // final Yes → confirm step
+    getByRole("button", { name: /Yes/ }).click();
+    await findByText("持っていないなら 買いますか?");
+
+    // Yes → window.open + chosen=yes
+    getByRole("button", { name: /Yes/ }).click();
+    await new Promise((r) => setTimeout(r, 50));
+    expect(openSpy).toHaveBeenCalledWith(
+      SERVICE_FASHION.url,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    openSpy.mockRestore();
+  });
+
+  it("category=fashion で 持っていないなら 買いますか? に No → stop banner、window.open は呼ばれない", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole, findByText, findByTestId, queryByTestId } = setup({
+      isFinal: true,
+      service: SERVICE_FASHION,
+      proposal: "明日は 軽めのジャケット で 決まり!",
+    });
+
+    // final Yes → confirm step
+    getByRole("button", { name: /Yes/ }).click();
+    await findByText("持っていないなら 買いますか?");
+
+    // No → stop
+    getByRole("button", { name: /No/ }).click();
+    await findByTestId("confirm-stop-banner");
+    expect(openSpy).not.toHaveBeenCalled();
+    expect(queryByTestId("external-service-cta")).toBeNull();
+    openSpy.mockRestore();
+  });
+
+  it("category=movie で final Yes → 今 観ますか? → Yes で window.open (1 段だけの flow)", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    const { getByRole, findByText } = setup({
+      isFinal: true,
+      service: SERVICE_MOVIE,
+      proposal: "『パターソン』を 観るので 決まり!",
+    });
+
+    // final Yes → 今 観ますか?
+    getByRole("button", { name: /Yes/ }).click();
+    await findByText("今 観ますか?");
+    expect(openSpy).not.toHaveBeenCalled();
+
+    // confirm Yes → window.open
+    getByRole("button", { name: /Yes/ }).click();
+    await new Promise((r) => setTimeout(r, 50));
+    expect(openSpy).toHaveBeenCalledWith(
+      SERVICE_MOVIE.url,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    openSpy.mockRestore();
+  });
+
+  it("category 未定義 service: 旧経路 (Yes で即 window.open) を維持", async () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    server.use(
+      http.post("http://localhost:8000/v1/decisions/test-id-1/choice", () =>
+        HttpResponse.json({ no_attempt_count: 0 }),
+      ),
+    );
+
+    // category なしの service object
+    const SERVICE_NO_CAT = { ...SERVICE_FASHION };
+    delete (SERVICE_NO_CAT as { category?: string }).category;
+
+    const { getByRole } = setup({
+      isFinal: true,
+      service: SERVICE_NO_CAT,
+      proposal: "服 で 決まり!",
+    });
+
+    getByRole("button", { name: /Yes/ }).click();
+    await new Promise((r) => setTimeout(r, 50));
+
+    expect(openSpy).toHaveBeenCalledWith(
+      SERVICE_NO_CAT.url,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    openSpy.mockRestore();
+  });
+});

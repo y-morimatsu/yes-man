@@ -16,9 +16,9 @@ const TABS: { id: PersonaSource; label: string; emoji: string; hint: string }[] 
   },
   {
     id: "anonymous",
-    label: "世界の誰か",
-    emoji: "🌐",
-    hint: "ランダムに呼ぶ",
+    label: "知り合い",
+    emoji: "🤝",
+    hint: "opt-in 中から 呼ぶ",
   },
   {
     id: "my",
@@ -66,7 +66,7 @@ export function PersonaSourceTabs({
               {tab.emoji}
             </span>
             {tab.label}
-            <span className="block text-[10px] font-normal text-neutral-400 mt-0.5">
+            <span className="block text-[12px] font-normal text-neutral-400 mt-0.5">
               {tab.hint}
             </span>
           </button>

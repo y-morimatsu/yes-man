@@ -66,7 +66,7 @@ export function PersonaCard({
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <h3 className="font-serif font-semibold text-persona truncate">
+          <h3 className="font-sans font-semibold text-persona truncate">
             <span aria-hidden className="mr-1">{icon}</span>
             {persona.name}
             {persona.is_builtin && (

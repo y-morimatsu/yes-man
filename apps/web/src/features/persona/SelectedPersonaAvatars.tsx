@@ -78,7 +78,7 @@ export function SelectedPersonaAvatars({
           key,
           type: "blob",
           blobColor: colorFor(p.persona_id),
-          label: "世界の誰か",
+          label: "知り合い",
         } as ResolvedAvatar;
       }
       const persona = (s.source === "builtin" ? builtins : my)?.find(
@@ -113,7 +113,7 @@ export function SelectedPersonaAvatars({
       <Link
         to={emptyLinkTo}
         data-testid="home-avatar-empty-placeholder"
-        className="text-xs italic hover:underline"
+        className="text-xs hover:underline"
         style={{ color: "rgba(46, 36, 24, 0.55)" }}
       >
         {emptyText}
@@ -151,8 +151,7 @@ export function SelectedPersonaAvatars({
                 height: size,
                 background: r.iconBackground!,
                 border: "1.5px solid #FFFCF4",
-                fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                fontStyle: "italic",
+                fontFamily: "var(--font-sans)",
                 fontWeight: 600,
                 // emoji は kanji より少し大きく見えるよう調整 (0.55 倍 vs 0.4)
                 fontSize: r.initial && r.initial.length > 1 ? Math.round(size * 0.55) : Math.round(size * 0.4),

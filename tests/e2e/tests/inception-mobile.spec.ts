@@ -147,7 +147,7 @@ test.describe("Mobile copy fits without truncation", () => {
   }) => {
     await gotoAuthenticated(page, "/score");
     await expect(
-      page.getByRole("heading", { name: /委任度 スコア/ }),
+      page.getByRole("heading", { name: /YesMan スコア/ }),
     ).toBeInViewport();
     // ScoreRadialChart の SVG が viewport 幅内に収まる (INCEPTION 04 spec)
     const radial = page.getByRole("img", { name: /委任度/ });

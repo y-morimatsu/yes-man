@@ -25,7 +25,7 @@ const baseUtterances: Utterance[] = [
   },
   {
     persona_id: "anon-en",
-    persona_name: "世界の誰か #1",
+    persona_name: "知り合い #1",
     text: "カレーいいよ",
     done: true,
     primary_language: "en",
@@ -33,7 +33,7 @@ const baseUtterances: Utterance[] = [
   },
   {
     persona_id: "anon-fr",
-    persona_name: "世界の誰か #2",
+    persona_name: "知り合い #2",
     text: "和食 おいしいじゃん",
     done: false, // 発話中 (= current speaker)
     primary_language: "fr",
@@ -161,7 +161,7 @@ describe("MangaStage", () => {
     );
     expect(speakingBlob).toBeTruthy();
     expect(speakingBlob?.getAttribute("aria-label")).toBe(
-      "世界の誰か #2 (発話中)",
+      "知り合い #2 (発話中)",
     );
   });
 
@@ -213,7 +213,7 @@ describe("MangaStage", () => {
 
   it("anonymous persona (慎重/楽観/効率 を含まない) は BlobAvatar fallback", () => {
     render(<MangaStage utterances={baseUtterances} />);
-    // baseUtterances の name は「あなたの声 / 世界の誰か #1 / 世界の誰か #2」 → 全 blob
+    // baseUtterances の name は「あなたの声 / 知り合い #1 / 知り合い #2」 → 全 blob
     expect(screen.getAllByTestId("blob-avatar")).toHaveLength(3);
     expect(screen.queryByTestId("manga-actor-icon-0")).not.toBeInTheDocument();
   });

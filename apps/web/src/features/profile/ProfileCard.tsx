@@ -39,7 +39,7 @@ import { AvatarEditor } from "./AvatarEditor";
 
 const MK_UMBER = "#2E2418";
 const MK_ORANGE = "#EF7A62";
-const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.08)";
+const MK_HAIRLINE_2 = "rgba(46, 36, 24, 0.18)";
 
 interface ProfileDraft {
   display_name: string;
@@ -174,8 +174,7 @@ export function ProfileCard() {
             data-testid="profile-card-name"
             className="truncate"
             style={{
-              fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-              fontStyle: "italic",
+              fontFamily: "var(--font-sans)",
               fontSize: 18,
               fontWeight: 600,
               color: MK_UMBER,
@@ -184,7 +183,7 @@ export function ProfileCard() {
             {displayName}
           </span>
           <span
-            className="text-[10px] tracking-wide"
+            className="text-[12px] tracking-wide"
             style={{ color: "rgba(46, 36, 24, 0.55)" }}
             data-testid="profile-card-stat"
           >
@@ -231,7 +230,7 @@ function ViewMode({
       >
         <h2
           id="profile-card-tags-heading"
-          className="text-[10px] font-bold uppercase tracking-widest"
+          className="text-[12px] font-bold uppercase tracking-widest"
           style={{ color: MK_ORANGE }}
         >
           価値観タグ
@@ -239,7 +238,7 @@ function ViewMode({
         <div className="flex flex-wrap gap-2">
           {tags.length === 0 ? (
             <span
-              className="text-xs italic"
+              className="text-xs"
               style={{ color: "rgba(46,36,24,0.45)" }}
             >
               (まだ ありません)
@@ -253,8 +252,7 @@ function ViewMode({
                   background: "rgba(239, 122, 98, 0.12)",
                   color: MK_UMBER,
                   border: "0.5px solid rgba(239, 122, 98, 0.3)",
-                  fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
-                  fontStyle: "italic",
+                  fontFamily: "var(--font-sans)",
                 }}
                 data-testid="profile-card-tag"
               >
@@ -275,7 +273,7 @@ function ViewMode({
           {profile?.age_group ? (
             String(profile.age_group)
           ) : (
-            <span className="italic text-neutral-400">{t("ageGroupPlaceholder")}</span>
+            <span className="text-neutral-400">{t("ageGroupPlaceholder")}</span>
           )}
         </dd>
         <dt className="font-semibold">{t("fieldOccupation")}:</dt>
@@ -283,7 +281,7 @@ function ViewMode({
           {profile?.occupation ? (
             String(profile.occupation)
           ) : (
-            <span className="italic text-neutral-400">未設定</span>
+            <span className="text-neutral-400">未設定</span>
           )}
         </dd>
         <dt className="font-semibold">{t("fieldGender")}:</dt>
@@ -291,7 +289,7 @@ function ViewMode({
           {profile?.gender && profile.gender.length > 0 ? (
             profile.gender.join(" / ")
           ) : (
-            <span className="italic text-neutral-400">未設定</span>
+            <span className="text-neutral-400">未設定</span>
           )}
         </dd>
         <dt className="font-semibold">{t("fieldLifeStage")}:</dt>
@@ -299,7 +297,7 @@ function ViewMode({
           {profile?.life_stage ? (
             String(profile.life_stage)
           ) : (
-            <span className="italic text-neutral-400">未設定</span>
+            <span className="text-neutral-400">未設定</span>
           )}
         </dd>
       </dl>
@@ -339,7 +337,7 @@ function EditMode({
         className="pb-3"
         style={{ borderBottom: `0.5px solid ${MK_HAIRLINE_2}` }}
       >
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: MK_ORANGE }}>
+        <p className="text-[12px] font-bold uppercase tracking-widest mb-2" style={{ color: MK_ORANGE }}>
           アバター
         </p>
         <AvatarEditor
@@ -542,7 +540,7 @@ function ChipMultiField({
           </div>
         )}
         {allowCustom && full && (
-          <p className="text-xs text-neutral-500 italic">{t("tagsFullNotice")}</p>
+          <p className="text-xs text-neutral-500">{t("tagsFullNotice")}</p>
         )}
       </div>
     </div>

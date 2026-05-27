@@ -83,7 +83,7 @@ export function ScoreLineChart({ history, title = "📈 推移 (30日)" }: Score
         <text x={PAD_X - 4} y={PAD_Y + innerH / 2 + 3} fontSize="8" fill={LABEL} textAnchor="end">50%</text>
         <text x={PAD_X - 4} y={PAD_Y + innerH + 3} fontSize="8" fill={LABEL} textAnchor="end">0%</text>
       </svg>
-      <div className="flex justify-between text-[10px] text-neutral-400 px-1">
+      <div className="flex justify-between text-[12px] text-neutral-400 px-1">
         <span>{firstDate}</span>
         <span>{lastDate}</span>
       </div>
