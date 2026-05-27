@@ -2,6 +2,11 @@ name: PR test (cross-unit)
 
 on:
   pull_request:
+    # MVP/hackathon: develop への PR では CI を skip し、main / staging への
+    # 昇格時のみ走らせる. develop は user 手動 merge で運用する.
+    branches:
+      - main
+      - staging
     paths:
       - "tests/**"
       - "apps/**"
