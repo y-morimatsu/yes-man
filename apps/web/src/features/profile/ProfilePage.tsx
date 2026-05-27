@@ -3,7 +3,7 @@
  *
  * ultrathink U7d FD Imp3: 二段階削除確認 (Modal + checkbox + final button).
  */
-import { useState } from "react";
+import { useState, startTransition } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Modal, useToast } from "@yesman/ui";
 import { useDeleteProfile } from "./useProfile";
@@ -36,11 +36,17 @@ export default function ProfilePage() {
 
   // refresh 前に splash へ明示 navigate することで RequireAuth の state.from 自動埋めを回避.
   // (state.from が立つと再 sign in 後 /profile に戻されてしまう)
+  //
+  // 2026-05-27: navigate 直後の refresh が SplashPage (lazy) の Suspense hydration
+  // と競合して React #426 を起こすため、refresh を startTransition でラップ.
+  // 非緊急 update として scheduled され、suspense 解決後に適用される.
   const handleSignOut = async () => {
     try {
       await signOutUser();
       navigate("/auth/splash", { replace: true });
-      await refresh();
+      startTransition(() => {
+        void refresh();
+      });
     } catch (err) {
       push({ message: `ログアウトに失敗しました: ${String(err)}`, variant: "error" });
     }
