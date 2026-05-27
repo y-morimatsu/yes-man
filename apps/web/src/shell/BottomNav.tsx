@@ -10,7 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import { HomeIcon, PersonaIcon, ProfileIcon, ScoreIcon } from "./icons";
 
 const TAB_ICONS: Record<string, ReactNode> = {
-  Home: <HomeIcon />,
+  ホーム: <HomeIcon />,
   スコア: <ScoreIcon />,
   ペルソナ: <PersonaIcon />,
   プロフィール: <ProfileIcon />,
@@ -23,7 +23,7 @@ const TAB_ICONS: Record<string, ReactNode> = {
 type Tab = { to: string; label: string; activePaths?: string[] };
 
 const TABS: Tab[] = [
-  { to: "/", label: "Home" },
+  { to: "/", label: "ホーム" },
   { to: "/score", label: "スコア" },
   {
     to: "/personas/selection",

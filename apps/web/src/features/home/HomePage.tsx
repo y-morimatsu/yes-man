@@ -53,6 +53,16 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col gap-4" data-testid="home-page">
+      <h1
+        className="text-lg font-bold"
+        style={{
+          fontFamily: "var(--font-sans)",
+          color: MK_UMBER,
+        }}
+      >
+        ホーム
+      </h1>
+
       {/* 委任率 / welcome strip — 2026-05-24: 先頭配置 (achievement を最初に visible 化) */}
       {score && score.total === 0 ? (
         // 新規ユーザー (まだ 1 度も委任していない) 専用 welcome strip.
