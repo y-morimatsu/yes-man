@@ -3,8 +3,7 @@
  *
  * ultrathink U7d FD Imp3: 二段階削除確認 (Modal + checkbox + final button).
  */
-import { useState, startTransition } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Button, Card, Modal, useToast } from "@yesman/ui";
 import { useDeleteProfile } from "./useProfile";
 import { useAuth } from "../../shell/AuthProvider";
@@ -17,8 +16,7 @@ import { OptInCard } from "./OptInCard";
 import { ProfileCard } from "./ProfileCard";
 
 export default function ProfilePage() {
-  const { sub, email, refresh } = useAuth();
-  const navigate = useNavigate();
+  const { sub, email } = useAuth();
   const deleteMe = useDeleteProfile();
   const { push } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
@@ -34,19 +32,17 @@ export default function ProfilePage() {
     }
   };
 
-  // refresh 前に splash へ明示 navigate することで RequireAuth の state.from 自動埋めを回避.
-  // (state.from が立つと再 sign in 後 /profile に戻されてしまう)
-  //
-  // 2026-05-27: navigate 直後の refresh が SplashPage (lazy) の Suspense hydration
-  // と競合して React #426 を起こすため、refresh を startTransition でラップ.
-  // 非緊急 update として scheduled され、suspense 解決後に適用される.
+  // 2026-05-27: ログアウト時 React #426 (Suspense hydration race) 解消のため
+  // hard reload で /auth/splash に遷移. startTransition でも refresh が async
+  // のため transition scope 外で setState が走り race が解消しなかった.
+  // hard reload なら React state を完全に破棄 → 新規 mount で安全に SplashPage 表示.
   const handleSignOut = async () => {
     try {
       await signOutUser();
-      navigate("/auth/splash", { replace: true });
-      startTransition(() => {
-        void refresh();
-      });
+      // window.location で full page reload (React Router の navigate ではなく)
+      // → React 全 tree を unmount → 新規 load で AuthProvider 初期化される
+      window.location.href = "/auth/splash";
+      // refresh は不要 (再 load で AuthProvider が clean state から起動)
     } catch (err) {
       push({ message: `ログアウトに失敗しました: ${String(err)}`, variant: "error" });
     }
