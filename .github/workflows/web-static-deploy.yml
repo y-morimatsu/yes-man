@@ -42,9 +42,11 @@ jobs:
       - name: Install workspace deps
         run: pnpm install --frozen-lockfile
 
-      - name: Build apps/web
-        working-directory: apps/web
-        run: pnpm build
+      # `pnpm -r build` は workspace の dep graph 順 (ui → api-client → web)
+      # で build する. apps/web 単体 build だと @yesman/ui の dist/ が
+      # 存在せず Vite が entry を resolve できない (run 26492744944 で踏んだ).
+      - name: Build workspace packages
+        run: pnpm -r build
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
