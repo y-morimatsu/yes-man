@@ -29,9 +29,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      # pnpm version は root package.json の `packageManager` field を
+      # source of truth に. v6 で重複指定が ERR_PNPM_BAD_PM_VERSION で
+      # reject されるため `with.version` を指定しない.
       - uses: pnpm/action-setup@v6
-        with:
-          version: 9
 
       - uses: actions/setup-node@v6
         with:
