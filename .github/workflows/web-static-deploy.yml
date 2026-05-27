@@ -1,8 +1,11 @@
 name: web-static / deploy
 
-# CloudFront + S3 だけの最小 deploy. apps/web を build して S3 にアップロード,
-# CloudFront 経由で配信する. backend (api / cognito) には依存しない.
-# UI 描画の動作確認用 (production 用ではない).
+# CloudFront + S3 + FastAPI Lambda の minimum stack deploy.
+# - apps/web を S3 にアップロード、CloudFront 経由で配信
+# - apps/api を Lambda Web Adapter で Lambda 化 (CDK Docker bundling 使用)
+# - CloudFront /api/* → FastAPI Lambda Function URL (RESPONSE_STREAM mode、SSE 対応)
+# - LLM = Bedrock (model: jp.anthropic.claude-haiku-4-5)
+# - Storage = mock (in-memory) / Auth = mock (no-login MVP)
 
 on:
   workflow_dispatch:
@@ -25,7 +28,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    # FastAPI Lambda の CDK Docker bundling (QEMU ARM64 emulation で pip install)
+    # に 5-10 分 + CDK deploy 5-10 分 + frontend build 2-3 分 + その他で 35 分.
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v6
 
@@ -68,11 +73,16 @@ jobs:
         working-directory: infra
         run: npm install --no-audit --no-fund
 
-      # bedrock-proxy Lambda の node_modules を事前 install. CDK の bundling
-      # Docker を使わずに Code.fromAsset で zip 化するため.
-      - name: Install bedrock-proxy deps (production)
-        working-directory: apps/bedrock-proxy
-        run: npm install --omit=dev --no-audit --no-fund
+      # 2026-05-27: apps/bedrock-proxy は撤去 (FastAPI Lambda 内で Bedrock 呼出).
+      # CDK の Python 3.12 ARM64 bundling Docker を使うため、GHA runner で
+      # Docker buildx + QEMU emulation を有効化する.
+      - name: Set up Docker Buildx (for CDK Python bundling)
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up QEMU (arm64 emulation on x86_64 runner)
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/arm64
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
