@@ -122,6 +122,10 @@ class AppConfig(BaseSettings):
     nudge_cache_ttl_seconds: float = 600.0
     event_bus_name: str = ""
     silence_hash_salt: str = ""
+    # 2026-05-27: Bedrock RPM quota が低い account では SilenceGuard の LLM 自己判定
+    # (1 call/req) を skip して regex fast-path のみで運用する. paraphrased 入力は
+    # 素通りするが、ハッカソン dev 用途では許容. true=LLM 有効 (default).
+    silence_guard_llm_enabled: bool = True
 
     # ------------------------------------------------------------------
     # U5 / learning (NFR Design §7)

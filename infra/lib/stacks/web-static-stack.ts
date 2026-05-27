@@ -163,6 +163,11 @@ export class WebStaticStack extends cdk.Stack {
         SILENCE_HASH_SALT: 'aws-prod-silence-salt-' + props.envName,
         PERSONA_ANONYMIZER_SALT: 'aws-prod-persona-salt-' + props.envName,
 
+        // 2026-05-27: Bedrock RPM quota 50 (new account) を緩和するため
+        // SilenceGuard の LLM 自己判定 (1 call/req) を skip. regex で
+        // 主要ドメインは catch、paraphrased 入力は素通り (hackathon 許容).
+        SILENCE_GUARD_LLM_ENABLED: 'false',
+
         // CORS (CloudFront URL は deploy 後確定するため * で開け、
         // Origin Verify header で実質 CloudFront のみに絞る)
         CORS_ALLOWED_ORIGINS: '["*"]',

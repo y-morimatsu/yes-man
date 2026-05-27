@@ -42,9 +42,19 @@ _FIXED_SILENCE_RESPONSE = (
 
 
 class SilenceGuard:
-    def __init__(self, *, llm: LLMProviderAdapter, salt: str) -> None:
+    def __init__(
+        self,
+        *,
+        llm: LLMProviderAdapter,
+        salt: str,
+        llm_enabled: bool = True,
+    ) -> None:
         self._llm = llm
         self._salt = salt
+        # 2026-05-27: Bedrock RPM quota が低い env では LLM 判定を skip して
+        # regex fast-path のみで運用. paraphrased 入力は素通りするが、ハッカソン
+        # dev 用途では許容. AppConfig.silence_guard_llm_enabled で制御.
+        self._llm_enabled = llm_enabled
         self._regex_map: dict[SilenceDomain, re.Pattern[str]] = {
             domain: re.compile("|".join(re.escape(k) for k in keywords))
             for domain, keywords in SILENCE_KEYWORDS.items()
@@ -69,7 +79,9 @@ class SilenceGuard:
         verdict = self._match_regex_domain(user_input)
         if verdict is not None:
             return verdict
-        # 2 段目: LLM 自己判定
+        # 2 段目: LLM 自己判定 (env disabled なら skip)
+        if not self._llm_enabled:
+            return SilenceVerdict(is_silenced=False, domain=None, response_text=None)
         return await self._llm_judge(user_input)
 
     def evaluate_regex_only(self, *, user_input: str) -> SilenceVerdict:

@@ -74,7 +74,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     event_publisher = await event_factory.create()
 
     # U4 シングルトン (stateless / process-wide)
-    silence_guard = SilenceGuard(llm=llm_provider, salt=config.silence_hash_salt)
+    silence_guard = SilenceGuard(
+        llm=llm_provider,
+        salt=config.silence_hash_salt,
+        llm_enabled=config.silence_guard_llm_enabled,
+    )
     orchestrator = ConsensusOrchestrator()
     nudge_cache = NudgeCache(ttl=config.nudge_cache_ttl_seconds)
     nudge_generator = NudgeMessageGenerator(
