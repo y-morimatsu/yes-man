@@ -32,6 +32,10 @@ export default defineConfig({
         // ultrathink U7a FD Imp3: 新 SW を即時 activate
         skipWaiting: true,
         clientsClaim: true,
+        // 2026-05-27: 新 SW activation 時に古い precache (前回 deploy の bundle) を自動削除.
+        // CloudFront に複数回 deploy した後に古い hash の asset が残り、新 index.html と
+        // 整合せず React error #426 (hydration mismatch) を起こす問題の防止策.
+        cleanupOutdatedCaches: true,
         // ultrathink U7a NFR Req Imp1: 画像は runtime cache (CacheFirst 30day)
         runtimeCaching: [
           {
