@@ -95,30 +95,65 @@ class MockStore:
             return False
 
     def save_to_s3(self) -> bool:
-        """現在の state を S3 に pickle 保存. 成功時 True, 失敗時 False.
+        """現在の state を S3 に pickle 保存 (load → merge → put で last-write-wins な race を回避).
 
         bundle() 終了時に呼ぶ. 失敗は best-effort で握り潰す
         (本筋の request response を阻害しないため).
+
+        Merge 戦略: 各 dict について S3 既存 + 自身の local を union 結合し、
+        key 衝突時は **local 側が優先** (= 自身が直前に行った更新を保持).
+        これにより 2 instance が同時 insert しても両方の record が S3 に残る.
+        ただし同一 key の同時更新は依然 last-write-wins (受容範囲).
         """
         if not self._s3 or not self._s3_bucket:
             return False
         try:
             import pickle
 
-            data = {
-                "profiles": self.profiles,
-                "decisions": self.decisions,
-                "preference_profiles": self.preference_profiles,
-                "silence_logs": self.silence_logs,
-                "personas": self.personas,
-                "persona_reports": self.persona_reports,
-                "user_persona_selections": self.user_persona_selections,
+            # Step 1: S3 の最新 state を取得 (他 instance の concurrent write を取り込む)
+            s3_state: dict = {}
+            try:
+                obj = self._s3.get_object(Bucket=self._s3_bucket, Key=self._s3_key)
+                s3_state = pickle.loads(obj["Body"].read())
+            except self._s3.exceptions.NoSuchKey:
+                s3_state = {}
+            except Exception:
+                s3_state = {}
+
+            # Step 2: merge — 各 dict で S3 既存 + local (local 優先)
+            def _merge(s3_dict_name: str, local: dict) -> dict:
+                s3_existing = s3_state.get(s3_dict_name) or {}
+                return {**s3_existing, **local}
+
+            merged = {
+                "profiles": _merge("profiles", self.profiles),
+                "decisions": _merge("decisions", self.decisions),
+                "preference_profiles": _merge(
+                    "preference_profiles", self.preference_profiles
+                ),
+                "silence_logs": _merge("silence_logs", self.silence_logs),
+                "personas": _merge("personas", self.personas),
+                "persona_reports": _merge("persona_reports", self.persona_reports),
+                "user_persona_selections": _merge(
+                    "user_persona_selections", self.user_persona_selections
+                ),
             }
+
+            # Step 3: merged state を S3 に書き戻し
             self._s3.put_object(
                 Bucket=self._s3_bucket,
                 Key=self._s3_key,
-                Body=pickle.dumps(data),
+                Body=pickle.dumps(merged),
             )
+
+            # Step 4: local も merged で更新 (次の bundle entry で再 load されるまでの整合性)
+            self.profiles = merged["profiles"]
+            self.decisions = merged["decisions"]
+            self.preference_profiles = merged["preference_profiles"]
+            self.silence_logs = merged["silence_logs"]
+            self.personas = merged["personas"]
+            self.persona_reports = merged["persona_reports"]
+            self.user_persona_selections = merged["user_persona_selections"]
             return True
         except Exception:
             return False
