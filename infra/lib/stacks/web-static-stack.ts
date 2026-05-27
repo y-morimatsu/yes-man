@@ -52,10 +52,14 @@ export class WebStaticStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: WebStaticStackProps) {
     super(scope, id, props);
 
-    // ap-northeast-1 で使える JP inference profile (Claude Haiku 4.5).
+    // ap-northeast-1 で使える JP inference profile.
+    // Haiku 4.5 は AWS Marketplace subscription が account 単位で必要 (一度 admin が
+    // invoke するまで使えない). Sonnet 4.5 は subscription 不要で immediate に使えるため
+    // hackathon default はこちら. コスト/速度重視で Haiku に切替えたい場合は
+    // bedrockModelId prop で上書き or Lambda env で BEDROCK_MODEL_ID を直接変更.
     const modelId =
       props.bedrockModelId ??
-      'jp.anthropic.claude-haiku-4-5-20251001-v1:0';
+      'jp.anthropic.claude-sonnet-4-5-20250929-v1:0';
     const maxPromptLength = props.maxPromptLength ?? 2000;
 
     // MVP: hardcoded secret. production では SecretsManager で管理する.
