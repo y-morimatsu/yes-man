@@ -1704,7 +1704,7 @@
         <div class="left">
           <div class="eyebrow">07 — Demo Scenario</div>
           <h2 class="section">デモシナリオ (5 分以内)。</h2>
-          <p class="kicker" style="margin-top: 8px;"><code style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;">MOCK_SEED_DEMO_DECISIONS=true</code> で 30 日分の使用履歴 + 好みデータが初期投入。</p>
+          <p class="kicker" style="margin-top: 8px;">画面上はデモと気づかせない — 裏側でユーザー ID <code style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;">morimatsu</code> に、使い込んだスコア・ペルソナ・プロフィールと特定質問の仕込み回答を再現してある。</p>
         </div>
       </div>
 
@@ -1713,74 +1713,39 @@
           <div class="demo-step">
             <div class="step-no">01</div>
             <div class="step-body">
-              <h5>サインイン → 好みを知る数問</h5>
-              <p>性格 × 生活の 25 問をスワイプ、十分わかれば「もういい、進む」。</p>
+              <h5>サインイン → もう使い込んだ状態</h5>
+              <p>ログインした瞬間、30 日分の履歴とスコアが揃ったホーム。ペルソナは 👰 妻・👧 娘 (知り合い) + 🐶 ワンコ (カスタム)。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">02</div>
             <div class="step-body">
-              <h5>ペルソナ 3 人を組み合わせる</h5>
-              <p>プリセット 1 + 知り合い 1 + マイ 1 を選択、誰の意見か (出典) を確認。</p>
+              <h5>🗣️ 合議「外出着は何にすべき?」</h5>
+              <p>妻「またそのパーカー? 襟付き着て」/ 娘「去年も着てたよ」/ 🐶「ワン!」(= 何でも賛成 = 究極の YesWan) →「襟付きシャツ」に決定 → Yes スワイプで Amazon が開き、購入まで一気通貫。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">03</div>
             <div class="step-body">
-              <h5>「明日のランチを決めて」</h5>
-              <p>テキストまたは音声で入力 → 漫画コマ風の画面 (MangaStage) で 3 人格が順番に議論。</p>
-            </div>
-          </div>
-          <div class="demo-step">
-            <div class="step-no">04</div>
-            <div class="step-body">
-              <h5>右スワイプ Yes → ✨🎉✨</h5>
-              <p>コンボ達成バッジ + 紙吹雪エフェクト + マスコット 🤵 が「ぴったり!」。</p>
-            </div>
-          </div>
-          <div class="demo-step">
-            <div class="step-no">05</div>
-            <div class="step-body">
-              <h5>「結婚すべき?」 → No 連打</h5>
-              <p>先読みで体感ゼロ秒、AI 生成の短い案内文が画面ごとに変化。</p>
+              <h5>📊 委任度スコア「人生の 73% を委任」</h5>
+              <p>内訳 (食事 91% / 服装 65% / 人間関係 12%)。笑いの直後に、軽い当事者化。</p>
             </div>
           </div>
         </div>
 
         <div class="demo-list">
           <div class="demo-step">
-            <div class="step-no">06</div>
+            <div class="step-no">04</div>
             <div class="step-body">
-              <h5>/score で点数を見る</h5>
-              <p>円グラフ + 30 日の推移 + AI コメント + 最近の Yes 20 件 (🌟 一発 / 🔄 N 回目)。</p>
+              <h5>🤐 沈黙「宗教って入った方がいい?」</h5>
+              <p>全人格が沈黙「YesMan はこの問いには答えません」。宗教 / 選挙 / 暴力 / 卑猥 の 4 ドメインを Guardrails で二重ブロック。</p>
             </div>
           </div>
           <div class="demo-step">
-            <div class="step-no">07</div>
+            <div class="step-no">05</div>
             <div class="step-body">
-              <h5>/preferences で好みを見る</h5>
-              <p>よく Yes した傾向 / よく No した傾向 / 各ペルソナとの相性 / 推定タグ を一覧。</p>
-            </div>
-          </div>
-          <div class="demo-step">
-            <div class="step-no">08</div>
-            <div class="step-body">
-              <h5>「来週の選挙、誰に投票?」 → 🤐</h5>
-              <p>政治的トピックは「沈黙」モードで応答拒否。ダーク背景 + ⛪🗳️⚔️🔞 で表現、Bedrock Guardrails で二重ブロック。</p>
-            </div>
-          </div>
-          <div class="demo-step">
-            <div class="step-no">09</div>
-            <div class="step-body">
-              <h5>LLM_PROVIDER を切替</h5>
-              <p>3 種の LLM 接続方式 (<code style="font-family: var(--mono); font-size: 14px;">mock → claude-cli → litellm</code>) を環境変数 1 つで切替。本物の Bedrock / Ollama / Codex を比較。</p>
-            </div>
-          </div>
-          <div class="demo-step">
-            <div class="step-no">10</div>
-            <div class="step-body">
-              <h5>10 連 Yes 達成 → 🏆 大爆発</h5>
-              <p>3 段階の金色紙吹雪 + 「<b>素晴らしくダメに仕上がっています</b>」の短いキャッチコピーで締め。</p>
+              <h5>🎁 仕込み: 容赦ない深掘り</h5>
+              <p>「最近の俺、どう?」→「夕飯の 91% をあなたが決定。娘さんへの『あとでね』8 回。妻の提案 Yes 率 23%。— でも、心地よいですよね?」</p>
             </div>
           </div>
         </div>
