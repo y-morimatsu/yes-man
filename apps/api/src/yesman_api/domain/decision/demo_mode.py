@@ -12,7 +12,11 @@ demo user のときだけ scripted な合議・深掘り・スコアを再現す
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 from uuid import UUID
+
+# 推移グラフ / 履歴の開始日 (デモ表示用に固定)
+DEMO_SEED_START_DATE = date(2026, 5, 15)
 
 # ============================================================
 # demo user 判定
@@ -191,10 +195,10 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
     store = getattr(decision_repo, "_store", None)
     if store is not None and hasattr(store, "seed_demo_decisions"):
         try:
-            from datetime import date, datetime, timezone
+            from datetime import datetime, timezone
 
-            # 推移グラフの開始日を 2026-05-15 に固定 (今日までの日数を seed)
-            days = (datetime.now(timezone.utc).date() - date(2026, 5, 15)).days + 1
+            # 推移グラフの開始日を固定 (今日までの日数を seed)
+            days = (datetime.now(timezone.utc).date() - DEMO_SEED_START_DATE).days + 1
             store.seed_demo_decisions(
                 user_id,
                 days=max(days, 1),
