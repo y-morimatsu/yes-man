@@ -33,22 +33,14 @@ class DemoLLMAdapter:
         return demo_mode.match_topic(self._joined(messages))
 
     @staticmethod
-    def _depth(messages: list[dict[str, str]]) -> int:
-        """drill-down depth を推定 (mock_adapter と同方式: chain marker の → 個数).
+    def _is_root_proposal(system: str) -> bool:
+        """drill-down chain の起点 (depth=0) か判定.
 
-        engine が chain_context 有り時に user_input を
-        ``[これまでの絞り込み: A → B → ...]`` で enriching する。
+        engine の proposal_system は depth=0 のとき root hint (「起点」) を含み、
+        depth>=1 では含まない (mixed path は chain marker を user message に
+        入れないため system prompt から判定する)。
         """
-        joined = DemoLLMAdapter._joined(messages)
-        marker = "[これまでの絞り込み: "
-        start = joined.find(marker)
-        if start < 0:
-            return 0
-        end = joined.find("]", start)
-        if end < 0:
-            return 0
-        chain_str = joined[start + len(marker) : end]
-        return len([s for s in chain_str.split("→") if s.strip()])
+        return "起点" in system
 
     def _detect_persona(self, system: str) -> str | None:
         # PERSONA_PROMPT_TEMPLATE は 「persona_name」 (鉤括弧付き) を含む
@@ -84,9 +76,10 @@ class DemoLLMAdapter:
             return await self._delegate.complete(
                 system=system, messages=messages, temperature=temperature
             )
-        # 最終提案 (depth-aware: 外出着は depth>=1 で final 化)
+        # 最終提案 (depth-aware: 外出着は root=ソフト, depth>=1 で final 化)
         if self._is_proposal(system):
-            prop = demo_mode.proposal_text(topic, depth=self._depth(messages))
+            depth = 0 if self._is_root_proposal(system) else 1
+            prop = demo_mode.proposal_text(topic, depth=depth)
             if prop is not None:
                 return prop
         # fallback: 委譲

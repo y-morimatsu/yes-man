@@ -100,10 +100,11 @@ async def test_adapter_outfit_persona_line():
 
 @pytest.mark.asyncio
 async def test_adapter_outfit_proposal_root_soft():
+    """root proposal (system に「起点」ヒスト) はソフト提案 (not final)."""
     spy = _SpyDelegate()
     adapter = DemoLLMAdapter(spy)
     out = await adapter.complete(
-        system="あなたは合議の最終的な助言をまとめます。",
+        system="最終的な助言をまとめます。これは drill-down chain の 起点 です。",
         messages=_msgs("外出着は何にすべき?"),
     )
     assert "シャツ" in out and "開きますか" not in out  # root はソフト提案
@@ -111,13 +112,13 @@ async def test_adapter_outfit_proposal_root_soft():
 
 
 @pytest.mark.asyncio
-async def test_adapter_outfit_proposal_final_with_chain():
-    """Yes 連鎖 (chain_context あり) で final 化 → Amazon Fashion CTA に繋がる."""
+async def test_adapter_outfit_proposal_final_when_drilled():
+    """depth>=1 (system に「起点」なし) で final 化 → Amazon Fashion CTA に繋がる."""
     spy = _SpyDelegate()
     adapter = DemoLLMAdapter(spy)
     out = await adapter.complete(
-        system="最終的な助言をまとめます。",
-        messages=_msgs("[これまでの絞り込み: 襟付きシャツ]\n元の要望: 外出着は何にすべき?"),
+        system="最終的な助言をまとめます。",  # root hint なし = drill-down 後
+        messages=_msgs("外出着は何にすべき?"),
     )
     assert "シャツ" in out and "開きますか" in out and "Amazon" in out
     assert spy.complete_calls == 0
