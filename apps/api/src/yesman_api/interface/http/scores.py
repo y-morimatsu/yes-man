@@ -38,12 +38,16 @@ async def get_my_score(
     if demo_mode.is_demo_user(user.email):
         total = summary.total
         no_count = round(total * (1 - demo_mode.DEMO_SCORE_RATIO)) if total else 0
+        # 推移グラフは開始日 (DEMO_SEED_START_DATE) 以降に絞る
+        # (scorer は固定 30 日窓を返すため、demo では 5/15 起点に truncate)
+        start_iso = demo_mode.DEMO_SEED_START_DATE.isoformat()
+        demo_history = [h for h in history if str(h.date) >= start_iso]
         return ScoreResponse(
             no_count=no_count,
             total=total,
             ratio=demo_mode.DEMO_SCORE_RATIO,
             message="あなたは人生の 73% を AI に委ねています。",
-            history=history,
+            history=demo_history,
             breakdown=dict(demo_mode.DEMO_SCORE_BREAKDOWN),
         )
     return ScoreResponse(
