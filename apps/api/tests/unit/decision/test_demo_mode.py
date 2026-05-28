@@ -48,8 +48,15 @@ def test_persona_line_outfit():
     assert demo_mode.persona_line(demo_mode.TOPIC_OUTFIT, "知らない人") is None
 
 
-def test_proposal_text():
-    assert "シャツ" in demo_mode.proposal_text(demo_mode.TOPIC_OUTFIT)
+def test_proposal_text_outfit_depth_aware():
+    root = demo_mode.proposal_text(demo_mode.TOPIC_OUTFIT, depth=0)
+    final = demo_mode.proposal_text(demo_mode.TOPIC_OUTFIT, depth=1)
+    assert "シャツ" in root and "開きますか" not in root  # root はソフト (not final)
+    assert "シャツ" in final and "開きますか" in final  # depth>=1 で final + Amazon
+    assert "Amazon" in final
+
+
+def test_proposal_text_deep_dive_and_none():
     assert "委任度 73%" in demo_mode.proposal_text(demo_mode.TOPIC_DEEP_DIVE)
     assert demo_mode.proposal_text(None) is None
 
@@ -92,14 +99,27 @@ async def test_adapter_outfit_persona_line():
 
 
 @pytest.mark.asyncio
-async def test_adapter_outfit_proposal_is_shirt():
+async def test_adapter_outfit_proposal_root_soft():
     spy = _SpyDelegate()
     adapter = DemoLLMAdapter(spy)
     out = await adapter.complete(
         system="あなたは合議の最終的な助言をまとめます。",
         messages=_msgs("外出着は何にすべき?"),
     )
-    assert "シャツ" in out  # → service_catalog fashion → Amazon Fashion
+    assert "シャツ" in out and "開きますか" not in out  # root はソフト提案
+    assert spy.complete_calls == 0
+
+
+@pytest.mark.asyncio
+async def test_adapter_outfit_proposal_final_with_chain():
+    """Yes 連鎖 (chain_context あり) で final 化 → Amazon Fashion CTA に繋がる."""
+    spy = _SpyDelegate()
+    adapter = DemoLLMAdapter(spy)
+    out = await adapter.complete(
+        system="最終的な助言をまとめます。",
+        messages=_msgs("[これまでの絞り込み: 襟付きシャツ]\n元の要望: 外出着は何にすべき?"),
+    )
+    assert "シャツ" in out and "開きますか" in out and "Amazon" in out
     assert spy.complete_calls == 0
 
 

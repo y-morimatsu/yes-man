@@ -25,9 +25,30 @@ class DemoLLMAdapter:
         self._chunk_size = chunk_size
 
     # --- 検出ヘルパ ---
+    @staticmethod
+    def _joined(messages: list[dict[str, str]]) -> str:
+        return "\n".join(m.get("content", "") for m in messages)
+
     def _topic(self, messages: list[dict[str, str]]) -> str | None:
-        joined = "\n".join(m.get("content", "") for m in messages)
-        return demo_mode.match_topic(joined)
+        return demo_mode.match_topic(self._joined(messages))
+
+    @staticmethod
+    def _depth(messages: list[dict[str, str]]) -> int:
+        """drill-down depth を推定 (mock_adapter と同方式: chain marker の → 個数).
+
+        engine が chain_context 有り時に user_input を
+        ``[これまでの絞り込み: A → B → ...]`` で enriching する。
+        """
+        joined = DemoLLMAdapter._joined(messages)
+        marker = "[これまでの絞り込み: "
+        start = joined.find(marker)
+        if start < 0:
+            return 0
+        end = joined.find("]", start)
+        if end < 0:
+            return 0
+        chain_str = joined[start + len(marker) : end]
+        return len([s for s in chain_str.split("→") if s.strip()])
 
     def _detect_persona(self, system: str) -> str | None:
         # PERSONA_PROMPT_TEMPLATE は 「persona_name」 (鉤括弧付き) を含む
@@ -63,9 +84,9 @@ class DemoLLMAdapter:
             return await self._delegate.complete(
                 system=system, messages=messages, temperature=temperature
             )
-        # 最終提案
+        # 最終提案 (depth-aware: 外出着は depth>=1 で final 化)
         if self._is_proposal(system):
-            prop = demo_mode.proposal_text(topic)
+            prop = demo_mode.proposal_text(topic, depth=self._depth(messages))
             if prop is not None:
                 return prop
         # fallback: 委譲

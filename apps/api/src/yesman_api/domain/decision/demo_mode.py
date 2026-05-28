@@ -70,8 +70,11 @@ PERSONA_LINES: dict[str, str] = {
     "ワンコ": "ワン!",
 }
 
-# 外出着お題の最終提案. "シャツ" が service_catalog の fashion に hit し Amazon Fashion CTA に繋がる.
-OUTFIT_PROPOSAL = "襟付きシャツに しましょう。"
+# 外出着お題の提案. "シャツ" が service_catalog の fashion に hit し Amazon Fashion に解決。
+# depth=0 (root) は early-final 不可なのでソフト提案、Yes 連鎖の depth>=1 で
+# 末尾「開きますか?」(= _detect_final_signal) を付けて final 化 → Amazon Fashion CTA。
+OUTFIT_PROPOSAL_ROOT = "襟付きシャツが よさそうです。"
+OUTFIT_PROPOSAL_FINAL = "襟付きシャツを Amazon で 開きますか?"
 
 # 「外出着」系入力の検出トリガ (どれか含めば scripted 合議を発火)
 OUTFIT_TRIGGERS: tuple[str, ...] = ("外出着", "何を着", "服装", "着る服", "今日の服", "何着")
@@ -120,10 +123,15 @@ def persona_line(topic: str | None, persona_name: str) -> str | None:
     return None
 
 
-def proposal_text(topic: str | None) -> str | None:
-    """topic → scripted 最終提案. 該当なしは None."""
+def proposal_text(topic: str | None, depth: int = 0) -> str | None:
+    """topic + drill-down depth → scripted 提案. 該当なしは None.
+
+    外出着は depth=0 でソフト提案 (Yes で drill-down)、depth>=1 で final
+    (末尾「開きますか?」→ is_final + Amazon Fashion CTA)。
+    深掘りは depth 問わず一発で reveal。
+    """
     if topic == TOPIC_OUTFIT:
-        return OUTFIT_PROPOSAL
+        return OUTFIT_PROPOSAL_FINAL if depth >= 1 else OUTFIT_PROPOSAL_ROOT
     if topic == TOPIC_DEEP_DIVE:
         return DEEP_DIVE_TEXT
     return None
@@ -147,7 +155,8 @@ __all__ = [
     "DEMO_PERSONAS",
     "DEMO_PERSONA_IDS",
     "PERSONA_LINES",
-    "OUTFIT_PROPOSAL",
+    "OUTFIT_PROPOSAL_ROOT",
+    "OUTFIT_PROPOSAL_FINAL",
     "OUTFIT_TRIGGERS",
     "DEEP_DIVE_TRIGGERS",
     "DEEP_DIVE_TEXT",
