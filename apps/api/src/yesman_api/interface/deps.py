@@ -158,7 +158,10 @@ async def get_decision_engine(
         )
 
         await demo_mode.ensure_demo_seeded(
-            bundle.persona, bundle.user_persona_selection, UUID(_user.sub)
+            bundle.persona,
+            bundle.user_persona_selection,
+            UUID(_user.sub),
+            decision_repo=bundle.decision,
         )
         llm = DemoLLMAdapter(llm)
     cold_start = getattr(request.app.state, "cold_start_estimator", None) or ColdStartEstimator()

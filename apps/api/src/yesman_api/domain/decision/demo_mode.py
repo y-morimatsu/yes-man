@@ -149,11 +149,13 @@ DEMO_SCORE_BREAKDOWN: dict[str, float] = {
 }
 
 
-async def ensure_demo_seeded(persona_repo, selection_repo, user_id) -> None:
-    """demo user に 妻/娘/ワンコ カスタムペルソナ + 3 人選択を冪等に投入.
+async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_repo=None) -> None:
+    """demo user に 妻/娘/ワンコ カスタムペルソナ + 3 人選択 + 30 日履歴を冪等に投入.
 
-    persona は無ければ insert、selection は毎回 妻/娘/ワンコ に強制 (デモの再現性)。
-    persona_repo / selection_repo は application 層の protocol (duck-typed)。
+    - persona は無ければ insert、selection は毎回 妻/娘/ワンコ に強制 (デモの再現性)
+    - decision_repo が MockStore backed なら 30 日分の使用履歴も best-effort で seed
+      (home の "recent" / preferences をリッチに見せる。冪等)
+    repo 群は application 層の protocol (duck-typed)。
     """
     from yesman_api.domain.persistence.models import Persona, UserPersonaSelection
 
@@ -176,6 +178,13 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id) -> None:
             persona_ids=[str(pid) for pid in DEMO_PERSONA_IDS],
         )
     )
+    # best-effort: MockStore backed なら 30 日履歴を seed (冪等、mock 以外は no-op)
+    store = getattr(decision_repo, "_store", None)
+    if store is not None and hasattr(store, "seed_demo_decisions"):
+        try:
+            store.seed_demo_decisions(user_id)
+        except Exception:  # noqa: BLE001  (デモ seed 失敗で本番フローを止めない)
+            pass
 
 
 __all__ = [
