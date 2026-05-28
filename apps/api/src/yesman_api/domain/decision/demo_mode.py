@@ -191,8 +191,13 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
     store = getattr(decision_repo, "_store", None)
     if store is not None and hasattr(store, "seed_demo_decisions"):
         try:
+            from datetime import date, datetime, timezone
+
+            # 推移グラフの開始日を 2026-05-15 に固定 (今日までの日数を seed)
+            days = (datetime.now(timezone.utc).date() - date(2026, 5, 15)).days + 1
             store.seed_demo_decisions(
                 user_id,
+                days=max(days, 1),
                 persona_specs=DEMO_SEED_PERSONA_SPECS,
                 persona_style_preference=DEMO_SEED_PERSONA_STYLE,
             )

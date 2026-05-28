@@ -251,17 +251,18 @@ class MockStore:
 
         rng = random.Random(42)
         now = _utcnow()
-        # ドメインごとに input サンプルを束ねる (PreferenceProfile の accepted_patterns に domain 多様性を出す)
-        domain_inputs: list[tuple[str, str]] = [
-            ("daily", "今日のランチを決めて"),
-            ("daily", "夕飯のメニューを決めて"),
-            ("daily", "今日の運動を決めて"),
-            ("entertainment", "観る映画を選んで"),
-            ("entertainment", "次に読む本を選んで"),
-            ("entertainment", "聴く音楽を提案して"),
-            ("planning", "週末の予定を提案して"),
-            ("planning", "次の旅行先を提案して"),
-            ("planning", "新しい趣味を提案して"),
+        # ドメインごとに (input, proposal) サンプルを束ねる
+        # (accepted_patterns に domain 多様性 + 履歴 UI に実際の合議結論を表示)
+        domain_inputs: list[tuple[str, str, str]] = [
+            ("daily", "今日のランチを決めて", "コンビニのサラダチキン定食"),
+            ("daily", "夕飯のメニューを決めて", "鶏の照り焼き定食"),
+            ("daily", "今日の運動を決めて", "20 分のウォーキング"),
+            ("entertainment", "観る映画を選んで", "「君の名は。」を観る"),
+            ("entertainment", "次に読む本を選んで", "「嫌われる勇気」を読む"),
+            ("entertainment", "聴く音楽を提案して", "お気に入りプレイリストを流す"),
+            ("planning", "週末の予定を提案して", "近所のカフェでのんびり過ごす"),
+            ("planning", "次の旅行先を提案して", "箱根で温泉旅行"),
+            ("planning", "新しい趣味を提案して", "観葉植物を育てる"),
         ]
         persona_specs = persona_specs or [
             ("慎重派", "リスクを検討した結果、これで進めるべきです"),
@@ -275,7 +276,7 @@ class MockStore:
             target_yes_ratio = 0.30 + (i / max(days - 1, 1)) * 0.65
             n_inputs = rng.randint(2, 5)
             for j in range(n_inputs):
-                domain, input_text = rng.choice(domain_inputs)
+                domain, input_text, proposal = rng.choice(domain_inputs)
                 shared_hash = f"demo-seed-{i}-{j:02d}"
                 # 20% は regenerate session (2-5 attempts)、80% は single attempt
                 session_length = rng.randint(2, 5) if rng.random() < 0.2 else 1
@@ -304,7 +305,7 @@ class MockStore:
                         domain_classification=domain,
                         user_input=input_text,
                         user_input_hash=shared_hash,  # session 内で共有
-                        proposal_text="（デモ用の合議結論）",
+                        proposal_text=proposal,
                         persona_outputs={"utterances": utterances},
                         user_choice=choice,
                         no_attempt_count=0,  # 本フィールドは履歴 UI では使わない
