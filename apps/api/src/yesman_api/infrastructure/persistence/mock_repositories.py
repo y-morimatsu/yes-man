@@ -387,6 +387,11 @@ class MockDecisionRepository:
     async def insert(self, decision: Decision) -> Decision:
         decision.created_at = decision.created_at or _utcnow()
         self._store.decisions[decision.id] = copy.deepcopy(decision)
+        # 2026-05-28 fix: SSE stream で生成した decision を即時 S3 永続化する.
+        # bundle 終了時 (stream 完全クローズ後) の save を待つと、frontend が
+        # proposal 受信直後に別 Lambda instance へ /choice を投げた際に、その
+        # instance が未保存の decision を見つけられず 404 になる race があった.
+        self._store.save_to_s3()
         return copy.deepcopy(decision)
 
     async def update_choice(
@@ -398,6 +403,8 @@ class MockDecisionRepository:
         d = self._store.decisions[decision_id]
         d.user_choice = choice
         d.no_attempt_count = no_count
+        # choice 結果を即時永続化 (後続の yes-nudge 等が別 instance に landing しても整合)
+        self._store.save_to_s3()
         return copy.deepcopy(d)
 
     async def get(self, decision_id: UUID) -> Decision | None:

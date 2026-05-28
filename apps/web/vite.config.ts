@@ -36,6 +36,10 @@ export default defineConfig({
         // CloudFront に複数回 deploy した後に古い hash の asset が残り、新 index.html と
         // 整合せず React error #426 (hydration mismatch) を起こす問題の防止策.
         cleanupOutdatedCaches: true,
+        // 2026-05-28: navigateFallback (SPA index.html へ fallback) が /api/* の
+        // ナビゲーションまで拾い、ブラウザで API URL を直接開くと SPA が返って
+        // "/" に redirect されてしまうのを防ぐ. /api/* は SW で fallback させない.
+        navigateFallbackDenylist: [/^\/api\//],
         // ultrathink U7a NFR Req Imp1: 画像は runtime cache (CacheFirst 30day)
         runtimeCaching: [
           {
