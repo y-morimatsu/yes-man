@@ -172,18 +172,22 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
     from yesman_api.domain.persistence.models import Persona, UserPersonaSelection
 
     for p in DEMO_PERSONAS:
-        if await persona_repo.get(p.id) is None:
-            await persona_repo.insert(
-                Persona(
-                    id=p.id,
-                    owner_user_id=user_id,
-                    name=p.name,
-                    description=f"デモ用カスタムペルソナ ({p.name})",
-                    prompt_text=p.prompt_text,
-                    is_shared=False,
-                    is_builtin=False,
-                )
-            )
+        existing = await persona_repo.get(p.id)
+        persona = Persona(
+            id=p.id,
+            owner_user_id=user_id,
+            name=p.name,
+            description=f"デモ用カスタムペルソナ ({p.name})",
+            prompt_text=p.prompt_text,
+            is_shared=False,
+            is_builtin=False,
+        )
+        if existing is None:
+            await persona_repo.insert(persona)
+        elif str(existing.owner_user_id) != str(user_id):
+            # 固定 ID を共有するため、アクセス中の sub に re-own して
+            # その sub の /personas/me (カスタム) に表示されるようにする。
+            await persona_repo.update(persona)
     await selection_repo.upsert(
         UserPersonaSelection(
             user_id=user_id,

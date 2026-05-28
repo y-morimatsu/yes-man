@@ -11,7 +11,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from yesman_api.domain.auth.models import AuthenticatedUser
 from yesman_api.domain.persona.catalog import PersonaCatalogService
 from yesman_api.domain.persona.errors import PersonaError
-from yesman_api.interface.deps import get_current_user, get_persona_catalog
+from yesman_api.interface.deps import (
+    ensure_demo_seeded_dep,
+    get_current_user,
+    get_persona_catalog,
+)
 from yesman_api.interface.http.dto.persona import (
     PersonaSelectionResponse,
     PersonaSelectionUpdateRequest,
@@ -25,6 +29,7 @@ router = APIRouter(prefix="/v1/persona-selections", tags=["persona-selections"])
 async def get_my_selection(
     user: AuthenticatedUser = Depends(get_current_user),
     catalog: PersonaCatalogService = Depends(get_persona_catalog),
+    _demo_seed: None = Depends(ensure_demo_seeded_dep),
 ) -> PersonaSelectionResponse:
     persona_ids = await catalog.get_selection(UUID(user.sub))
     return PersonaSelectionResponse(persona_ids=persona_ids)

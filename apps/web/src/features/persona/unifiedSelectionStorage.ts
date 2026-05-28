@@ -8,8 +8,34 @@
  */
 import type { SelectedPersonaSource } from "@yesman/api-client";
 
+import { getCurrentUser } from "../../shell/mockAuthStorage";
+
 const STORAGE_KEY = "yesman:unified-selection-v1";
 export const MAX_SELECTION = 3;
+
+/**
+ * デモアカウント (email に "morimatsu") 用の固定カスタムペルソナ ID。
+ * backend demo_mode.DEMO_PERSONAS (妻 / 娘 / ワンコ) と一致。
+ * 新規サインイン時の既定選択をビルトインではなく家族 3 人にするために使う。
+ */
+const DEMO_PERSONA_IDS = [
+  "00000000-0000-0000-0000-0000000000d1", // 妻
+  "00000000-0000-0000-0000-0000000000d2", // 娘
+  "00000000-0000-0000-0000-0000000000d3", // ワンコ
+] as const;
+const DEMO_SELECTION: SelectedPersona[] = DEMO_PERSONA_IDS.map((id) => ({
+  source: "my",
+  id,
+}));
+
+function isDemoUser(): boolean {
+  try {
+    const email = getCurrentUser()?.email;
+    return !!email && email.toLowerCase().includes("morimatsu");
+  } catch {
+    return false;
+  }
+}
 
 export interface SelectedPersona {
   source: SelectedPersonaSource;
@@ -47,9 +73,12 @@ export function readUnifiedSelection(): SelectedPersona[] {
   if (typeof window === "undefined") return [...DEFAULT_BUILTIN_SELECTION];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    // キー未作成 = 新規ユーザー (登録直後) → builtin 3 をデフォルト選択。
+    // キー未作成 = 新規ユーザー (登録直後) → デフォルト選択。
+    // デモアカウント (morimatsu) は 妻/娘/ワンコ、それ以外は builtin 3 種。
     // キーが存在する場合 (空配列含む) は user の明示的な選択結果として尊重する。
-    if (raw === null) return [...DEFAULT_BUILTIN_SELECTION];
+    if (raw === null) {
+      return isDemoUser() ? [...DEMO_SELECTION] : [...DEFAULT_BUILTIN_SELECTION];
+    }
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(isValidEntry).slice(0, MAX_SELECTION);
