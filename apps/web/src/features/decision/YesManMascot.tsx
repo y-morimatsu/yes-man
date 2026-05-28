@@ -70,7 +70,7 @@ export function YesManMascot({ state }: YesManMascotProps) {
 
   return (
     <div
-      className="fixed top-20 right-4 z-50 flex items-start gap-2 pointer-events-none"
+      className="fixed top-2 right-3 z-50 flex items-start gap-2 pointer-events-none"
       role="status"
       aria-label={`YesMan: ${look.message}`}
       data-testid="yesman-mascot"
