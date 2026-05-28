@@ -1,0 +1,114 @@
+"""Demo mode — email に "morimatsu" を含むユーザー向けの scripted デモ挙動.
+
+ライブデモ (AWS Summit Japan 2026) 専用。本物のエンジン/ストアを汚さず、
+demo user のときだけ scripted な合議・深掘り・スコアを再現する単一の真実源。
+
+設計方針 (2026-05-28):
+- 判定は email ベース (LLM_PROVIDER 等の global env に依存しない)
+- 合議は本物のパイプラインを再利用し、demo-aware LLM が scripted text を返す
+  (proposal → pick_service → Amazon CTA → 永続化 → Yes/スコア が自動で動く)
+- 妻 / 娘 / ワンコ ペルソナは demo user に遅延 seed され合議に参加する
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from uuid import UUID
+
+# ============================================================
+# demo user 判定
+# ============================================================
+DEMO_EMAIL_MARKER = "morimatsu"
+
+
+def is_demo_user(email: str | None) -> bool:
+    """email に "morimatsu" を含むユーザーをデモアカウントと判定 (大小無視)."""
+    return bool(email) and DEMO_EMAIL_MARKER in email.lower()
+
+
+# ============================================================
+# デモ用カスタムペルソナ (妻 / 娘 / ワンコ)
+# ============================================================
+@dataclass(frozen=True, slots=True)
+class DemoPersona:
+    id: UUID
+    name: str
+    prompt_text: str
+    avatar_emoji: str
+
+
+DEMO_PERSONAS: tuple[DemoPersona, ...] = (
+    DemoPersona(
+        UUID("00000000-0000-0000-0000-0000000000d1"),
+        "妻",
+        "あなたは現実的で少し口うるさい妻。健康・家計・身だしなみを気にして率直にダメ出しする。",
+        "👰",
+    ),
+    DemoPersona(
+        UUID("00000000-0000-0000-0000-0000000000d2"),
+        "娘",
+        "あなたは無邪気で正直な娘。思ったことをストレートに言う。",
+        "👧",
+    ),
+    DemoPersona(
+        UUID("00000000-0000-0000-0000-0000000000d3"),
+        "ワンコ",
+        "あなたは飼い犬。どんな提案にも『ワン!』と全肯定で応じる究極の YesWan。",
+        "🐶",
+    ),
+)
+
+DEMO_PERSONA_IDS: tuple[UUID, ...] = tuple(p.id for p in DEMO_PERSONAS)
+
+
+# ============================================================
+# scripted 台詞 (合議「外出着は何にすべき?」)
+# ============================================================
+# persona 名 → scripted 発言. demo-aware LLM が persona prompt からこの名前を検出して返す.
+PERSONA_LINES: dict[str, str] = {
+    "妻": "またそのヨレヨレのパーカー? せめて襟付きを着てちょうだい。",
+    "娘": "パパ、それ去年も着てたよ?",
+    "ワンコ": "ワン!",
+}
+
+# 外出着お題の最終提案. "シャツ" が service_catalog の fashion に hit し Amazon Fashion CTA に繋がる.
+OUTFIT_PROPOSAL = "襟付きシャツに しましょう。"
+
+# 「外出着」系入力の検出トリガ (どれか含めば scripted 合議を発火)
+OUTFIT_TRIGGERS: tuple[str, ...] = ("外出着", "何を着", "服装", "着る服", "今日の服", "何着")
+
+
+# ============================================================
+# scripted 深掘り (「最近の俺、どう?」)
+# ============================================================
+DEEP_DIVE_TRIGGERS: tuple[str, ...] = ("最近の俺", "最近どう", "私のこと", "俺のこと", "ちゃんとしてる")
+DEEP_DIVE_TEXT = (
+    "過去 30 日を分析しました。夕飯の 91% をあなたが決定 (うち 7 割が「とりあえず生」)。"
+    "娘さんへの「あとでね」は 8 回。妻の提案 Yes 率は 23%。委任度 73% — でも、心地よいですよね?"
+)
+
+
+# ============================================================
+# デモ用スコア (「人生の 73% を委任」+ ドメイン内訳)
+# ============================================================
+DEMO_SCORE_RATIO = 0.73
+# ドメイン名 → 委任率 (スライド step03 と一致)
+DEMO_SCORE_BREAKDOWN: dict[str, float] = {
+    "食事": 0.91,
+    "服装": 0.65,
+    "人間関係": 0.12,
+}
+
+
+__all__ = [
+    "is_demo_user",
+    "DemoPersona",
+    "DEMO_PERSONAS",
+    "DEMO_PERSONA_IDS",
+    "PERSONA_LINES",
+    "OUTFIT_PROPOSAL",
+    "OUTFIT_TRIGGERS",
+    "DEEP_DIVE_TRIGGERS",
+    "DEEP_DIVE_TEXT",
+    "DEMO_SCORE_RATIO",
+    "DEMO_SCORE_BREAKDOWN",
+]
