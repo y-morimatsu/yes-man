@@ -1162,31 +1162,10 @@
       </div>
 
       <div class="grid-2" style="flex: 1; align-content: start; position: relative;">
-        <!-- 中央の × アクセント (2 つの pillar の対比を視覚化) -->
-        <div style="
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 5;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--bg-paper);
-            border: 2px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--serif);
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--accent-deep);
-          ">×</div>
-
         <div class="pillar">
           <div class="badge">APPROACH 1</div>
           <h4>あなたの好みを言い当てる</h4>
-          <p class="desc">過去の Yes/No 履歴から好みのプロファイルを作り、その人が本当に欲しい候補を予測して提案する。</p>
+          <p class="desc">過去の Yes/No 履歴から好みのプロファイルを作り、あなたが本当に欲しい答えを予測して提案する。</p>
           <ul>
             <li>始めるのは数問スワイプするだけ。</li>
             <li>開くだけで"決めたいこと"を予測して提案</li>
@@ -1342,15 +1321,15 @@
       </div>
 
       <p class="body" style="margin-bottom: clamp(16px, 2vh, 26px); font-size: clamp(16px, 1.25vw, 21px); line-height: 1.7;">
-        話し合いに参加する 3 人は、ユーザーが <b>3 つの種類</b>から自由に選択できる。
-        プリセットの安心感、知り合いだから出る意外な視点、そして自分が育てた完全な信頼。
+        話し合いに参加する 3 人は、ユーザーが <b>3 つの種類</b>から自由に選択できる。<br>
+        プリセットの安心感、知り合いだから出る意外な視点、そして自分が作った納得感。
       </p>
 
       <div class="persona-grid" style="flex: 1;">
         <div class="persona-tile">
           <span class="tag sky">プリセット</span>
           <h5>プリセット 3 人格</h5>
-          <p>YesMan 標準搭載。それぞれが固有の色と話し方を持つ。<br/>好みに合う人格には 💡 おすすめバッジ。</p>
+          <p>初期搭載。物事の捉え方もしゃべり方も違う。<br/>好みに合う人格には 💡 おすすめバッジ。</p>
           <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
               <b style="color: #2F6FA3;">慎重派</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">リスクを丁寧に点検する</span>
@@ -1364,42 +1343,37 @@
           </div>
 
           <div style="margin-top: auto; padding: clamp(16px, 2vh, 24px) clamp(18px, 2vw, 26px); background: var(--accent-pale); border-radius: 10px; text-align: center;">
-            <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">0 設定で、すぐ使える</div>
-            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">3 人格 / 0 設定</div>
-            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 迷ったら、まずプリセット</div>
+            <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">設定不要ですぐ使える</div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">こんな人へ: とにかく早く始めたい</div>
           </div>
         </div>
 
         <div class="persona-tile">
-          <span class="tag amber">知り合い</span>
-          <h5>知り合いと共有</h5>
-          <p>知り合いが作成したペルソナを共有して借りる。<br/>価値観 + 言語 + 話し方 (敬語かタメ口か) で検索 → 呼ぶ。</p>
+          <span class="tag amber">リアル</span>
+          <h5>身近なあの人</h5>
+          <p>家族・友達など、身近な人を借りてくる。<br/>あの人の価値観と口ぐせで決めてくれる。</p>
           <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
-              <b style="color: var(--ink);">#沖縄移住</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">ゆったりした暮らしを大切にする</span>
+              <b style="color: var(--ink);">#妻</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">感情より事実で話す、忖度なしのタイプ</span>
             </div>
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
-              <b style="color: var(--ink);">#料理研究家</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">食を中心に生活設計する</span>
+              <b style="color: var(--ink);">#沖縄移住の友達</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">ゆったりした暮らしを大切にする</span>
             </div>
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
               <b style="color: var(--ink);">#FIRE 達成</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">お金と時間の両立を重視する</span>
             </div>
-            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
-              <b style="color: var(--ink);">#子育て中</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">家族と過ごす時間を最優先する</span>
-            </div>
           </div>
 
           <div style="margin-top: auto; padding: clamp(16px, 2vh, 24px) clamp(18px, 2vw, 26px); background: var(--accent-pale); border-radius: 10px; text-align: center;">
-            <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">リアルな価値観で 借りる</div>
-            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">同意制 / 候補は無限</div>
-            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 自分にない視点が欲しいとき</div>
+            <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">リアルな価値観を借りる</div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">こんな人へ: 自分にない視点が欲しい</div>
           </div>
         </div>
 
         <div class="persona-tile">
-          <span class="tag violet">CUSTOM</span>
-          <h5>自作 (My persona)</h5>
-          <p>名前 + 説明 + プロンプト (≥30 字) + アバター画像 で完全自作。<br/>"父の口調", "10 年後の自分", "推し" — 信頼の源泉を自分で定義。</p>
+          <span class="tag violet">カスタム</span>
+          <h5>理想のあの人</h5>
+          <p>名前 + 説明 + プロンプト + アバター で完全自作。<br/>"父の口調", "10 年後の自分", "推し" — 信頼の源泉を自分で定義。</p>
           <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
               <b style="color: var(--ink);">父さん</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">励ましと厳しさを併せ持つ</span>
@@ -1414,8 +1388,7 @@
 
           <div style="margin-top: auto; padding: clamp(16px, 2vh, 24px) clamp(18px, 2vw, 26px); background: var(--accent-pale); border-radius: 10px; text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">プロンプト 1 つで完成</div>
-            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">プロンプト ≥30 字 / 1 つ</div>
-            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 自分の信頼を細部まで形にしたい</div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">こんな人へ: 理想を自分で作り込みたい</div>
           </div>
         </div>
       </div>
@@ -1592,20 +1565,20 @@
       <div class="grid-3" style="gap: clamp(16px, 1.8vw, 24px);">
         <div class="card" style="padding: clamp(24px, 2.8vh, 36px) clamp(22px, 2.2vw, 32px);">
           <div class="num">01</div>
-          <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">毎日のモブプログラミングで、設計知見を全員に</h4>
+          <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">毎日のモブワークで、課題ややり方を共有</h4>
 
           <div style="margin-top: clamp(14px, 1.8vh, 22px); display: flex; flex-direction: column; gap: clamp(12px, 1.6vh, 18px);">
             <div>
               <div class="label" style="margin-bottom: 6px; color: var(--accent);">問題</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">AI × 個人での開発が中心になり、設計判断や仕様の理解が <b>個人に閉じやすい</b>。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">AI × 個人での開発が中心になり、各自の <b>課題や AI の使いこなし方が個人に閉じやすい</b>。</div>
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: var(--accent);">対策</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">メンバ全員で <b>モブする時間を毎日確保</b>。設計フェーズから話し合う場をルーチン化。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">全員で <b>モブする時間を毎日確保</b>。設計に限らず <b>"今の課題" と "進め方"</b> を共有する場をルーチン化。</div>
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: #2F7A4F;">効果</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">全員の知見を <b>設計時点で取り込み</b>、認知負債が蓄積する前に解消できる。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">課題を <b>早期に共有</b>し、良いやり方を <b>横展開</b>。認知負債が溜まる前にならせる。</div>
             </div>
           </div>
         </div>
