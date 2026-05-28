@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 import {
   MAX_SELECTION,
   type SelectedPersona,
-  clearUnifiedSelection,
   isSameEntry,
   readUnifiedSelection,
   writeUnifiedSelection,
@@ -67,8 +66,10 @@ export function useUnifiedSelection(): UseUnifiedSelectionResult {
   );
 
   const reset = useCallback(() => {
+    // 明示的な空配列を永続化する (key 削除だと「未作成 = 新規」扱いになり
+    // builtin 3 のデフォルト選択が復活してしまうため、空状態を user の意思として保持).
     setSelection([]);
-    clearUnifiedSelection();
+    writeUnifiedSelection([]);
   }, []);
 
   const countBySource = selection.reduce(

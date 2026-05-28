@@ -16,6 +16,24 @@ export interface SelectedPersona {
   id: string;
 }
 
+/**
+ * Builtin (preset) ペルソナの UUID。backend の alembic 0002 / mock seed と一致する
+ * 決定論的な固定 ID (慎重派 / 楽観派 / 効率派)。
+ * source of truth: apps/api alembic 0002_builtin_personas + mock_repositories._seed_builtin_personas。
+ */
+const BUILTIN_PERSONA_IDS = [
+  "00000000-0000-0000-0000-0000000000a1", // 慎重派
+  "00000000-0000-0000-0000-0000000000a2", // 楽観派
+  "00000000-0000-0000-0000-0000000000a3", // 効率派
+] as const;
+
+/**
+ * 新規ユーザーのデフォルト選択。登録直後 (localStorage 未作成時) に builtin 3 種を
+ * 決定参加ペルソナとしてプリセット選択する。明示的な reset / 選択変更後は尊重される。
+ */
+export const DEFAULT_BUILTIN_SELECTION: SelectedPersona[] =
+  BUILTIN_PERSONA_IDS.map((id) => ({ source: "builtin", id }));
+
 function isValidEntry(v: unknown): v is SelectedPersona {
   if (!v || typeof v !== "object") return false;
   const e = v as Record<string, unknown>;
@@ -26,10 +44,12 @@ function isValidEntry(v: unknown): v is SelectedPersona {
 }
 
 export function readUnifiedSelection(): SelectedPersona[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return [...DEFAULT_BUILTIN_SELECTION];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
+    // キー未作成 = 新規ユーザー (登録直後) → builtin 3 をデフォルト選択。
+    // キーが存在する場合 (空配列含む) は user の明示的な選択結果として尊重する。
+    if (raw === null) return [...DEFAULT_BUILTIN_SELECTION];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(isValidEntry).slice(0, MAX_SELECTION);
