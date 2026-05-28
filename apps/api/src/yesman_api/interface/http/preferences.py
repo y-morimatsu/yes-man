@@ -14,6 +14,7 @@ from yesman_api.domain.learning.cold_start import ColdStartEstimator
 from yesman_api.domain.learning.loader import PreferenceProfileLoader
 from yesman_api.domain.persistence.models import PreferenceProfile
 from yesman_api.interface.deps import (
+    ensure_demo_seeded_dep,
     get_current_user,
     get_preference_repo,
     get_profile_repo,
@@ -44,6 +45,7 @@ async def get_my_preferences(
     user: AuthenticatedUser = Depends(get_current_user),
     pref_repo: PreferenceProfileRepository = Depends(get_preference_repo),
     profile_repo=Depends(get_profile_repo),
+    _demo_seed: None = Depends(ensure_demo_seeded_dep),
 ) -> PreferenceProfileResponse:
     """ColdStart 一元発火 (Consumer 側では呼ばない、FD I1)."""
     user_id = UUID(user.sub)

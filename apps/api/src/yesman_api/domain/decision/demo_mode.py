@@ -148,6 +148,14 @@ DEMO_SCORE_BREAKDOWN: dict[str, float] = {
     "人間関係": 0.12,
 }
 
+# seed_demo_decisions 用: 履歴/嗜好を 妻/娘/ワンコ で生成 (/preferences の persona 名整合)
+DEMO_SEED_PERSONA_SPECS: list[tuple[str, str]] = [
+    ("妻", "ちゃんと考えて決めなさい"),
+    ("娘", "それでいいんじゃない?"),
+    ("ワンコ", "ワン!"),
+]
+DEMO_SEED_PERSONA_STYLE: dict[str, float] = {"妻": 0.78, "娘": 0.62, "ワンコ": 0.95}
+
 
 async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_repo=None) -> None:
     """demo user に 妻/娘/ワンコ カスタムペルソナ + 3 人選択 + 30 日履歴を冪等に投入.
@@ -179,10 +187,15 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
         )
     )
     # best-effort: MockStore backed なら 30 日履歴を seed (冪等、mock 以外は no-op)
+    # 履歴/嗜好の persona も 妻/娘/ワンコ にして /preferences と整合させる。
     store = getattr(decision_repo, "_store", None)
     if store is not None and hasattr(store, "seed_demo_decisions"):
         try:
-            store.seed_demo_decisions(user_id)
+            store.seed_demo_decisions(
+                user_id,
+                persona_specs=DEMO_SEED_PERSONA_SPECS,
+                persona_style_preference=DEMO_SEED_PERSONA_STYLE,
+            )
         except Exception:  # noqa: BLE001  (デモ seed 失敗で本番フローを止めない)
             pass
 

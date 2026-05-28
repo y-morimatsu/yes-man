@@ -123,6 +123,31 @@ def get_auth_adapter(request: Request) -> AuthBackendAdapter:
     return adapter
 
 
+# --- Demo mode (2026-05-28) ---
+async def ensure_demo_seeded_dep(
+    request: Request,
+    bundle: RepositoryBundle = Depends(get_bundle),
+) -> None:
+    """demo user (email=morimatsu) の read 系 endpoint で使い込み状態を冪等 seed.
+
+    scores / preferences / decisions 等に Depends で噛ませることで、
+    新規サインイン (毎回新 sub) でも初回アクセス時に 30 日履歴・嗜好・
+    妻/娘/ワンコ ペルソナが揃った状態を返す。非 demo user は no-op。
+    """
+    from uuid import UUID
+
+    from yesman_api.domain.decision import demo_mode
+
+    user = getattr(request.state, "user", None)
+    if user is not None and demo_mode.is_demo_user(getattr(user, "email", None)):
+        await demo_mode.ensure_demo_seeded(
+            bundle.persona,
+            bundle.user_persona_selection,
+            UUID(user.sub),
+            decision_repo=bundle.decision,
+        )
+
+
 # --- Decision accessors (U4 + U5 統合) ---
 async def get_decision_engine(
     request: Request,

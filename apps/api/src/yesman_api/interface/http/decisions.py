@@ -21,6 +21,7 @@ from yesman_api.domain.decision.errors import DecisionError
 from yesman_api.domain.decision.models import DecisionRequest, SelectedPersonaRef
 from yesman_api.domain.decision.nudge import NudgeCache, NudgeMessageGenerator
 from yesman_api.interface.deps import (
+    ensure_demo_seeded_dep,
     get_current_user,
     get_decision_engine,
     get_decision_repo,
@@ -244,6 +245,7 @@ async def list_decisions(
     repo: DecisionRepository = Depends(get_decision_repo),
     limit: int = Query(default=20, ge=1, le=100),
     choice: Literal["yes", "no", "all"] = Query(default="yes"),
+    _demo_seed: None = Depends(ensure_demo_seeded_dep),
 ) -> DecisionHistoryResponse:
     """Yes 採択履歴 (デフォルト 20 件) + attempt_count (同 user_input_hash 内の試行順)."""
     user_id = UUID(user.sub)
