@@ -110,6 +110,8 @@ class ScoreResponse(BaseModel):
     ratio: float | None  # Yes 比率 = (total - no_count) / total、total=0 → None
     message: str
     history: list[ScoreHistoryPointResponse] = []
+    # Demo mode (2026-05-28): ドメイン別委任率の内訳 (例 {"食事":0.91,...})。通常は None。
+    breakdown: dict[str, float] | None = None
 
 
 class DecisionHistoryItemDTO(BaseModel):

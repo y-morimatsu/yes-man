@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from dataclasses import replace
 from typing import Literal
 from uuid import UUID, uuid4
 
@@ -58,6 +59,21 @@ def _build_domain_request(payload: DecisionRequestDTO, user_id: UUID) -> Decisio
     )
 
 
+def _apply_demo_persona_override(
+    request: DecisionRequest, user: AuthenticatedUser
+) -> DecisionRequest:
+    """Demo user (email=morimatsu) は合議ペルソナを 妻/娘/ワンコ に強制.
+
+    frontend の localStorage 選択 (builtin 既定) を無視し、デモの再現性を担保する。
+    """
+    from yesman_api.domain.decision.demo_mode import DEMO_PERSONA_IDS, is_demo_user
+
+    if not is_demo_user(user.email):
+        return request
+    forced = tuple(SelectedPersonaRef(source="my", id=pid) for pid in DEMO_PERSONA_IDS)
+    return replace(request, selected_personas=forced)
+
+
 # ============================================================
 # 非ストリーミング合議
 # ============================================================
@@ -68,6 +84,7 @@ async def request_decision(
     engine: DecisionEngine = Depends(get_decision_engine),
 ) -> DecisionResponse:
     request = _build_domain_request(payload, UUID(user.sub))
+    request = _apply_demo_persona_override(request, user)
     try:
         decision_id, consensus, no_attempt_count = await engine.run(request)
     except DecisionError as exc:
@@ -99,6 +116,7 @@ async def request_decision_stream(
     engine: DecisionEngine = Depends(get_decision_engine),
 ) -> StreamingResponse:
     request = _build_domain_request(payload, UUID(user.sub))
+    request = _apply_demo_persona_override(request, user)
     decision_id = uuid4()  # ultrathink Imp2: SSE start event で client に事前通知
 
     async def event_stream():

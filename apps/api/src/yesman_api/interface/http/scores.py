@@ -21,16 +21,29 @@ async def get_my_score(
     user: AuthenticatedUser = Depends(get_current_user),
     scorer: AutonomyScorer = Depends(get_autonomy_scorer),
 ) -> ScoreResponse:
+    from yesman_api.domain.decision import demo_mode
+
     summary = await scorer.compute(UUID(user.sub))
+    history = [
+        ScoreHistoryPointResponse(date=p.date, yes_ratio=p.yes_ratio, total=p.total)
+        for p in summary.history
+    ]
+    # Demo mode: 「人生の 73% を委任」+ ドメイン内訳 (履歴は実 seed を流用)
+    if demo_mode.is_demo_user(user.email):
+        return ScoreResponse(
+            no_count=summary.no_count,
+            total=summary.total,
+            ratio=demo_mode.DEMO_SCORE_RATIO,
+            message="あなたは人生の 73% を AI に委ねています。",
+            history=history,
+            breakdown=dict(demo_mode.DEMO_SCORE_BREAKDOWN),
+        )
     return ScoreResponse(
         no_count=summary.no_count,
         total=summary.total,
         ratio=summary.ratio,
         message=summary.message,
-        history=[
-            ScoreHistoryPointResponse(date=p.date, yes_ratio=p.yes_ratio, total=p.total)
-            for p in summary.history
-        ],
+        history=history,
     )
 
 
