@@ -156,6 +156,23 @@ html.dark {
 }
 
 /* ================================================================
+ * iOS Safari input auto-zoom 防止 (2026-05-28)
+ * input の font-size < 16px だと、focus 時に iOS Safari が自動でズームし
+ * 「画面が 100% 以上」になって収まらなくなる (SignInPage 等の text-[13px]
+ * input で発生)。タッチデバイスで text 系 form control を 16px 以上に固定
+ * して auto-zoom を抑止する (viewport の pinch-zoom 自体は維持し a11y を保つ)。
+ * Tailwind の text-[NNpx] utility (specificity 0,1,0) を上書きするため
+ * !important を付与。checkbox/radio/range/color は対象外。
+ * ================================================================ */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* ================================================================
  * v3-γ anonymous-strangers (2026-05-24, Task 5): 漫画ステージ用
  * ================================================================ */
 
