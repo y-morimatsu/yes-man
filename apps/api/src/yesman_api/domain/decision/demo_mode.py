@@ -149,8 +149,38 @@ DEMO_SCORE_BREAKDOWN: dict[str, float] = {
 }
 
 
+async def ensure_demo_seeded(persona_repo, selection_repo, user_id) -> None:
+    """demo user に 妻/娘/ワンコ カスタムペルソナ + 3 人選択を冪等に投入.
+
+    persona は無ければ insert、selection は毎回 妻/娘/ワンコ に強制 (デモの再現性)。
+    persona_repo / selection_repo は application 層の protocol (duck-typed)。
+    """
+    from yesman_api.domain.persistence.models import Persona, UserPersonaSelection
+
+    for p in DEMO_PERSONAS:
+        if await persona_repo.get(p.id) is None:
+            await persona_repo.insert(
+                Persona(
+                    id=p.id,
+                    owner_user_id=user_id,
+                    name=p.name,
+                    description=f"デモ用カスタムペルソナ ({p.name})",
+                    prompt_text=p.prompt_text,
+                    is_shared=False,
+                    is_builtin=False,
+                )
+            )
+    await selection_repo.upsert(
+        UserPersonaSelection(
+            user_id=user_id,
+            persona_ids=[str(pid) for pid in DEMO_PERSONA_IDS],
+        )
+    )
+
+
 __all__ = [
     "is_demo_user",
+    "ensure_demo_seeded",
     "DemoPersona",
     "DEMO_PERSONAS",
     "DEMO_PERSONA_IDS",

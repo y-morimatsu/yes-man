@@ -124,14 +124,21 @@ def get_auth_adapter(request: Request) -> AuthBackendAdapter:
 
 
 # --- Decision accessors (U4 + U5 統合) ---
-def get_decision_engine(
+async def get_decision_engine(
     request: Request,
     bundle: RepositoryBundle = Depends(get_bundle),
 ):
     """per-request DecisionEngine (RepositoryBundle が request scope のため都度組み立て).
 
     U5 統合 (Phase A.0b): PreferenceProfileLoader を inject、U4 単体テストは preference_loader=None で動作.
+
+    Demo mode (2026-05-28): email に "morimatsu" を含むユーザーのときだけ
+    妻/娘/ワンコ ペルソナを冪等 seed し、LLM を DemoLLMAdapter で包む
+    (scripted 合議/深掘り)。非 demo user には一切影響しない。
     """
+    from uuid import UUID
+
+    from yesman_api.domain.decision import demo_mode
     from yesman_api.domain.decision.engine import DecisionEngine
     from yesman_api.domain.learning.cold_start import ColdStartEstimator
     from yesman_api.domain.learning.loader import PreferenceProfileLoader
@@ -142,6 +149,18 @@ def get_decision_engine(
     orchestrator = getattr(request.app.state, "consensus_orchestrator", None)
     if not all((llm, event_publisher, silence_guard, orchestrator)):
         raise RuntimeError("Decision singletons not initialized in main.py lifespan")
+
+    # --- Demo mode: demo user のみ seed + LLM ラップ ---
+    _user = getattr(request.state, "user", None)
+    if _user is not None and demo_mode.is_demo_user(getattr(_user, "email", None)):
+        from yesman_api.infrastructure.decision.llm_providers.demo_adapter import (
+            DemoLLMAdapter,
+        )
+
+        await demo_mode.ensure_demo_seeded(
+            bundle.persona, bundle.user_persona_selection, UUID(_user.sub)
+        )
+        llm = DemoLLMAdapter(llm)
     cold_start = getattr(request.app.state, "cold_start_estimator", None) or ColdStartEstimator()
     preference_loader = PreferenceProfileLoader(
         preference_repo=bundle.preference,
