@@ -9,6 +9,7 @@ import {
   readUnifiedSelection,
   writeUnifiedSelection,
 } from "../../../src/features/persona/unifiedSelectionStorage";
+import { registerUser, setCurrentEmail } from "../../../src/shell/mockAuthStorage";
 
 const STORAGE_KEY = "yesman:unified-selection-v1";
 
@@ -49,6 +50,18 @@ describe("unifiedSelectionStorage", () => {
     clearUnifiedSelection();
     expect(window.localStorage.getItem(STORAGE_KEY)).toBeNull();
     expect(readUnifiedSelection()).toEqual(DEFAULT_BUILTIN_SELECTION);
+  });
+
+  it("デモアカウント (morimatsu) は 妻/娘/ワンコ (my) をデフォルト選択する", () => {
+    registerUser("morimatsu@nec.com");
+    setCurrentEmail("morimatsu@nec.com");
+    clearUnifiedSelection();
+    expect(readUnifiedSelection()).toEqual([
+      { source: "my", id: "00000000-0000-0000-0000-0000000000d1" },
+      { source: "my", id: "00000000-0000-0000-0000-0000000000d2" },
+      { source: "my", id: "00000000-0000-0000-0000-0000000000d3" },
+    ]);
+    window.localStorage.clear(); // mock auth をクリア (他テストへの汚染防止)
   });
 
   it("MAX_SELECTION を超える保存は 3 件に trim される", () => {
