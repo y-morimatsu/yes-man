@@ -98,7 +98,7 @@ export default function PersonaSelectionPage() {
         選択中: <span className="font-bold">{selection.length}</span> / {MAX_SELECTION}
         {selection.length > 0 && (
           <span className="ml-2 text-[12px] text-neutral-500">
-            (ビルトイン:{countBySource.builtin} ・ 世界:{countBySource.anonymous} ・
+            (ビルトイン:{countBySource.builtin} ・ 知り合い:{countBySource.anonymous} ・
             自作:{countBySource.my})
           </span>
         )}
@@ -114,7 +114,7 @@ export default function PersonaSelectionPage() {
           className="flex flex-col gap-3"
         >
           <p className="text-xs text-neutral-500">
-            🤝 opt-in 中の 知り合い (caller は除外)
+            🤝 opt-in 中の 知り合い
           </p>
           <AnonymousSelectionList />
         </div>

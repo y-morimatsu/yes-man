@@ -101,7 +101,7 @@ export function OptInCard() {
             id="opt-in-card-desc"
             className="text-xs text-neutral-600 mt-1 leading-relaxed"
           >
-            あなたの 価値観タグが、世界の だれかの 決め事に 使われます。
+            あなたの 価値観タグが、知り合いの 決め事に 使われます。
             <br />
             <span className="text-[12px] text-neutral-500">
               email / 表示名 は 絶対に 送信されません。

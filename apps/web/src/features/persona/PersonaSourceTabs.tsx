@@ -12,7 +12,7 @@ const TABS: { id: PersonaSource; label: string; emoji: string; hint: string }[] 
     id: "builtin",
     label: "ビルトイン",
     emoji: "🎭",
-    hint: "慎重派 / 楽観派 / 効率派",
+    hint: "慎重 / 楽観 / 効率",
   },
   {
     id: "anonymous",
