@@ -85,6 +85,48 @@ DEEP_DIVE_TEXT = (
     "過去 30 日を分析しました。夕飯の 91% をあなたが決定 (うち 7 割が「とりあえず生」)。"
     "娘さんへの「あとでね」は 8 回。妻の提案 Yes 率は 23%。委任度 73% — でも、心地よいですよね?"
 )
+# 深掘りお題のときの家族の反応 (合議パート用)
+DEEP_DIVE_PERSONA_LINES: dict[str, str] = {
+    "妻": "聞かない方がいいと思うけど…。",
+    "娘": "パパ、ほんとに大丈夫?",
+    "ワンコ": "ワン…。",
+}
+
+
+# ============================================================
+# お題トピック判定
+# ============================================================
+TOPIC_OUTFIT = "outfit"
+TOPIC_DEEP_DIVE = "deep_dive"
+
+
+def match_topic(text: str | None) -> str | None:
+    """user 入力から scripted トピックを判定. 該当なしは None (= 本物 LLM に委譲)."""
+    if not text:
+        return None
+    if any(t in text for t in DEEP_DIVE_TRIGGERS):
+        return TOPIC_DEEP_DIVE
+    if any(t in text for t in OUTFIT_TRIGGERS):
+        return TOPIC_OUTFIT
+    return None
+
+
+def persona_line(topic: str | None, persona_name: str) -> str | None:
+    """topic + persona 名 → scripted 発言. 該当なしは None."""
+    if topic == TOPIC_OUTFIT:
+        return PERSONA_LINES.get(persona_name)
+    if topic == TOPIC_DEEP_DIVE:
+        return DEEP_DIVE_PERSONA_LINES.get(persona_name)
+    return None
+
+
+def proposal_text(topic: str | None) -> str | None:
+    """topic → scripted 最終提案. 該当なしは None."""
+    if topic == TOPIC_OUTFIT:
+        return OUTFIT_PROPOSAL
+    if topic == TOPIC_DEEP_DIVE:
+        return DEEP_DIVE_TEXT
+    return None
 
 
 # ============================================================
@@ -109,6 +151,12 @@ __all__ = [
     "OUTFIT_TRIGGERS",
     "DEEP_DIVE_TRIGGERS",
     "DEEP_DIVE_TEXT",
+    "DEEP_DIVE_PERSONA_LINES",
     "DEMO_SCORE_RATIO",
     "DEMO_SCORE_BREAKDOWN",
+    "TOPIC_OUTFIT",
+    "TOPIC_DEEP_DIVE",
+    "match_topic",
+    "persona_line",
+    "proposal_text",
 ]
