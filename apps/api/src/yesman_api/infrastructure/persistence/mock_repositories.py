@@ -219,7 +219,14 @@ class MockStore:
                 is_builtin=True,
             )
 
-    def seed_demo_decisions(self, user_id: UUID, days: int = 30) -> int:
+    def seed_demo_decisions(
+        self,
+        user_id: UUID,
+        days: int = 30,
+        *,
+        persona_specs: list[tuple[str, str]] | None = None,
+        persona_style_preference: dict[str, float] | None = None,
+    ) -> int:
         """デモ用の過去 N 日 (default 30) の Yes/No 決定履歴 + PreferenceProfile を投入。
 
         Yes 比率が時間と共に漸進的に上昇する (30% → 95%) パターンで、
@@ -256,7 +263,7 @@ class MockStore:
             ("planning", "次の旅行先を提案して"),
             ("planning", "新しい趣味を提案して"),
         ]
-        persona_specs = [
+        persona_specs = persona_specs or [
             ("慎重派", "リスクを検討した結果、これで進めるべきです"),
             ("楽観派", "きっと うまくいきます！"),
             ("効率派", "最短ルートはこれです"),
@@ -324,7 +331,7 @@ class MockStore:
         # builder.apply_yes/no は全 persona 一括加算で clip 飽和するため、
         # デモでは「ペルソナごとに Yes 含有率を変えた」相当のスコアを直接上書きし、
         # bar graph に差を出す。実運用では learning consumer が自然な分散を生む。
-        profile.persona_style_preference = {
+        profile.persona_style_preference = persona_style_preference or {
             "慎重派": 0.72,
             "楽観派": 0.91,
             "効率派": 0.45,

@@ -148,6 +148,36 @@ async def test_adapter_non_topic_delegates():
 
 
 @pytest.mark.asyncio
+async def test_ensure_demo_seeded_populates_personas_selection_history(mock_bundle):
+    """demo user に 妻/娘/ワンコ persona + selection + 30日履歴 + 嗜好を冪等 seed."""
+    from uuid import uuid4
+
+    uid = uuid4()
+    await demo_mode.ensure_demo_seeded(
+        mock_bundle.persona,
+        mock_bundle.user_persona_selection,
+        uid,
+        decision_repo=mock_bundle.decision,
+    )
+    # 妻/娘/ワンコ persona
+    for dp in demo_mode.DEMO_PERSONAS:
+        p = await mock_bundle.persona.get(dp.id)
+        assert p is not None and p.name == dp.name
+    # selection = 3 人
+    sel = await mock_bundle.user_persona_selection.get(uid)
+    assert sel is not None and len(sel.persona_ids) == 3
+    # 履歴 + 嗜好 (persona 名が 妻/娘/ワンコ で整合)
+    pref = await mock_bundle.preference.get(uid)
+    assert pref is not None
+    assert set(pref.persona_style_preference.keys()) == {"妻", "娘", "ワンコ"}
+    # 冪等: 2 回目で persona 重複作成しない (例外なく完了)
+    await demo_mode.ensure_demo_seeded(
+        mock_bundle.persona, mock_bundle.user_persona_selection, uid,
+        decision_repo=mock_bundle.decision,
+    )
+
+
+@pytest.mark.asyncio
 async def test_adapter_stream_chunks_scripted():
     spy = _SpyDelegate()
     adapter = DemoLLMAdapter(spy)
