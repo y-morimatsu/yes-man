@@ -927,12 +927,16 @@
           <div class="sub">
             <p>AI があなたの欲しい答えを<br/>予測して提案する。</p>
             <p>あなたの仕事は、<em>YES</em> で承認するだけ。</p>
-            <p>話し合いによる多角的な予測と、議論履歴の透明性で、<br/>安心して任せられる — そして、心地よくダメになっていく。</p>
+            <p>合議による多角的な言い当てと、議論履歴の透明性で、<br/>安心して任せられる — そして、心地よくダメになっていく。</p>
           </div>
         </div>
         <div class="cover-phone" aria-label="App screen capture placeholder">
           <span class="cover-phone-label">App<br/>Screen<br/>Capture</span>
         </div>
+      </div>
+
+      <div class="bottom">
+        <span class="pill">● Built with AI-DLC × Claude × AWS</span>
       </div>
     </section>
 
@@ -976,14 +980,14 @@
               width: clamp(180px, 17vw, 260px);
               height: clamp(180px, 17vw, 260px);
               border-radius: 50%;
-              border: 2.5px solid var(--line);
-              overflow: hidden;
-              box-shadow:
-                0 8px 24px rgba(151, 63, 34, 0.08),
-                0 2px 6px rgba(0, 0, 0, 0.04);
-            ">
-            <img src="images/1-森松.png" alt="森松 祐樹" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
-          </div>
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
           <div style="text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">森松 祐樹</div>
           </div>
@@ -995,14 +999,14 @@
               width: clamp(180px, 17vw, 260px);
               height: clamp(180px, 17vw, 260px);
               border-radius: 50%;
-              border: 2.5px solid var(--line);
-              overflow: hidden;
-              box-shadow:
-                0 8px 24px rgba(151, 63, 34, 0.08),
-                0 2px 6px rgba(0, 0, 0, 0.04);
-            ">
-            <img src="images/2-佐々木.jpeg" alt="佐々木 航太" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
-          </div>
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
           <div style="text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">佐々木 航太</div>
           </div>
@@ -1014,14 +1018,14 @@
               width: clamp(180px, 17vw, 260px);
               height: clamp(180px, 17vw, 260px);
               border-radius: 50%;
-              border: 2.5px solid var(--line);
-              overflow: hidden;
-              box-shadow:
-                0 8px 24px rgba(151, 63, 34, 0.08),
-                0 2px 6px rgba(0, 0, 0, 0.04);
-            ">
-            <img src="images/3-辻.png" alt="辻 朋子" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
-          </div>
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
           <div style="text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">辻 朋子</div>
           </div>
@@ -1033,14 +1037,14 @@
               width: clamp(180px, 17vw, 260px);
               height: clamp(180px, 17vw, 260px);
               border-radius: 50%;
-              border: 2.5px solid var(--line);
-              overflow: hidden;
-              box-shadow:
-                0 8px 24px rgba(151, 63, 34, 0.08),
-                0 2px 6px rgba(0, 0, 0, 0.04);
-            ">
-            <img src="images/4-水野.jpeg" alt="水野 良祐" style="width: 100%; height: 100%; object-fit: cover; object-position: 75% 30%; display: block;" />
-          </div>
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
           <div style="text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">水野 良祐</div>
           </div>
@@ -1070,18 +1074,18 @@
             <div class="stat-cap" style="flex: 1; margin-top: 0;">大人が 1 日に下す意思決定の数。<br/><span style="font-style: italic; color: var(--ink-muted);">— ケンブリッジ大学 Barbara Sahakian 教授の研究による</span></div>
           </div>
           <div class="card tint" style="display: flex; align-items: baseline; gap: 20px;">
-            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">36<span style="font-size: 0.55em;">%</span></div>
+            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">94<span style="font-size: 0.55em;">%</span></div>
             <div class="stat-cap" style="flex: 1; margin-top: 0;">「日々の選択」をストレス源として挙げた人の割合 (年により変動)。<br/><span style="font-style: italic; color: var(--ink-muted);">— American Psychological Association, Stress in America</span></div>
           </div>
           <div class="card tint" style="display: flex; align-items: baseline; gap: 20px;">
-            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">45<span style="font-size: 0.55em;">%</span></div>
+            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">40<span style="font-size: 0.55em;">%</span></div>
             <div class="stat-cap" style="flex: 1; margin-top: 0;">1 日の行動のうち、習慣 (= 決めずに済ませる行動) が占める割合。<br/><span style="font-style: italic; color: var(--ink-muted);">— Wood &amp; Neal, Duke University (2007)</span></div>
           </div>
         </div>
 
         <!-- RIGHT: 今日の決断リスト -->
         <div class="card" style="display: flex; flex-direction: column; gap: 10px;">
-          <div class="label" style="margin-bottom: 8px; font-family: var(--serif); font-size: clamp(16px, 1.3vw, 21px); font-weight: 600; letter-spacing: normal; text-transform: none; color: var(--ink);">今日、この会場に来るまでに決めたこと</div>
+          <div class="label" style="margin-bottom: 4px;">今日、この会場に来るまでに決めたこと</div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; flex: 1;">
             <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 何時に起きるか</div>
             <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ シャワーを浴びるか</div>
@@ -1130,7 +1134,7 @@
         <div style="flex: 1; max-width: 1200px;">
           <div class="concept-quote">
             AI が日常〜人生レベルの<br/>
-            欲しい答えを察して提案し、<br/>
+            欲しい答えを言い当て、<br/>
             ユーザーは <em>Yes をスワイプ</em>するだけ。
           </div>
 
@@ -1141,9 +1145,9 @@
           </div>
 
           <p class="body" style="font-size: clamp(18px, 1.4vw, 24px); line-height: 1.75; max-width: 64ch;">
-            話し合いによる多角的な予測と、議論履歴の透明性で、安心して任せられる
+            合議による多角的な言い当てと、議論履歴の透明性で、安心して任せられる
             新しい意思決定支援サービス。最終承認だけは人間が握り、その判断疲労を
-            限りなくゼロに近づける — つまり、<em style="font-style: normal; color: var(--accent-deep); font-weight: 600;">最高にぐうたれる毎日を、AI で叶えます</em>。
+            限りなくゼロに近づける — 言い換えれば、<em style="font-style: normal; color: var(--accent-deep); font-weight: 600;">人を心地よくダメにする</em>。
           </p>
         </div>
       </div>
@@ -1157,7 +1161,7 @@
         <div class="left">
           <div class="eyebrow">03 — How we spoil humans</div>
           <h2 class="section">人をダメにする二つのアプローチ。</h2>
-          <p class="kicker" style="margin-top: 8px;">あなたを学ぶ <span style="color: var(--accent); font-weight: 700;">×</span> 信頼する人を呼ぶ。</p>
+          <p class="kicker" style="margin-top: 8px;">あなたを学ぶ <span style="color: var(--accent); font-weight: 700;">×</span> 信頼の人を呼ぶ。</p>
         </div>
       </div>
 
@@ -1185,22 +1189,22 @@
 
         <div class="pillar">
           <div class="badge">APPROACH 1</div>
-          <h4>あなたの好みを言い当てる</h4>
-          <p class="desc">過去の Yes/No 履歴から好みのプロファイルを作り、その人が本当に欲しい候補を予測して提案する。</p>
+          <h4>ユーザーの嗜好を言い当てる</h4>
+          <p class="desc">過去の Yes/No 履歴から嗜好プロファイルを構築し、その人が本当に欲しい候補を予測生成する。</p>
           <ul>
-            <li>始めるのは数問スワイプするだけ。</li>
-            <li>開くだけで"決めたいこと"を予測して提案</li>
-            <li>Yes/No のたびに裏で学習、提案精度が自動で上がる</li>
+            <li>Onboarding swipe (最大 50 問) で初期プロファイル</li>
+            <li>QuickStart: 時刻 × 曜日 × 嗜好で候補を動的生成</li>
+            <li>Yes/No の都度、EventBridge で非同期に精度更新</li>
           </ul>
         </div>
 
         <div class="pillar">
           <div class="badge">APPROACH 2</div>
-          <h4>信頼する人が決めてくれる</h4>
-          <p class="desc">"誰の目線の提案か" が、納得感を左右する。プリセット / 知り合い / カスタムの 3 種類から最大 3 人を話し合いに呼ぶ。</p>
+          <h4>自分が信頼するペルソナを設定する</h4>
+          <p class="desc">"誰のレンズで絞り込むか" が言い当てを深める。ビルトイン / 知り合い / カスタムの 3 系統から最大 3 人を合議に招集。</p>
           <ul>
-            <li>プリセット: 慎重派・楽観派・効率派</li>
-            <li>知り合い: 価値観でペルソナを共有 → 話し合いに呼ぶ</li>
+            <li>ビルトイン: 慎重派・楽観派・効率派</li>
+            <li>知り合い: 価値観タグで共有 / 招集</li>
             <li>カスタム: 親・尊敬する人・理想の自分を作る</li>
           </ul>
         </div>
@@ -1214,8 +1218,8 @@
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">03 · 1 — Personalization</div>
-          <h2 class="section">あなたの好みを言い当てる。</h2>
-          <p class="kicker" style="margin-top: 8px;">"あなたが本当に欲しかった答え" を予測する学習ループ。</p>
+          <h2 class="section">嗜好を言い当てる。</h2>
+          <p class="kicker" style="margin-top: 8px;">"あなたが本当に欲しかった答え" を当てに行く学習ループ。</p>
         </div>
       </div>
 
@@ -1223,23 +1227,23 @@
         <div class="col" style="gap: clamp(14px, 1.6vh, 22px);">
           <div class="card" style="flex: 1; padding: clamp(28px, 3vh, 44px) clamp(28px, 2.4vw, 36px); display: flex; flex-direction: column; justify-content: center;">
             <div class="num">STEP 01</div>
-            <h4>好みを知る数問</h4>
-            <p>性格 × 生活の Yes/No 質問をスワイプ。十分わかれば「もういい、進む」で中断 OK。</p>
+            <h4>Onboarding swipe (最大 50 問)</h4>
+            <p>性格 × 生活の Yes/No 質問を Tinder 風 swipe で。確信ライン到達で「もういい、進む」 CTA で離脱許容。</p>
           </div>
           <div class="card" style="flex: 1; padding: clamp(28px, 3vh, 44px) clamp(28px, 2.4vw, 36px); display: flex; flex-direction: column; justify-content: center;">
             <div class="num">STEP 02</div>
-            <h4>開いた瞬間に候補を提案</h4>
-            <p>時刻 + 曜日 + 好みのプロファイルから「もしかして〜について?」候補を即座に提示。</p>
+            <h4>QuickStart 候補生成</h4>
+            <p>時刻 + 曜日 + 嗜好プロファイルから「もしかして〜について?」候補を build-time + runtime で動的提示。</p>
           </div>
           <div class="card" style="flex: 1; padding: clamp(28px, 3vh, 44px) clamp(28px, 2.4vw, 36px); display: flex; flex-direction: column; justify-content: center;">
             <div class="num">STEP 03</div>
-            <h4>裏側で好みデータを更新</h4>
-            <p>Yes/No のたびに、裏側で好みデータをためる (EventBridge)。提案の速度は落ちない。</p>
+            <h4>非同期で嗜好プロファイル更新</h4>
+            <p>Yes/No の都度 EventBridge にイベント発行。提案レイテンシを劣化させず、嗜好を蓄積。</p>
           </div>
         </div>
 
         <div class="card tint" style="display: flex; flex-direction: column; gap: clamp(16px, 2vh, 24px);">
-          <div class="label">嗜好プロファイル</div>
+          <div class="label">嗜好プロファイル (実装通り)</div>
 
           <!-- 1. 採択された domain (accepted_patterns 集計) -->
           <div>
@@ -1323,7 +1327,7 @@
           </div>
 
           <div style="margin-top: auto; padding-top: clamp(12px, 1.6vh, 18px); border-top: 1px solid var(--line); font-size: clamp(13px, 1vw, 15px); color: var(--ink-soft); font-style: italic; line-height: 1.55;">
-            ユーザーがいつでも閲覧・修正・全リセット可能。<strong style="color: var(--accent-deep); font-style: normal; font-weight: 700;">同じ意見ばかりにならない設計</strong>。
+            ユーザーがいつでも閲覧・修正・全リセット可能。<strong style="color: var(--accent-deep); font-style: normal; font-weight: 700;">エコーチェンバー回避設計</strong>。
           </div>
         </div>
       </div>
@@ -1336,21 +1340,21 @@
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">03 · 2 — Trusted Persona</div>
-          <h2 class="section">信頼する人が決めてくれる。</h2>
-          <p class="kicker" style="margin-top: 8px;">"誰の目線の提案か" が、納得感を決める。</p>
+          <h2 class="section">自分が信頼するペルソナと、決める。</h2>
+          <p class="kicker" style="margin-top: 8px;">"誰のレンズで絞るか" が、言い当ての解像度を決める。</p>
         </div>
       </div>
 
       <p class="body" style="margin-bottom: clamp(16px, 2vh, 26px); font-size: clamp(16px, 1.25vw, 21px); line-height: 1.7;">
-        話し合いに参加する 3 人は、ユーザーが <b>3 つの種類</b>から自由に選択できる。
-        プリセットの安心感、知り合いだから出る意外な視点、そして自分が育てた完全な信頼。
+        合議に参加する 3 人は、ユーザーが <b>3 つの系統</b>から自由に mix できる。
+        ビルトインの安心感、知り合いが持つ予測不能性、そして自分が育てた完全な信頼。
       </p>
 
       <div class="persona-grid" style="flex: 1;">
         <div class="persona-tile">
-          <span class="tag sky">プリセット</span>
-          <h5>プリセット 3 人格</h5>
-          <p>YesMan 標準搭載。それぞれが固有の色と話し方を持つ。<br/>好みに合う人格には 💡 おすすめバッジ。</p>
+          <span class="tag sky">BUILTIN</span>
+          <h5>ビルトイン 3 人格</h5>
+          <p>YesMan 標準搭載。それぞれが固有の theme color と発話 tone を持つ。<br/>嗜好親和度の高い人格には 💡 おすすめ badge。</p>
           <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
               <b style="color: #2F6FA3;">慎重派</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">リスクを丁寧に点検する</span>
@@ -1366,14 +1370,14 @@
           <div style="margin-top: auto; padding: clamp(16px, 2vh, 24px) clamp(18px, 2vw, 26px); background: var(--accent-pale); border-radius: 10px; text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">0 設定で、すぐ使える</div>
             <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">3 人格 / 0 設定</div>
-            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 迷ったら、まずプリセット</div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 迷ったら、まずビルトイン</div>
           </div>
         </div>
 
         <div class="persona-tile">
           <span class="tag amber">知り合い</span>
           <h5>知り合いと共有</h5>
-          <p>知り合いが作成したペルソナを共有して借りる。<br/>価値観 + 言語 + 話し方 (敬語かタメ口か) で検索 → 呼ぶ。</p>
+          <p>知り合いが作成したペルソナを共有して借りる。<br/>価値観タグ + 言語 + formality で検索 / 招集。</p>
           <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
               <b style="color: var(--ink);">#沖縄移住</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">ゆったりした暮らしを大切にする</span>
@@ -1391,7 +1395,7 @@
 
           <div style="margin-top: auto; padding: clamp(16px, 2vh, 24px) clamp(18px, 2vw, 26px); background: var(--accent-pale); border-radius: 10px; text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">リアルな価値観で 借りる</div>
-            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">同意制 / 候補は無限</div>
+            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">opt-in × ∞ 候補</div>
             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 自分にない視点が欲しいとき</div>
           </div>
         </div>
@@ -1399,7 +1403,7 @@
         <div class="persona-tile">
           <span class="tag violet">CUSTOM</span>
           <h5>自作 (My persona)</h5>
-          <p>名前 + 説明 + プロンプト (≥30 字) + アバター画像 で完全自作。<br/>"父の口調", "10 年後の自分", "推し" — 信頼の源泉を自分で定義。</p>
+          <p>name + description + prompt (≥30 字) + avatar で完全自作。<br/>"父の口調", "10 年後の自分", "推し" — 信頼の源泉を自分で定義。</p>
           <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
             <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
               <b style="color: var(--ink);">父さん</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">励ましと厳しさを併せ持つ</span>
@@ -1414,7 +1418,7 @@
 
           <div style="margin-top: auto; padding: clamp(16px, 2vh, 24px) clamp(18px, 2vw, 26px); background: var(--accent-pale); border-radius: 10px; text-align: center;">
             <div style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); font-weight: 600; color: var(--accent-deep);">プロンプト 1 つで完成</div>
-            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">プロンプト ≥30 字 / 1 つ</div>
+            <div style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); margin-top: 4px;">prompt ≥30 字 / 1 つ</div>
             <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(151, 63, 34, 0.22); font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); font-style: italic;">推奨: 自分の信頼を細部まで形にしたい</div>
           </div>
         </div>
@@ -1430,7 +1434,7 @@
         <div class="left">
           <div class="eyebrow">04 — Business</div>
           <h2 class="section">全ユーザー基本無料。アフィリエイトで支える。</h2>
-          <p class="kicker" style="margin-top: 8px;">予測が当たった直後は、行動に移る最も自然な瞬間。判断疲労ゼロのまま、次の一歩 (予約・購入) へ繋ぐ。</p>
+          <p class="kicker" style="margin-top: 8px;">"言い当てた瞬間 = 自然な次の一歩" を活かす、判断疲労ゼロのコマース動線。</p>
         </div>
       </div>
 
@@ -1440,8 +1444,8 @@
         <div class="col" style="gap: clamp(16px, 1.8vh, 24px);">
           <div class="card" style="padding: clamp(24px, 2.8vh, 36px) clamp(22px, 2.2vw, 32px);">
             <div class="num">CHANNEL 01</div>
-            <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">アプリ画面内の話題に合った広告</h4>
-            <p style="font-size: clamp(16px, 1.25vw, 20px); line-height: 1.65;">嗜好プロファイル × 時間帯 × 直近の質問から、UI に溶け込むさりげない広告枠を 1 画面 1 つだけ。</p>
+            <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">アプリ画面内のアドホック広告</h4>
+            <p style="font-size: clamp(16px, 1.25vw, 20px); line-height: 1.65;">嗜好プロファイル × 時間帯 × 直近の質問から、UI に溶け込むネイティブ広告枠を 1 画面 1 つだけ。</p>
             <ul style="list-style: none; margin-top: clamp(12px, 1.5vh, 18px); display: flex; flex-direction: column; gap: clamp(8px, 1vh, 12px);">
               <li style="font-size: clamp(16px, 1.2vw, 19px); color: var(--ink-soft); padding-left: 22px; position: relative; line-height: 1.55;">
                 <span style="position: absolute; left: 0; color: var(--accent); font-weight: 700;">→</span>
@@ -1453,7 +1457,7 @@
               </li>
               <li style="font-size: clamp(16px, 1.2vw, 19px); color: var(--ink-soft); padding-left: 22px; position: relative; line-height: 1.55;">
                 <span style="position: absolute; left: 0; color: var(--accent); font-weight: 700;">→</span>
-                センシティブな話題 (宗教 / 選挙 / 暴力 / 卑猥) は <b>回答しない</b>
+                沈黙ドメイン (宗教 / 選挙 / 暴力 / 卑猥) では <b>必ず非表示</b>
               </li>
             </ul>
           </div>
@@ -1461,7 +1465,7 @@
           <div class="card" style="padding: clamp(24px, 2.8vh, 36px) clamp(22px, 2.2vw, 32px);">
             <div class="num">CHANNEL 02</div>
             <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">YES 深堀り回答のアフィリエイトリンク</h4>
-            <p style="font-size: clamp(16px, 1.25vw, 20px); line-height: 1.65;">"明日のランチを決めて" → 店候補にホットペッパー。<b>予測が当たった瞬間は、最も自然な次の一歩</b>を踏み出す瞬間。</p>
+            <p style="font-size: clamp(16px, 1.25vw, 20px); line-height: 1.65;">"明日のランチを決めて" → 店候補にホットペッパー。<b>言い当てた瞬間は、最も自然な次の一歩</b>を踏み出す瞬間。</p>
             <div style="margin-top: clamp(14px, 1.8vh, 22px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 1vh, 12px);">
               <div style="background: var(--bg-card-tint); border: 1px solid var(--line); border-radius: 8px; padding: clamp(10px, 1.2vh, 14px) clamp(12px, 1.2vw, 16px);">
                 <div style="font-size: clamp(12px, 0.95vw, 14px); letter-spacing: 0.12em; color: var(--accent); font-weight: 700; text-transform: uppercase;">食事</div>
@@ -1505,11 +1509,11 @@
                 <td style="text-align: right; font-family: var(--serif); font-size: clamp(22px, 1.8vw, 30px); color: var(--ink); font-weight: 600;">¥56</td>
               </tr>
               <tr>
-                <td style="padding: clamp(6px, 0.8vh, 10px) 0; font-size: clamp(15px, 1.15vw, 19px); color: var(--ink-soft);">広告 ARPU (=平均収益)</td>
+                <td style="padding: clamp(6px, 0.8vh, 10px) 0; font-size: clamp(15px, 1.15vw, 19px); color: var(--ink-soft);">広告 ARPU</td>
                 <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 23px); color: #2F7A4F;">+ ¥40</td>
               </tr>
               <tr>
-                <td style="padding: clamp(6px, 0.8vh, 10px) 0; font-size: clamp(15px, 1.15vw, 19px); color: var(--ink-soft);">アフィリエイト ARPU (=平均収益)</td>
+                <td style="padding: clamp(6px, 0.8vh, 10px) 0; font-size: clamp(15px, 1.15vw, 19px); color: var(--ink-soft);">アフィリエイト ARPU</td>
                 <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 23px); color: #2F7A4F;">+ ¥120</td>
               </tr>
               <tr style="border-top: 2.5px solid var(--accent);">
@@ -1520,13 +1524,13 @@
           </div>
 
           <div class="card" style="padding: clamp(24px, 2.8vh, 36px) clamp(22px, 2.2vw, 32px);">
-            <div class="label">なぜ予測提案とアフィリエイトは相性が良いか</div>
+            <div class="label">なぜ言い当てとアフィリエイトは相性が良いか</div>
             <div style="margin-top: clamp(12px, 1.4vh, 18px); display: flex; flex-direction: column; gap: clamp(10px, 1.4vh, 16px);">
               <div style="font-size: clamp(16px, 1.2vw, 19px); color: var(--ink-soft); line-height: 1.6;">
                 <b style="color: var(--accent);">① 自然な行動連続</b> — "本当に欲しかった答え" の直後は実行に動く瞬間
               </div>
               <div style="font-size: clamp(16px, 1.2vw, 19px); color: var(--ink-soft); line-height: 1.6;">
-                <b style="color: var(--accent);">② 個人最適化</b> — 嗜好プロファイルで広告のクリック率 / 購入率 (CTR / CVR) が数倍
+                <b style="color: var(--accent);">② 超パーソナライズ</b> — 嗜好プロファイルで CTR / CVR が数倍
               </div>
               <div style="font-size: clamp(16px, 1.2vw, 19px); color: var(--ink-soft); line-height: 1.6;">
                 <b style="color: var(--accent);">③ 体験を壊さない</b> — "次のアクション" として自然に統合
@@ -1592,7 +1596,7 @@
       <div class="grid-3" style="gap: clamp(16px, 1.8vw, 24px);">
         <div class="card" style="padding: clamp(24px, 2.8vh, 36px) clamp(22px, 2.2vw, 32px);">
           <div class="num">01</div>
-          <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">毎日のモブプログラミングで、設計知見を全員に</h4>
+          <h4 style="font-size: clamp(22px, 1.9vw, 30px); margin-bottom: 8px;">毎日のモブで、設計知見を全員に</h4>
 
           <div style="margin-top: clamp(14px, 1.8vh, 22px); display: flex; flex-direction: column; gap: clamp(12px, 1.6vh, 18px);">
             <div>
@@ -1601,7 +1605,7 @@
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: var(--accent);">対策</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">メンバ全員で <b>モブする時間を毎日確保</b>。設計フェーズから話し合う場をルーチン化。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">メンバ全員で <b>モブする時間を毎日確保</b>。設計フェーズから合議する場をルーチン化。</div>
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: #2F7A4F;">効果</div>
@@ -1625,7 +1629,7 @@
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: #2F7A4F;">効果</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">判断の <b>経緯と理由</b> がリポジトリに残り、後から見ても経緯をたどれる。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">判断の <b>経緯と理由</b> がリポジトリに残り、後追いでも文脈を再構築できる。</div>
             </div>
           </div>
         </div>
@@ -1666,7 +1670,7 @@
         <div class="left">
           <div class="eyebrow">06 · 補足 — Other Practices</div>
           <h2 class="section">他にも、こんな工夫を。</h2>
-          <p class="kicker" style="margin-top: 8px;">仕様 → 設計 → 実装の全工程を、AI と人間が協働で進める。透明性が、提案の精度を支える。</p>
+          <p class="kicker" style="margin-top: 8px;">仕様 → 設計 → 実装の全工程を、AI と人間が協働。"言い当て" の精度を支える透明性。</p>
         </div>
       </div>
 
@@ -1682,7 +1686,7 @@
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: var(--accent);">対策</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">設計フェーズに <b>drawio</b> + <b>HTML 可視化</b> を組み込み、設計 / 体験 / ストーリーを多層で見せる。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">設計フェーズに <b>drawio</b> + <b>HTML 可視化</b> を組み込み、アーキ / UX / ストーリーを多層で見せる。</div>
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: #2F7A4F;">効果</div>
@@ -1702,7 +1706,7 @@
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: var(--accent);">対策</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;"><b>任意の拡張機能</b> と <b>Superpowers (Claude の Skill 集)</b> を組み合わせ、品質を多層で担保。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;"><b>opt-in 拡張機能</b> と <b>Superpowers</b> を組み合わせ、品質ガードを多層化。</div>
               <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: clamp(13px, 0.95vw, 16px); color: var(--ink-muted); line-height: 1.55;">
                 <div>opt-in: Security Baseline / PBT / Construction Flow <span style="color: var(--accent); font-weight: 700;">(独自)</span> / Frontend Design <span style="color: var(--accent); font-weight: 700;">(独自)</span></div>
                 <div>Superpowers: brainstorming / TDD / executing-plans / parallel agents</div>
@@ -1710,7 +1714,7 @@
             </div>
             <div>
               <div class="label" style="margin-bottom: 6px; color: #2F7A4F;">効果</div>
-              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">品質とスピードを両立。AI の暴走を防ぎながら、4 週間で 12 機能ユニットを完走。</div>
+              <div style="font-size: clamp(15px, 1.15vw, 18px); color: var(--ink-soft); line-height: 1.65;">品質ガード × スピード両立。AI の暴走を防ぎながら、4 週間で 12 ユニット完走。</div>
             </div>
           </div>
         </div>
@@ -1718,7 +1722,7 @@
 
       <div style="margin-top: clamp(18px, 2.4vh, 30px); padding: clamp(14px, 1.8vh, 22px) clamp(22px, 2.2vw, 32px); border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
         <p style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); color: var(--ink); font-style: italic; font-weight: 500; line-height: 1.5;">
-          結果: <b style="color: var(--accent-deep); font-style: normal;">4 週間 / 12 機能ユニット / 全工程の追跡可能性</b>を両立。
+          結果: <b style="color: var(--accent-deep); font-style: normal;">4 週間 / 12 ユニット / 全工程の追跡可能性</b>を両立。
         </p>
       </div>
     </section>
@@ -1731,7 +1735,7 @@
         <div class="left">
           <div class="eyebrow">07 — Demo Scenario</div>
           <h2 class="section">デモシナリオ (5 分以内)。</h2>
-          <p class="kicker" style="margin-top: 8px;"><code style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;">MOCK_SEED_DEMO_DECISIONS=true</code> で 30 日分の使用履歴 + 好みデータが初期投入。</p>
+          <p class="kicker" style="margin-top: 8px;"><code style="font-family: var(--mono); font-size: clamp(13px, 1vw, 16px); background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;">MOCK_SEED_DEMO_DECISIONS=true</code> で 30 日分の履歴 + 嗜好プロファイルが初期投入。</p>
         </div>
       </div>
 
@@ -1740,36 +1744,36 @@
           <div class="demo-step">
             <div class="step-no">01</div>
             <div class="step-body">
-              <h5>サインイン → 好みを知る数問</h5>
-              <p>性格 × 生活の 25 問をスワイプ、十分わかれば「もういい、進む」。</p>
+              <h5>サインイン → Onboarding swipe</h5>
+              <p>性格 × 生活の 25 問を swipe、確信ラインで「もういい、進む」。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">02</div>
             <div class="step-body">
-              <h5>ペルソナ 3 人を組み合わせる</h5>
-              <p>プリセット 1 + 知り合い 1 + マイ 1 を選択、誰の意見か (出典) を確認。</p>
+              <h5>ペルソナ 3 人を mix</h5>
+              <p>ビルトイン 1 + 知り合い 1 + マイ 1 を選択、source breakdown を確認。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">03</div>
             <div class="step-body">
               <h5>「明日のランチを決めて」</h5>
-              <p>テキストまたは音声で入力 → 漫画コマ風の画面 (MangaStage) で 3 人格が順番に議論。</p>
+              <p>テキスト or 音声入力 → MangaStage で 3 人格が SSE streaming 議論。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">04</div>
             <div class="step-body">
               <h5>右スワイプ Yes → ✨🎉✨</h5>
-              <p>コンボ達成バッジ + 紙吹雪エフェクト + マスコット 🤵 が「ぴったり!」。</p>
+              <p>コンボ tier badge + confetti + マスコット 🤵 が「言い当てた!」。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">05</div>
             <div class="step-body">
               <h5>「結婚すべき?」 → No 連打</h5>
-              <p>先読みで体感ゼロ秒、AI 生成の短い案内文が画面ごとに変化。</p>
+              <p>プリフェッチで体感ゼロ秒、microcopy が stage 別に変化 (LLM 動的)。</p>
             </div>
           </div>
         </div>
@@ -1778,36 +1782,36 @@
           <div class="demo-step">
             <div class="step-no">06</div>
             <div class="step-body">
-              <h5>/score で点数を見る</h5>
-              <p>円グラフ + 30 日の推移 + AI コメント + 最近の Yes 20 件 (🌟 一発 / 🔄 N 回目)。</p>
+              <h5>/score ダッシュボード</h5>
+              <p>円形チャート + 30 日推移 + AI 可変コメント + 最近の Yes 採択 20 件 (🌟 一発 / 🔄 N 回目)。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">07</div>
             <div class="step-body">
-              <h5>/preferences で好みを見る</h5>
-              <p>よく Yes した傾向 / よく No した傾向 / 各ペルソナとの相性 / 推定タグ を一覧。</p>
+              <h5>/preferences で嗜好可視化</h5>
+              <p>採択傾向 / 棄却傾向 / ペルソナ親和度バー / 推定タグ pill を一覧。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">08</div>
             <div class="step-body">
               <h5>「来週の選挙、誰に投票?」 → 🤐</h5>
-              <p>政治的トピックは「沈黙」モードで応答拒否。ダーク背景 + ⛪🗳️⚔️🔞 で表現、Bedrock Guardrails で二重ブロック。</p>
+              <p>沈黙演出発動。ダーク背景 + ⛪🗳️⚔️🔞、Bedrock Guardrails で二重ブロック。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">09</div>
             <div class="step-body">
               <h5>LLM_PROVIDER を切替</h5>
-              <p>3 種の LLM 接続方式 (<code style="font-family: var(--mono); font-size: 14px;">mock → claude-cli → litellm</code>) を環境変数 1 つで切替。本物の Bedrock / Ollama / Codex を比較。</p>
+              <p><code style="font-family: var(--mono); font-size: 14px;">mock → claude-cli → litellm</code> を env 一発で。本物の Bedrock / Ollama / Codex を比較。</p>
             </div>
           </div>
           <div class="demo-step">
             <div class="step-no">10</div>
             <div class="step-body">
               <h5>10 連 Yes 達成 → 🏆 大爆発</h5>
-              <p>3 段階の金色紙吹雪 + 「<b>素晴らしくダメに仕上がっています</b>」の短いキャッチコピーで締め。</p>
+              <p>3 wave 金色 confetti + 「<b>素晴らしくダメに仕上がっています</b>」マイクロコピーで締め。</p>
             </div>
           </div>
         </div>
@@ -1830,14 +1834,14 @@
         <div class="horizon-col">
           <h4>Yes だけで、選んで、実行して、完了</h4>
           <ul>
-            <li>iOS / Android アプリ化 (Capacitor)</li>
+            <li>iOS / Android ネイティブ wrap (Capacitor)</li>
             <li>Apple Watch / Wear OS で 1-tap Yes</li>
             <li>Siri / Google Assistant 連携 (音声で起動)</li>
             <li>カレンダー連動 (今夜の予定を決めて)</li>
-            <li>外部情報連動 (天気 / 交通 / 現在地) で状況に合わせた提案</li>
-            <li>AI が自動で予約 (レストラン / 美容院 / 病院 を Yes ワンタップで完了)</li>
-            <li>AI が自動で電話 (注文 / 問い合わせ / 予約確認を AI 音声が代行)</li>
-            <li>AI が自動で購入 (Amazon / 楽天 / EC で Yes → 決済まで一気通貫)</li>
+            <li>外部情報連動 (天気 / 交通 / 現在地) で文脈に応じた提案</li>
+            <li>Agentic 自動予約 (レストラン / 美容院 / 病院 を Yes ワンタップで完了)</li>
+            <li>Agentic 自動電話発信 (注文 / 問い合わせ / 予約確認を AI 音声が代行)</li>
+            <li>Agentic 自動購入 (Amazon / 楽天 / EC で Yes → 決済まで一気通貫)</li>
             <li>月次「あなたの判断レポート」(Premium)</li>
           </ul>
         </div>
@@ -1866,11 +1870,12 @@
         <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 28px;">
           <div class="quote-big">
             <p>決められない人に、</p>
-            <p style="padding-left: 3em; margin-bottom: 0.5em;"><em>察してくれる優しさ</em>を。</p>
+            <p style="padding-left: 3em; margin-bottom: 0.5em;"><em>言い当てる優しさ</em>を。</p>
             <p>考えたくない人に、</p>
             <p style="padding-left: 3em;"><em>心地よくダメになる自由</em>を。</p>
           </div>
           <div class="sig">— あなたの最後の仕事は、YES で承認すること。</div>
+          <div style="font-family: var(--serif); font-style: italic; font-size: clamp(16px, 1.2vw, 20px); color: var(--ink-muted); margin-top: 4px;">— ぐうたラボ —</div>
         </div>
 
         <!-- RIGHT: QR カード (Live Demo) -->
