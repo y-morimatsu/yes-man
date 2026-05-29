@@ -290,11 +290,12 @@ export default function DecisionPage() {
       )}
 
       {showQuickStart && quick.current && (
-        // key={current.id}: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐため
-        // QuickStartCard 全体を remount。reject 時に SwipeChoice の動的 state が
-        // 持ち越されると、新題目で「すでに左にスワイプされた」状態から始まってしまう.
+        // key に noCount も含める: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐ。
+        // 2026-05-29 fix: queue 枯渇時は current=catchAll 固定で id が変わらず、No しても
+        // remount されず「左にスワイプされたまま固まる」バグ。noCount を key に足して
+        // No のたびに必ず remount させる (catchAll が出続けても操作可能に保つ)。
         <QuickStartCard
-          key={quick.current.id}
+          key={`${quick.current.id}-${quick.noCount}`}
           title={quick.current.title}
           noCount={quick.noCount}
           onYes={handleQuickYes}
