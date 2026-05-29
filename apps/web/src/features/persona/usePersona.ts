@@ -5,7 +5,7 @@
  *   新 unified selection は features/persona/useUnifiedSelection.ts (localStorage ベース).
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { PersonaCreate, SharedSort } from "@yesman/api-client";
+import type { PersonaCreate, PersonaUpdate, SharedSort } from "@yesman/api-client";
 import { useApi } from "../../shell/ApiProvider";
 
 export function useMyPersonas() {
@@ -42,6 +42,18 @@ export function useCreatePersona() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (payload: PersonaCreate) => api.personas.create(payload),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["persona", "list", "my"] });
+    },
+  });
+}
+
+export function useUpdatePersona() {
+  const api = useApi();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: PersonaUpdate }) =>
+      api.personas.update(id, payload),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["persona", "list", "my"] });
     },
