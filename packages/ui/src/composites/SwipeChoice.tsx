@@ -252,9 +252,29 @@ export function SwipeChoice({
           aria-label="No、別案を再生成"
           data-testid="swipe-no"
         >
-          <span aria-hidden className="text-2xl">←</span>
           <span aria-hidden className="text-sm font-bold">No</span>
-          <span aria-hidden className="text-[10px] opacity-70">別案</span>
+          {/* No 文字の下に ←←← marching (左流れ、Yes の →→→ と対称) */}
+          {showSwipeHint && idle && (
+            <span
+              aria-hidden
+              className="mt-0.5 flex items-center text-[11px] font-bold"
+              data-testid="swipe-hint-left"
+            >
+              {/* 右端の ← が先に流れるよう delay を 0.4/0.2/0 で逆順 → 右→左の波 */}
+              {[0.4, 0.2, 0].map((delay, i) => (
+                <span
+                  key={i}
+                  className="inline-block"
+                  style={{
+                    animation: `ym-swipe-hint-arrow-left 1.4s ease-in-out infinite`,
+                    animationDelay: `${delay}s`,
+                  }}
+                >
+                  ←
+                </span>
+              ))}
+            </span>
+          )}
         </button>
 
         {/* 中央: swipeable card (drag-following) */}
@@ -303,7 +323,6 @@ export function SwipeChoice({
           data-testid="swipe-yes"
         >
           <span aria-hidden className="text-sm font-bold">Yes</span>
-          <span aria-hidden className="text-2xl font-bold leading-none">→</span>
           {/* 未スワイプ時のみ → → → marching でYes方向を誘導 */}
           {showSwipeHint && idle && (
             <span
