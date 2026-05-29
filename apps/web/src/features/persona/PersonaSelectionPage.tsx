@@ -16,6 +16,9 @@ import { MAX_SELECTION, type SelectedPersona } from "./unifiedSelectionStorage";
 import { usePersonaSource } from "./usePersonaSource";
 import { usePreference } from "../preference/usePreference";
 import { t } from "./strings";
+import type { Persona } from "@yesman/api-client";
+
+type MyPersona = Persona;
 
 const RECOMMEND_TOP_N = 3;
 
@@ -29,6 +32,8 @@ export default function PersonaSelectionPage() {
     useUnifiedSelection();
   const { push } = useToast();
   const [createOpen, setCreateOpen] = useState(false);
+  // 編集対象 persona (null = モーダル閉)。
+  const [editing, setEditing] = useState<MyPersona | null>(null);
 
   // 2026-05-24: builtin 3 種 (慎重派 / 楽観派 / 効率派) は常に推奨。
   //   preference profile が空でも、user が初めて来た時点で 3 種全てに おすすめ badge を表示。
@@ -210,6 +215,20 @@ export default function PersonaSelectionPage() {
                         💡 おすすめ
                       </span>
                     )}
+                    {/* 編集ボタン (カードクリック=選択トグルと分離) */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditing(p);
+                      }}
+                      className="absolute bottom-2 right-2 z-10 rounded-full bg-neutral-0 px-2.5 py-1 text-[12px] font-semibold shadow-sm border border-neutral-200 hover:bg-neutral-50"
+                      style={{ color: "#E8775A", borderColor: "#E0D5BC" }}
+                      data-testid={`persona-edit-${p.id}`}
+                      aria-label={`${p.name} を編集`}
+                    >
+                      ✏️ {t("editButton")}
+                    </button>
                     <PersonaCard
                       persona={p}
                       selected={isSelected({ source: "my", id: p.id })}
@@ -255,6 +274,14 @@ export default function PersonaSelectionPage() {
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onCreated={() => setSource("my")}
+      />
+
+      {/* 編集モーダル (my カードの ✏️ から起動) */}
+      <PersonaCreateModal
+        open={editing !== null}
+        persona={editing}
+        onClose={() => setEditing(null)}
+        onCreated={() => setEditing(null)}
       />
     </div>
   );

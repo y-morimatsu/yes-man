@@ -38,6 +38,7 @@ class DemoPersona:
     name: str
     prompt_text: str
     avatar_emoji: str
+    avatar_color: str  # avatarColors のキー (green/orange/blue/purple/pink/yellow/teal/umber)
 
 
 DEMO_PERSONAS: tuple[DemoPersona, ...] = (
@@ -45,23 +46,44 @@ DEMO_PERSONAS: tuple[DemoPersona, ...] = (
         UUID("00000000-0000-0000-0000-0000000000d1"),
         "妻",
         "あなたは現実的で少し口うるさい妻。健康・家計・身だしなみを気にして率直にダメ出しする。",
-        "👰",
+        "👩",
+        "pink",
     ),
     DemoPersona(
         UUID("00000000-0000-0000-0000-0000000000d2"),
         "娘",
         "あなたは無邪気で正直な娘。思ったことをストレートに言う。",
         "👧",
+        "yellow",
     ),
     DemoPersona(
         UUID("00000000-0000-0000-0000-0000000000d3"),
         "ワンコ",
         "あなたは飼い犬。どんな提案にも『ワン!』と全肯定で応じる究極の YesWan。",
         "🐶",
+        "umber",
     ),
 )
 
 DEMO_PERSONA_IDS: tuple[UUID, ...] = tuple(p.id for p in DEMO_PERSONAS)
+
+
+def encode_avatar(emoji: str, color: str) -> str:
+    """emoji + color を frontend と同形式の avatar_url にエンコード.
+
+    PersonaCreateModal.encodeAvatarForUrl と互換: "yesman-avatar:" + base64(JSON).
+    PersonaCard / AvatarEditor が decode して emoji を背景色付きで表示できる。
+    """
+    import base64
+    import json
+
+    payload = json.dumps(
+        {"mode": "emoji", "color": color, "emoji": emoji},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    b64 = base64.b64encode(payload.encode("utf-8")).decode("ascii")
+    return f"yesman-avatar:{b64}"
 
 
 # ============================================================
@@ -179,14 +201,19 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
             name=p.name,
             description=f"デモ用カスタムペルソナ ({p.name})",
             prompt_text=p.prompt_text,
+            avatar_url=encode_avatar(p.avatar_emoji, p.avatar_color),
             is_shared=False,
             is_builtin=False,
         )
         if existing is None:
             await persona_repo.insert(persona)
-        elif str(existing.owner_user_id) != str(user_id):
+        elif (
+            str(existing.owner_user_id) != str(user_id)
+            or existing.avatar_url != persona.avatar_url
+        ):
             # 固定 ID を共有するため、アクセス中の sub に re-own して
             # その sub の /personas/me (カスタム) に表示されるようにする。
+            # avatar 差分でも update (既存 seed 済みペルソナに avatar を backfill)。
             await persona_repo.update(persona)
     await selection_repo.upsert(
         UserPersonaSelection(

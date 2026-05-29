@@ -12,6 +12,46 @@
 import { Card } from "../primitives/Card";
 import { personaBackgroundFor, personaIconFor } from "./DecisionUtteranceBubble";
 
+/**
+ * avatar_url の "yesman-avatar:<base64(JSON{mode,color,emoji})>" 形式を decode.
+ * apps/web の PersonaCreateModal.encodeAvatarForUrl / backend demo_mode.encode_avatar と互換。
+ * decode 失敗・非該当は null。
+ */
+const AVATAR_GRADIENTS: Record<string, string> = {
+  green: "linear-gradient(135deg, #2BB89E, #15806E)",
+  orange: "linear-gradient(135deg, #FF9F75, #EF7A62)",
+  blue: "linear-gradient(135deg, #A4C5E8, #6E94C7)",
+  purple: "linear-gradient(135deg, #C4A1F0, #9B6FE0)",
+  pink: "linear-gradient(135deg, #F7B1C4, #E58AA3)",
+  yellow: "linear-gradient(135deg, #FFD976, #F2B847)",
+  teal: "linear-gradient(135deg, #7CD3CC, #3FA09A)",
+  umber: "linear-gradient(135deg, #7A6B57, #4F4435)",
+};
+
+interface DecodedAvatar {
+  emoji: string | null;
+  gradient: string;
+}
+
+function decodeAvatarConfig(avatarUrl: string): DecodedAvatar | null {
+  const PREFIX = "yesman-avatar:";
+  if (!avatarUrl.startsWith(PREFIX)) return null;
+  try {
+    const json = decodeURIComponent(escape(atob(avatarUrl.slice(PREFIX.length))));
+    const cfg = JSON.parse(json) as {
+      mode?: string;
+      color?: string | null;
+      emoji?: string | null;
+    };
+    const gradient: string =
+      (cfg.color ? AVATAR_GRADIENTS[cfg.color] : undefined) ??
+      "linear-gradient(135deg, #2BB89E, #15806E)";
+    return { emoji: cfg.emoji ?? null, gradient };
+  } catch {
+    return null;
+  }
+}
+
 export interface PersonaCardData {
   id: string;
   name: string;
@@ -48,18 +88,33 @@ export function PersonaCard({
   const icon = personaIconFor(persona.name);
   const iconBg = personaBackgroundFor(persona.name);
 
+  // avatar_url を decode: yesman-avatar: 形式 → emoji+色、URL → img、なければ icon
+  const decoded = persona.avatar_url
+    ? decodeAvatarConfig(persona.avatar_url)
+    : null;
+  const isImageUrl =
+    !!persona.avatar_url && !persona.avatar_url.startsWith("yesman-avatar:");
+
   return (
     <Card className={className} onClick={onClick}>
       <div className="flex items-start gap-3">
-        {persona.avatar_url ? (
+        {decoded && decoded.emoji ? (
+          <div
+            className="h-12 w-12 rounded-full flex items-center justify-center text-2xl shrink-0"
+            style={{ background: decoded.gradient }}
+            aria-hidden
+          >
+            {decoded.emoji}
+          </div>
+        ) : isImageUrl ? (
           <img
-            src={persona.avatar_url}
+            src={persona.avatar_url ?? undefined}
             alt={persona.name}
-            className="h-12 w-12 rounded-full object-cover"
+            className="h-12 w-12 rounded-full object-cover shrink-0"
           />
         ) : (
           <div
-            className={`h-12 w-12 rounded-full ${iconBg} flex items-center justify-center text-2xl`}
+            className={`h-12 w-12 rounded-full ${iconBg} flex items-center justify-center text-2xl shrink-0`}
             aria-hidden
           >
             {icon}
@@ -67,7 +122,7 @@ export function PersonaCard({
         )}
         <div className="flex-1 min-w-0">
           <h3 className="font-sans font-semibold text-persona truncate">
-            <span aria-hidden className="mr-1">{icon}</span>
+            <span aria-hidden className="mr-1">{decoded?.emoji ?? icon}</span>
             {persona.name}
             {persona.is_builtin && (
               <span className="ml-1 text-xs text-neutral-500 font-normal">
