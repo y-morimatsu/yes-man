@@ -34,7 +34,9 @@
 - [🚀 主要機能](#-主要機能)
 - [🏗️ アーキテクチャ](#️-アーキテクチャ)
 - [🛠️ 技術スタック](#️-技術スタック)
+- [🔧 セットアップ](#-セットアップ)
 - [🚀 ローカル起動](#-ローカル起動)
+- [☁️ インフラ構築 (デプロイ)](#️-インフラ構築-デプロイ)
 - [🗂️ データモデル (ER 図)](#️-データモデル-er-図)
 - [🔄 ユーザーフロー (シーケンス図)](#-ユーザーフロー-シーケンス図)
 - [📂 リポジトリ構成](#-リポジトリ構成)
@@ -72,9 +74,10 @@
 | 操作 | 内容 |
 |---|---|
 | 📝 **入力** | テキスト or 音声で「何を決めてほしいか」を AI に伝える |
-| 👉 **右スワイプ** | AI 提案を **Yes** で承認 → 肯定演出 |
+| 👉 **右スワイプ** | AI 提案を **Yes** で確定 → 肯定演出 (drill-down 最終段では外部サービスを開く) |
 | 👈 **左スワイプ** | **No** → 別案再生成 + 再考を促すマイクロコピー |
-| (それ以外) | 何もない |
+| 👇 **下スワイプ** | **もっと絞る** → 提案を一段深掘り (drill-down) |
+| 👆 **上スワイプ** | **やめる** → 中断して入力画面へ |
 
 ---
 
@@ -357,8 +360,8 @@ CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → �
 
 | 機能 | 説明 | 関連要件 ID |
 |---|---|---|
-| 🎭 **複数人格の合議** | LLM への単一プロンプト内で慎重派 / 楽観派 / 効率派などが議論し、最終提案を 1 回の推論で出力 | FR-AI-07/08 |
-| 🤐 **沈黙演出ガード** | プロンプト自己判定 + Bedrock Guardrails の **二重ガード**で 4 カテゴリを完全ブロック | FR-AI-06, FR-DM-SILENT |
+| 🎭 **複数人格の合議** | 慎重派 / 楽観派 / 効率派などの 3 ペルソナを **並列 LLM 呼び出し** (`asyncio.gather`) で生成し、各発言を **SSE トークンストリーミング** で逐次配信。その後それらを集約して 1 つの最終提案を生成 | FR-AI-07/08 |
+| 🤐 **沈黙演出ガード** | **regex 即時判定 + LLM 自己判定の 2 段** (LLM 段は env で無効化可) + Bedrock Guardrails で 4 カテゴリをブロック。判定不能時は沈黙側に倒す **fail-closed** | FR-AI-06, FR-DM-SILENT |
 | 💬 **AI 生成可変メッセージ** | 再考を促すメッセージを **固定文を持たず毎回 AI 生成**。文脈と回数に応じて段階的に表現を変化 | FR-NUDGE-01〜05 |
 | 📊 **委任度スコア + 推移グラフ + Yes 採択履歴** | **Yes 比率** モデル (高いほど委任度高)。円形プログレスチャート + **30 日折れ線推移グラフ** + ピンクバブルの AI 生成可変コメント (Pack A 煽り文「過去 30 日、N% を委ねました…」) + **📜 最近の Yes 採択 (最大 20 件)** カードリスト (質問 + 提案 + 相対時刻 + 採用回数 🌟/🔄) | FR-SCORE-01〜04, FR-HIST-01 |
 | 🧠 **嗜好学習 + 可視化** | 決定履歴から嗜好プロファイルを **非同期更新** (EventBridge 経由)。専用画面で「採択された傾向」「棄却された傾向」「ペルソナ親和度バー」「推定タグ pill」を表示 | FR-LEARN-01〜07 |
@@ -367,7 +370,9 @@ CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → �
 | ⚡ **No 連打プリフェッチ** | 提案表示直後に裏で別案を **2 件先取得**、No スワイプ時は loading 演出を完全スキップして即座に次の合議を表示 (LLM 応答待ち時間を体感ゼロ化) | FR-NUDGE-* |
 | 🔌 **Backend 切替** | 設定ファイルで Auth / DB / LLM / Voice の本番↔MOCK↔エミュレータを切替（**Strategy + DI**） | FR-AUTH-05〜07, FR-HIST-04〜06, FR-VOICE-01 |
 | 🎙️ **音声入力 backend 切替** | プロフィール画面 (`/profile`) で **Web Speech API** (ブラウザ内蔵、即時、無料) ↔ **Server STT** (AWS Transcribe / Mock) を user 選択、`localStorage` で永続化。Toggle 方式 (クリック開始 / クリック停止) | FR-VOICE-01〜04 |
-| 👆 **スワイプ UI** | 右 = Yes / 左 = No のミニマル UX。INCEPTION canonical (drawio screen-03) と完全整合、buffer swap でも `key={decisionId}` で internal state を強制 reset | FR-UX-02 |
+| 👆 **4 方向スワイプ UI** | カード四辺のラベルで **右 = Yes (確定) / 左 = No (別案) / 下 = もっと絞る (深掘り) / 上 = やめる (中断)** を表現 (案E)。タップ・キーボード (←→↑↓) でも操作可、WCAG 2.5.1 (ポインタジェスチャ代替) 準拠 | FR-UX-02 |
+| 🔻 **Drill-down (深掘り)** | 下スワイプで提案を段階的に絞り込み (`MAX_DRILL_DEPTH=4`)。前段提案を `chain_context` に積み、方向性→媒体→ジャンル→固有名と具体化。最終段で外部サービス (Amazon 等) の CTA を提示 | FR-AI-07/08 |
+| 🎬 **デモモード** | sign-in する email に `morimatsu` を含むと、妻 👩 / 娘 👧 / ワンコ 🐶 ペルソナ + 使い込み済みスコア (73%) と 30 日履歴を即再現。本物の合議経路はそのままに `DemoLLMAdapter` で仕込み応答をラップ (再デプロイ不要) | — (ハッカソンデモ) |
 | 📱 **Mobile App Polish** | Sticky header (logo + Sign out のみに簡素化) + **Bottom Navigation 4-tab** (🏠 Home / 💭 決定 / 📊 スコア / 👤 プロフィール) + **Safe Area Insets** (iPhone notch / home indicator 対応) + **Skeleton loader** (4 page で Spinner 置換) + **View Transitions API** (Chrome 111+/Safari TP で cross-fade) + **Haptic feedback** (Yes 採択時 50ms 振動、Android 限定) + Button `active:scale-[0.98]` microinteraction (`motion-reduce` 対応) | — (Post-CONSTRUCTION UX 改修) |
 | 💬 **議論チャット token streaming** | LLM 出力を **token (delta) 単位で SSE 配信**、新 event `utterance_delta` で 3 persona 並列に bubble がパラパラ埋まる。`personas` event で delta 到着前から bubble header (icon + name) を pre-fill 表示。`asyncio.Queue` fan-in で per-persona timeout 制御。 | FR-CV-01〜12 (Post-CONSTRUCTION v3 拡張) |
 | 🎯 **No 後 microcopy を LLM 動的生成** | No 採択 → 別案到着で stage 別 tone (1 軽い前向き / 2 共感 / 3 不安吸い上げ / 5+ 委ねる) の Yes nudge を 30 字以内で生成。新 endpoint `POST /v1/decisions/{id}/yes-nudge` (同期返却、2s timeout + stage 別 fallback)。 | FR-NUDGE-01〜05 (Post-CONSTRUCTION v3 拡張) |
@@ -378,7 +383,42 @@ CONSTRUCTION 完了後、ハッカソンデモ向けに **モバイル Web → �
 
 ## 🏗️ アーキテクチャ
 
-### AWS インフラ全体図
+YesMan には **2 層のアーキテクチャ** があります。アプリケーションコードは **Strategy + DI** (環境変数で実装を差し替え) により、両層を同一コードで動かせます。
+
+| 層 | 状態 | 構成 |
+|---|---|---|
+| **実デプロイ構成 (ハッカソン MVP)** | ✅ 稼働中 (`d28x9vimvrhs5w.cloudfront.net`) | CloudFront + S3 + Lambda (FastAPI / Web Adapter) + Bedrock Gemma 3。認証・DB は mock |
+| **フルスタック構成** | 設計のみ (未デプロイ) | ECS Fargate + Aurora + Cognito + EventBridge の 7-Stack 構想 |
+
+### 実デプロイ構成 (MVP, 現在稼働中)
+
+```mermaid
+flowchart LR
+    User["ユーザー (ブラウザ / PWA)"]
+    subgraph CF["CloudFront (HTTPS)"]
+        direction TB
+        SPA["/* → S3 (SPA assets)"]
+        API["/api/* → Lambda Function URL"]
+    end
+    S3W["S3: Web assets"]
+    Lambda["Lambda: FastAPI on Web Adapter (RESPONSE_STREAM)"]
+    Bedrock["Bedrock: Gemma 3 12B / Claude Haiku (+ Guardrails)"]
+    S3M["S3: MockStore pickle (状態永続化)"]
+
+    User --> CF
+    SPA --> S3W
+    API --> Lambda
+    Lambda -->|LLM 推論 / SSE| Bedrock
+    Lambda -->|load/save| S3M
+```
+
+- **SSE 対応**: Lambda Web Adapter を `RESPONSE_STREAM` で動かし、CloudFront の `/api/*` ビヘイビアは圧縮・キャッシュ無効。合議のトークンストリーミングを実現。
+- **状態**: 認証は mock (`mock-user:` トークンでマルチユーザー可)、ストレージは MockStore を S3 に pickle 永続化 (Lambda マルチインスタンス間の一貫性確保)。
+- 詳細は **[docs/design/04-infrastructure-design.md](docs/design/04-infrastructure-design.md)** を参照。
+
+### フルスタック構成 (設計のみ・未デプロイ)
+
+本格運用時の目標形。ECS Fargate + Aurora Serverless v2 + Cognito + EventBridge の 7-Stack 構想。
 
 ```mermaid
 flowchart TB
@@ -401,7 +441,7 @@ flowchart TB
     subgraph LLMLayer["🟦 LLM Layer (LiteLLM Router)"]
         Bedrock["Bedrock<br>+ Guardrails"]
         Local["Local LLM<br>(Ollama)"]
-        CLIs["Codex / Claude Code /<br>Gemini CLI"]
+        CLIs["Claude Code CLI<br>(claude-cli)"]
     end
 
     subgraph Async["🟫 Async"]
@@ -444,16 +484,17 @@ flowchart TB
 
 ### 🎯 アーキテクチャ採用理由
 
-| 選択 | 理由 |
-|---|---|
-| **モジュラー・モノリス** (単一 FastAPI コンテナ) | チーム 2〜3 名・1 ヶ月の開発期間でデプロイ単位を最小化、運用負荷を抑制 |
-| **ECS Fargate** | サーバーレスでありながら、Lambda の 15 分制限を回避。コンテナの自由度確保 |
-| **Aurora Serverless v2** | 0.5 ACU からスケール可能、ハッカソン規模に最適 |
-| **LiteLLM Router** | Bedrock / OpenAI / **ローカル LLM (Ollama)** / Codex CLI などを設定切替。コスト柔軟性と障害時フォールバック |
-| **Strategy + DI** | 認証・DB・LLM・音声すべてを差替え可能 → ローカル開発時は AWS 不要 |
-| **EventBridge** | 嗜好プロファイル更新を非同期化、提案レイテンシを劣化させない |
+| 選択 | 層 | 理由 |
+|---|---|---|
+| **Lambda Function URL + Web Adapter** | MVP | 常時起動コストを回避し FastAPI をそのまま Lambda 化。`RESPONSE_STREAM` で SSE を維持 |
+| **MockStore + S3 pickle** | MVP | DB 不要・起動高速。Lambda マルチインスタンスは S3 の last-write-wins で一貫性確保 |
+| **Bedrock Gemma 3 12B** | MVP | Claude Haiku の RPM quota 50 が SSE のボトルネック → RPM 1000 の Gemma に変更 |
+| **mock 認証 (`mock-user:` token)** | MVP | ログイン基盤不要。email だけでマルチユーザー・デモモードを切替 |
+| **ECS Fargate / Aurora Serverless v2** | 構想 | 本格運用時の常時稼働・スケール。Lambda の制約を回避 (未デプロイ) |
+| **EventBridge** | 構想 | 嗜好プロファイル更新を非同期化、提案レイテンシを劣化させない (未デプロイ) |
+| **Strategy + DI** | 共通 | 認証・DB・LLM・音声を差替え可能 → ローカル開発は AWS 不要、両層を同一コードで稼働 |
 
-> 📊 詳細な階層構造、シーケンス図、コンポーネント依存関係は **[application-design/diagrams/application-design.drawio](aidlc-docs/inception/application-design/diagrams/application-design.drawio) (11 ページ)** を参照
+> 📐 実デプロイ詳細は **[docs/design/04-infrastructure-design.md](docs/design/04-infrastructure-design.md)**、AWS アーキ図 (構想) は **[docs/architecture/](docs/architecture/)** を参照
 
 ---
 
@@ -480,8 +521,7 @@ flowchart TB
 <td align="center" valign="top">
 
 <img src="https://img.shields.io/badge/-Docker-2496ED.svg?logo=docker&logoColor=white" alt="Docker"><br>
-<img src="https://img.shields.io/badge/-pnpm-F69220.svg?logo=pnpm&logoColor=white" alt="pnpm"><br>
-<img src="https://img.shields.io/badge/-Turborepo-EF4444.svg?logo=turborepo&logoColor=white" alt="Turborepo"><br>
+<img src="https://img.shields.io/badge/-pnpm%20workspace-F69220.svg?logo=pnpm&logoColor=white" alt="pnpm workspace"><br>
 <img src="https://img.shields.io/badge/-Playwright-2EAD33.svg?logo=playwright&logoColor=white" alt="Playwright"><br>
 <img src="https://img.shields.io/badge/-Hypothesis%20(PBT)-9C27B0.svg?logo=python&logoColor=white" alt="Hypothesis (PBT)"><br>
 <img src="https://img.shields.io/badge/-OpenAPI-6BA539.svg?logo=openapiinitiative&logoColor=white" alt="OpenAPI"><br>
@@ -497,8 +537,9 @@ flowchart TB
 <img src="https://img.shields.io/badge/-Alembic-6BA539.svg?logo=python&logoColor=white" alt="Alembic"><br>
 <img src="https://img.shields.io/badge/-TypeScript-3178C6.svg?logo=typescript&logoColor=white" alt="TypeScript">
 <img src="https://img.shields.io/badge/-React-20232A.svg?logo=react&logoColor=61DAFB" alt="React"><br>
-<img src="https://img.shields.io/badge/-Vite-646CFF.svg?logo=vite&logoColor=white" alt="Vite">
-<img src="https://img.shields.io/badge/-TanStack%20Router-FF4154.svg?logo=react-query&logoColor=white" alt="TanStack Router"><br>
+<img src="https://img.shields.io/badge/-Vite%205-646CFF.svg?logo=vite&logoColor=white" alt="Vite">
+<img src="https://img.shields.io/badge/-React%20Router%206-CA4245.svg?logo=reactrouter&logoColor=white" alt="React Router"><br>
+<img src="https://img.shields.io/badge/-TanStack%20Query%205-FF4154.svg?logo=react-query&logoColor=white" alt="TanStack Query"><br>
 <img src="https://img.shields.io/badge/-Tailwind-38B2AC.svg?logo=tailwind-css&logoColor=white" alt="Tailwind">
 <img src="https://img.shields.io/badge/-PWA-5A0FC8.svg?logo=pwa&logoColor=white" alt="PWA">
 
@@ -520,6 +561,7 @@ flowchart TB
 <img src="https://img.shields.io/badge/-Cognito-F44336.svg?logo=amazoncognito&logoColor=white" alt="Cognito">
 <img src="https://img.shields.io/badge/-CloudFront-9C27B0.svg?logo=amazoncloudfront&logoColor=white" alt="CloudFront"><br>
 <img src="https://img.shields.io/badge/-S3-569A31.svg?logo=amazons3&logoColor=white" alt="S3"><br>
+<img src="https://img.shields.io/badge/-Lambda%20(Web%20Adapter)-FF9900.svg?logo=awslambda&logoColor=white" alt="Lambda"><br>
 <img src="https://img.shields.io/badge/-EventBridge-E91E63.svg?logo=amazon&logoColor=white" alt="EventBridge"><br>
 <img src="https://img.shields.io/badge/-Secrets%20Manager-DD344C.svg?logo=amazonaws&logoColor=white" alt="Secrets Manager"><br>
 <img src="https://img.shields.io/badge/-CloudWatch-795548.svg?logo=amazoncloudwatch&logoColor=white" alt="CloudWatch">
@@ -532,12 +574,11 @@ flowchart TB
 <img src="https://img.shields.io/badge/-LiteLLM%20Router-2196F3.svg?logo=openai&logoColor=white" alt="LiteLLM"><br>
 <img src="https://img.shields.io/badge/-Amazon%20Bedrock-00BCD4.svg?logo=amazon&logoColor=white" alt="Bedrock"><br>
 <img src="https://img.shields.io/badge/-Bedrock%20Guardrails-00838F.svg?logo=amazon&logoColor=white" alt="Guardrails"><br>
-<img src="https://img.shields.io/badge/-Claude-D97757.svg?logo=anthropic&logoColor=white" alt="Claude">
+<img src="https://img.shields.io/badge/-Gemma%203%2012B%20(deployed)-4285F4.svg?logo=google&logoColor=white" alt="Gemma 3 12B"><br>
+<img src="https://img.shields.io/badge/-Claude%20Haiku-D97757.svg?logo=anthropic&logoColor=white" alt="Claude Haiku">
 <img src="https://img.shields.io/badge/-Nova-7B68EE.svg?logo=amazon&logoColor=white" alt="Nova"><br>
-<img src="https://img.shields.io/badge/-Ollama%20(Local)-000000.svg?logo=ollama&logoColor=white" alt="Ollama"><br>
-<img src="https://img.shields.io/badge/-Codex%20CLI-181717.svg?logo=openai&logoColor=white" alt="Codex CLI"><br>
+<img src="https://img.shields.io/badge/-Ollama%20(via%20LiteLLM)-000000.svg?logo=ollama&logoColor=white" alt="Ollama"><br>
 <img src="https://img.shields.io/badge/-Claude%20Code%20CLI-D97757.svg?logo=anthropic&logoColor=white" alt="Claude Code CLI"><br>
-<img src="https://img.shields.io/badge/-Gemini%20CLI-4285F4.svg?logo=google&logoColor=white" alt="Gemini CLI"><br>
 <img src="https://img.shields.io/badge/-Polly%20(TTS)-FF9900.svg?logo=amazon&logoColor=white" alt="Polly"><br>
 <img src="https://img.shields.io/badge/-Transcribe%20(STT)-FF9900.svg?logo=amazon&logoColor=white" alt="Transcribe">
 
@@ -546,8 +587,72 @@ flowchart TB
 </tbody>
 </table>
 
-> 💡 **Strategy + DI** によって、上記すべてのカテゴリで本番↔MOCK↔ローカルエミュレータを設定ファイルで切替可能です。
-> 例: `LLM_PROVIDER=ollama` でローカル LLM、`STORAGE_BACKEND=docker-postgres` でローカル PostgreSQL、`AUTH_BACKEND=mock` で AWS リソース不要の開発環境が完成。
+> 💡 上表は **設計上の総覧** です。実デプロイ MVP はこのサブセット (**Lambda + Bedrock Gemma 3 + MockStore + mock 認証**) で稼働しています。
+> **Strategy + DI** により全カテゴリを環境変数で切替可能。実装済み LLM アダプタは `LLM_PROVIDER` = `bedrock` / `litellm` (OpenAI/Ollama 等を集約) / `claude-cli` / `mock` の 4 種。
+> 例: `STORAGE_BACKEND=docker-postgres` でローカル PostgreSQL、`AUTH_BACKEND=mock` で AWS リソース不要の開発環境が完成。
+
+---
+
+## 🔧 セットアップ
+
+### 前提ツール
+
+| ツール | バージョン | 用途 |
+|---|---|---|
+| **Node.js** | `>= 20` | フロント (`apps/web`) / 共有パッケージ / api-client のビルド |
+| **pnpm** | `>= 9` (`pnpm@9.0.0`) | monorepo のパッケージ管理 |
+| **Python** | `>= 3.12` | バックエンド (`apps/api`) |
+| **uv** | 最新 | Python 依存管理 (`apps/api/uv.lock` 準拠)。無ければ `venv + pip -e .` でも可 |
+| **Git** | — | クローン |
+| (任意) **AWS CLI v2** + Bedrock アクセス | — | 本物の LLM (Bedrock) 利用 / QuickStart 質問の再生成 / デプロイ |
+| (任意) **Docker** | — | ローカル PostgreSQL (`STORAGE_BACKEND=docker-postgres`) / Lambda コンテナビルド |
+
+> 💡 Node に同梱の corepack で pnpm を準備できます: `corepack enable && corepack prepare pnpm@9 --activate`。uv のインストールは [docs.astral.sh/uv](https://docs.astral.sh/uv/) を参照。
+
+### 1. クローン
+
+```bash
+git clone https://github.com/NES-Innovation-lavolatories/yes-man.git
+cd yes-man
+```
+
+### 2. 依存インストール
+
+```bash
+# JS/TS — monorepo 全体 (apps/web + packages/* + tests/e2e)
+pnpm install
+
+# Python — apps/api
+cd apps/api && uv sync && cd ../..
+#   uv が無い場合:
+#   cd apps/api && python -m venv .venv && . .venv/bin/activate && pip install -e . && cd ../..
+```
+
+### 3. 起動 (最短: Mock モード、AWS 不要)
+
+完全オフライン・即時応答で UI を確認できます。2 つのターミナルで [🚀 ローカル起動](#-ローカル起動) の **共通 Web 起動コマンド** と **Mode 1 (Mock LLM)** の API 起動コマンドをそれぞれ実行し、ブラウザで http://localhost:5173/ を開きます (Mock User で自動ログイン)。
+
+```bash
+# ターミナル A: API (port 8000) — Mode 1 の env を前置 (ローカル起動 参照)
+pnpm --filter @yesman/api start
+
+# ターミナル B: Web (port 5173) — 共通 Web env を前置 (ローカル起動 参照)
+pnpm --filter @yesman/web dev
+```
+
+実 LLM (Claude CLI / LiteLLM / Bedrock) や音声・DB の切替は [🚀 ローカル起動](#-ローカル起動) を参照してください。
+
+### 補助コマンド (リポジトリルート)
+
+| コマンド | 内容 |
+|---|---|
+| `pnpm build` | 全パッケージをビルド (`pnpm -r build`) |
+| `pnpm test` | 全パッケージのテスト (`pnpm -r test`) |
+| `pnpm lint` | 全パッケージの lint (`pnpm -r lint`) |
+| `pnpm openapi:dump` | `apps/api` の OpenAPI スキーマを書き出し |
+| `pnpm openapi:generate` | OpenAPI から `@yesman/api-client` の型を生成 |
+
+> ☁️ AWS へのデプロイ (CloudFront + S3 + Lambda) は [docs/design/04-infrastructure-design.md](docs/design/04-infrastructure-design.md) / [infra/README.md](infra/README.md) を参照。
 
 ---
 
@@ -751,6 +856,76 @@ uv run python scripts/generate_quick_start_templates.py --seed
 
 ---
 
+## ☁️ インフラ構築 (デプロイ)
+
+インフラは **AWS CDK (TypeScript)** で定義され、[2 層のアーキテクチャ](#️-アーキテクチャ) に対応します。
+
+### A. 実デプロイ構成 (WebStaticStack, 現在稼働中)
+
+CloudFront + S3 + Lambda (FastAPI / Web Adapter) + Bedrock Gemma 3。エントリは `infra/bin/yesman-static.ts`、スタック名は `yesman-<env>-web-static`。
+
+**前提**:
+- AWS アカウント + **CDK Bootstrap** 済 (account/region 単位で 1 回): `npx cdk bootstrap aws://<account>/ap-northeast-1`
+- **Bedrock のモデルアクセス申請**済 (実デプロイは Gemma 3 12B IT を使用)
+- **Docker** (Lambda コンテナを ARM64 でビルドするため)
+- (CI 経由の場合) OIDC ロール `gha-cdk-deploy-<env>` + GitHub Secret `AWS_ACCOUNT_ID`
+
+**方法 1: GitHub Actions (推奨)**
+
+`.github/workflows/web-static-deploy.yml` を **`workflow_dispatch`** で起動し、`envName` (dev / staging / prod) を選択。OIDC 認証 → `pnpm install` → `pnpm -r build` → CDK Docker bundling (QEMU ARM64) → `cdk deploy` まで自動実行されます (所要 ~35 分)。
+
+**方法 2: ローカルから手動**
+
+```bash
+# 1. フロント + 共有パッケージをビルド (ui → api-client → web の順)
+#    env.ts が VITE_COGNITO_* を必須化しているため dummy 値 + VITE_AUTH_BYPASS=true を渡す
+VITE_API_BASE_URL=/api VITE_AUTH_BYPASS=true \
+VITE_COGNITO_REGION=ap-northeast-1 VITE_COGNITO_USER_POOL_ID=dummy \
+VITE_COGNITO_APP_CLIENT_ID=dummy VITE_COGNITO_HOSTED_UI_URL=https://dummy \
+pnpm -r build
+
+# 2. infra 依存をインストール
+cd infra && npm install
+
+# 3. CDK デプロイ (Docker 起動必須)
+npx cdk deploy yesman-dev-web-static \
+  --app "npx tsx bin/yesman-static.ts" \
+  --require-approval never \
+  --outputs-file /tmp/web-static-outputs.json \
+  -c envName=dev \
+  -c awsAccount=$(aws sts get-caller-identity --query Account --output text) \
+  -c awsRegion=ap-northeast-1
+```
+
+- 出力された **CloudFront URL** でアクセス可能 (認証は mock、email に `morimatsu` を含むと[デモモード](#-主要機能))。
+- 削除: `npx cdk destroy yesman-dev-web-static --app "npx tsx bin/yesman-static.ts" -c envName=dev`
+- 詳細 (Lambda env / CloudFront ビヘイビア / CF Functions / IAM): **[docs/design/04-infrastructure-design.md](docs/design/04-infrastructure-design.md)**
+
+### B. フルスタック構成 (7-Stack, 設計のみ・未デプロイ)
+
+ECS Fargate + Aurora + Cognito + EventBridge の本格構成。エントリは `infra/bin/yesman.ts`、依存順に **Network → Auth / Ai → Data → Api → Edge → Monitoring** をデプロイ。
+
+概略手順 (詳細は **[infra/README.md](infra/README.md)** / **[infra/RUNBOOK.md](infra/RUNBOOK.md)**):
+
+1. `cdk bootstrap` → Bedrock モデルアクセス申請 + CloudFront origin-facing prefix list ID を取得
+2. ECR にコンテナイメージを push し `imageDigest` を取得
+3. `AWS_PROFILE=yesman-prod cdk deploy --all --context imageDigest=<digest> --context cloudfrontPrefixListId=<pl-id>`
+4. **Post-deploy** (RUNBOOK): LLM API キーを Secrets Manager に投入 / SNS にメール購読追加 / Cognito App Client の callback URL を CloudFront ドメインに更新
+
+| Stack | 主要リソース |
+|---|---|
+| `yesman-<env>-network` | VPC / Subnet ×4 / NAT / SG |
+| `yesman-<env>-auth` | Cognito User Pool / App Client (PKCE) / Hosted UI |
+| `yesman-<env>-ai` | Bedrock Guardrails / IAM |
+| `yesman-<env>-data` | KMS / Aurora Serverless v2 / Secrets |
+| `yesman-<env>-api` | ECR / ECS Fargate / ALB / EventBridge / SQS |
+| `yesman-<env>-edge` | CloudFront / S3 Static / OAC |
+| `yesman-<env>-monitoring` | CloudWatch Logs / SNS / Alarms / Budget |
+
+> 開発用: `pnpm synth` (テンプレ生成) / `cdk diff` (差分) / `pnpm test` (AWS 不要のスナップショットテスト)。
+
+---
+
 ## 🗂️ データモデル (ER 図)
 
 ```mermaid
@@ -764,12 +939,15 @@ erDiagram
     personas ||--o{ persona_reports : "1:N"
 
     profiles {
-        UUID user_id PK
+        UUID user_id PK "= Cognito sub"
         TEXT email "UNIQUE NOT NULL"
         TEXT age_group
+        JSONB gender
         TEXT occupation
         JSONB value_tags
-        TEXT cognito_sub "UNIQUE"
+        JSONB preferences
+        TEXT life_stage
+        JSONB avatar_config
         TIMESTAMPTZ created_at
         TIMESTAMPTZ updated_at
     }
@@ -777,16 +955,17 @@ erDiagram
     decisions {
         UUID id PK
         UUID user_id FK
-        TEXT domain_classification
+        TEXT domain_classification "daily/work/school/major/silenced"
         TEXT user_input "NOT NULL"
+        TEXT user_input_hash "SHA-256"
         TEXT proposal_text
         JSONB persona_outputs "合議の中間出力"
         TEXT rationale
         TEXT user_choice "yes/no/pending"
         INT no_attempt_count "DEFAULT 0"
         TEXT llm_provider
+        JSONB selected_persona_ids "array of UUID, max 3"
         TIMESTAMPTZ created_at
-        TIMESTAMPTZ updated_at
     }
 
     preference_profiles {
@@ -803,7 +982,7 @@ erDiagram
         UUID user_id FK
         TEXT detected_domain "religion/election/violence/obscene"
         TEXT triggered_by "prompt-self-check/guardrails"
-        TEXT raw_input_hash "本文は保存せずハッシュのみ"
+        TEXT user_input_hash "本文は保存せずハッシュのみ (salt+user_id+input)"
         TIMESTAMPTZ created_at
     }
 
@@ -819,7 +998,7 @@ erDiagram
         BOOLEAN is_builtin "DEFAULT FALSE"
         BOOLEAN is_deleted "DEFAULT FALSE 論理削除"
         INT usage_count "DEFAULT 0"
-        FLOAT yes_acceptance_rate "DEFAULT 0.0"
+        INT yes_count "DEFAULT 0"
         TIMESTAMPTZ created_at
         TIMESTAMPTZ updated_at
     }
@@ -846,22 +1025,25 @@ erDiagram
 
 | インデックス | 用途 |
 |---|---|
-| `decisions(user_id, created_at DESC)` | 履歴タイムライン |
-| `decisions(user_id, user_choice)` | Yes/No 集計、スコア算出 |
-| `decisions(domain_classification)` | ドメイン別集計 |
+| `decisions(user_id, created_at)` | 履歴タイムライン / スコア集計 (複合) |
+| `decisions(user_input_hash)` | 同一質問の採用回数算出 (attempt_count) |
+| `decisions(created_at)` | 30 日推移グラフ |
 | `silence_logs(detected_domain)` | 沈黙演出のドメイン別統計 |
+| `personas(owner_user_id)` / `personas(is_shared)` | 自作一覧 / 共有プール |
 
 ### 🔐 PII 保護
 
-- `profiles.email` は Aurora KMS 暗号化
+- `profiles.email` はフルスタック構成で Aurora KMS 暗号化 (MVP は MockStore + S3)
 - `decisions.user_input` は LLM 送信前に PII フィルタ
-- `silence_logs` は **本文を保存せずハッシュのみ** (倫理的安全装置)
+- `silence_logs` は **本文を保存せずハッシュのみ** (`SHA-256(salt+user_id+input)`、倫理的安全装置)
 
 ---
 
 ## 🔄 ユーザーフロー (シーケンス図)
 
 ### コア決定ループ (Journey B + 非同期学習)
+
+> 下図は **フルスタック構成** のフロー。実デプロイ MVP では Aurora → MockStore + S3、EventBridge → 同期処理 (`EVENT_BACKEND=sync`) に置き換わります。
 
 ```mermaid
 sequenceDiagram
@@ -871,26 +1053,30 @@ sequenceDiagram
     participant API as API Service<br>(FastAPI)
     participant DE as DecisionEngine
     participant LS as LearningService
-    participant LLM as LiteLLM
+    participant LLM as LLM<br>(Bedrock)
     participant Aur as Aurora
     participant EB as EventBridge
 
     U->>W: テキスト/音声で入力
-    W->>API: POST /v1/decisions/request
+    W->>API: POST /v1/decisions/request/stream
     API->>LS: get_profile(user_id)
     LS->>Aur: SELECT preference_profiles
     Aur-->>LS: PreferenceProfile
     API->>DE: request_decision(input, context)
-    DE->>LLM: complete(consensus_prompt)
-    Note over LLM: 単一プロンプト内で<br>複数人格が合議
-    LLM-->>DE: ConsensusResult
+    par 3 ペルソナ並列 (asyncio.gather)
+        DE->>LLM: 慎重派 / 楽観派 / 効率派 を並列生成
+    end
+    Note over DE,LLM: 各発言を SSE で<br>トークンストリーミング配信
+    LLM-->>DE: 3 utterances
+    DE->>LLM: 集約して 1 つの提案を生成
+    LLM-->>DE: proposal
     DE-->>API: DecisionProposal
     API->>Aur: INSERT decisions (status=pending)
-    API-->>W: DecisionProposal
-    W->>U: 提案表示 + スワイプ Yes/No
+    API-->>W: SSE (personas / utterance / proposal / complete)
+    W->>U: 提案表示 + 4 方向スワイプ
 
     U->>W: 右スワイプ (Yes)
-    W->>API: POST /v1/decisions/{id}/yes
+    W->>API: POST /v1/decisions/{id}/choice {choice: yes}
     API->>Aur: UPDATE decisions SET user_choice=yes
     API->>EB: publish(DecisionConfirmed)
     EB-->>API: ack
@@ -913,20 +1099,25 @@ sequenceDiagram
     participant API as API Service
     participant DE as DecisionEngine
     participant SG as SilenceGuard
-    participant LLM as LiteLLM
+    participant LLM as LLM (自己判定)
     participant BG as Bedrock<br>Guardrails
 
     U->>W: 「来週の選挙で誰に投票すべき?」
-    W->>API: POST /v1/decisions/request
+    W->>API: POST /v1/decisions/request/stream
     API->>DE: request_decision(input)
-    DE->>LLM: complete(prompt + 沈黙判定指示)
-    LLM-->>DE: { silence: true, detected: "election" }
-    DE->>SG: is_silent_domain → True
-    Note over SG,BG: 【本番のみ】二重ガード
-    SG->>BG: apply_guardrails_check
-    BG-->>SG: BLOCKED
+    DE->>SG: evaluate(input)
+    SG->>SG: ① regex 即時判定 (4 ドメイン辞書)
+    alt regex ヒット
+        SG-->>DE: silenced (election)
+    else regex ミス & LLM 判定有効時
+        SG->>LLM: ② 自己判定 (none / 4 ドメイン)
+        LLM-->>SG: election
+        SG-->>DE: silenced (fail-closed: 例外時も沈黙)
+    end
+    Note over SG,BG: 本番は Bedrock Guardrails も併用
+    DE->>API: SilenceLog 記録 (本文ハッシュのみ)
     DE-->>API: SilenceResponse
-    API-->>W: SilenceResponse
+    API-->>W: SSE: silence
     W->>U: 🤐 「…」演出 → ホームへ
 ```
 
@@ -959,14 +1150,12 @@ yesman/
 │   │       │   ├── voice/            # VoiceMicInput (Web Speech / Server STT)
 │   │       │   └── auth/             # Splash / SignIn / SignUp (Mock auth)
 │   │       └── ...
-│   └── 📂 api/                       # FastAPI + Python 3.12 (uv) + SQLModel + Pydantic v2
+│   └── 📂 api/                       # FastAPI + Python 3.12 (uv) + SQLModel + Pydantic v2 (DDD + ヘキサゴナル)
 │       └── src/yesman_api/
-│           ├── routers/              # /v1/decisions/* /v1/scores/* /v1/personas/* /v1/preferences/* /v1/voice/*
-│           ├── services/             # DecisionEngine / SilenceGuard / LearningService / ScoreCalculator
-│           ├── adapters/llm/         # LiteLLM / Claude CLI / Mock (Strategy + DI)
-│           ├── adapters/auth/        # Cognito / Mock
-│           ├── adapters/storage/     # SQLModel / Mock (in-memory)
-│           └── adapters/voice/       # AWS Transcribe / Mock
+│           ├── domain/               # ビジネスロジック: decision(engine/consensus/silence_guard/scorer/nudge/demo_mode) / persona_pool / learning / persistence(models)
+│           ├── application/          # ユースケース + Port(Protocol): LLMProviderAdapter / Repository / Auth / Voice / EventPublisher
+│           ├── infrastructure/       # Adapter 実装 + factory: llm_providers(bedrock/litellm/claude-cli/mock/demo) / persistence(SqlModel・MockStore+S3) / auth / voice / config
+│           └── interface/            # http/*.py(routers) + dto + middleware(Auth/OriginVerify) + deps
 │
 ├── 📂 packages/                      # 🧱 共有パッケージ
 │   ├── ui/                           # primitives (Button / Skeleton / Input / Toast) + composites (SwipeChoice / DecisionUtteranceBubble / PersonaCard etc.)
@@ -979,9 +1168,12 @@ yesman/
 │   ├── load/                         # 負荷試験 placeholder
 │   └── fixtures/                     # 共通 fixture
 │
-├── 📂 infra/                         # 🏗️ AWS CDK (TypeScript) placeholder (ハッカソンは Local 起動が中心)
+├── 📂 infra/                         # 🏗️ AWS CDK (TS): WebStaticStack (CloudFront+S3+Lambda+Bedrock) デプロイ済 + フルスタック 7-Stack 構想
 │
-├── 📂 docs/                          # 📐 Post-INCEPTION ドキュメント (feature 単位)
+├── 📂 docs/                          # 📐 Post-INCEPTION ドキュメント
+│   ├── design/                       # 🆕 サービス設計書 (01 概要 / 02 フロント / 03 バック / 04 インフラ / 05 データモデル + README 索引)
+│   ├── adr/                          # 🆕 ADR 42 件 (ADR-{uuid-v7}-{slug}.md、機能追加・修正の意思決定を時系列記録)
+│   ├── architecture/                 # AWS アーキ図 (yesman-aws-arch.drawio / .png / simple.drawio.svg)
 │   └── superpowers/
 │       ├── plans/                    # 実装計画書 (TDD step-by-step)
 │       │   ├── 2026-05-20-mock-auth.md
@@ -1162,7 +1354,14 @@ gantt
 
 ## 📚 詳細ドキュメント
 
-### 📋 設計ドキュメント
+### 🆕 サービス設計書 (docs/design) + ADR (docs/adr)
+
+| ドキュメント | 内容 |
+|---|---|
+| 📐 [docs/design/](docs/design/) | 実装準拠のサービス設計書: [01 概要](docs/design/01-overview.md) / [02 フロント](docs/design/02-frontend-design.md) / [03 バック](docs/design/03-backend-design.md) / [04 インフラ](docs/design/04-infrastructure-design.md) / [05 データモデル](docs/design/05-data-model.md) |
+| 🗂️ [docs/adr/](docs/adr/) | Architecture Decision Records 42 件 (機能追加・修正の意思決定を時系列記録、`ADR-{uuid-v7}-{slug}.md`) |
+
+### 📋 設計ドキュメント (INCEPTION canonical)
 
 | ドキュメント | 内容 |
 |---|---|
