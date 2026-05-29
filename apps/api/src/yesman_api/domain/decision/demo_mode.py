@@ -39,6 +39,7 @@ class DemoPersona:
     prompt_text: str
     avatar_emoji: str
     avatar_color: str  # avatarColors のキー (green/orange/blue/purple/pink/yellow/teal/umber)
+    description: str  # 選択画面に表示する短い説明
 
 
 DEMO_PERSONAS: tuple[DemoPersona, ...] = (
@@ -48,6 +49,7 @@ DEMO_PERSONAS: tuple[DemoPersona, ...] = (
         "あなたは現実的で少し口うるさい妻。健康・家計・身だしなみを気にして率直にダメ出しする。",
         "👩",
         "pink",
+        "口うるさい怖い妻",
     ),
     DemoPersona(
         UUID("00000000-0000-0000-0000-0000000000d2"),
@@ -55,6 +57,7 @@ DEMO_PERSONAS: tuple[DemoPersona, ...] = (
         "あなたは無邪気で正直な娘。思ったことをストレートに言う。",
         "👧",
         "yellow",
+        "無邪気な娘",
     ),
     DemoPersona(
         UUID("00000000-0000-0000-0000-0000000000d3"),
@@ -62,6 +65,7 @@ DEMO_PERSONAS: tuple[DemoPersona, ...] = (
         "あなたは飼い犬。どんな提案にも『ワン!』と全肯定で応じる究極の YesWan。",
         "🐶",
         "umber",
+        "何にでも『ワン!』と全肯定で応じる犬",
     ),
 )
 
@@ -199,7 +203,7 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
             id=p.id,
             owner_user_id=user_id,
             name=p.name,
-            description=f"デモ用カスタムペルソナ ({p.name})",
+            description=p.description,
             prompt_text=p.prompt_text,
             avatar_url=encode_avatar(p.avatar_emoji, p.avatar_color),
             is_shared=False,
@@ -210,6 +214,7 @@ async def ensure_demo_seeded(persona_repo, selection_repo, user_id, decision_rep
         elif (
             str(existing.owner_user_id) != str(user_id)
             or existing.avatar_url != persona.avatar_url
+            or existing.description != persona.description
         ):
             # 固定 ID を共有するため、アクセス中の sub に re-own して
             # その sub の /personas/me (カスタム) に表示されるようにする。
