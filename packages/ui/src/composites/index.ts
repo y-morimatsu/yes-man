@@ -1,5 +1,5 @@
-export { PersonaCard } from "./PersonaCard";
-export type { PersonaCardProps, PersonaCardData } from "./PersonaCard";
+export { PersonaCard, decodeAvatarConfig } from "./PersonaCard";
+export type { PersonaCardProps, PersonaCardData, DecodedAvatar } from "./PersonaCard";
 export {
   DecisionUtteranceBubble,
   personaBackgroundFor,

@@ -5,7 +5,7 @@
  * 0 件選択時は「人を選ぶ →」 placeholder.
  */
 import { Link } from "react-router-dom";
-import { BlobAvatar, personaIconFor } from "@yesman/ui";
+import { BlobAvatar, decodeAvatarConfig, personaIconFor } from "@yesman/ui";
 import { useBuiltinPersonas, useMyPersonas } from "./usePersona";
 import { useAnonymousList } from "./usePersonaPool";
 import { useUnifiedSelection } from "./useUnifiedSelection";
@@ -85,12 +85,25 @@ export function SelectedPersonaAvatars({
         (x) => x.id === s.id,
       );
       if (!persona) return null;
-      // builtin は name に応じた gradient (PersonaCard 配色と統一)、my は purple gradient
+      // 1) avatar_url が yesman-avatar: 形式なら emoji + 背景色を最優先 (PersonaCard と統一).
+      //    カスタム (妻/娘/ワンコ 等) の絵文字アイコンを home でも表示する。
+      const decoded = persona.avatar_url
+        ? decodeAvatarConfig(persona.avatar_url)
+        : null;
+      if (decoded?.emoji) {
+        return {
+          key,
+          type: "icon",
+          initial: decoded.emoji,
+          iconBackground: decoded.gradient,
+          label: persona.name,
+        } as ResolvedAvatar;
+      }
+      // 2) avatar 無し: builtin は name gradient、my は purple gradient
       const bg =
         s.source === "builtin"
           ? builtinGradient(persona.name)
           : ICON_GRADIENTS.my;
-      // 2026-05-24: PersonaCard と同じ「文字 = emoji icon」 を表示.
       //   builtin の慎重派/楽観派/効率派 は personaIconFor で 🛡️/☀️/⚡、他は 🎭.
       //   my (自作) は name 頭文字を使う (emoji がないため).
       const emoji = personaIconFor(persona.name);
