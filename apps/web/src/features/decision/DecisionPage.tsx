@@ -8,7 +8,7 @@
  */
 import { useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Input } from "@yesman/ui";
+import { Button, Input, decodeAvatarConfig, personaIconFor } from "@yesman/ui";
 import { VoiceMicInput } from "../voice/VoiceMicInput";
 import { decisionReducer, initialState } from "./reducer";
 import { useDecisionStream } from "./useDecisionStream";
@@ -74,14 +74,30 @@ export default function DecisionPage() {
   // 2026-05-24 v4: 統合 selection (3 source mix). 指定時は selected_personas で送信.
   const { selection: unifiedSelection } = useUnifiedSelection();
 
-  // persona_id → avatar_url の map (MangaStage の発話者アイコン用).
-  // カスタム persona (妻/娘/ワンコ 等) の emoji アイコンを議論画面でも表示する。
+  // persona_id → {name, avatar_url} の map (MangaStage の発話者アイコン / 選択ピル用).
+  // カスタム persona (妻/娘/ワンコ 等) の emoji アイコンを議論画面・ピルでも表示する。
   const { data: myPersonas } = useMyPersonas();
   const { data: builtinPersonas } = useBuiltinPersonas();
   const avatarById: Record<string, string | null | undefined> = {};
+  const personaById: Record<string, { name: string; avatar_url?: string | null }> = {};
   for (const p of [...(builtinPersonas ?? []), ...(myPersonas ?? [])]) {
     avatarById[p.id] = p.avatar_url;
+    personaById[p.id] = { name: p.name, avatar_url: p.avatar_url };
   }
+  // inline persona セレクタ pill のラベル (選択中ペルソナの emoji + 名前).
+  // 未解決 (persona list 未到着) は builtin 既定ラベルに fallback。
+  const pillItems = unifiedSelection
+    .map((s) => personaById[s.id])
+    .filter((p): p is { name: string; avatar_url?: string | null } => !!p)
+    .map((p) => {
+      const decoded = p.avatar_url ? decodeAvatarConfig(p.avatar_url) : null;
+      const emoji = decoded?.emoji ?? personaIconFor(p.name);
+      return `${emoji} ${p.name}`;
+    });
+  const pillLabel =
+    pillItems.length > 0
+      ? `${pillItems.join(" ・ ")} [▼]`
+      : "🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]";
 
   /** stream payload に selected_personas を merge (非空時のみ). */
   const buildStreamPayload = (
@@ -333,7 +349,7 @@ export default function DecisionPage() {
             aria-label="合議に使うペルソナを選択"
             data-testid="persona-selector-pill"
           >
-            🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]
+            {pillLabel}
           </Link>
         </>
       )}
