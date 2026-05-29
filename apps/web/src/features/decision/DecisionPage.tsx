@@ -24,6 +24,7 @@ import { YesManMascot, type MascotState } from "./YesManMascot";
 import type { ChainNode, StageMode } from "./reducer";
 import { usePersonaSource } from "../persona/usePersonaSource";
 import { useUnifiedSelection } from "../persona/useUnifiedSelection";
+import { useBuiltinPersonas, useMyPersonas } from "../persona/usePersona";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -72,6 +73,15 @@ export default function DecisionPage() {
 
   // 2026-05-24 v4: 統合 selection (3 source mix). 指定時は selected_personas で送信.
   const { selection: unifiedSelection } = useUnifiedSelection();
+
+  // persona_id → avatar_url の map (MangaStage の発話者アイコン用).
+  // カスタム persona (妻/娘/ワンコ 等) の emoji アイコンを議論画面でも表示する。
+  const { data: myPersonas } = useMyPersonas();
+  const { data: builtinPersonas } = useBuiltinPersonas();
+  const avatarById: Record<string, string | null | undefined> = {};
+  for (const p of [...(builtinPersonas ?? []), ...(myPersonas ?? [])]) {
+    avatarById[p.id] = p.avatar_url;
+  }
 
   /** stream payload に selected_personas を merge (非空時のみ). */
   const buildStreamPayload = (
@@ -348,6 +358,7 @@ export default function DecisionPage() {
           utterances={state.utterances}
           currentSpeakerId={state.lastSpeakerId ?? undefined}
           personaSource={personaSource}
+          avatarById={avatarById}
         >
           {/* proposal-card は DecisionResult が createPortal で ここに render する.
               この div の ref を proposalOverlayEl state に登録して DecisionResult に渡す. */}

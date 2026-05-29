@@ -313,4 +313,22 @@ describe("MangaStage", () => {
     expect(typing).toHaveAttribute("role", "status");
     expect(typing).toHaveAttribute("aria-label", "考え中");
   });
+
+  it("avatarById で custom persona の emoji アイコンを表示 (blob でなく emoji)", () => {
+    // {mode:"emoji", color:"umber", emoji:"🐶"} を base64 encode (backend と互換)
+    const json = JSON.stringify({ mode: "emoji", color: "umber", emoji: "🐶" });
+    const b64 = btoa(unescape(encodeURIComponent(json)));
+    const us: Utterance[] = [
+      { persona_id: "self", persona_name: "妻", text: "x", done: true },
+      { persona_id: "wanko", persona_name: "ワンコ", text: "ワン!", done: false },
+    ];
+    render(
+      <MangaStage
+        utterances={us}
+        avatarById={{ wanko: `yesman-avatar:${b64}` }}
+      />,
+    );
+    // ワンコ slot (idx 1) が emoji icon (🐶) を表示
+    expect(screen.getByTestId("manga-actor-icon-1")).toHaveTextContent("🐶");
+  });
 });

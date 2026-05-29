@@ -17,7 +17,7 @@
  * EarthHorizon は stage 全体に absolute で配置 (cluster の背景として visible).
  */
 import { useState } from "react";
-import { BlobAvatar, EarthHorizon, MangaBubble } from "@yesman/ui";
+import { BlobAvatar, EarthHorizon, MangaBubble, decodeAvatarConfig } from "@yesman/ui";
 import type { Utterance } from "./reducer";
 
 // === Persona theme (PersonaCard / SelectedPersonaAvatars と統一) ===
@@ -73,6 +73,26 @@ function personaTheme(name: string): PersonaTheme {
   return { builtin: null };
 }
 
+/** avatar_url (yesman-avatar: 形式) から emoji icon theme を導出 (カスタム persona 用).
+ *  name keyword theme を最優先、無ければ avatar emoji、両方無ければ null (blob fallback)。 */
+function themeFor(name: string, avatarUrl: string | null | undefined): PersonaTheme {
+  const named = personaTheme(name);
+  if (named.builtin) return named;
+  if (avatarUrl) {
+    const decoded = decodeAvatarConfig(avatarUrl);
+    if (decoded?.emoji) {
+      return {
+        builtin: {
+          emoji: decoded.emoji,
+          iconGradient: decoded.gradient,
+          bubbleBg: "#FCE7F0", // pink-ish pastel (吹き出し背景、emoji avatar 共通)
+        },
+      };
+    }
+  }
+  return { builtin: null };
+}
+
 // === Cluster (bubble + actor) の内部レイアウト ===
 // Cluster は固定 220px。内部の bottom 座標は cluster bottom が基準。
 const CLUSTER_HEIGHT = 220;
@@ -102,6 +122,8 @@ interface MangaStageProps {
   /** 2026-05-24 v4: T icon (self) 廃止. 全 slot を blob で表示.
    *  prop は backward-compat のため残置するが内部で使用しない. */
   personaSource?: "anonymous" | "builtin";
+  /** persona_id → avatar_url. カスタム persona (妻/娘/ワンコ 等) の emoji アイコン表示用. */
+  avatarById?: Record<string, string | null | undefined>;
   /** stage 上部の overlay slot (例: 完了時の proposal + YES/NO). */
   children?: React.ReactNode;
 }
@@ -118,6 +140,7 @@ export function MangaStage({
   utterances,
   currentSpeakerId,
   personaSource = "anonymous",
+  avatarById,
   children,
 }: MangaStageProps) {
   // personas event 到着前でも 3 actor を表示するため、不足分は placeholder で埋める.
@@ -208,7 +231,7 @@ export function MangaStage({
             const actorScale = isSpeaking ? 1.12 : 0.92;
             const actorZ = isSpeaking ? 5 : 1;
             // 2026-05-24: persona name から theme を導出 (builtin → emoji icon、anonymous → blob).
-            const theme = personaTheme(u.persona_name);
+            const theme = themeFor(u.persona_name, avatarById?.[u.persona_id]);
             // placeholder (utterance 未到着) は click 不可.
             const isPlaceholder = u.persona_id.startsWith("__placeholder");
             const handleActorClick = () => {
@@ -300,7 +323,7 @@ export function MangaStage({
           const showBubble = !!u.text;
           const variant: "pink" | "cream" = isSelf ? "cream" : "pink";
           // 2026-05-24: builtin persona は theme 色 (sky/amber/violet) で bubble bg を上書き.
-          const theme = personaTheme(u.persona_name);
+          const theme = themeFor(u.persona_name, avatarById?.[u.persona_id]);
           const bubbleBg = theme.builtin?.bubbleBg;
 
           const bubbleLeftRight: {
