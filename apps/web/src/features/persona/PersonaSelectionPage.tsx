@@ -207,14 +207,7 @@ export default function PersonaSelectionPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {myList.map((p) => (
                   <div key={p.id} className="relative">
-                    {recommendedNames.has(p.name) && (
-                      <span
-                        className="absolute -top-2 -right-2 z-10 rounded-full px-2 py-0.5 text-[12px] font-bold shadow-sm"
-                        style={{ background: "#FFD6E0", color: "#E8775A" }}
-                      >
-                        💡 おすすめ
-                      </span>
-                    )}
+                    {/* 自作タブでは「おすすめ」バッジは出さない (嗜好推奨は builtin タブのみ) */}
                     {/* 編集ボタン (カードクリック=選択トグルと分離) */}
                     <button
                       type="button"
