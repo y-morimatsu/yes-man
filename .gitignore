@@ -96,5 +96,4 @@ htmlcov/
 
 # === Playwright test artifacts (re-generated per run) ===
 tests/e2e/test-results/
-tests/e2e/playwright-report/data/
-tests/e2e/playwright-report/trace/
+tests/e2e/playwright-report/
