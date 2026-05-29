@@ -9,10 +9,11 @@ AWS Summit Japan 2026 AI-DLC ハッカソン提出作品。本ディレクトリ
 
 | # | ドキュメント | 内容 |
 |---|---|---|
-| 01 | [概要設計](./01-overview.md) | サービスコンセプト、主要機能、モノレポ構成、技術スタック、全体アーキテクチャ |
-| 02 | [フロントエンド設計](./02-frontend-design.md) | apps/web + packages/{ui,api-client}。画面/ルーティング、状態管理、SSE合議、認証 |
-| 03 | [バックエンド設計](./03-backend-design.md) | apps/api。DDD/ヘキサゴナル構成、API、合議エンジン、LLM抽象化、永続化、認証 |
-| 04 | [インフラ設計](./04-infrastructure-design.md) | AWS CDK。実デプロイ構成 (CloudFront+S3+Lambda+Bedrock) と将来のフルスタック構成 |
+| 01 | [概要設計](./01-overview.md) | サービスコンセプト、主要機能、ユースケース、モノレポ構成、技術スタック、全体アーキテクチャ、非機能要件、AI-DLC |
+| 02 | [フロントエンド設計](./02-frontend-design.md) | apps/web + packages/{ui,api-client}。画面/ルーティング、reducer 状態機械、SSE 合議、SwipeChoice、hooks、api-client、認証、PWA |
+| 03 | [バックエンド設計](./03-backend-design.md) | apps/api。DDD/ヘキサゴナル、API スキーマ、合議エンジン、プロンプト設計、沈黙ガード、service catalog、LLM 抽象化、認証、エラー一覧 |
+| 04 | [インフラ設計](./04-infrastructure-design.md) | AWS CDK。WebStaticStack (CloudFront+S3+Lambda+Bedrock) の設定値・CF Functions・IAM・CI/CD と将来のフルスタック構成 |
+| 05 | [データモデル設計](./05-data-model.md) | ER 図、全テーブルのフィールド/制約/インデックス、enum、JSONB 構造、in-flight モデル、MockStore、マイグレーション |
 
 ## 2 層のアーキテクチャ観
 

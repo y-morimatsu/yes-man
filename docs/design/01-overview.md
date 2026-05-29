@@ -18,19 +18,44 @@
 
 ## 1.2 主要機能 (ユーザー視点)
 
-| 機能 | 概要 |
-|---|---|
-| **好み学習オンボーディング** | 性格×生活の Yes/No 質問をスワイプ、嗜好プロファイルを構築 |
-| **3 ペルソナ合議** | 慎重派 / 楽観派 / 効率派 などが議論し、最終提案を生成 (SSE でリアルタイム可視化) |
-| **Yes/No スワイプ + 4 方向** | 右=決定 / 左=別案 / 上=中断 / 下=もっと絞る。マーチング矢印で誘導 |
-| **Drill-down (深掘り)** | 「もっと絞る」で決定領域を段階的に絞り込み、最終段で外部サービス (Amazon 等) へ |
-| **委任度スコア** | Yes 比率を円グラフ + 30日推移で可視化。「人生の N% を AI に委ねています」 |
-| **ペルソナ管理 (3 系統)** | プリセット / 知り合い (匿名共有プール) / カスタム から最大 3 人を選択 |
-| **沈黙ドメイン (倫理ガードレール)** | 4 ドメインは応答停止 (regex + LLM 自己判定の 2 段 + Bedrock Guardrails) |
-| **音声入出力** | Web Speech API (ブラウザ内蔵) ↔ Server STT/TTS (AWS Transcribe/Polly) を切替 |
-| **デモモード** | email に `morimatsu` を含むと、妻/娘/ワンコ ペルソナ + 使い込み履歴を即再現 |
+| 機能 | 概要 | 実装の要点 |
+|---|---|---|
+| **好み学習オンボーディング** | 性格×生活の Yes/No 質問をスワイプ、嗜好プロファイルを構築 | `OnboardingPage` → `PreferenceProfile` 初期化 (ColdStart 推定) |
+| **3 ペルソナ合議** | 慎重派 / 楽観派 / 効率派などが議論し最終提案を生成 | `asyncio.gather` で 3 並列 LLM、SSE で逐次可視化 |
+| **Yes/No スワイプ + 4 方向** | 右=決定 / 左=別案 / 上=中断 / 下=もっと絞る | `SwipeChoice` (四辺ボタン + キーボード, WCAG 2.5.1) |
+| **Drill-down (深掘り)** | 「もっと絞る」で決定領域を段階的に絞り込み、最終段で外部サービスへ | `MAX_DRILL_DEPTH=4`, `chain_context`, `service_catalog` |
+| **委任度スコア** | Yes 比率を円グラフ + 30日推移で可視化 | `AutonomyScorer` (累積 yes_ratio) |
+| **ペルソナ管理 (3 系統)** | プリセット / 知り合い (匿名共有プール) / カスタムから最大 3 人 | `selected_personas` (source 混在), 共有プール + 通報 |
+| **沈黙ドメイン (倫理ガードレール)** | 4 ドメインは応答停止 | regex + LLM 自己判定の 2 段 + Bedrock Guardrails, fail-closed |
+| **音声入出力** | Web Speech API ↔ Server STT/TTS を切替 | `VOICE_BACKEND` (web-speech-api / aws / mock) |
+| **デモモード** | email に `morimatsu` を含むと妻/娘/ワンコ + 使い込み履歴を即再現 | `DemoLLMAdapter` ラップ (本物経路は不変) |
 
-## 1.3 モノレポ構成
+機能の内部仕様は [02. フロントエンド設計](./02-frontend-design.md) / [03. バックエンド設計](./03-backend-design.md) を参照。
+
+## 1.3 主要ユースケースの流れ
+
+```mermaid
+sequenceDiagram
+    participant U as ユーザー
+    participant W as Web (PWA)
+    participant A as API (FastAPI)
+    participant L as LLM (Bedrock)
+
+    U->>W: 「今夜の夕飯どうしよう」
+    W->>A: POST /v1/decisions/request/stream
+    A-->>W: SSE: start / personas / utterance×3
+    A->>L: 3 ペルソナ並列 + 提案生成
+    A-->>W: SSE: proposal {is_final:false, depth:0}
+    A-->>W: SSE: complete
+    U->>W: ↓ もっと絞る (drill-down)
+    W->>A: POST /request/stream {chain_context:[前段提案]}
+    A-->>W: SSE: proposal {depth:1 ...}
+    U->>W: → Yes (確定)
+    W->>A: POST /v1/decisions/{id}/choice {choice:"yes"}
+    A-->>W: {nudge_url, no_attempt_count}
+```
+
+## 1.4 モノレポ構成
 
 pnpm workspace によるモノレポ (`pnpm-workspace.yaml`)。
 
@@ -55,7 +80,7 @@ yesman/
 | `@yesman/api-client` | API ラッパー (pure fetch, 依存なし) | TypeScript / openapi-typescript |
 | `infra` | IaC | AWS CDK 2.x |
 
-## 1.4 技術スタック総覧
+## 1.5 技術スタック総覧
 
 | カテゴリ | 技術 |
 |---|---|
@@ -69,7 +94,7 @@ yesman/
 | CI/CD | GitHub Actions / Docker / OIDC |
 | テスト | Vitest / Playwright / Hypothesis (PBT) |
 
-## 1.5 全体アーキテクチャ (実デプロイ構成)
+## 1.6 全体アーキテクチャ (実デプロイ構成)
 
 ```mermaid
 flowchart LR
@@ -94,7 +119,9 @@ flowchart LR
 - **SSE 対応**: Lambda Web Adapter を `RESPONSE_STREAM` モードで動かし、CloudFront の API ビヘイビアは圧縮無効・キャッシュ無効。合議の逐次配信 (Server-Sent Events) を実現。
 - **状態**: 認証は mock (固定 demo user)、ストレージは MockStore を S3 に pickle 永続化することで Lambda マルチインスタンス間の一貫性を確保。
 
-## 1.6 設計思想: 差し替え可能性 (Strategy + DI)
+詳細は [04. インフラ設計](./04-infrastructure-design.md) を参照。
+
+## 1.7 設計思想: 差し替え可能性 (Strategy + DI)
 
 YesMan の最大の設計特徴は、**外部依存をすべて Protocol で抽象化し、環境変数で実装を切り替えられる**ことです。
 
@@ -106,13 +133,31 @@ YesMan の最大の設計特徴は、**外部依存をすべて Protocol で抽�
 | `VOICE_BACKEND` | 音声 | `aws` / `web-speech-api` / `mock` |
 | `EVENT_BACKEND` | イベント | `eventbridge` / `inline-async` / `sync` |
 
-これにより、(a) ローカル開発を AWS 不要で完結、(b) テストを mock で高速・決定論的に実行、(c) 本番を AWS サービスで稼働、を同一コードで実現します。
+これにより、(a) ローカル開発を AWS 不要で完結、(b) テストを mock で高速・決定論的に実行、(c) 本番を AWS サービスで稼働、を同一コードで実現します。各 Adapter は `application/` 層の Protocol を実装し、`infrastructure/*/factory.py` が起動時に 1 度だけ生成します ([03](./03-backend-design.md) §3.1)。
 
-## 1.7 開発プロセス
+## 1.8 非機能要件 (抜粋)
+
+| 区分 | 要件 | 実現手段 |
+|---|---|---|
+| 性能 | 合議は SSE で逐次表示し体感待ちを最小化 | 3 ペルソナ並列 + トークンストリーミング。per-persona 30s / stream 全体 120s timeout |
+| 可用性 | LLM 失敗時も全滅させない | ペルソナ単位 timeout、全滅時のみ `all_personas_failed` (502) |
+| プライバシー | 沈黙ログに本文を残さない | `SilenceLog` は `SHA-256(salt+user_id+input)` のみ保存 (NFR-PRIV-04) |
+| 安全性 | 倫理領域で確実に沈黙 | regex + LLM の 2 段 + Bedrock Guardrails、**fail-closed** |
+| アクセシビリティ | スワイプ以外の代替操作 | 四辺ボタン + キーボード (←→↑↓)、brand AA 5.5:1 |
+| コスト | 常時起動コストを避ける | Lambda Function URL + MockStore (ハッカソン MVP) |
+
+## 1.9 開発プロセス (AI-DLC)
 
 - **AI-DLC** (AWS AI-powered Development Lifecycle): Inception → Construction → Operations。14 Units に分解 (U1 infra / U2-U6 backend / U7a-d frontend / U-Persona / U-Test)。思考トレースは `aidlc-docs/` に蓄積。
+
+| フェーズ | 主な成果物 |
+|---|---|
+| Inception | 要件・ユーザーストーリー・アプリ設計・Unit 分解 (`aidlc-docs/inception/`) |
+| Construction | Unit ごとの機能設計・NFR・インフラ設計・コード生成 (`aidlc-docs/construction/`) |
+| Operations | デプロイ・監視 (placeholder) |
+
 - **Git-Flow** (`CLAUDE.md` 準拠): `main` / `develop` / `feature/*` / `bugfix/*`。Conventional Commits + `Co-Authored-By` trailer。develop へは PR 経由・`--no-ff` マージ。
 
 ---
 
-→ 詳細は [02. フロントエンド設計](./02-frontend-design.md) / [03. バックエンド設計](./03-backend-design.md) / [04. インフラ設計](./04-infrastructure-design.md) へ。
+→ 詳細は [02. フロントエンド設計](./02-frontend-design.md) / [03. バックエンド設計](./03-backend-design.md) / [04. インフラ設計](./04-infrastructure-design.md) / [05. データモデル設計](./05-data-model.md) へ。
