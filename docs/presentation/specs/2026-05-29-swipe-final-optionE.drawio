@@ -1,0 +1,85 @@
+<mxfile host="app.diagrams.net" modified="2026-05-29T00:00:00.000Z" agent="claude-code" version="24.0.0">
+  <diagram id="optionE-final" name="案E確定版 — カードスワイプ4方向">
+    <mxGraphModel dx="1000" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="760" pageHeight="560" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- 見出し -->
+        <mxCell id="head" value="案E (確定版): カードスワイプ 4方向 — ボタン廃止・四辺ラベル" style="text;html=1;fontSize=16;fontStyle=1;align=center;fontColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="680" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="sub" value="左=No / 右=Yes / 上=やめる / 下=もっと絞る。Yes 方向は現行の → → → マーチング矢印で誘導" style="text;html=1;fontSize=11;align=center;fontColor=#7A6B57;" vertex="1" parent="1">
+          <mxGeometry x="40" y="48" width="680" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- 背景 (アプリ画面想定) -->
+        <mxCell id="bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=#E0D5BC;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="120" y="90" width="520" height="430" as="geometry" />
+        </mxCell>
+
+        <!-- 上: ↑ やめる -->
+        <mxCell id="up" value="↑ やめる" style="text;html=1;fontSize=14;align=center;fontColor=#9AA5AD;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="150" width="160" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="upArrow" value="" style="endArrow=classicThin;html=1;strokeColor=#C8CDD2;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="215" as="sourcePoint" />
+            <mxPoint x="380" y="178" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 左: ← No -->
+        <mxCell id="noLabel" value="←&#10;No" style="text;html=1;fontSize=18;align=center;fontColor=#6B7680;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="260" width="56" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="noSub" value="別案" style="text;html=1;fontSize=10;align=center;fontColor=#9AA5AD;" vertex="1" parent="1">
+          <mxGeometry x="150" y="306" width="56" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- カード (中央) -->
+        <mxCell id="card" value="明るく 元気が出る曲を&#10;聴こう。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#2E2418;fontColor=#1A1814;fontSize=17;fontStyle=1;arcSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="230" width="280" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cardHint" value="(カードを指でスワイプ)" style="text;html=1;fontSize=10;align=center;fontColor=#B0A892;" vertex="1" parent="1">
+          <mxGeometry x="240" y="344" width="280" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- 右: Yes → + マーチング矢印 (現行ヒント) -->
+        <mxCell id="yesLabel" value="Yes&#10;→" style="text;html=1;fontSize=18;align=center;fontColor=#3C7A3E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="554" y="258" width="56" height="50" as="geometry" />
+        </mxCell>
+        <!-- マーチング → → → (サイズ/濃淡で動き示唆) -->
+        <mxCell id="m1" value="→" style="text;html=1;fontSize=16;align=center;fontColor=#A7D2A8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="524" y="288" width="20" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="→" style="text;html=1;fontSize=18;align=center;fontColor=#7CBF7E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="286" width="20" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="→" style="text;html=1;fontSize=20;align=center;fontColor=#5BA85C;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="556" y="284" width="20" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="yesAnimNote" value="※ → → → が右へ流れる&#10;marching アニメ (現行流用)" style="text;html=1;fontSize=9;align=center;fontColor=#5BA85C;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="500" y="312" width="130" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 下: ↓ もっと絞る (あと N 段) -->
+        <mxCell id="downArrow" value="" style="endArrow=classicThin;html=1;strokeColor=#7BAEFF;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="358" as="sourcePoint" />
+            <mxPoint x="380" y="395" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="down" value="↓ もっと絞る  (あと 4 段)" style="text;html=1;fontSize=14;align=center;fontColor=#3A66B5;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="400" width="200" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- 凡例 -->
+        <mxCell id="legend" value="左 ← No (別案) ・ 右 → Yes (決定 / →→→ アニメ) ・ 上 ↑ やめる ・ 下 ↓ もっと絞る" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6E9;strokeColor=#E0D5BC;fontColor=#7A6B57;fontSize=11;arcSize=20;" vertex="1" parent="1">
+          <mxGeometry x="150" y="448" width="460" height="34" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
