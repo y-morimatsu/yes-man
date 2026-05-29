@@ -225,7 +225,7 @@ describe("DecisionResult — drill-down-auto-open (final 段 Yes 自動 open)", 
     openSpy.mockRestore();
   });
 
-  it("isFinal=false (drill-down 中): window.open は呼ばれない (FR-DAO-05)", async () => {
+  it("isFinal=false: Yes (右) は drill-down せず確定 (2026-05-29 仕様変更)", async () => {
     const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
     const onDrillDown = vi.fn();
 
@@ -239,11 +239,34 @@ describe("DecisionResult — drill-down-auto-open (final 段 Yes 自動 open)", 
     yesBtn.click();
     await new Promise((r) => setTimeout(r, 50));
 
-    // isFinal=false なら onYesSync は SwipeChoice に渡されない (undefined) ので発火しない
+    // isFinal=false なら onYesSync は渡されない (undefined) ので window.open しない
     expect(openSpy).not.toHaveBeenCalled();
-    // drill-down 経路では onDrillDown が呼ばれる
-    expect(onDrillDown).toHaveBeenCalledOnce();
+    // 2026-05-29: 右(Yes) は確定。深掘りは下スワイプ (onDown) に分離したので
+    // Yes click では onDrillDown は呼ばれない。
+    expect(onDrillDown).not.toHaveBeenCalled();
     openSpy.mockRestore();
+  });
+
+  it("2026-05-29: 下キー (↓) で onDrillDown (もっと絞る、非finalのみ)", async () => {
+    const onDrillDown = vi.fn();
+    const { getByTestId } = setup({ isFinal: false, onDrillDown });
+    const card = getByTestId("swipe-card");
+    card.focus();
+    const { fireEvent } = await import("@testing-library/react");
+    fireEvent.keyDown(card, { key: "ArrowDown" });
+    await new Promise((r) => setTimeout(r, 250));
+    expect(onDrillDown).toHaveBeenCalledOnce();
+  });
+
+  it("2026-05-29: 上キー (↑) で onAbort (中断)", async () => {
+    const onAbort = vi.fn();
+    const { getByTestId } = setup({ isFinal: false, onAbort });
+    const card = getByTestId("swipe-card");
+    card.focus();
+    const { fireEvent } = await import("@testing-library/react");
+    fireEvent.keyDown(card, { key: "ArrowUp" });
+    await new Promise((r) => setTimeout(r, 250));
+    expect(onAbort).toHaveBeenCalledOnce();
   });
 
   it("isFinal=true && service≠null: Yes button aria-label に '新しいタブ' が含まれる (NFR-DAO-10)", () => {

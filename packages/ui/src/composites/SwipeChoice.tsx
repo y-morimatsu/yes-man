@@ -47,6 +47,18 @@ export interface SwipeChoiceProps {
    * スクリーンリーダー利用者に「Yes 押下 = 外部遷移」を事前通知.
    */
   yesAriaLabelOverride?: string;
+  /**
+   * 2026-05-29 4方向スワイプ: 下スワイプ (= もっと絞る / 深掘り). 未指定で無効 (final 段等).
+   */
+  onDown?: () => void;
+  /** 下スワイプの hint / indicator ラベル. default "もっと絞る". */
+  downLabel?: string;
+  /**
+   * 2026-05-29 4方向スワイプ: 上スワイプ (= 中断 / やめる). 未指定で無効.
+   */
+  onUp?: () => void;
+  /** 上スワイプの hint / indicator ラベル. default "やめる". */
+  upLabel?: string;
 }
 
 const SWIPE_THRESHOLD_DEFAULT = 100;
@@ -73,6 +85,10 @@ export function SwipeChoice({
   showSwipeHint = true,
   onYesSync,
   yesAriaLabelOverride,
+  onDown,
+  downLabel = "もっと絞る",
+  onUp,
+  upLabel = "やめる",
 }: SwipeChoiceProps) {
   // 2026-05-26 (FR-DAO-09): user gesture chain 内同期発火 helper.
   // 3 Yes path で onYes より前に呼ぶ:
@@ -88,7 +104,10 @@ export function SwipeChoice({
     }
   };
   const [dx, setDx] = useState(0);
-  const [confirming, setConfirming] = useState<"yes" | "no" | null>(null);
+  const [dy, setDy] = useState(0);
+  const [confirming, setConfirming] = useState<"yes" | "no" | "up" | "down" | null>(
+    null,
+  );
 
   // 防御的 reset: proposalText が変わったら (No 採択後の別案 swap 等で) confirming/dx を初期化.
   // 上位で <SwipeChoice key={decisionId}> が付いていれば本来 instance ごと remount されるが、
@@ -98,15 +117,24 @@ export function SwipeChoice({
     if (prevProposalRef.current !== proposalText) {
       prevProposalRef.current = proposalText;
       setDx(0);
+      setDy(0);
       setConfirming(null);
     }
   }, [proposalText]);
 
+  const clamp = (v: number) => Math.max(-MAX_DRAG_PX, Math.min(MAX_DRAG_PX, v));
+
   const handlers = useSwipeable({
-    onSwiping: ({ deltaX }) => {
+    onSwiping: ({ deltaX, deltaY }) => {
       if (disabled || confirming) return;
-      const clamped = Math.max(-MAX_DRAG_PX, Math.min(MAX_DRAG_PX, deltaX));
-      setDx(clamped);
+      // 主軸判定: 横移動が縦以上なら左右ドラッグ、そうでなければ上下ドラッグ.
+      if (Math.abs(deltaX) >= Math.abs(deltaY)) {
+        setDx(clamp(deltaX));
+        setDy(0);
+      } else {
+        setDy(clamp(deltaY));
+        setDx(0);
+      }
     },
     onSwipedLeft: ({ absX }) => {
       if (disabled || confirming) return;
@@ -134,9 +162,42 @@ export function SwipeChoice({
       tryHaptic();
       setTimeout(() => onYes(), 180);
     },
+    onSwipedDown: ({ absY }) => {
+      // 2026-05-29: 下スワイプ = もっと絞る (深掘り). onDown 未指定なら無効.
+      if (disabled || confirming || !onDown) {
+        setDy(0);
+        return;
+      }
+      if (absY < threshold) {
+        setDy(0);
+        return;
+      }
+      setConfirming("down");
+      setDy(MAX_DRAG_PX);
+      tryHaptic();
+      setTimeout(() => onDown(), 180);
+    },
+    onSwipedUp: ({ absY }) => {
+      // 2026-05-29: 上スワイプ = 中断 (やめる). onUp 未指定なら無効.
+      if (disabled || confirming || !onUp) {
+        setDy(0);
+        return;
+      }
+      if (absY < threshold) {
+        setDy(0);
+        return;
+      }
+      setConfirming("up");
+      setDy(-MAX_DRAG_PX);
+      tryHaptic();
+      setTimeout(() => onUp(), 180);
+    },
     onSwiped: () => {
       // 閾値未満で離した時は元の位置に戻る
-      if (!confirming) setDx(0);
+      if (!confirming) {
+        setDx(0);
+        setDy(0);
+      }
     },
     trackMouse: true,
     trackTouch: true,
@@ -144,6 +205,7 @@ export function SwipeChoice({
   });
 
   const ratio = Math.min(Math.abs(dx) / threshold, 1);
+  const ratioY = Math.min(Math.abs(dy) / threshold, 1);
   const rotation = (dx / MAX_DRAG_PX) * 6; // 最大 6deg 回転 (tinder-like)
 
   return (
@@ -170,6 +232,26 @@ export function SwipeChoice({
         >
           Yes →
         </span>
+        {/* 上 中断 indicator (drag<0 で fade-in、onUp 有効時のみ) */}
+        {onUp && (
+          <span
+            aria-hidden
+            className="absolute left-1/2 top-1 -translate-x-1/2 select-none text-lg font-bold text-silence transition-opacity"
+            style={{ opacity: dy < 0 ? ratioY : 0 }}
+          >
+            ↑ {upLabel}
+          </span>
+        )}
+        {/* 下 深掘り indicator (drag>0 で fade-in、onDown 有効時のみ) */}
+        {onDown && (
+          <span
+            aria-hidden
+            className="absolute left-1/2 bottom-1 -translate-x-1/2 select-none text-lg font-bold transition-opacity"
+            style={{ opacity: dy > 0 ? ratioY : 0, color: "#3A66B5" }}
+          >
+            ↓ {downLabel}
+          </span>
+        )}
         {/* swipeable card — role="group" にして fallback Yes/No button との strict mode 衝突を回避.
             keyboard accessible は内部の Yes/No button (Tab focus) で担保. swipe div 上でも
             ArrowLeft/Right が動作するように tabIndex + onKeyDown を残す. */}
@@ -179,7 +261,7 @@ export function SwipeChoice({
           // Hackathon: dx=0 (未スワイプ) の時に右辺グロー pulse で Yes 方向を passive 誘導
           className="relative mx-auto max-w-utterance touch-pan-y select-none transition-transform duration-150 ease-out rounded-2xl"
           style={{
-            transform: `translateX(${dx}px) rotate(${rotation}deg)`,
+            transform: `translateX(${dx}px) translateY(${dy}px) rotate(${rotation}deg)`,
             cursor: disabled ? "default" : "grab",
             animation:
               !disabled && !confirming && dx === 0
@@ -190,7 +272,9 @@ export function SwipeChoice({
           role="group"
           aria-roledescription="swipeable proposal card"
           tabIndex={0}
-          aria-label={`提案カード: ${proposalText}。右へスワイプまたは → で承認、左へスワイプまたは ← で再考。`}
+          aria-label={`提案カード: ${proposalText}。右へスワイプまたは → で決定、左へスワイプまたは ← で別案${
+            onDown ? "、下へスワイプまたは ↓ でもっと絞る" : ""
+          }${onUp ? "、上へスワイプまたは ↑ でやめる" : ""}。`}
           data-testid="swipe-card"
           onKeyDown={(e) => {
             // キーボード代替: ←/→ で Yes/No (アクセシビリティ)
@@ -207,6 +291,16 @@ export function SwipeChoice({
               // FR-DAO-09: setTimeout の前に同期発火
               invokeYesSync();
               setTimeout(() => onYes(), 180);
+            } else if (e.key === "ArrowDown" && onDown) {
+              setConfirming("down");
+              setDy(MAX_DRAG_PX);
+              tryHaptic();
+              setTimeout(() => onDown(), 180);
+            } else if (e.key === "ArrowUp" && onUp) {
+              setConfirming("up");
+              setDy(-MAX_DRAG_PX);
+              tryHaptic();
+              setTimeout(() => onUp(), 180);
             }
           }}
         >
@@ -249,6 +343,26 @@ export function SwipeChoice({
             </span>
             <span className="ml-1">Yes</span>
           </span>
+        </div>
+      )}
+
+      {/* 上下スワイプの hint (有効時のみ): スワイプ主体 + ヒントで発見性を補う */}
+      {(onDown || onUp) && dx === 0 && dy === 0 && !confirming && (
+        <div
+          className="flex items-center gap-3 text-[11px] text-neutral-400"
+          aria-hidden
+          data-testid="swipe-hint-vertical"
+        >
+          {onDown && (
+            <span className="flex items-center gap-0.5">
+              <span style={{ color: "#3A66B5" }}>↓</span> {downLabel}
+            </span>
+          )}
+          {onUp && (
+            <span className="flex items-center gap-0.5">
+              <span className="text-silence">↑</span> {upLabel}
+            </span>
+          )}
         </div>
       )}
 

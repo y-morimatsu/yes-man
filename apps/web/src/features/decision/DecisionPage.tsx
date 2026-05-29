@@ -396,6 +396,7 @@ export default function DecisionPage() {
           chain={chain}
           service={state.status === "completed" ? state.service : null}
           onDrillDown={handleDrillDown}
+          onAbort={handleFullReset}
           // 2026-05-24: 両経路で MangaStage を bubble 表示に使うため、ここの bubble は常時 hide.
           hideUtterances
           // 2026-05-24: proposal-card を MangaStage の overlay 領域に Portal で render.
