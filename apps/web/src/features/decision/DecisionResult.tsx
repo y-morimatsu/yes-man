@@ -449,7 +449,7 @@ export function DecisionResult({
                 onYes={handleConfirmYes}
                 onNo={handleConfirmNo}
                 disabled={choose.isPending}
-                showSwipeHint={!proposalCardPortal}
+                showSwipeHint={true}
                 onYesSync={
                   isOpenStep && service
                     ? () => {
@@ -502,7 +502,7 @@ export function DecisionResult({
                 onYes={() => handleChoose("yes")}
                 onNo={() => handleChoose("no")}
                 disabled={choose.isPending}
-                showSwipeHint={!proposalCardPortal}
+                showSwipeHint={true}
                 // 2026-05-26 drill-down-auto-open (FR-DAO-02/03/09 + NFR-DAO-06/07/10):
                 // final 段 (isFinal=true) + service≠null のみ自動 open + a11y override を有効化.
                 // 2026-05-26 (confirm phase): confirmFlow がある category は Yes で confirm step に
@@ -526,24 +526,25 @@ export function DecisionResult({
                 upLabel="やめる"
               >
                 <article
-                  className="rounded-3xl overflow-hidden shadow-md flex flex-col"
+                  className="rounded-3xl overflow-hidden shadow-md flex flex-col justify-center"
                   style={{
                     background: "#FFFCF4",
                     border: "0.5px solid rgba(46, 36, 24, 0.30)",
                     boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
+                    minHeight: 180,
                   }}
                   aria-label="提案"
                   role="article"
                   data-testid="proposal-result-card"
                 >
-                  <div className="px-4 pt-3 pb-2 text-center">
+                  <div className="px-5 py-8 text-center">
                     <p
-                      className="font-medium"
+                      className="font-bold"
                       style={{
                         fontFamily: "var(--font-sans)",
-                        fontSize: 20,
-                        lineHeight: 1.3,
-                        color: "#2E2418",
+                        fontSize: 24,
+                        lineHeight: 1.35,
+                        color: "#1A1814",
                       }}
                     >
                       {proposal}
