@@ -42,9 +42,11 @@ export interface DecisionResultProps {
   onNoChosen?: (noAttemptCount: number) => void;
   /** Hackathon: 親 (DecisionPage) で mascot 状態を切り替えるための callback. */
   onChoiceMade?: (choice: "yes" | "no") => void;
-  /** 2026-05-23 Drill-down chain: Yes が「次段に進む」を意味する場合のハンドラ.
+  /** 2026-05-23 Drill-down chain: 下スワイプ「もっと絞る」のハンドラ.
    *  isFinal=false のときに呼ぶ。指定時は内部 choose API を call せず、親が新 stream を起動。 */
   onDrillDown?: () => void;
+  /** 2026-05-29 上スワイプ「やめる」= 中断. 親で入力画面に戻す (handleFullReset). */
+  onAbort?: () => void;
   /** 2026-05-23 Drill-down chain: 現提案が最終かどうか. true なら Yes 採択 (choose API + 祝福). */
   isFinal?: boolean;
   /** 2026-05-26 Drill-down hint: 現在の depth (= chain.length). pink-nudge で「あと N 段で決定」表示用. */
@@ -70,6 +72,7 @@ export function DecisionResult({
   onNoChosen,
   onChoiceMade,
   onDrillDown,
+  onAbort,
   isFinal = true,
   depth = 0,
   chain = [],
@@ -177,14 +180,10 @@ export function DecisionResult({
 
   const handleChoose = async (choice: "yes" | "no") => {
     if (!decisionId) return;
-    // 2026-05-23 Drill-down chain: Yes かつ非 final なら choose API を call せず drill-down
-    if (choice === "yes" && !isFinal && onDrillDown) {
-      onChoiceMade?.("yes");
-      onDrillDown();
-      return;
-    }
+    // 2026-05-29: Yes (右スワイプ) は常に「確定」。深掘りは下スワイプ (handleDown) に分離.
     // 2026-05-26: final Yes で category confirm flow がある場合は popup を直開せず
     // confirm step に遷移. choose API も confirm 終了後に呼ぶ.
+    // (非 final でも confirmFlow は無い ので、その場合はそのまま choose("yes") = 即確定)
     if (choice === "yes" && isFinal && confirmFlow && confirmStepId === null) {
       onChoiceMade?.("yes");
       setConfirmStepId(confirmFlow.start);
@@ -208,6 +207,19 @@ export function DecisionResult({
     } catch (err) {
       push({ message: `${t("errorDefault")}: ${describeError(err)}`, variant: "error" });
     }
+  };
+
+  // 2026-05-29 下スワイプ = もっと絞る (深掘り). 非 final + onDrillDown 有効時のみ.
+  const canDrillDown = !isFinal && !!onDrillDown;
+  const handleDown = () => {
+    if (!canDrillDown) return;
+    onChoiceMade?.("yes"); // 深掘りは前向きアクション → mascot は yes 寄り表情
+    onDrillDown!();
+  };
+
+  // 2026-05-29 上スワイプ = 中断 (やめる) → 入力画面に戻る (親の onAbort).
+  const handleUp = () => {
+    onAbort?.();
   };
 
   /** 2026-05-26: confirm step (Yes/No) の遷移. action に基づき次 step / open / stop を実行. */
@@ -507,6 +519,11 @@ export function DecisionResult({
                     ? `Yes、提案を採択 (新しいタブで ${service.name} を開きます)`
                     : undefined
                 }
+                // 2026-05-29 4方向: 下=もっと絞る (非finalのみ) / 上=やめる (中断)
+                onDown={canDrillDown ? handleDown : undefined}
+                downLabel="もっと絞る"
+                onUp={onAbort ? handleUp : undefined}
+                upLabel="やめる"
               >
                 <article
                   className="rounded-3xl overflow-hidden shadow-md flex flex-col"
@@ -592,9 +609,9 @@ export function DecisionResult({
                   </>
                 ) : (
                   <>
-                    <span className="font-bold">🪜 まだ深堀り中。</span>
+                    <span className="font-bold">🪜 → で今すぐ決定。</span>
                     <span className="ml-1">
-                      Yes で もっと絞る (あと {Math.max(1, MAX_DRILL_DEPTH - depth)} 段で決定)
+                      ↓ で もっと絞る (あと {Math.max(1, MAX_DRILL_DEPTH - depth)} 段)
                     </span>
                   </>
                 )}
