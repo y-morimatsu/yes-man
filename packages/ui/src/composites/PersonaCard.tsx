@@ -28,12 +28,12 @@ const AVATAR_GRADIENTS: Record<string, string> = {
   umber: "linear-gradient(135deg, #7A6B57, #4F4435)",
 };
 
-interface DecodedAvatar {
+export interface DecodedAvatar {
   emoji: string | null;
   gradient: string;
 }
 
-function decodeAvatarConfig(avatarUrl: string): DecodedAvatar | null {
+export function decodeAvatarConfig(avatarUrl: string): DecodedAvatar | null {
   const PREFIX = "yesman-avatar:";
   if (!avatarUrl.startsWith(PREFIX)) return null;
   try {
