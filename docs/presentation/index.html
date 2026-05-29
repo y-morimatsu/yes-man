@@ -906,6 +906,12 @@
     }
     .nav-controls, .progress-bar { display: none; }
   }
+
+  /* ===== Speaker notes / presenter preview ===== */
+  .notes { display: none; }                                   /* hidden in normal / audience / print view */
+  body.preview .nav-controls,
+  body.preview .progress-bar { display: none !important; }    /* preview iframe (presenter thumbnail): hide chrome */
+  body.preview .slide { transition: none !important; }
 </style>
 </head>
 <body>
@@ -919,6 +925,15 @@
          Slide 01 — Cover
          ==================================================== -->
     <section class="slide cover active" data-title="Cover">
+      <aside class="notes">
+        <p><b>⏱ 0:30 ・ 通過 ~0:30 — つかみ</b></p>
+        <ul>
+          <li>(笑顔で) 「みなさん、こんにちは」</li>
+          <li>「今日は、"人をダメにする" 新しい意思決定支援サービス、『<b>YesMan</b>』を紹介します」</li>
+          <li>「コンセプトは、"人間最後の仕事は、YES で承認すること"」</li>
+          <li>「AI があなたの欲しい答えを予測して提案し、あなたの仕事は YES で承認するだけ。今日はその世界をお見せします」</li>
+        </ul>
+      </aside>
       <div class="cover-main">
         <div class="cover-text">
           <div class="eyebrow">人をダメにする、新しい意思決定支援。</div>
@@ -940,6 +955,14 @@
          Slide 02 — Team
          ==================================================== -->
     <section class="slide" data-title="Team">
+      <aside class="notes">
+        <p><b>⏱ 0:20 ・ 通過 ~0:50</b></p>
+        <ul>
+          <li>「チーム名は "ぐうたラボ"。"ぐうたら" を本気で研究するラボ、という意味です」</li>
+          <li>「NEC ソリューションイノベータのイノベーションラボラトリ、4 名で開発しました」</li>
+          <li>「"楽してダメになる" を真面目に突き詰める、それが私たちのテーマです」(深入りせず次へ)</li>
+        </ul>
+      </aside>
       <div class="slide-header">
         <div class="left">
           <div class="eyebrow">— Team</div>
@@ -1054,6 +1077,21 @@
          「決断は毒」科学的フレーミング × 「あなたの今日の決断リスト」共感誘発
          ==================================================== -->
     <section class="slide" data-title="Problem">
+      <aside class="notes">
+        <p><b>⏱ 1:30 ・ 通過 ~2:20</b></p>
+        <ul>
+          <li>「ここからが本題です。私たちがこのサービスを作った背景から、少しお話しします」</li>
+          <li>「人を最も消耗させるのは、実は "決めること" なんです」</li>
+          <li>(左の数字を順に指して) 「ケンブリッジ大学の研究では、大人は1日に約 <b>35,000 回</b> も意思決定しているそうです。無意識のものも含めると、毎日これだけの数をさばいています」</li>
+          <li>「アメリカ心理学会の調査では、<b>36%</b> の人が "日々の選択" をストレス源に挙げています。3人に1人以上が、"何を選ぶか" そのものに疲れている、ということです」</li>
+          <li>「心理学では "決断疲れ" と呼ばれ、決断を重ねるほど判断の質は落ちていきます」</li>
+          <li>「だから人は、1日の行動の <b>45%</b> を "習慣" で自動化しています。— 裏を返せば、それだけ "決めずに済ませたい" んですね」</li>
+          <li>(右を示して) 「実際、皆さんも今日ここに来るまでに、起きる時間・シャワー・朝ごはん・服・電車・持ち物… 何十個も決めてきたはずです」</li>
+          <li>「今日に至っては "デモが動くか" "質問にどう答えるか" まで。数えてみると、この席に座るまでで驚く数になります」</li>
+          <li>「でも、その大半は、本当に自分で決めたいことでしょうか? どうでもいい決断は手放して、大事なことにエネルギーを残せばいいんです」</li>
+          <li>(結論) 「だからこそ — 決めるのをやめて、"心地よくダメになろう"。これが私たちの出発点です」</li>
+        </ul>
+      </aside>
       <div class="slide-header">
         <div class="left">
           <div class="eyebrow">01 — Problem</div>
@@ -1119,6 +1157,18 @@
          Slide 04 — Concept
          ==================================================== -->
     <section class="slide" data-title="Concept">
+      <aside class="notes">
+        <p><b>⏱ 1:00 ・ 通過 ~3:20</b></p>
+        <ul>
+          <li>「いま、"決めるのをやめて、心地よくダメになろう" とお話ししました。それを形にしたのが、この YesMan です」</li>
+          <li>(タイトルを示して) 「目指すのは、"決めなくていい" という状態そのものです」</li>
+          <li>「さっきの "決断疲れ" の正体 — どうでもいい決断 — を、まるごと AI に肩代わりさせます」</li>
+          <li>(引用を示して) 「AI が日常から人生レベルまで、欲しい答えを察して提案し、あなたは <b>Yes をスワイプするだけ</b>」</li>
+          <li>(「そのために」へ) 「とはいえ丸投げは不安ですよね。だから、複数の視点で多角的に予測して、その議論の履歴も全部見えるようにしました。透明だから、安心して任せられます」</li>
+          <li>「"決断を重ねるほど判断の質が落ちる" と言いましたが、最終承認だけ人間が握れば、その疲労は限りなくゼロです」</li>
+          <li>(締め) 「こうして、"最高にぐうたれる毎日" を AI で叶えます」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">02 — Concept</div>
@@ -1153,6 +1203,20 @@
          Slide 05 — Two-pillar approach overview
          ==================================================== -->
     <section class="slide" data-title="Approach">
+      <aside class="notes">
+        <p><b>⏱ 1:10 ・ 通過 ~4:30 — 中核(二つのアプローチ)</b></p>
+        <ul>
+          <li>「"察して提案する" と言いましたが、ではどうやって、あなたの答えを察するのか。その仕掛けが、この二つのアプローチです」</li>
+          <li>(二つのアプローチを示して) 「ひとことで言うと、<b>"あなたの好みを言い当てる"</b> と <b>"信頼する人が決めてくれる"</b>。この二つを掛け合わせます」</li>
+          <li>「ひとつ目は <b>"あなたの好みを言い当てる"</b>。過去の Yes/No の履歴から好みのプロファイルを作って、あなたが本当に欲しい答えを予測します。使うほど、提案はどんどん賢くなっていきます」</li>
+          <li>「ただ、自分の好みを学ぶ "だけ" だと、どうしても視野が狭くなりがちですよね」</li>
+          <li>「そこで、ふたつ目が <b>"信頼する人が決めてくれる"</b>。ここがポイントなんですが、同じ提案でも <b>"誰の目線か" で納得感がまるで変わります</b>」</li>
+          <li>「だから、信頼できる人たちを呼んで、話し合いで多角的に決めます。さっき言った "多角的な予測" の正体が、これです」</li>
+          <li>「呼べるのは、プリセット・知り合い・カスタムの 3 種類から、最大 3 人まで」</li>
+          <li>「この二つを掛け合わせるから、<b>"あなたらしく、でも偏らない"</b> 提案になります」</li>
+          <li>(予告) 「では、それぞれを次の 2 枚で詳しくお見せします」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(20px, 2.5vh, 36px);">
         <div class="left">
           <div class="eyebrow">03 — How we spoil humans</div>
@@ -1190,6 +1254,19 @@
          Slide 06 — Approach 1a: 嗜好に応じた質問
          ==================================================== -->
     <section class="slide" data-title="Preference Questions">
+      <aside class="notes">
+        <p><b>⏱ 1:10 ・ 通過 ~5:40 — アプローチ①</b></p>
+        <ul>
+          <li>「では、一つ目のアプローチ <b>"あなたの好みを言い当てる"</b> から。これがその中身です」</li>
+          <li>「目指すのは、"あなたが本当に欲しかった答え" を予測する学習ループです」</li>
+          <li>(STEP 01) 「まずは、アカウント登録後に性格や生活についての Yes/No を数問スワイプ。十分わかれば "もういい、進む" で、途中でやめても大丈夫です」</li>
+          <li>(STEP 02) 「あとはアプリを開いた瞬間、時刻・曜日・プロファイルから "もしかして〜について?" と、候補を先回りで出します」</li>
+          <li>(STEP 03) 「そして Yes/No のたびに、裏で好みデータを更新。EventBridge で非同期に処理するので、提案の速度は落ちません」</li>
+          <li>(右を指して) 「学習結果が、この嗜好プロファイル。どの分野に興味があるか、どんなタグか、どの人格を好むかまで見える化しています」</li>
+          <li>(強調) 「しかも、いつでも修正・全リセットできて、<b>"同じ意見ばかりにならない" 設計</b>です」</li>
+          <li>(締め) 「これが、さっき言った "使うほど賢くなる" の正体です」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">03 · 1 — Personalization</div>
@@ -1312,6 +1389,18 @@
          Slide 07 — Approach 2: Persona Setting
          ==================================================== -->
     <section class="slide" data-title="Trusted Persona">
+      <aside class="notes">
+        <p><b>⏱ 1:10 ・ 通過 ~6:50 — アプローチ②</b></p>
+        <ul>
+          <li>「一つ目のアプローチは、あなた自身から学ぶ話でした。でも、自分の好み "だけ" だと、どうしても視野が狭くなりがちです。そこで、二つ目のアプローチです」</li>
+          <li>(タイトルを示して) 「<b>"信頼する人が決めてくれる"</b>。kicker の通り、"誰の目線の提案か" で納得感が決まります」</li>
+          <li>「話し合いに呼ぶ 3 人を、ユーザーが 3 種類から自由に選べます」</li>
+          <li>(プリセット) 「ひとつ目は <b>プリセット</b>。慎重派・楽観派・効率派の 3 人格が初期搭載で、設定不要ですぐ使えます。"とにかく早く始めたい" 人向けです」</li>
+          <li>(リアル) 「ふたつ目は <b>リアル</b>。家族や友達など、身近な人の価値観と口ぐせを借りてこられます。"自分にない視点が欲しい" 人向け」</li>
+          <li>(カスタム) 「みっつ目は <b>カスタム</b>。名前・説明・プロンプトで、理想の人を自分で作れます。"父の口調" や "10年後の自分"、"推し" まで。"理想を作り込みたい" 人向け」</li>
+          <li>(締め) 「この中から最大 3 人を呼んで、合議で決めてもらいます。これが、さっき言った <b>"偏らない"</b> 提案の仕掛けです」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">03 · 2 — Trusted Persona</div>
@@ -1399,6 +1488,18 @@
          Slide 08 — Business Plan (Free + Affiliate)
          ==================================================== -->
     <section class="slide" data-title="Business">
+      <aside class="notes">
+        <p><b>⏱ 1:10 ・ 通過 ~8:00</b></p>
+        <ul>
+          <li>「ここまでが "どう当てるか" でした。では、"どう続けるか" — ビジネスモデルです」</li>
+          <li>「方針はシンプルで、全ユーザー基本無料。収益はアフィリエイトで支えます」</li>
+          <li>(CHANNEL 01) 「ひとつ目は、画面内の、話題に合ったさりげない広告。邪魔にならないよう、1 画面に 1 枠だけです」</li>
+          <li>(CHANNEL 02) 「ふたつ目は、YES の深掘り回答に貼るアフィリンク。"ランチ決めて" なら店候補に、そのまま予約や購入へ繋ぎます」</li>
+          <li>「ここが肝で、<b>"予測が当たった直後" は、行動に移る最も自然な瞬間</b>。判断疲労ゼロのまま、次の一歩へ運べます」</li>
+          <li>(数字) 「超概算ですが、コストが 1 ユーザー月 ¥56 に対し、収益が ¥160。差し引き <b>粗利 ¥104</b> です」</li>
+          <li>(一言) 「なお、宗教・選挙・暴力・卑猥の話題には、広告を出しません」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">04 — Business</div>
@@ -1459,7 +1560,7 @@
         <!-- RIGHT: Unit economics + Why -->
         <div class="col" style="gap: clamp(16px, 1.8vh, 24px);">
           <div class="card accent" style="padding: clamp(24px, 2.8vh, 36px) clamp(22px, 2.2vw, 32px);">
-            <div class="label" style="color: var(--accent-deep);">単位経済性 (1 ユーザー / 月、内部試算)</div>
+            <div class="label" style="color: var(--accent-deep);">単位経済性 (1 ユーザー / 月、超概算)</div>
             <table style="width: 100%; border-collapse: collapse; margin-top: clamp(12px, 1.4vh, 18px);">
               <tr>
                 <td style="padding: clamp(6px, 0.8vh, 10px) 0; font-size: clamp(15px, 1.15vw, 19px); color: var(--ink-soft);">LLM (Claude Haiku 中心)</td>
@@ -1514,6 +1615,16 @@
          Slide 09 — AWS Architecture
          ==================================================== -->
     <section class="slide" data-title="AWS Architecture">
+      <aside class="notes">
+        <p><b>⏱ 1:00 ・ 通過 ~9:00</b></p>
+        <ul>
+          <li>「この体験を、運用ゼロで支えているのが、この AWS 構成です」</li>
+          <li>「方針は <b>Serverless-First</b>。サーバ管理から解放されて、Agentic AI そのものに集中できます」</li>
+          <li>(経路をなぞって) 「リクエストは、ブラウザから CloudFront・API Gateway・Lambda と流れ、AgentCore 上の Strands Agent が、Bedrock の Claude Haiku 4.5 を呼びます。出力は Guardrail で守っています」</li>
+          <li>「音声は Polly と Transcribe、データは Aurora DSQL と S3、認証は Cognito の IAM で固めています」</li>
+          <li>(締め) 「これは構想図ではなく、<b>"実際に動いているコードの経路"</b> そのものです」</li>
+        </ul>
+      </aside>
 
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
@@ -1554,6 +1665,18 @@
          Slide 10 — AI-DLC で工夫したこと (認知負債の軽減)
          ==================================================== -->
     <section class="slide" data-title="AI-DLC Approach">
+      <aside class="notes">
+        <p><b>⏱ 1:00 ・ 通過 ~10:00</b></p>
+        <ul>
+          <li>「ここまでがプロダクトの話。ここからは、それを "どう作ったか" — AI-DLC での工夫です」</li>
+          <li>「テーマは、<b>"チーム内の認知負債を減らす"</b> こと」</li>
+          <li>「AI で一人でできることが増えるほど、逆にメンバー間の理解差が広がります。そこを縮めたいと考えました」</li>
+          <li>(01) 「ひとつ目、毎日のモブワークで、課題ややり方をその場で共有します」</li>
+          <li>(02) 「ふたつ目、大きな判断は ADR、"設計判断の記録" として資産化します」</li>
+          <li>(03) 「みっつ目、Skill と hooks で、"今の正しい仕様" を常に最新化します」</li>
+          <li>(締め) 「一人が速くなるだけでは足りません。<b>"チームの理解を、同じ速度で更新する"</b> を目指しました」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">06 — AI-DLC Workflow</div>
@@ -1635,6 +1758,15 @@
          Slide 10b — AI-DLC で工夫したこと (補足: その他)
          ==================================================== -->
     <section class="slide" data-title="AI-DLC Approach (補足)">
+      <aside class="notes">
+        <p><b>⏱ 0:40 ・ 通過 ~10:40</b></p>
+        <ul>
+          <li>(さらっと) 「同じ "認知負債を減らす" 工夫を、あと二つだけ」</li>
+          <li>(01) 「設計を drawio と HTML で可視化。文章だけでは伝わらない全体像を見せて、レビューの認識ズレを激減させました」</li>
+          <li>(02) 「そして AI-DLC に、拡張機能と <b>Superpowers</b> — Claude のスキル集 — を組み合わせ、品質を多層で担保。AI の暴走も防ぎます」</li>
+          <li>(締め) 「結果、<b>4 週間で 12 機能</b> を、全工程を追跡できる形で完走しました」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">06 · 補足 — Other Practices</div>
@@ -1700,6 +1832,19 @@
          Slide 11 — Demo Scenario
          ==================================================== -->
     <section class="slide" data-title="Demo">
+      <aside class="notes">
+        <p><b>⏱ 3:00 ・ 通過 ~13:40 — ここが山場 (5分以内厳守)</b></p>
+        <ul>
+          <li>「お待たせしました。ここまでの二つのアプローチが実際に動くところを、デモでお見せします」(目安 3 分 / 最長 5 分)</li>
+          <li>(前提) 「ユーザー ID <b>morimatsu</b> に、30 日使い込んだ状態を仕込んであります。デモとは気づかせません」</li>
+          <li><b>① ログイン</b> 「ログインすると、履歴とスコアが揃ったホーム。ペルソナは妻・娘、それとカスタムでワンコです」</li>
+          <li><b>② 合議</b> 「"今日の外出着は?" で合議。妻 "またそのパーカー? 襟付き着て"、娘 "去年も着てた"、ワンコ "ワン!" = 何でも賛成、究極の YesWan」 →「"襟付きシャツ" に決定、YES で Amazon が開き、購入まで一気通貫」</li>
+          <li><b>③ 委任度スコア</b> 「"人生の 73% を委任"。笑ったあとに、ちょっと我が事として刺さります」</li>
+          <li><b>④ 沈黙</b> 「"宗教って入った方がいい?" → 全員沈黙。"YesMan はこの問いには答えません"。Guardrails で二重ブロック」</li>
+          <li><b>⑤ 深掘り</b> 「"最近の俺、どう?" → 容赦ない数字。"夕飯の 91% をあなたが決定、娘さんへの あとでね が 8 回"… そして "<b>でも、心地よいですよね?</b>"」</li>
+          <li>(注意) 押したら ③ か ⑤ を省略。開始前に 実機・ネット・ログイン を必ず確認</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">07 — Demo Scenario</div>
@@ -1756,6 +1901,16 @@
          Slide 12 — Future / Roadmap
          ==================================================== -->
     <section class="slide" data-title="Future">
+      <aside class="notes">
+        <p><b>⏱ 0:40 ・ 通過 ~14:20</b></p>
+        <ul>
+          <li>「このデモの体験を、これからもっと広げていきます」</li>
+          <li>「目指すのは、もっと多くの場面で Yes。そして、その先の手続きまで全部 AI に」</li>
+          <li>「アプリ化、Apple Watch でワンタップ Yes、Siri 連携、カレンダーや天気・交通との連動」</li>
+          <li>「さらに、AI が予約・電話・購入まで代行。月次の "あなたの判断レポート" も」</li>
+          <li>(締め) 「"人間最後の仕事は、YES で承認すること"。その世界を、<b>もっと多くの場面へ広げていきます</b>」</li>
+        </ul>
+      </aside>
       <div class="slide-header" style="margin-bottom: clamp(16px, 2vh, 28px);">
         <div class="left">
           <div class="eyebrow">08 — Future</div>
@@ -1776,14 +1931,14 @@
             <li>AI が自動で予約 (レストラン / 美容院 / 病院 を Yes ワンタップで完了)</li>
             <li>AI が自動で電話 (注文 / 問い合わせ / 予約確認を AI 音声が代行)</li>
             <li>AI が自動で購入 (Amazon / 楽天 / EC で Yes → 決済まで一気通貫)</li>
-            <li>月次「あなたの判断レポート」(Premium)</li>
+            <li>月次「あなたの判断レポート」</li>
           </ul>
         </div>
       </div>
 
       <div style="margin-top: clamp(18px, 2.4vh, 30px); padding: clamp(14px, 1.8vh, 22px) clamp(22px, 2.2vw, 32px); background: var(--accent-pale); border-radius: 0 8px 8px 0; border-left: 4px solid var(--accent);">
         <p style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); color: var(--ink); font-style: italic; font-weight: 500; line-height: 1.5;">
-          「人間最後の仕事は、YES で承認すること」 — <b style="color: var(--accent-deep); font-style: normal;">その世界を、技術と倫理の両輪で作っていく</b>。
+          「人間最後の仕事は、YES で承認すること」 — <b style="color: var(--accent-deep); font-style: normal;">その世界を、もっと多くの場面へ広げていく</b>。
         </p>
       </div>
     </section>
@@ -1792,6 +1947,15 @@
          Slide 13 — Closing
          ==================================================== -->
     <section class="slide" data-title="Closing">
+      <aside class="notes">
+        <p><b>⏱ 0:30 ・ 通過 ~14:50 (残り ~0:10 はバッファ) — クロージング</b></p>
+        <ul>
+          <li>(ゆっくり) 「最後に、私たちの想いを。— 決められない人に、<b>"察してくれる優しさ"</b> を」</li>
+          <li>「そして、考えたくない人に、<b>"心地よくダメになる自由"</b> を」</li>
+          <li>(QR を示して) 「この QR から、今すぐ体験できます。<b>yesman.app</b> です。ぜひ後で触ってみてください」</li>
+          <li>(締め) 「あなたの最後の仕事は、YES で承認すること。— ご清聴、ありがとうございました」</li>
+        </ul>
+      </aside>
       <div class="slide-header">
         <div class="left">
           <div class="eyebrow">— Thank you</div>
@@ -1868,6 +2032,7 @@
       <tr><td><b>← / PageUp</b></td><td>前のスライド</td></tr>
       <tr><td><b>Home / End</b></td><td>先頭 / 末尾</td></tr>
       <tr><td><b>P</b></td><td>発表モード切替 (UI 非表示)</td></tr>
+      <tr><td><b>S</b></td><td>発表者ビュー (ノート + 次スライド + タイマー)</td></tr>
       <tr><td><b>B</b></td><td>黒画面 toggle</td></tr>
       <tr><td><b>F</b></td><td>フルスクリーン</td></tr>
       <tr><td><b>画面右半</b></td><td>次へ / <b>左半</b> 戻る</td></tr>
@@ -1890,25 +2055,30 @@
     const helpOverlay = document.getElementById('helpOverlay');
     let idx = 0;
 
+    // 発表者ビューのサムネイル iframe は #p<N> で読み込まれる (プレビューモード)
+    const previewMatch = location.hash.match(/^#p(\d+)/);
+    const isPreview = !!previewMatch;
+    if (isPreview) document.body.classList.add('preview');
+
     function pad(n) { return String(n).padStart(2, '0'); }
+    function noteHTML(i) { const s = slides[i]; const a = s && s.querySelector('.notes'); return a ? a.innerHTML : ''; }
+
     function render() {
       slides.forEach((s, i) => s.classList.toggle('active', i === idx));
       pager.textContent = `${pad(idx + 1)} / ${pad(slides.length)}`;
       progressBar.style.width = `${((idx + 1) / slides.length) * 100}%`;
-
-      const hash = `#${idx + 1}`;
-      if (location.hash !== hash) history.replaceState(null, '', hash);
+      if (!isPreview) {
+        const hash = `#${idx + 1}`;
+        if (location.hash !== hash) history.replaceState(null, '', hash);
+        updatePresenter();
+      }
     }
     function go(n) {
       idx = Math.max(0, Math.min(slides.length - 1, n));
       render();
     }
-    function togglePresenting() {
-      deck.classList.toggle('presenting');
-    }
-    function toggleBlackout() {
-      blackout.style.display = (blackout.style.display === 'none') ? 'block' : 'none';
-    }
+    function togglePresenting() { deck.classList.toggle('presenting'); }
+    function toggleBlackout() { blackout.style.display = (blackout.style.display === 'none') ? 'block' : 'none'; }
     function toggleHelp() {
       const showing = helpOverlay.style.display !== 'none';
       helpOverlay.style.display = showing ? 'none' : 'flex';
@@ -1918,48 +2088,184 @@
       else document.exitFullscreen?.();
     }
 
-    document.addEventListener('keydown', (e) => {
-      // help / blackout の時は Esc で閉じる
-      if (e.key === 'Escape') {
-        if (helpOverlay.style.display === 'flex') { helpOverlay.style.display = 'none'; return; }
-        if (blackout.style.display === 'block')   { blackout.style.display = 'none';    return; }
-      }
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(idx + 1); }
-      else if (e.key === 'ArrowLeft' || e.key === 'PageUp')                  { e.preventDefault(); go(idx - 1); }
-      else if (e.key === 'Home')                                              { e.preventDefault(); go(0); }
-      else if (e.key === 'End')                                               { e.preventDefault(); go(slides.length - 1); }
-      else if (e.key === 'p' || e.key === 'P')                                { e.preventDefault(); togglePresenting(); }
-      else if (e.key === 'b' || e.key === 'B')                                { e.preventDefault(); toggleBlackout(); }
-      else if (e.key === 'f' || e.key === 'F')                                { e.preventDefault(); toggleFullscreen(); }
-      else if (e.key === '?' || e.key === '/')                                { e.preventDefault(); toggleHelp(); }
-    });
+    // ---------- 発表者ビュー (別ウィンドウ) ----------
+    let presenterWin = null;
+    const DECK_URL = location.href.split('#')[0];
 
-    prevBtn.addEventListener('click', () => go(idx - 1));
-    nextBtn.addEventListener('click', () => go(idx + 1));
+    const PRESENTER_HTML = `<!doctype html><html lang="ja"><head><meta charset="utf-8"><title>YesMan — 発表者ビュー</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;background:#15110e;color:#f3ece2;display:grid;grid-template-columns:var(--lw,46%) 6px 1fr;grid-template-rows:1fr auto;height:100vh;overflow:hidden}
+  .left{grid-row:1;padding:18px;display:flex;flex-direction:column;gap:12px;min-height:0}
+  .divider{grid-row:1;background:#3a2f27;cursor:col-resize;position:relative}
+  .divider::after{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:46px;background:#6b5848;border-radius:2px}
+  .divider:hover,body.dragging .divider{background:#7a5a3f}
+  body.dragging{user-select:none;cursor:col-resize}
+  .right{grid-row:1}
+  .lbl{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#c98b6b;font-weight:700;margin-bottom:4px}
+  .thumb{position:relative;width:100%;aspect-ratio:16/9;background:#000;border:1px solid #3a2f27;border-radius:8px;overflow:hidden}
+  .thumb iframe{position:absolute;top:0;left:0;width:1280px;height:720px;border:0;transform-origin:top left}
+  .thumb .end{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#8c7c6e;font-size:18px}
+  #nextThumb{max-width:78%}
+  .right{padding:20px 24px;display:flex;flex-direction:column;min-height:0}
+  .right h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#c98b6b;margin-bottom:12px;font-weight:700}
+  #notes{flex:1;overflow:auto;font-size:20px;line-height:1.72}
+  #notes ul{margin:.2em 0 .7em 1.2em}
+  #notes li{margin:.3em 0}
+  #notes p{margin:.45em 0}
+  #notes b{color:#f7d9a0}
+  #notes .empty{color:#8c7c6e;font-style:italic}
+  .bar{grid-column:1 / -1;grid-row:2;display:flex;align-items:center;gap:20px;padding:12px 24px;border-top:1px solid #3a2f27;background:#0f0c0a;font-variant-numeric:tabular-nums}
+  .bar .timer{font-size:30px;font-weight:700}
+  .bar .clock{font-size:19px;color:#c9bcae}
+  .bar .count{margin-left:auto;font-size:22px;font-weight:700}
+  button{background:#2a2019;color:#f3ece2;border:1px solid #4a3b30;border-radius:8px;padding:8px 14px;font-size:15px;cursor:pointer}
+  button:hover{background:#3a2d24}
+  .navrow{display:flex;gap:10px;margin-top:10px}
+  .navrow button{flex:1}
+</style></head><body>
+  <div class="left">
+    <div><div class="lbl">現在</div><div class="thumb" id="curThumb"><iframe id="curFrame" title="current"></iframe></div></div>
+    <div><div class="lbl">次 &#9654;</div><div class="thumb" id="nextThumb"><iframe id="nextFrame" title="next"></iframe><div class="end" id="nextEnd">&mdash; 最終スライド &mdash;</div></div></div>
+    <div class="navrow"><button id="pBtn">&lsaquo; 前へ</button><button id="nBtn">次へ &rsaquo;</button></div>
+  </div>
+  <div class="divider" id="divider"></div>
+  <div class="right">
+    <h2>Speaker Notes</h2>
+    <div id="notes"><span class="empty">発表者ビューを準備中…</span></div>
+  </div>
+  <div class="bar">
+    <span class="timer" id="timer">00:00</span>
+    <button id="tToggle" title="一時停止/再開">&#9208;</button>
+    <button id="tReset" title="リセット">&#8635;</button>
+    <span class="clock" id="clock">--:--</span>
+    <span class="count" id="count">– / –</span>
+  </div>
+<script>
+  var state={idx:0,total:0,deckUrl:''}, inited=false;
+  var curFrame=document.getElementById('curFrame'), nextFrame=document.getElementById('nextFrame'), nextEnd=document.getElementById('nextEnd');
+  var notes=document.getElementById('notes');
+  function fit(f){ var s=f.parentElement.clientWidth/1280; f.style.transform='scale('+s+')'; }
+  function fitAll(){ fit(curFrame); fit(nextFrame); }
+  window.addEventListener('resize', fitAll);
+  // 中央線ドラッグで左右ペイン幅を可変
+  var divider=document.getElementById('divider'), dragging=false;
+  divider.addEventListener('mousedown', function(e){ dragging=true; document.body.classList.add('dragging'); e.preventDefault(); });
+  window.addEventListener('mousemove', function(e){ if(!dragging) return; var w=Math.max(260, Math.min(window.innerWidth-320, e.clientX)); document.body.style.setProperty('--lw', w+'px'); fitAll(); });
+  window.addEventListener('mouseup', function(){ if(dragging){ dragging=false; document.body.classList.remove('dragging'); fitAll(); } });
+  window.addEventListener('dblclick', function(e){ if(e.target===divider){ document.body.style.setProperty('--lw','46%'); fitAll(); } });
+  function gotoFrame(f,n){ try{ if(f.contentWindow) f.contentWindow.postMessage({type:'preview-goto',n:n},'*'); }catch(_){ } }
+  curFrame.addEventListener('load', function(){ fitAll(); gotoFrame(curFrame, state.idx+1); });
+  nextFrame.addEventListener('load', function(){ fitAll(); gotoFrame(nextFrame, state.idx+2); });
+  function apply(d){
+    state=d;
+    document.getElementById('count').textContent=(d.idx+1)+' / '+d.total;
+    notes.innerHTML = (d.curNote && d.curNote.replace(/<[^>]*>/g,'').trim()) ? d.curNote : '<span class="empty">（このスライドのノートは未記入）</span>';
+    var hasNext = d.idx+1 < d.total;
+    if(!inited){ curFrame.src=d.deckUrl+'#p'+(d.idx+1); nextFrame.src=d.deckUrl+'#p'+(d.idx+2); inited=true; }
+    else { gotoFrame(curFrame, d.idx+1); if(hasNext) gotoFrame(nextFrame, d.idx+2); }
+    nextFrame.style.display = hasNext ? '' : 'none';
+    nextEnd.style.display = hasNext ? 'none' : 'flex';
+    setTimeout(fitAll, 80);
+  }
+  window.addEventListener('message', function(e){ var d=e.data; if(d && d.type==='state') apply(d); });
+  function nav(delta){ if(window.opener && !window.opener.closed) window.opener.postMessage({type:'nav',delta:delta},'*'); }
+  document.getElementById('pBtn').onclick=function(){ nav(-1); };
+  document.getElementById('nBtn').onclick=function(){ nav(1); };
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); nav(1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); nav(-1); }
+  });
+  var elapsed=0, running=true;
+  function fmt(t){ var m=Math.floor(t/60), s=t%60; return (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+  setInterval(function(){ if(running){ elapsed++; document.getElementById('timer').textContent=fmt(elapsed); } },1000);
+  document.getElementById('tToggle').onclick=function(){ running=!running; this.innerHTML=running?'&#9208;':'&#9654;'; };
+  document.getElementById('tReset').onclick=function(){ elapsed=0; document.getElementById('timer').textContent='00:00'; };
+  function clock(){ var d=new Date(); document.getElementById('clock').textContent=(d.getHours()<10?'0':'')+d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes(); }
+  setInterval(clock,1000); clock();
+  if(window.opener && !window.opener.closed) window.opener.postMessage({type:'presenter-ready'},'*');
+<\/script>
+</body></html>`;
 
-    // クリックナビ: 画面の右半クリックで次、左半クリックで前 (発表モード時のみ)
-    deck.addEventListener('click', (e) => {
-      if (!deck.classList.contains('presenting')) return;
-      const rect = deck.getBoundingClientRect();
-      const isRight = (e.clientX - rect.left) > rect.width / 2;
-      go(idx + (isRight ? 1 : -1));
-    });
-
-    // touch swipe
-    let touchX = null;
-    document.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-    document.addEventListener('touchend', (e) => {
-      if (touchX === null) return;
-      const dx = e.changedTouches[0].clientX - touchX;
-      if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
-      touchX = null;
-    }, { passive: true });
-
-    // initial hash support
-    const initial = parseInt((location.hash || '#1').slice(1), 10);
-    if (Number.isFinite(initial) && initial >= 1 && initial <= slides.length) {
-      idx = initial - 1;
+    function openPresenter() {
+      if (presenterWin && !presenterWin.closed) { presenterWin.focus(); return; }
+      presenterWin = window.open('', 'yesman-presenter', 'width=1280,height=820');
+      if (!presenterWin) { alert('ポップアップがブロックされました。発表者ビューを許可してください。'); return; }
+      presenterWin.document.open();
+      presenterWin.document.write(PRESENTER_HTML);
+      presenterWin.document.close();
     }
+    function updatePresenter() {
+      if (!presenterWin || presenterWin.closed) return;
+      presenterWin.postMessage({ type: 'state', idx, total: slides.length, deckUrl: DECK_URL, curNote: noteHTML(idx) }, '*');
+    }
+
+    if (!isPreview) {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (helpOverlay.style.display === 'flex') { helpOverlay.style.display = 'none'; return; }
+          if (blackout.style.display === 'block')   { blackout.style.display = 'none';    return; }
+        }
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(idx + 1); }
+        else if (e.key === 'ArrowLeft' || e.key === 'PageUp')                  { e.preventDefault(); go(idx - 1); }
+        else if (e.key === 'Home')                                              { e.preventDefault(); go(0); }
+        else if (e.key === 'End')                                               { e.preventDefault(); go(slides.length - 1); }
+        else if (e.key === 'p' || e.key === 'P')                                { e.preventDefault(); togglePresenting(); }
+        else if (e.key === 's' || e.key === 'S')                                { e.preventDefault(); openPresenter(); }
+        else if (e.key === 'b' || e.key === 'B')                                { e.preventDefault(); toggleBlackout(); }
+        else if (e.key === 'f' || e.key === 'F')                                { e.preventDefault(); toggleFullscreen(); }
+        else if (e.key === '?' || e.key === '/')                                { e.preventDefault(); toggleHelp(); }
+      });
+
+      prevBtn.addEventListener('click', () => go(idx - 1));
+      nextBtn.addEventListener('click', () => go(idx + 1));
+
+      // クリックナビ: 画面の右半クリックで次、左半クリックで前 (発表モード時のみ)
+      deck.addEventListener('click', (e) => {
+        if (!deck.classList.contains('presenting')) return;
+        const rect = deck.getBoundingClientRect();
+        const isRight = (e.clientX - rect.left) > rect.width / 2;
+        go(idx + (isRight ? 1 : -1));
+      });
+
+      // touch swipe
+      let touchX = null;
+      document.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+      document.addEventListener('touchend', (e) => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+        touchX = null;
+      }, { passive: true });
+
+      // 発表者ビューからのナビ / 準備完了通知
+      window.addEventListener('message', (e) => {
+        const d = e.data; if (!d || typeof d !== 'object') return;
+        if (d.type === 'presenter-ready') updatePresenter();
+        else if (d.type === 'nav')  go(idx + (d.delta | 0));
+        else if (d.type === 'goto') go(d.idx | 0);
+      });
+    } else {
+      // プレビュー iframe: 親 (発表者ビュー) からの表示スライド指定のみ受け付ける
+      window.addEventListener('message', (e) => {
+        const d = e.data;
+        if (d && d.type === 'preview-goto') {
+          const n = d.n | 0;
+          if (n >= 1 && n <= slides.length) { idx = n - 1; render(); }
+        }
+      });
+    }
+
+    // 外部からのハッシュ変更 (ディープリンク / サムネイル初期表示) に追従
+    window.addEventListener('hashchange', () => {
+      const m = location.hash.match(/^#p?(\d+)/);
+      if (m) { const n = parseInt(m[1], 10); if (n >= 1 && n <= slides.length) { idx = n - 1; render(); } }
+    });
+
+    const initN = previewMatch ? parseInt(previewMatch[1], 10)
+                               : (parseInt((location.hash || '').replace(/\D/g, ''), 10) || 1);
+    if (Number.isFinite(initN) && initN >= 1 && initN <= slides.length) idx = initN - 1;
     render();
   })();
 </script>
