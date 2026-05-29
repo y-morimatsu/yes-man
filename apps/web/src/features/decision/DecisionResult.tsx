@@ -557,6 +557,9 @@ export function DecisionResult({
             {/* INCEPTION 03-proposal-card.svg L46-49: 下部 pink nudge banner.
                 2026-05-26: drill-down 中は「あと N 段で決定」明示、最終段は「Yes で外部サービスへ」.
                 Yes 採択後は「✨ 決まりました」 にメッセージ切替. */}
+            {/* 非final (深掘り中) は四辺ラベル (→決定 / ↓もっと絞る) と重複するため banner 非表示。
+                Yes 採択後 / 最終段 / 確認フェーズの banner のみ残す。 */}
+            {(isChosenYes || confirmStep || isFinal) && (
             <div
               className="mt-2 rounded-xl border px-3 py-1.5 text-center"
               style={{
@@ -618,6 +621,7 @@ export function DecisionResult({
                 )}
               </p>
             </div>
+            )}
           </>
         );
         return proposalCardPortal
