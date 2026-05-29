@@ -449,7 +449,7 @@ export function DecisionResult({
                 onYes={handleConfirmYes}
                 onNo={handleConfirmNo}
                 disabled={choose.isPending}
-                showSwipeHint={!proposalCardPortal}
+                showSwipeHint={true}
                 onYesSync={
                   isOpenStep && service
                     ? () => {
@@ -502,7 +502,7 @@ export function DecisionResult({
                 onYes={() => handleChoose("yes")}
                 onNo={() => handleChoose("no")}
                 disabled={choose.isPending}
-                showSwipeHint={!proposalCardPortal}
+                showSwipeHint={true}
                 // 2026-05-26 drill-down-auto-open (FR-DAO-02/03/09 + NFR-DAO-06/07/10):
                 // final 段 (isFinal=true) + service≠null のみ自動 open + a11y override を有効化.
                 // 2026-05-26 (confirm phase): confirmFlow がある category は Yes で confirm step に
