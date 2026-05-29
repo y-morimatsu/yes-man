@@ -64,6 +64,11 @@ export default function DecisionPage() {
   // "anonymous" 選択時は stageMode="manga"、DecisionRequestPayload に persona_source を inject.
   const { source: personaSource } = usePersonaSource();
   const stageMode: StageMode = personaSource === "anonymous" ? "manga" : "chat";
+  // API DTO の persona_source は "builtin" | "anonymous" のみ受理。"my" (自作タブ) は
+  // selected_personas 経由で送るため、persona_source としては "builtin" に正規化する
+  // (これを送らないと "my" で 422 validation_error になる)。
+  const payloadPersonaSource: "builtin" | "anonymous" =
+    personaSource === "anonymous" ? "anonymous" : "builtin";
 
   // 2026-05-24 v4: 統合 selection (3 source mix). 指定時は selected_personas で送信.
   const { selection: unifiedSelection } = useUnifiedSelection();
@@ -128,7 +133,7 @@ export default function DecisionPage() {
     prefetch.clear();
     dispatch({ type: "start" });
     await startStream(
-      buildStreamPayload({ user_input: state.input, persona_source: personaSource }),
+      buildStreamPayload({ user_input: state.input, persona_source: payloadPersonaSource }),
     );
   };
 
@@ -150,7 +155,7 @@ export default function DecisionPage() {
       buildStreamPayload({
         user_input: lastInputRef.current,
         chain_context: nextChain.map((n) => n.proposalText),
-        persona_source: personaSource,
+        persona_source: payloadPersonaSource,
       }),
     );
   };
@@ -184,7 +189,7 @@ export default function DecisionPage() {
     setRegenerating(true);
     dispatch({ type: "start" });
     await startStream(
-      buildStreamPayload({ user_input: input, persona_source: personaSource }),
+      buildStreamPayload({ user_input: input, persona_source: payloadPersonaSource }),
     );
   };
 
@@ -230,7 +235,7 @@ export default function DecisionPage() {
     prefetch.clear();
     dispatch({ type: "start" });
     await startStream(
-      buildStreamPayload({ user_input: title, persona_source: personaSource }),
+      buildStreamPayload({ user_input: title, persona_source: payloadPersonaSource }),
     );
   };
 
