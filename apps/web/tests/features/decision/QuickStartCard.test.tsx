@@ -26,7 +26,7 @@ describe("QuickStartCard (v3: SwipeChoice 統一)", () => {
     expect(screen.getByTestId("swipe-choice")).toBeInTheDocument();
     // SwipeChoice の WCAG fallback button (aria-label で識別)
     expect(screen.getByRole("button", { name: /Yes、提案を採択/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /No、提案を拒否/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /No、別案を再生成/ })).toBeInTheDocument();
     expect(screen.getByTestId("quickstart-switch-to-text")).toBeInTheDocument();
   });
 
@@ -40,7 +40,7 @@ describe("QuickStartCard (v3: SwipeChoice 統一)", () => {
   it("fallback `← No` button click で onNo が呼ばれる", async () => {
     const user = userEvent.setup();
     const props = renderCard();
-    await user.click(screen.getByRole("button", { name: /No、提案を拒否/ }));
+    await user.click(screen.getByRole("button", { name: /No、別案を再生成/ }));
     expect(props.onNo).toHaveBeenCalledTimes(1);
   });
 
