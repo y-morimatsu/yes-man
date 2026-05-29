@@ -242,13 +242,13 @@ export function SwipeChoice({
       )}
 
       {/* 中段: [← No] [カード] [Yes →] */}
-      <div className="flex w-full items-stretch justify-center gap-1">
+      <div className="flex w-full items-stretch justify-center gap-0.5">
         {/* 左: ← No */}
         <button
           type="button"
           onClick={() => fireNo(true)}
           disabled={disabled || confirming !== null}
-          className={`${sideLabelBase} shrink-0 w-12 text-silence disabled:opacity-40`}
+          className={`${sideLabelBase} shrink-0 w-10 text-silence disabled:opacity-40`}
           aria-label="No、別案を再生成"
           data-testid="swipe-no"
         >
@@ -277,8 +277,8 @@ export function SwipeChoice({
           )}
         </button>
 
-        {/* 中央: swipeable card (drag-following) */}
-        <div className="relative flex-1 min-w-0 max-w-utterance">
+        {/* 中央: swipeable card (drag-following). 白枠を最大化するため幅上限なし (左右ラベル以外の全幅) */}
+        <div className="relative flex-1 min-w-0">
           <div
             {...handlers}
             className="touch-pan-y select-none transition-transform duration-150 ease-out rounded-2xl"
@@ -318,7 +318,7 @@ export function SwipeChoice({
           type="button"
           onClick={() => fireYes(true)}
           disabled={disabled || confirming !== null}
-          className={`${sideLabelBase} shrink-0 w-14 text-success disabled:opacity-40`}
+          className={`${sideLabelBase} shrink-0 w-11 text-success disabled:opacity-40`}
           aria-label={yesAriaLabelOverride ?? "Yes、提案を採択"}
           data-testid="swipe-yes"
         >
