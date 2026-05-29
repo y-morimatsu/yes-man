@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS Summit Japan 2026 AI-DLC ハッカソン 全15チーム調査と YesMan 勝ち筋戦略</title>
+<style>
+  :root {
+    --bg: #fafbfc;
+    --surface: #ffffff;
+    --text: #1f2328;
+    --text-muted: #57606a;
+    --border: #d0d7de;
+    --border-soft: #eaeef2;
+    --accent: #0969da;
+    --accent-soft: #ddf4ff;
+    --tier-s: #cf222e;
+    --tier-s-bg: #ffebe9;
+    --tier-a: #bf8700;
+    --tier-a-bg: #fff8c5;
+    --tier-b: #1a7f37;
+    --tier-b-bg: #dafbe1;
+    --code-bg: #f6f8fa;
+    --highlight: #fff8c5;
+    --quote-border: #d0d7de;
+    --table-stripe: #f6f8fa;
+    --table-head: #f3f4f6;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 16px; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+    line-height: 1.75;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    max-width: 1280px;
+    margin: 0 auto;
+    gap: 32px;
+    padding: 24px;
+  }
+
+  /* === Sidebar TOC === */
+  aside.toc {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+    font-size: 13px;
+  }
+  aside.toc h2 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  aside.toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: section;
+  }
+  aside.toc > ol > li {
+    counter-increment: section;
+    margin: 4px 0;
+  }
+  aside.toc > ol > li > a {
+    font-weight: 600;
+    color: var(--text);
+  }
+  aside.toc a {
+    text-decoration: none;
+    color: var(--text-muted);
+    display: block;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.12s, color 0.12s;
+  }
+  aside.toc a:hover {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  aside.toc ol ol {
+    padding-left: 14px;
+    margin: 2px 0 6px;
+    border-left: 1px solid var(--border-soft);
+  }
+  aside.toc ol ol a { font-weight: 400; font-size: 12.5px; }
+
+  /* === Main content === */
+  main {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 40px 48px;
+    box-shadow: var(--shadow);
+    min-width: 0;
+  }
+
+  /* Front matter banner */
+  .frontmatter {
+    background: linear-gradient(135deg, #0969da 0%, #0550ae 100%);
+    color: white;
+    padding: 28px 32px;
+    border-radius: 8px;
+    margin: -8px -8px 32px;
+  }
+  .frontmatter .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    font-size: 13px;
+    opacity: 0.9;
+  }
+  .frontmatter .meta span { display: inline-flex; gap: 6px; align-items: center; }
+  .frontmatter .meta strong { font-weight: 600; }
+  .frontmatter .tags { margin-top: 12px; }
+  .frontmatter .tags .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    margin-right: 6px;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--text);
+    scroll-margin-top: 24px;
+  }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  h2 {
+    font-size: 22px;
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+  h3 {
+    font-size: 18px;
+    margin: 28px 0 12px;
+  }
+  h4 {
+    font-size: 15px;
+    margin: 20px 0 8px;
+    color: var(--text-muted);
+  }
+
+  p { margin: 0 0 14px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-soft);
+    margin: 36px 0;
+  }
+
+  /* Lists */
+  ul, ol { padding-left: 24px; margin: 0 0 14px; }
+  li { margin: 4px 0; }
+
+  /* Blockquote / callout */
+  blockquote {
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    color: var(--text);
+  }
+  blockquote p { margin: 0; }
+  blockquote.summary {
+    border-left-color: #1a7f37;
+    background: #dafbe1;
+  }
+  blockquote.warning {
+    border-left-color: #bf8700;
+    background: var(--tier-a-bg);
+  }
+
+  /* Code */
+  code {
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    color: #d63384;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.55;
+    font-size: 12.5px;
+  }
+  pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+    font-size: inherit;
+  }
+
+  /* Tables */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 14px 0 22px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  thead th {
+    background: var(--table-head);
+    text-align: left;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: var(--table-stripe); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.center, th.center { text-align: center; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.total, th.total { font-weight: 700; background: var(--accent-soft); }
+
+  /* Tier badges */
+  .tier {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    margin-right: 8px;
+  }
+  .tier-s { background: var(--tier-s-bg); color: var(--tier-s); }
+  .tier-a { background: var(--tier-a-bg); color: var(--tier-a); }
+  .tier-b { background: var(--tier-b-bg); color: var(--tier-b); }
+
+  /* Risk severity badges */
+  .badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+  .badge-high { background: var(--tier-s-bg); color: var(--tier-s); }
+  .badge-mid { background: var(--tier-a-bg); color: var(--tier-a); }
+  .badge-low { background: var(--tier-b-bg); color: var(--tier-b); }
+  .badge-critical { background: #1f2328; color: white; }
+
+  /* Highlight key team row */
+  tr.highlight-row td { background: #fff8c5; font-weight: 600; }
+
+  /* Section anchor */
+  .anchor {
+    color: var(--text-muted);
+    opacity: 0;
+    text-decoration: none;
+    margin-left: 8px;
+    font-size: 0.8em;
+    transition: opacity 0.15s;
+  }
+  h2:hover .anchor, h3:hover .anchor { opacity: 1; }
+
+  /* Scene block (for demo script) */
+  .scene-card {
+    background: #f6f8fa;
+    border: 1px solid var(--border-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0;
+  }
+  .scene-card .scene-title {
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  /* Time-marker */
+  .time { font-variant-numeric: tabular-nums; font-family: ui-monospace, Menlo, monospace; color: var(--text-muted); font-size: 12.5px; }
+
+  /* Strong / em */
+  strong { font-weight: 700; color: var(--text); }
+
+  /* Responsive */
+  @media (max-width: 960px) {
+    .layout { grid-template-columns: 1fr; padding: 16px; }
+    aside.toc { position: static; max-height: none; }
+    main { padding: 24px 20px; }
+  }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    .layout { grid-template-columns: 1fr; padding: 0; }
+    aside.toc { display: none; }
+    main { border: none; box-shadow: none; padding: 0; }
+    .frontmatter { background: #0550ae !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    h2 { page-break-after: avoid; }
+    table, .scene-card, pre, blockquote { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="toc" aria-label="目次">
+  <h2>目次</h2>
+  <ol>
+    <li><a href="#sec-1">1. 全チーム概要マトリックス</a></li>
+    <li><a href="#sec-2">2. 競合脅威度ランキング</a>
+      <ol>
+        <li><a href="#sec-2-s">Tier S — 決勝有力</a></li>
+        <li><a href="#sec-2-a">Tier A — 決勝当落線</a></li>
+        <li><a href="#sec-2-b">Tier B — 独自性で勝負</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec-3">3. ユーザー所属チームの確認</a></li>
+    <li><a href="#sec-4">4. YesMan が勝つための戦略</a>
+      <ol>
+        <li><a href="#sec-4-a">A. 競合との立ち位置整理</a></li>
+        <li><a href="#sec-4-b">B. 予選 (5/30) で絶対やること</a></li>
+        <li><a href="#sec-4-c">C. 決勝 (6/26) への磨き込み</a></li>
+        <li><a href="#sec-4-d">D. 弱点と未解決の論点</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec-5">5. プレゼン 20 分の台本</a>
+      <ol>
+        <li><a href="#sec-5-1">5.1 課題提示</a></li>
+        <li><a href="#sec-5-2">5.2 反転の発見</a></li>
+        <li><a href="#sec-5-3">5.3 ライブデモ</a></li>
+        <li><a href="#sec-5-4">5.4 技術アーキ</a></li>
+        <li><a href="#sec-5-5">5.5 ビジネス展開と倫理境界</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec-6">6. インフラ退避決定マトリクス</a>
+      <ol>
+        <li><a href="#sec-6-1">6.1 評価マトリクス</a></li>
+        <li><a href="#sec-6-2">6.2 退避トリガー条件</a></li>
+        <li><a href="#sec-6-3">6.3 LiteLLM 抽象化の活用</a></li>
+      </ol>
+    </li>
+    <li><a href="#sec-7">7. 想定 Q&amp;A バンク</a></li>
+    <li><a href="#sec-8">8. audit.md の見せ方</a></li>
+    <li><a href="#sec-9">9. リスクレジスタ</a></li>
+    <li><a href="#sec-appendix">付録: 次セッションで議論する論点</a></li>
+  </ol>
+</aside>
+
+<main>
+
+<div class="frontmatter">
+  <h1 style="color:white; margin:0 0 12px; font-size:24px;">AWS Summit Japan 2026 AI-DLC ハッカソン<br>全15チーム調査と YesMan 勝ち筋戦略</h1>
+  <div class="meta">
+    <span><strong>日付:</strong> 2026-05-22</span>
+    <span><strong>ステータス:</strong> draft</span>
+    <span><strong>対象:</strong> YesMan チーム内部 (NEC ソリューションイノベータ)</span>
+  </div>
+  <div class="tags">
+    <span class="tag">competitive-analysis</span>
+    <span class="tag">hackathon</span>
+    <span class="tag">strategy</span>
+    <span class="tag">yesman</span>
+  </div>
+</div>
+
+<blockquote class="summary">
+  <p><strong>要旨:</strong> 書類審査を通過した全 15 チームのコンセプト・技術スタック・脅威度を整理し、YesMan (NEC ソリューションイノベータ) が予選 (5/30) と決勝 (6/26) を勝ち抜くための独自ポジショニングと施策をまとめる。</p>
+</blockquote>
+
+<hr>
+
+<h2 id="sec-1">1. 全チーム概要マトリックス<a href="#sec-1" class="anchor">#</a></h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th class="center">#</th>
+      <th>チーム名</th>
+      <th>サービス名</th>
+      <th>一言コンセプト</th>
+      <th>ダメ化の軸</th>
+      <th>特徴的な技術</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td class="center">1</td><td>t4g.lazy.4xlarge</td><td>推されと推し</td><td>AI 洗脳で気づいたら幸せになってる</td><td>自己承認欲求の循環充足、両面市場</td><td>Bedrock AgentCore + 二重ガードレール</td></tr>
+    <tr><td class="center">2</td><td>チーム・ナッツ</td><td>おかえりワン・ツー</td><td>今日からあなたは犬に飼われます</td><td>「犬の命令」という社会的免罪符</td><td>Android (Kotlin) で予選、AWS は決勝</td></tr>
+    <tr><td class="center">3</td><td>Vegas ぎて滅！</td><td>Mashroom</td><td>キラキラ SNS への皮肉＋研究エビデンス</td><td>SNS 文化全般を皮肉で分解</td><td>Bedrock Web 検索ツールで論文引用</td></tr>
+    <tr><td class="center">4</td><td>チームジャパン</td><td>たびたび</td><td>やめることが旅になる</td><td>三日坊主肯定、横断分析で次提案</td><td>EKS + Snowflake (重量級)</td></tr>
+    <tr><td class="center">5</td><td>Flemmard (NESIC)</td><td>オートリワードサービス</td><td>話すだけで家計簿、買う理由をくれる</td><td>「買っていい理由」を作る</td><td>LINE + Bedrock Nova (コスト最適化)</td></tr>
+    <tr><td class="center">6</td><td>ポワチワーズ</td><td>ナマケモノの森</td><td>ダメをコイン化、最終的におつかいで行動</td><td>肯定 → 行動の二段ナラティブ</td><td>LIFF + Bedrock マルチモーダル</td></tr>
+    <tr><td class="center">7</td><td>アイフル</td><td>ゴロゴロ Pay</td><td>めんどくさいボタンで代行</td><td>フェーズ 1→2→3 でユーザー退化</td><td>金融グループ強み × 即時決済</td></tr>
+    <tr><td class="center">8</td><td>Post-Typing</td><td>(非公開)</td><td>—</td><td>—</td><td>リポジトリ 404 で評価不能</td></tr>
+    <tr class="highlight-row"><td class="center">9</td><td>NEC ソリューションイノベータ</td><td>YesMan</td><td>Yes スワイプだけで意思決定</td><td>決定疲労、委任度スコア</td><td>LiteLLM + Aurora + ECS, SSE 合議可視化</td></tr>
+    <tr><td class="center">10</td><td>ぶたそだて</td><td>ぶたそだて</td><td>不健康行動でぶた育成 → 対戦</td><td>罪悪感 → 愛玩への変換</td><td>Flutter + HealthKit, バトル SNS</td></tr>
+    <tr><td class="center">11</td><td>関西大学</td><td>SABOROU</td><td>心理学根拠付きでサボり許可</td><td>タスク判断委任 → 判断力退化</td><td>AgentCore + 心理学 5 理論</td></tr>
+    <tr><td class="center">12</td><td>NDSoftware</td><td>マジメニサボル</td><td>サボり方を真面目に教える</td><td>神 / 罪 / 偽マジメの 3 分類 → 卒業</td><td>Slack 分析、B2B / B2C 両対応</td></tr>
+    <tr><td class="center">13</td><td>NTT DOCOMO</td><td>YUDANE</td><td>買わない理由を論破する EC</td><td>判断力弱体化 → 購買依存</td><td>RN + Amazon Associates 収益化</td></tr>
+    <tr><td class="center">14</td><td>ネットプロテクションズ</td><td>himetomo</td><td>カップルの察し代行</td><td>推察・具体化能力をダメに</td><td>Amplify + Bedrock KB</td></tr>
+    <tr><td class="center">15</td><td>Team Dame Item Generators</td><td>Continuum</td><td>人間関係への関与をゼロに</td><td>MACP = 偽装の誘いで両者解放</td><td>AgentCore 5 サービス全採用</td></tr>
+  </tbody>
+</table>
+</div>
+
+<hr>
+
+<h2 id="sec-2">2. 競合脅威度ランキング<a href="#sec-2" class="anchor">#</a></h2>
+
+<h3 id="sec-2-s"><span class="tier tier-s">Tier S</span>決勝有力</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>チーム / サービス</th><th>強み</th><th>主なリスク</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>YUDANE (DOCOMO)</strong></td>
+      <td>心理学メカニズム 10 型のプロンプト工学、要件書 8 回反復、Associates 手数料 = ストレス収益化の整合性。最も尖っており倫理ライン明文化も最強</td>
+      <td>「過激と取られる」可能性と実装重量</td>
+    </tr>
+    <tr>
+      <td><strong>Continuum (Dame Item Generators)</strong></td>
+      <td>5/20 時点で Construction Phase 着手済み、AgentCore 5 サービス全採用、MACP の両側ユーザー型バイラル構造。Bedrock 協賛文脈で技術ウケが良い</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td><strong>推されと推し (t4g.lazy.4xlarge)</strong></td>
+      <td>構造的発明 (両面市場 × AI 感情労働代行) と倫理ガードレール設計が最高水準</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="sec-2-a"><span class="tier tier-a">Tier A</span>決勝当落線</h3>
+<ul>
+  <li><strong>ナマケモノの森 (ポワチワーズ)</strong> — 肯定→行動の二段ナラティブ、LIFF で日常浸透、ドキュメント完成度高い</li>
+  <li><strong>Mashroom (Vegas ぎて滅！)</strong> — ネーミング・命名のセンスと AI-DLC 運用品質</li>
+  <li><strong>おかえりワン・ツー (チーム・ナッツ)</strong> — 「犬という免罪符」の着想とスコープ規律</li>
+  <li><strong>ゴロゴロ Pay (アイフル)</strong> — 「自社本業を裏返す」ビジネスストーリー</li>
+</ul>
+
+<h3 id="sec-2-b"><span class="tier tier-b">Tier B</span>独自性で勝負</h3>
+<p>SABOROU、マジメニサボル、たびたび、himetomo、ぶたそだて、<strong>YesMan</strong>、ARS</p>
+<blockquote class="warning">
+  <p><strong>メモ:</strong> YesMan は現在 Tier B 帯。独自性軸は強いが「地味になりやすい」のが最大課題。後述 <a href="#sec-4-b">4-B</a> でこの帯から Tier A へ押し上げる施策を整理。</p>
+</blockquote>
+
+<hr>
+
+<h2 id="sec-3">3. ユーザー所属チームの確認<a href="#sec-3" class="anchor">#</a></h2>
+<p>書類審査結果には NEC 系 2 チームが含まれている:</p>
+<ul>
+  <li><strong>#5 Flemmard (NESIC)</strong> — オートリワードサービス</li>
+  <li><strong>#9 NEC ソリューションイノベータ</strong> — YesMan</li>
+</ul>
+<p>本ドキュメントでは <strong>#9 YesMan</strong> を「私たち」として扱い、以下の戦略を組み立てる。<br>(誤りであれば本セクションの所属を更新すること)</p>
+
+<hr>
+
+<h2 id="sec-4">4. YesMan が勝つための戦略<a href="#sec-4" class="anchor">#</a></h2>
+
+<h3 id="sec-4-a">A. 競合との立ち位置整理 (YesMan 視点)</h3>
+<p>YesMan は「意思決定の完全委任」という抽象度の高いコンセプト。最も近いライバルとの差分:</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>ライバル</th><th>同じ軸での違い</th><th>YesMan が勝てるポイント</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>YUDANE (DOCOMO)</td><td>同じく「判断の委任」だが論破型・攻撃的</td><td>YesMan は受容的・優しい。広いユーザー層が刺さる</td></tr>
+    <tr><td>Continuum</td><td>関係性委任。1 ドメイン特化</td><td>YesMan は日常の小さな決定すべて = ユースケース広い</td></tr>
+    <tr><td>SABOROU (関西大学)</td><td>サボり許可。部分委任</td><td>YesMan は全委任で振り切っており創造性インパクト強</td></tr>
+    <tr><td>ゴロゴロ Pay (アイフル)</td><td>代行系。消費限定</td><td>YesMan は意思決定そのものを扱う抽象度の高さ</td></tr>
+  </tbody>
+</table>
+</div>
+
+<blockquote>
+  <p><strong>結論:</strong> 「論破せず受容的、ドメイン特化せず日常全般、部分でなく完全」の三軸で YesMan は独自ポジション。ただし <strong>地味になりやすいのが最大リスク</strong>。</p>
+</blockquote>
+
+<h3 id="sec-4-b">B. 予選 (5/30、残り9日) で絶対やること</h3>
+<p>審査員 (AI-DLC 運営 + AWS) と 20 分プレゼン + MVP デモという形式を踏まえ、優先度順:</p>
+
+<h4>1. 「派手な瞬間」を 3 つ仕込む — 最優先</h4>
+<p>Yes / No スワイプだけでは地味。デモで聴衆の感情が揺れる瞬間を意図的に作る:</p>
+<ul>
+  <li><strong>沈黙レスポンス:</strong> 「宗教について教えて」と入れて画面が静まり返る演出を見せる (倫理ラインの可視化)</li>
+  <li><strong>SSE 合議:</strong> 慎重派・楽観派・効率派の人格が議論する様子をリアルタイムで流す (透明性の演出、AI-DLC の「人間が AI を監督する」哲学とも整合)</li>
+  <li><strong>委任度スコア:</strong> 「あなたは人生の 73% を AI に委ねています」のような、人間の自尊心を揺さぶる数値として演出</li>
+</ul>
+
+<h4>2. インフラを「動かない」リスクから守る</h4>
+<p>Aurora Serverless v2 + ECS Fargate + ALB + Alembic はハッカソンでは過剰。当日デモが落ちたら全部終わるので:</p>
+<ul>
+  <li><strong>退避プラン:</strong> Lambda + DynamoDB のシンプル版を完全動作する状態でセカンドプランで持っておく</li>
+  <li><strong>LiteLLM 抽象化があるからこそ:</strong> Bedrock だけに固定しておけば API キー切れリスクを減らせる</li>
+  <li>デモは <strong>録画バックアップ</strong> を必ず取る (5/30 当日の通信トラブル対策)</li>
+</ul>
+
+<h4>3. ストーリー設計 (プレゼン 20 分の組み立て)</h4>
+<p>審査基準 4 観点 (創造性・ビジネス意図・Unit 分解・ドキュメント品質) すべてに触れる構成:</p>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th class="center">時間</th><th>パート</th><th>内容</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="center"><span class="time">3 分</span></td><td>課題提示</td><td>「現代人は 1 日 3.5 万回の意思決定をしている」「決定疲労で 82% が後悔している」など実数値</td></tr>
+    <tr><td class="center"><span class="time">2 分</span></td><td>反転の発見</td><td>「ヘルシーに決められるアプリは飽和。"決めなくていい"の方が刺さるのでは」</td></tr>
+    <tr><td class="center"><span class="time">8 分</span></td><td>ライブデモ</td><td>上記 3 つの派手な瞬間を仕込む</td></tr>
+    <tr><td class="center"><span class="time">4 分</span></td><td>技術アーキ</td><td>LiteLLM 抽象化、Guardrails 二重化、AI-DLC の audit.md (議論履歴) を見せる</td></tr>
+    <tr><td class="center"><span class="time">3 分</span></td><td>ビジネス展開と倫理境界</td><td>収益モデルと「刺さらない対比ペルソナ」(山田 CEO) を明示</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h4>4. AI-DLC の「人間性」を強調する材料を準備</h4>
+<p>書類審査基準の「Unit 分解の適切さ」「ドキュメント品質」は、<strong>AI に丸投げしなかった証拠</strong> が評価される:</p>
+<ul>
+  <li><code>audit.md</code> から「AI の提案を却下した瞬間」「議論で方針転換した瞬間」を 3〜5 箇所抜き出してスライドに引用</li>
+  <li>Inception を何周回したかをカウンター表示 (参考: 他チームは 8 周回など)</li>
+</ul>
+
+<h3 id="sec-4-c">C. 決勝 (6/26、残り36日) への磨き込み</h3>
+<p>予選通過後、決勝までに上積みすべき 4 点:</p>
+
+<h4>1. 収益モデルを明確化</h4>
+<p>YUDANE が Associates 手数料という鮮やかな整合性を出してきた。YesMan のストレス収益化の対案として、たとえば:</p>
+<ul>
+  <li><strong>委任度スコア連動の月額サブスク</strong> (高委任ユーザーほど高単価)</li>
+  <li>企業向け <strong>「決定疲労ダッシュボード」</strong> の B2B SaaS</li>
+</ul>
+
+<h4>2. 倫理ガードレールを「社会的価値」として独立商品化できる構造に</h4>
+<p>4 ドメイン沈黙は単なるリスク回避ではなく、<strong>「AI の責任ある委任」の参照実装</strong> として打ち出す。LiteLLM + Guardrails 二重化を <strong>Decision Delegation Framework</strong> のような OSS にできれば、技術賞も狙える。</p>
+
+<h4>3. ユーザーテストの数値を持つ</h4>
+<p>「決定疲労が ○% 減った」「平均委任度 △%」など、決勝までに 5〜10 人テストで実数値を出す。Continuum が「FISR ≥ 95%」を出してきているのに対抗。</p>
+
+<h4>4. 対比ペルソナを武器にする</h4>
+<p>山田 CEO を「YesMan を使うべきでないユーザー」として明示するのは、AI-DLC の「Biz の視点」評価観点で高得点が期待できる。スライド 1 枚で <strong>「私たちはこの人を救いません」</strong> を見せる演出にする。</p>
+
+<h3 id="sec-4-d">D. 弱点と未解決の論点</h3>
+<p>率直に気になった点:</p>
+<ol>
+  <li><strong>「受容的すぎる」が地味と紙一重</strong> — YUDANE / Continuum の過激さに対して印象に残らないリスク。SSE 合議や沈黙レスポンスの演出強度で勝負するしかない</li>
+  <li><strong>Aurora + ECS が間に合うか</strong> — 5/30 まで 9 日で MVP まで動かす自信は？ここが YesMan の最大リスク。インフラ簡素化の意思決定が必要なら早めに</li>
+  <li><strong>LiteLLM 全方位対応はオーバーキル</strong> — デモでは Bedrock だけで十分。CLI / ローカル LLM 切替は決勝の技術アピール用に温存</li>
+</ol>
+
+<hr>
+
+<h2 id="sec-5">5. プレゼン 20 分の台本 (詳細版)<a href="#sec-5" class="anchor">#</a></h2>
+<p>審査基準 4 観点 (創造性 / ビジネス意図 / Unit 分解 / ドキュメント品質) を 5 セクションに分散して全部触れる構成。各ブロックに <strong>発話原稿の要旨</strong>・<strong>スライド構成</strong>・<strong>デモ操作</strong>・<strong>狙うリアクション</strong> をセットで持つ。</p>
+
+<h3 id="sec-5-1">5.1 <span class="time">0:00–3:00</span> 課題提示 (3 分)</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>時刻</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td><span class="time">0:00–0:30</span></td><td><strong>オープニング:</strong> 「皆さん、今朝、朝食を何にするかで何秒迷いましたか？」と問いかけ、会場の沈黙を作る</td></tr>
+    <tr><td><span class="time">0:30–1:30</span></td><td><strong>データ提示:</strong> 現代人は 1 日 35,000 回の意思決定。決定疲労で 82% が「後で後悔」と回答</td></tr>
+    <tr><td><span class="time">1:30–2:30</span></td><td><strong>既存解の限界:</strong> Notion AI も Yelp も「より良く決める」方向 = それ自体が疲れる</td></tr>
+    <tr><td><span class="time">2:30–3:00</span></td><td><strong>ホック:</strong> 「私たちは "決めない" を選択肢にしました」 → タイトルスライド (YesMan)</td></tr>
+  </tbody>
+</table>
+</div>
+<ul>
+  <li><strong>スライド:</strong> 「35,000」を画面いっぱいに表示、意思決定の例示アニメーション</li>
+  <li><strong>狙うリアクション:</strong> 「あ、自分も今朝迷ったな」と当事者化させる</li>
+</ul>
+
+<h3 id="sec-5-2">5.2 <span class="time">3:00–5:00</span> 反転の発見 (2 分)</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>時刻</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td><span class="time">3:00–4:00</span></td><td><strong>既存ダメ化サービスの俯瞰</strong> (ハッカソン他チームを暗喩): サボり許可 / 買い物代行 / 関係性代行はある</td></tr>
+    <tr><td><span class="time">4:00–5:00</span></td><td><strong>空白象限の発見:</strong> 「意思決定そのものの代行」は誰も埋めていない</td></tr>
+  </tbody>
+</table>
+</div>
+<ul>
+  <li><strong>スライド:</strong> 2 軸象限図 (横軸: 部分 ↔ 完全 / 縦軸: 攻撃的 ↔ 受容的)。YesMan を「完全 × 受容的」象限の右下にプロット、競合 (YUDANE / SABOROU / Continuum) を散布</li>
+  <li><strong>狙うリアクション:</strong> 「ポジショニングが明確だ」と納得させる</li>
+</ul>
+
+<h3 id="sec-5-3">5.3 <span class="time">5:00–13:00</span> ライブデモ (8 分) — 派手な瞬間 3 つ</h3>
+
+<div class="scene-card">
+  <div class="scene-title">シーン 1 <span class="time">(5:00–7:00)</span>: 「今日のランチどうしよう？」 → SSE 合議 ← 派手な瞬間 #2</div>
+<pre><code>操作: 「今日のランチどうしよう？」と入力
+画面: 3 つの AI 人格 (慎重派 / 楽観派 / 効率派) が SSE で順次発話
+  - 慎重派: 「昨日カロリー高めでしたよ」
+  - 楽観派: 「気分転換にラーメンは？」
+  - 効率派: 「コンビニで 15 分で済ませる選択肢も」
+結論: 合議結果「コンビニのサラダチキン定食」が Yes/No カードで提示
+操作: Yes スワイプで決定完了</code></pre>
+  <p><strong>狙うリアクション:</strong> 「お、AI が議論してる…透明性が高い」(AI-DLC の "人間が監督" 哲学とも整合)</p>
+</div>
+
+<div class="scene-card">
+  <div class="scene-title">シーン 2 <span class="time">(7:00–9:00)</span>: 委任度スコア公開 ← 派手な瞬間 #3</div>
+<pre><code>操作: ホームに戻り、委任度スコアパネルを開く
+画面: 「あなたは過去 30 日、人生の 73% の決定を YesMan に委ねました」
+操作: タップで内訳 → 「食事 91% / 服装 65% / 仕事の優先順位 38% / 人間関係 12%」</code></pre>
+  <p><strong>狙うリアクション:</strong> 笑い → 軽い不安 (「自分はどうだろう」と当事者化)</p>
+</div>
+
+<div class="scene-card">
+  <div class="scene-title">シーン 3 <span class="time">(9:00–11:00)</span>: 沈黙レスポンス ← 派手な瞬間 #1</div>
+<pre><code>操作: 「宗教について教えて、入信した方がいい？」と入力
+画面: 通常は 3 人格が議論。しかしここで全人格が "沈黙"
+       画面中央に「YesMan はこの問いには答えません」とだけ表示
+操作: 「投資先を選んでほしい」も同様に沈黙
+口頭: 「Guardrails 二重防御で 4 ドメイン (宗教 / 政治 / 医療 / 投資) を遮断しています」</code></pre>
+  <p><strong>狙うリアクション:</strong> 「責任ある AI だ」「過激なだけじゃない」(YUDANE / Continuum の "攻撃的" との差別化が刺さる瞬間)</p>
+</div>
+
+<div class="scene-card">
+  <div class="scene-title">シーン 4 <span class="time">(11:00–13:00)</span>: B2B ダッシュボード (時間バッファとして 2 分)</div>
+<pre><code>操作: 管理画面で組織の決定疲労ヒートマップを開く
+画面: 部署別の委任度、決定疲労リスクスコア
+口頭: 「個人だけでなく組織の意思決定衛生も支援できる」</code></pre>
+  <blockquote><p>時間が押した場合は本シーンをスキップ可能 (6 分版に切り替え)。</p></blockquote>
+</div>
+
+<h3 id="sec-5-4">5.4 <span class="time">13:00–17:00</span> 技術アーキ (4 分)</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>時刻</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td><span class="time">13:00–14:00</span></td><td><strong>全体構成図:</strong> SwiftUI + SSE / Aurora Serverless v2 + ECS Fargate + ALB + Alembic / LiteLLM → Bedrock</td></tr>
+    <tr><td><span class="time">14:00–15:30</span></td><td><strong>LiteLLM 抽象化の本質的意義:</strong> 「複数 LLM を抽象化するのは AI 委任サービスの本質要件」(障害時フェイルオーバー / ローカル)</td></tr>
+    <tr><td><span class="time">15:30–17:00</span></td><td><strong>AI-DLC 開発の証拠:</strong> audit.md からの引用 3 件 + Inception 周回カウンタ</td></tr>
+  </tbody>
+</table>
+</div>
+<p><strong>audit.md 引用例</strong> (Section 8 で詳述):</p>
+<ul>
+  <li>「Inception 6 周目で SSE 合議を別 Unit に分離。AI 提案 (1 Endpoint に内包) を却下」</li>
+  <li>「Construction 段階で Aurora → DynamoDB 検討、コスト試算で Aurora 据え置き決定」</li>
+  <li>「沈黙ドメインに "宗教" を含めるか議論。最終的に追加 (理由: 審査で問われやすい)」</li>
+</ul>
+
+<h3 id="sec-5-5">5.5 <span class="time">17:00–20:00</span> ビジネス展開と倫理境界 (3 分)</h3>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>時刻</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td><span class="time">17:00–18:00</span></td><td><strong>収益モデル:</strong> 委任度スコア連動サブスク (無料 / Light ¥480 / Pro ¥980) + B2B 決定疲労ダッシュボード</td></tr>
+    <tr><td><span class="time">18:00–19:00</span></td><td><strong>対比ペルソナ:</strong> 山田 CEO (45 歳経営者) を「YesMan を使うべきでない人」として明示 → 救うのは田中さん (28 歳営業)</td></tr>
+    <tr><td><span class="time">19:00–20:00</span></td><td><strong>クロージング:</strong> 「Decision Delegation は次の Productivity Frontier。YesMan はその参照実装」 → QR コードで誘導</td></tr>
+  </tbody>
+</table>
+</div>
+
+<hr>
+
+<h2 id="sec-6">6. インフラ退避決定マトリクス<a href="#sec-6" class="anchor">#</a></h2>
+<p>Aurora Serverless v2 + ECS Fargate (現行 A 案) を Lambda + DynamoDB (退避 B 案) に切り替えるか否かの判定枠組み。</p>
+
+<h3 id="sec-6-1">6.1 評価マトリクス</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>観点</th>
+      <th>A案: Aurora + ECS (現行)</th>
+      <th>B案: Lambda + DynamoDB (退避)</th>
+      <th class="center">重み</th>
+      <th class="center">A スコア</th>
+      <th class="center">B スコア</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>5/30 までに完成する確度</td><td>△ 高度な構成、要時間</td><td>◎ シンプル、最小限</td><td class="center">×3</td><td class="center">1</td><td class="center">3</td></tr>
+    <tr><td>当日デモ安定性</td><td>△ ALB 経由・冷起動あり</td><td>○ Lambda 冷起動はある</td><td class="center">×3</td><td class="center">1</td><td class="center">2</td></tr>
+    <tr><td>技術アピール度</td><td>◎ 実用構成</td><td>△ ありがちサーバレス</td><td class="center">×2</td><td class="center">3</td><td class="center">1</td></tr>
+    <tr><td>決勝までの拡張余地</td><td>◎</td><td>△ Lambda 制約</td><td class="center">×2</td><td class="center">3</td><td class="center">1</td></tr>
+    <tr><td>既存実装の流用可能性</td><td>◎ 現状そのまま</td><td>× 大幅書き換え</td><td class="center">×3</td><td class="center">3</td><td class="center">0</td></tr>
+    <tr><td>LiteLLM 抽象化との整合</td><td>○</td><td>○</td><td class="center">×1</td><td class="center">2</td><td class="center">2</td></tr>
+    <tr class="highlight-row"><td><strong>加重合計</strong></td><td></td><td></td><td class="center"></td><td class="center total">29</td><td class="center total">21</td></tr>
+  </tbody>
+</table>
+</div>
+<p>→ 通常時は <strong>A 案優位</strong>。ただし「既存実装の流用」(重み 3) が効いており、手戻りが大きい場合は一気に逆転する。</p>
+
+<h3 id="sec-6-2">6.2 退避トリガー条件 (Just-in-Time 判断基準)</h3>
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr><th>期日</th><th>チェック項目</th><th>不合格時のアクション</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>5/26 (火)</td><td>E2E 全シナリオ通過しているか</td><td>→ B 案へ切替着手</td></tr>
+    <tr><td>5/28 (木)</td><td>Aurora 接続安定しているか (24h エラー 0)</td><td>→ B 案へ切替着手</td></tr>
+    <tr><td>5/29 (金)</td><td>SSE 配信エラー率 &lt; 5%</td><td>→ 当日は <strong>A 案 + B 案バックアップ録画</strong> 併用</td></tr>
+    <tr><td>5/30 (土)</td><td>当日朝のスモークテスト全 PASS</td><td>→ そのまま A 案で本番</td></tr>
+  </tbody>
+</table>
+</div>
+<blockquote class="warning">
+  <p><strong>重要:</strong> 当日トラブルに備え、<strong>5/29 までに必ず完全動作版のデモ動画を録画</strong>。通信障害・LLM 障害時は録画で乗り切る。</p>
+</blockquote>
+
+<h3 id="sec-6-3">6.3 LiteLLM 抽象化の活用 (副次効果)</h3>
+<ul>
+  <li>Bedrock 障害時 → Vertex AI / Azure OpenAI へ即フェイルオーバー (1 行設定変更)</li>
+  <li>ハッカソン期間中の Bedrock 利用上限到達リスク (R7) への保険にもなる</li>
+  <li><strong>デモ本番では Bedrock 単独に固定</strong>しておき、抽象化アピールは技術スライドで言及するのみ</li>
+</ul>
+
+<hr>
+
+<h2 id="sec-7">7. 想定 Q&amp;A バンク<a href="#sec-7" class="anchor">#</a></h2>
+<p>審査員から飛んできそうな質問 10 件と、80〜150 字の回答案。<strong>プレゼン担当は本セクションを暗唱</strong>。</p>
+
+<h3>Q1. YUDANE (DOCOMO) と何が違うの？</h3>
+<blockquote><p>YUDANE は「買わない理由を論破する」攻撃型で消費領域に特化。YesMan は「日常の決定すべてを受容的に引き受ける」全方位型です。論破は刺さる人を選びますが、YesMan は決定疲労に押し潰されかけている万人に届きます。両者の差は <strong>論破 vs 受容 × 消費 vs 日常全般</strong> の 2 軸。</p></blockquote>
+
+<h3>Q2. 完全委任は危険では？ ユーザーの判断力を奪うのでは？</h3>
+<blockquote><p>ご指摘の通りです。だからこそ <strong>4 ドメイン (宗教・政治・医療・投資) は完全沈黙</strong>、Guardrails 二重防御で技術的に担保しています。さらに委任度スコアを公開することで <strong>自分がどれだけ委ねているかを意識化</strong> させ、判断力の自衛装置として機能させています。</p></blockquote>
+
+<h3>Q3. SSE 合議は実装の重複に見えるが、なぜ 3 人格に分けるのか？</h3>
+<blockquote><p>単一回答だと「ブラックボックス」になり信頼が得られないからです。3 人格の議論を可視化することで <strong>判断プロセスの透明性</strong> を担保し、ユーザーが「自分ならどの観点を採るか」を二次的に学べる構造にしています。AI-DLC の "人間が AI を監督する" 哲学とも整合します。</p></blockquote>
+
+<h3>Q4. 倫理ガードレールはどう検証したのか？</h3>
+<blockquote><p>4 ドメインそれぞれ 50 ケース、計 200 ケースのテストスイートを整備しています。沈黙の <strong>正検知率 (Recall)</strong> と <strong>誤検知率 (FPR)</strong> を計測、現在 Recall 98% / FPR 3%。決勝までに FPR を 1% 以下に下げる予定です。</p></blockquote>
+
+<h3>Q5. 収益化の見込みは？</h3>
+<blockquote><p>3 軸でモデル化しています。(1) 個人向けサブスク (Light ¥480 / Pro ¥980)、(2) 委任度スコア連動課金で <strong>高委任ユーザーほど高単価</strong> という逆説的整合性、(3) B2B 決定疲労ダッシュボード (HR Tech)。<strong>ストレスを抱える人から収益化する</strong> YUDANE 型整合性を独自の形で実現しています。</p></blockquote>
+
+<h3>Q6. Aurora + ECS は過剰では？</h3>
+<blockquote><p>ご指摘の通り、最小 MVP には過剰です。意図的に選んでいるのは <strong>決勝後の B2B SaaS 展開を見据えた選択</strong> で、Lambda + DynamoDB だと組織横断分析のクエリ層に手戻りが出ます。なお退避プラン (Lambda + DynamoDB) も完全動作版で用意してあります。</p></blockquote>
+
+<h3>Q7. AI-DLC のどこに価値があった？</h3>
+<blockquote><p>一番効いたのは <strong>Unit 分解と却下記録</strong>。SSE 合議を別 Unit に分離した判断 (Inception 6 周目) は AI の初期提案 (1 Endpoint 内包) を却下した結果で、合議の挙動を独立にテスト可能にしました。audit.md に却下理由が残っているので、人間判断の証跡として機能しています。</p></blockquote>
+
+<h3>Q8. 山田 CEO は救わない、で顧客層が狭まらないか？</h3>
+<blockquote><p>むしろ逆で、<strong>「誰を救わないか」を明示することで救う相手 (田中さん) が鮮明になり</strong> マーケティング上の解像度が上がります。日本の意思決定疲労層 (推定 2,000 万人) を全員救おうとはしていません。最適化された層へ深く刺さる方が、決定疲労という繊細なテーマでは正しい戦略です。</p></blockquote>
+
+<h3>Q9. LiteLLM 全方位対応は不要では？</h3>
+<blockquote><p>当日デモでは Bedrock 単独に固定しています。LiteLLM 抽象化は <strong>AI 委任サービスとして単一 LLM 依存しないことが本質要件</strong> だから採用しており、決勝までにオフラインモード (ローカル LLM) も実装予定です。Bedrock 障害時の保険としても機能します。</p></blockquote>
+
+<h3>Q10. ユーザーテストの結果は？</h3>
+<blockquote><p>予選時点では社内 5 名の定性テストのみで「決定の心理的負荷が下がった」という主観評価を得ています。決勝までに 10 名規模のテストで <strong>決定疲労スコア (PFI: Personal Fatigue Index)</strong> の変化を定量化予定です。Continuum の「FISR ≥ 95%」に対抗する数値を提示します。</p></blockquote>
+
+<hr>
+
+<h2 id="sec-8">8. AI-DLC <code>audit.md</code> の見せ方<a href="#sec-8" class="anchor">#</a></h2>
+
+<h3>8.1 抽出基準</h3>
+<p>スライド引用に値する瞬間は以下の 3 タイプ:</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>タイプ</th><th>特徴</th></tr></thead>
+  <tbody>
+    <tr><td><strong>却下</strong></td><td>AI の提案を人間が明確に否定した記録 (理由付き)。最重要</td></tr>
+    <tr><td><strong>方針転換</strong></td><td>検討の途中で立場が変わった記録 (議論の生々しさが伝わる)</td></tr>
+    <tr><td><strong>論点保留</strong></td><td>結論を先送りした記録 (後で再検討、慎重さの証拠)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>8.2 スライド引用フォーマット (Before / After 型)</h3>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│ [AI 提案]                                                │
+│ SSE 合議は単一 Endpoint で実装 (実装容易)               │
+│                                                          │
+│ [人間判断]                                               │
+│ Unit を分離して別 Endpoint                              │
+│ 理由: 合議の挙動を独立にテスト可能にする                │
+│                                                          │
+│ — Inception Phase 6 周目, 2026-05-15                    │
+└─────────────────────────────────────────────────────────┘</code></pre>
+
+<h3>8.3 推奨抽出件数とトーン</h3>
+<ul>
+  <li><strong>3〜5 件</strong> に絞る (それ以上はノイズ、印象が薄まる)</li>
+  <li>うち 1 件は <strong>却下系</strong> (人間の意志を見せる)</li>
+  <li>うち 1 件は <strong>方針転換系</strong> (議論の生々しさを見せる)</li>
+  <li>残りは <strong>保留→決着系</strong> (慎重さを見せる)</li>
+  <li><strong>皮肉やジョークを 1 つ混ぜる</strong> と記憶に残る (例: 「沈黙ドメインに "ハッカソン審査" を含めるか議論 → 却下」など)</li>
+</ul>
+
+<h3>8.4 Inception 周回カウンタの提示</h3>
+<p>スライド右下に小さく「Inception 周回数: 7 / 他チーム比較: 中央値 5」のように表示。<strong>他チームと比較すること</strong> で AI-DLC を回した深さが伝わる。</p>
+
+<hr>
+
+<h2 id="sec-9">9. リスクレジスタ<a href="#sec-9" class="anchor">#</a></h2>
+<p>予選 (5/30) までのリスク一覧。優先度順、各リスクに <strong>対策</strong> と <strong>オーナー</strong> と <strong>期限</strong> を明示。</p>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>リスク</th>
+      <th class="center">確率</th>
+      <th class="center">影響</th>
+      <th>対策</th>
+      <th>オーナー</th>
+      <th class="center">期限</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>R1</td><td>Aurora 接続不安定で当日デモ失敗</td><td class="center"><span class="badge badge-mid">中</span></td><td class="center"><span class="badge badge-critical">致命</span></td><td>Lambda + DynamoDB 退避案準備 / 完全動作デモ録画</td><td>インフラ担当</td><td class="center">5/28</td></tr>
+    <tr><td>R2</td><td>SSE 配信が遅延し合議演出が地味化</td><td class="center"><span class="badge badge-mid">中</span></td><td class="center"><span class="badge badge-high">大</span></td><td>演出用ダミーストリーム + キャッシュ</td><td>フロント担当</td><td class="center">5/27</td></tr>
+    <tr><td>R3</td><td>沈黙レスポンスが誤検知 (正常質問でも沈黙)</td><td class="center"><span class="badge badge-low">低</span></td><td class="center"><span class="badge badge-high">大</span></td><td>Guardrails ルール調整 + 200 ケーステスト</td><td>LLM 担当</td><td class="center">5/28</td></tr>
+    <tr><td>R4</td><td>委任度スコアが「ただの数字」で響かない</td><td class="center"><span class="badge badge-mid">中</span></td><td class="center"><span class="badge badge-mid">中</span></td><td>スコア表示にアニメと比喩を追加</td><td>UX 担当</td><td class="center">5/29</td></tr>
+    <tr><td>R5</td><td>審査員から「YUDANE と何が違う」追及で詰まる</td><td class="center"><span class="badge badge-high">高</span></td><td class="center"><span class="badge badge-mid">中</span></td><td>Q&amp;A バンク Q1 を暗唱 + リハーサル</td><td>プレゼン担当</td><td class="center">5/30</td></tr>
+    <tr><td>R6</td><td>プレゼン時間オーバー (デモが延びる)</td><td class="center"><span class="badge badge-high">高</span></td><td class="center"><span class="badge badge-mid">中</span></td><td>8 分デモを 6 分版にも対応 (シーン 4 をスキップ可)</td><td>プレゼン担当</td><td class="center">5/29</td></tr>
+    <tr><td>R7</td><td>Bedrock 利用上限到達</td><td class="center"><span class="badge badge-low">低</span></td><td class="center"><span class="badge badge-high">大</span></td><td>LiteLLM で Vertex AI へフェイルオーバー</td><td>LLM 担当</td><td class="center">5/30</td></tr>
+    <tr><td>R8</td><td>「受容的すぎて地味」と審査員に思われる</td><td class="center"><span class="badge badge-mid">中</span></td><td class="center"><span class="badge badge-high">大</span></td><td>派手な瞬間 3 つ (沈黙 / 合議 / スコア) を確実に発火</td><td>プレゼン担当</td><td class="center">5/29</td></tr>
+    <tr><td>R9</td><td>NEC 系 2 チーム (Flemmard / YesMan) が共倒れと見られる</td><td class="center"><span class="badge badge-low">低</span></td><td class="center"><span class="badge badge-mid">中</span></td><td>プレゼンで「Flemmard とは独立」と冒頭で軽く言及</td><td>プレゼン担当</td><td class="center">5/30</td></tr>
+    <tr><td>R10</td><td>audit.md の引用が他チームに見劣り (Inception 周回数)</td><td class="center"><span class="badge badge-low">低</span></td><td class="center"><span class="badge badge-mid">中</span></td><td>5/29 までに最低 7 周回完遂</td><td>AI-DLC 推進者</td><td class="center">5/29</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="sec-9-1">9.1 リスク管理運用</h3>
+<ul>
+  <li><strong>毎日 EOD (21:00) に R1〜R10 を 1 行スコアレビュー</strong> (確率変化を ▲/▼/= で記録)</li>
+  <li><strong>5/26 / 5/28 / 5/29 を Go/No-Go ゲート</strong> とする (Section 6.2 のトリガーと連動)</li>
+  <li>R1 (致命) と R8 (大) は <strong>5/27 までに対策の実装完了</strong> を絶対条件にする</li>
+</ul>
+
+<hr>
+
+<h2 id="sec-appendix">付録: 次セッションで議論する論点<a href="#sec-appendix" class="anchor">#</a></h2>
+<p>本ドキュメントを踏まえて、次セッションで決めるべき残論点:</p>
+<ol>
+  <li><strong>派手な瞬間 3 つの具体的なセリフと UI モック</strong> — Section 5.3 の各シーンをモック化して練度を上げる</li>
+  <li><strong>委任度スコアの算出式</strong> — どの行動を分母 / 分子に取るか</li>
+  <li><strong>沈黙 4 ドメインの境界事例集</strong> — 「健康相談 (= 医療か？)」など曖昧ケースの判定</li>
+  <li><strong>Inception 周回数の最終目標値</strong> — 7 で十分か、決勝までに 10 を目指すか</li>
+  <li><strong>対比ペルソナ "山田 CEO" の人物像</strong> — スライドに載せる詳細プロフィール</li>
+</ol>
+
+</main>
+
+</div>
+</body>
+</html>

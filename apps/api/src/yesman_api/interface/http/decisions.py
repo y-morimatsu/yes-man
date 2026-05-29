@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from dataclasses import replace
 from typing import Literal
 from uuid import UUID, uuid4
 
@@ -17,9 +18,10 @@ from yesman_api.domain.auth.models import AuthenticatedUser
 from yesman_api.domain.decision.engine import DecisionEngine
 from yesman_api.domain.persistence.models import Decision
 from yesman_api.domain.decision.errors import DecisionError
-from yesman_api.domain.decision.models import DecisionRequest
+from yesman_api.domain.decision.models import DecisionRequest, SelectedPersonaRef
 from yesman_api.domain.decision.nudge import NudgeCache, NudgeMessageGenerator
 from yesman_api.interface.deps import (
+    ensure_demo_seeded_dep,
     get_current_user,
     get_decision_engine,
     get_decision_repo,
@@ -42,6 +44,37 @@ from yesman_api.interface.http.dto.decision import (
 router = APIRouter(prefix="/v1/decisions", tags=["decisions"])
 
 
+def _build_domain_request(payload: DecisionRequestDTO, user_id: UUID) -> DecisionRequest:
+    """2026-05-24 v4: DTO → DecisionRequest 変換. selected_personas を含めて伝搬."""
+    selected_refs = tuple(
+        SelectedPersonaRef(source=p.source, id=p.id)
+        for p in (payload.selected_personas or [])
+    )
+    return DecisionRequest(
+        user_id=user_id,
+        user_input=payload.user_input,
+        selected_persona_ids=payload.selected_persona_ids or [],
+        chain_context=tuple(payload.chain_context or ()),
+        persona_source=payload.persona_source,
+        selected_personas=selected_refs,
+    )
+
+
+def _apply_demo_persona_override(
+    request: DecisionRequest, user: AuthenticatedUser
+) -> DecisionRequest:
+    """Demo user (email=morimatsu) は合議ペルソナを 妻/娘/ワンコ に強制.
+
+    frontend の localStorage 選択 (builtin 既定) を無視し、デモの再現性を担保する。
+    """
+    from yesman_api.domain.decision.demo_mode import DEMO_PERSONA_IDS, is_demo_user
+
+    if not is_demo_user(user.email):
+        return request
+    forced = tuple(SelectedPersonaRef(source="my", id=pid) for pid in DEMO_PERSONA_IDS)
+    return replace(request, selected_personas=forced)
+
+
 # ============================================================
 # 非ストリーミング合議
 # ============================================================
@@ -51,11 +84,8 @@ async def request_decision(
     user: AuthenticatedUser = Depends(get_current_user),
     engine: DecisionEngine = Depends(get_decision_engine),
 ) -> DecisionResponse:
-    request = DecisionRequest(
-        user_id=UUID(user.sub),
-        user_input=payload.user_input,
-        selected_persona_ids=payload.selected_persona_ids or [],
-    )
+    request = _build_domain_request(payload, UUID(user.sub))
+    request = _apply_demo_persona_override(request, user)
     try:
         decision_id, consensus, no_attempt_count = await engine.run(request)
     except DecisionError as exc:
@@ -86,11 +116,8 @@ async def request_decision_stream(
     user: AuthenticatedUser = Depends(get_current_user),
     engine: DecisionEngine = Depends(get_decision_engine),
 ) -> StreamingResponse:
-    request = DecisionRequest(
-        user_id=UUID(user.sub),
-        user_input=payload.user_input,
-        selected_persona_ids=payload.selected_persona_ids or [],
-    )
+    request = _build_domain_request(payload, UUID(user.sub))
+    request = _apply_demo_persona_override(request, user)
     decision_id = uuid4()  # ultrathink Imp2: SSE start event で client に事前通知
 
     async def event_stream():
@@ -218,6 +245,7 @@ async def list_decisions(
     repo: DecisionRepository = Depends(get_decision_repo),
     limit: int = Query(default=20, ge=1, le=100),
     choice: Literal["yes", "no", "all"] = Query(default="yes"),
+    _demo_seed: None = Depends(ensure_demo_seeded_dep),
 ) -> DecisionHistoryResponse:
     """Yes 採択履歴 (デフォルト 20 件) + attempt_count (同 user_input_hash 内の試行順)."""
     user_id = UUID(user.sub)

@@ -123,15 +123,47 @@ def get_auth_adapter(request: Request) -> AuthBackendAdapter:
     return adapter
 
 
+# --- Demo mode (2026-05-28) ---
+async def ensure_demo_seeded_dep(
+    request: Request,
+    bundle: RepositoryBundle = Depends(get_bundle),
+) -> None:
+    """demo user (email=morimatsu) の read 系 endpoint で使い込み状態を冪等 seed.
+
+    scores / preferences / decisions 等に Depends で噛ませることで、
+    新規サインイン (毎回新 sub) でも初回アクセス時に 30 日履歴・嗜好・
+    妻/娘/ワンコ ペルソナが揃った状態を返す。非 demo user は no-op。
+    """
+    from uuid import UUID
+
+    from yesman_api.domain.decision import demo_mode
+
+    user = getattr(request.state, "user", None)
+    if user is not None and demo_mode.is_demo_user(getattr(user, "email", None)):
+        await demo_mode.ensure_demo_seeded(
+            bundle.persona,
+            bundle.user_persona_selection,
+            UUID(user.sub),
+            decision_repo=bundle.decision,
+        )
+
+
 # --- Decision accessors (U4 + U5 統合) ---
-def get_decision_engine(
+async def get_decision_engine(
     request: Request,
     bundle: RepositoryBundle = Depends(get_bundle),
 ):
     """per-request DecisionEngine (RepositoryBundle が request scope のため都度組み立て).
 
     U5 統合 (Phase A.0b): PreferenceProfileLoader を inject、U4 単体テストは preference_loader=None で動作.
+
+    Demo mode (2026-05-28): email に "morimatsu" を含むユーザーのときだけ
+    妻/娘/ワンコ ペルソナを冪等 seed し、LLM を DemoLLMAdapter で包む
+    (scripted 合議/深掘り)。非 demo user には一切影響しない。
     """
+    from uuid import UUID
+
+    from yesman_api.domain.decision import demo_mode
     from yesman_api.domain.decision.engine import DecisionEngine
     from yesman_api.domain.learning.cold_start import ColdStartEstimator
     from yesman_api.domain.learning.loader import PreferenceProfileLoader
@@ -142,12 +174,30 @@ def get_decision_engine(
     orchestrator = getattr(request.app.state, "consensus_orchestrator", None)
     if not all((llm, event_publisher, silence_guard, orchestrator)):
         raise RuntimeError("Decision singletons not initialized in main.py lifespan")
+
+    # --- Demo mode: demo user のみ seed + LLM ラップ ---
+    _user = getattr(request.state, "user", None)
+    if _user is not None and demo_mode.is_demo_user(getattr(_user, "email", None)):
+        from yesman_api.infrastructure.decision.llm_providers.demo_adapter import (
+            DemoLLMAdapter,
+        )
+
+        await demo_mode.ensure_demo_seeded(
+            bundle.persona,
+            bundle.user_persona_selection,
+            UUID(_user.sub),
+            decision_repo=bundle.decision,
+        )
+        llm = DemoLLMAdapter(llm)
     cold_start = getattr(request.app.state, "cold_start_estimator", None) or ColdStartEstimator()
     preference_loader = PreferenceProfileLoader(
         preference_repo=bundle.preference,
         profile_repo=bundle.profile,
         cold_start=cold_start,
     )
+    # v3-γ anonymous-strangers: app.state.anonymous_pool が存在すれば inject
+    # (Task 2 で persona_source="anonymous" 経路をサポート、未設定なら builtin only)
+    pool_repo = getattr(request.app.state, "anonymous_pool", None)
     return DecisionEngine(
         llm=llm,
         orchestrator=orchestrator,
@@ -161,6 +211,8 @@ def get_decision_engine(
         selection_repo=bundle.user_persona_selection,
         # Issue #4: Dynamic Persona Routing 用
         preference_repo=bundle.preference,
+        # v3-γ anonymous-strangers
+        pool_repo=pool_repo,
     )
 
 

@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YesMan — ハッカソンプレゼン</title>
+<style>
+  /* ===========================================================
+     Claude / Anthropic 風 デザイントークン
+     warm cream + terracotta accent + serif headline
+     =========================================================== */
+  :root {
+    /* projector-tuned palette: contrast +15-25%, accent saturation up */
+    --bg-paper:        #FBFAF5;
+    --bg-paper-alt:    #F1EDDF;
+    --bg-card:         #FFFFFF;
+    --bg-card-tint:    #F5F1E3;
+
+    --ink:             #1A1814;      /* 濃く: 投影面でぼやけ防止 */
+    --ink-soft:        #3A362E;
+    --ink-muted:       #6B6557;
+    --ink-faint:       #918B7D;
+
+    --accent:          #B85C3D;      /* terracotta — 彩度・深み up */
+    --accent-deep:     #973F22;
+    --accent-soft:     #EFC5B3;
+    --accent-pale:     #FAE5D9;
+
+    --line:            #B8AC91;      /* 投影面のガンマで沈んでもなお見える濃度 */
+    --line-soft:       #CFC4A8;
+
+    --sky:             #3F8FC2;
+    --amber:           #D9962F;
+    --violet:          #7C5FB5;
+    --mint:            #4DA974;
+
+    --shadow-sm:       0 1px 3px rgba(40, 25, 10, 0.10);
+    --shadow-md:       0 6px 18px rgba(40, 25, 10, 0.14);
+    --shadow-lg:       0 18px 48px rgba(40, 25, 10, 0.18);
+
+    --serif: "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
+    --sans:  -apple-system, BlinkMacSystemFont, "Inter", "Hiragino Kaku Gothic ProN",
+             "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+    --mono:  "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg-paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: clamp(15px, 1.1vw, 19px);  /* projector: 後列でも読めるサイズに底上げ */
+    font-weight: 450;                      /* projector: 400 は薄く沈む */
+    line-height: 1.55;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  b, strong { font-weight: 700; }
+
+  /* ======================== Stage / Slide ======================== */
+  .stage {
+    position: fixed;
+    inset: 0;
+  }
+
+  .deck {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-paper);
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    padding: clamp(40px, 5vh, 72px) clamp(48px, 7vw, 120px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 360ms ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ======================== Typography ======================== */
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: clamp(13px, 0.95vw, 16px);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h1.title {
+    font-family: var(--serif);
+    font-weight: 500;       /* projector: 400 は薄く沈む → 500 */
+    font-size: clamp(56px, 6.5vw, 96px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  h2.section {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(36px, 3.4vw, 56px);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  h3.lead {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 0 0 18px;
+  }
+  .kicker {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(17px, 1.55vw, 24px);
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+  }
+  p.body {
+    font-size: clamp(16px, 1.25vw, 21px);
+    color: var(--ink-soft);
+    max-width: 64ch;
+  }
+  .accent-text { color: var(--accent); }
+  .ink-soft { color: var(--ink-soft); }
+  .ink-muted { color: var(--ink-muted); }
+  .label {
+    font-size: clamp(12px, 0.9vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  /* ======================== Layout primitives ======================== */
+  .row { display: flex; gap: 28px; }
+  .col { display: flex; flex-direction: column; gap: 16px; }
+  .grow { flex: 1; }
+  .center-y { align-items: center; }
+  .between { justify-content: space-between; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+
+  /* ======================== Card ======================== */
+  /* projector note: drop-shadow は投影面でほぼ消える → border に集約 */
+  .card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+  }
+  .card.tint {
+    background: var(--bg-card-tint);
+    border-color: var(--line);
+  }
+  .card.accent {
+    background: var(--accent-pale);
+    border-color: var(--accent);
+    border-width: 2px;
+  }
+  .card .num {
+    font-family: var(--serif);
+    font-size: clamp(14px, 1vw, 16px);
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .card h4 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(20px, 1.6vw, 26px);
+    line-height: 1.3;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .card p {
+    font-size: clamp(15px, 1.15vw, 18px);
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ======================== Header band ======================== */
+  .slide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 32px;
+  }
+  .slide-header .left { display: flex; flex-direction: column; gap: 2px; }
+
+  /* ======================== Footer / nav ======================== */
+  .footer {
+    position: absolute;
+    bottom: 18px;
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 36px;
+    pointer-events: none;
+  }
+  .brand {
+    font-family: var(--serif);
+    font-size: clamp(13px, 0.95vw, 16px);
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .brand b { color: var(--ink); font-weight: 600; }
+  .pager {
+    font-family: var(--mono);
+    font-size: clamp(13px, 0.95vw, 15px);
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .nav-controls {
+    position: fixed;
+    bottom: 18px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 50;
+    padding: 4px 8px 4px 14px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-sm);
+  }
+  .nav-controls .pager {
+    /* nav cluster 内の pager: ボタンの右に置き水平整列 */
+    margin: 0 4px 0 4px;
+  }
+  .nav-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    background: var(--bg-card);
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 160ms ease;
+    box-shadow: var(--shadow-md);
+  }
+  .nav-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .progress-bar {
+    position: absolute;
+    top: 0; left: 0;
+    height: 5px;
+    background: var(--accent);
+    transition: width 360ms ease;
+    z-index: 40;
+  }
+  .deck.presenting .progress-bar,
+  .deck.presenting .footer,
+  .deck.presenting ~ .nav-controls { display: none; }
+
+  /* ======================== Cover slide ======================== */
+  .cover {
+    /* projector note: radial gradient (10% opacity) は投影面で完全消失 → 単色背景に */
+    background: var(--bg-paper);
+    padding: clamp(56px, 7vh, 96px) clamp(56px, 8vw, 140px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover::before {
+    /* 装飾的な縦のアクセントライン (投影でも残る) */
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 8px;
+    background: var(--accent);
+  }
+  .cover .top { display: flex; align-items: center; justify-content: space-between; }
+  .cover .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-size: clamp(18px, 1.4vw, 22px);
+    color: var(--ink);
+  }
+  .cover .logo-dot {
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .cover .meta {
+    font-family: var(--mono);
+    font-size: clamp(13px, 1vw, 16px);
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+    text-align: right;
+    font-weight: 500;
+  }
+  .cover h1.title {
+    font-size: clamp(64px, 6.8vw, 124px);
+    margin-top: 18px;
+    letter-spacing: -0.035em;
+    font-weight: 600;       /* cover title は最大級にしっかり */
+  }
+  /* 2-column layout: 左にテキスト、右にスマホ画面キャプチャ枠 */
+  .cover-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: clamp(40px, 6vw, 96px);
+    min-height: 0;
+  }
+  .cover-text {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 64ch;
+  }
+  .cover-phone {
+    flex: 0 0 auto;
+    height: clamp(460px, 70vh, 760px);
+    aspect-ratio: 9 / 19.5;
+    border: 2.5px dashed var(--accent);
+    border-radius: 42px;
+    background: var(--bg-card);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow:
+      0 14px 40px rgba(151, 63, 34, 0.10),
+      0 3px 12px rgba(0, 0, 0, 0.04);
+  }
+  .cover-phone::before {
+    /* dynamic island 風の装飾 (スマホ感を出すためのトップノッチ) */
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 78px;
+    height: 20px;
+    background: var(--ink);
+    border-radius: 20px;
+    opacity: 0.55;
+  }
+  .cover-phone-label {
+    text-align: center;
+    font-family: var(--sans);
+    font-size: clamp(13px, 1vw, 16px);
+    color: var(--ink-muted);
+    letter-spacing: 0.12em;
+    line-height: 1.9;
+    text-transform: uppercase;
+  }
+  .cover .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 2vw, 34px);
+    color: var(--ink-soft);
+    margin-top: 22px;
+    line-height: 1.35;
+  }
+  /* tagline 内の YES をハイライトマーカー風に装飾 */
+  .cover .tagline em {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.12em;
+    letter-spacing: 0.05em;
+    color: var(--accent-deep);
+    background: linear-gradient(
+      transparent 60%,
+      var(--accent-pale) 60%,
+      var(--accent-pale) 94%,
+      transparent 94%
+    );
+    padding: 0 0.18em;
+    border-radius: 2px;
+  }
+  .cover .sub {
+    font-size: clamp(16px, 1.25vw, 21px);
+    color: var(--ink-soft);
+    margin-top: 32px;
+    line-height: 1.75;
+  }
+  .cover .sub p { margin: 0; }
+  .cover .sub p + p { margin-top: 0.8em; }
+  .cover .bottom {
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .cover .pill {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    background: var(--accent-pale);
+    color: var(--accent-deep);
+    font-size: clamp(13px, 1vw, 16px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  /* ======================== Problem slide stats ======================== */
+  .big-stat {
+    font-family: var(--serif);
+    font-size: clamp(64px, 7vw, 120px);
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .stat-cap {
+    font-size: clamp(15px, 1.1vw, 18px);
+    color: var(--ink-soft);
+    margin-top: 12px;
+    line-height: 1.55;
+  }
+
+  /* ======================== Concept slide ======================== */
+  .concept-hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+  }
+  .concept-quote {
+    font-family: var(--serif);
+    font-size: clamp(40px, 4vw, 68px);
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  .concept-quote em { color: var(--accent); font-style: normal; }
+  .concept-side {
+    flex: 0 0 320px;
+    border-left: 1px solid var(--line);
+    padding-left: 36px;
+  }
+
+  /* ======================== Approach two-pillar ======================== */
+  .pillar {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: relative;
+    min-height: 380px;
+  }
+  .pillar .badge {
+    position: absolute;
+    top: -12px; left: 24px;
+    background: var(--accent);
+    color: white;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 15px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+  .pillar h4 {
+    font-family: var(--serif);
+    font-size: clamp(24px, 2vw, 32px);
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .pillar .desc {
+    font-size: clamp(15px, 1.2vw, 19px);
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .pillar ul {
+    list-style: none;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .pillar li {
+    font-size: clamp(15px, 1.15vw, 18px);
+    color: var(--ink-soft);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .pillar li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 9px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ======================== UX nudge timeline ======================== */
+  .nudge-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .nudge-step {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .nudge-step .stage-no {
+    font-family: var(--mono);
+    font-size: clamp(11px, 0.8vw, 13px);
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+  .nudge-step .stage-label {
+    font-family: var(--serif);
+    font-size: clamp(15px, 1.2vw, 19px);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .nudge-step .stage-line {
+    font-size: clamp(13px, 0.95vw, 16px);
+    color: var(--ink-soft);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ======================== Persona source tabs ======================== */
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+  .persona-tile {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 22px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+  }
+  .persona-tile .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: clamp(12px, 0.9vw, 14px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .tag.sky    { background: #C8DEF0; color: #1F5481; }
+  .tag.amber  { background: #F2D89D; color: #6E4C0E; }
+  .tag.violet { background: #DECDED; color: #432F75; }
+  .persona-tile h5 {
+    font-family: var(--serif);
+    font-size: clamp(20px, 1.6vw, 26px);
+    color: var(--ink);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .persona-tile p {
+    font-size: clamp(15px, 1.15vw, 18px);
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .persona-tile .actors {
+    margin-top: 16px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .actor-chip {
+    background: var(--bg-card-tint);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: clamp(13px, 0.95vw, 15px);
+  }
+
+  /* ======================== Pricing tier ======================== */
+  .tier {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+  .tier.featured {
+    background: linear-gradient(180deg, var(--accent-pale) 0%, var(--bg-card) 70%);
+    border-color: var(--accent);
+    border-width: 2.5px;
+  }
+  .tier .tier-name {
+    font-family: var(--serif);
+    font-size: clamp(20px, 1.7vw, 28px);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .tier .price {
+    font-family: var(--serif);
+    font-size: clamp(36px, 3vw, 52px);
+    color: var(--ink);
+    line-height: 1;
+  }
+  .tier .price small {
+    font-size: clamp(13px, 1vw, 16px);
+    color: var(--ink-muted);
+    font-family: var(--sans);
+    margin-left: 6px;
+  }
+  .tier ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .tier li {
+    font-size: clamp(13px, 1vw, 16px);
+    color: var(--ink-soft);
+    padding-left: 18px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .tier li::before {
+    content: '+';
+    position: absolute;
+    left: 0; top: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .tier-featured-badge {
+    position: absolute;
+    top: -10px; right: 18px;
+    background: var(--accent);
+    color: white;
+    padding: 4px 12px;
+    font-size: clamp(11px, 0.8vw, 13px);
+    letter-spacing: 0.1em;
+    border-radius: 999px;
+    font-weight: 700;
+  }
+
+  /* ======================== AWS arch grid ======================== */
+  .arch {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto auto auto auto;
+    gap: 14px;
+    align-content: center;
+  }
+  .arch-box {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+  .arch-box .svc {
+    font-family: var(--serif);
+    font-size: clamp(14px, 1.1vw, 17px);
+    color: var(--ink);
+    line-height: 1.2;
+    font-weight: 500;
+  }
+  .arch-box .role {
+    font-size: clamp(11px, 0.85vw, 14px);
+    color: var(--ink-soft);
+    line-height: 1.35;
+  }
+  .arch-box.user {
+    background: var(--ink);
+    color: white;
+    border-color: var(--ink);
+  }
+  .arch-box.user .svc, .arch-box.user .role { color: white; }
+  .arch-box.user .role { color: rgba(255,255,255,0.6); }
+
+  .arch-group {
+    /* projector: dashed は投影で連続線に潰れる → solid + 色塗りで領域識別 */
+    border: 2px solid var(--ink-faint);
+    border-radius: 12px;
+    padding: 16px 14px 12px;
+    background: rgba(255,255,255,0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+  }
+  .arch-group .group-label {
+    position: absolute;
+    top: -11px; left: 14px;
+    background: var(--bg-paper);
+    padding: 0 8px;
+    font-size: clamp(11px, 0.85vw, 14px);
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  /* projector: 透明度 0.06 では投影で完全消失 → 0.15 以上にして領域認識 */
+  .arch-group.edge { background: rgba(217, 150, 47, 0.13); border-color: rgba(151, 100, 25, 0.5); }
+  .arch-group.vpc  { background: rgba(63, 143, 194, 0.13); border-color: rgba(40, 95, 130, 0.5); }
+  .arch-group.llm  { background: rgba(124, 95, 181, 0.13); border-color: rgba(75, 55, 120, 0.5); }
+  .arch-group.ops  { background: rgba(77, 169, 116, 0.13); border-color: rgba(50, 110, 75, 0.5); }
+
+  .arch-row { display: flex; gap: 10px; }
+  .arch-row > .arch-box { flex: 1; }
+
+  /* ======================== Demo steps ======================== */
+  .demo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .demo-step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .demo-step:last-child { border-bottom: none; }
+  .demo-step .step-no {
+    font-family: var(--serif);
+    color: var(--accent);
+    font-size: clamp(20px, 1.8vw, 28px);
+    line-height: 1;
+    padding-top: 2px;
+    font-weight: 600;
+  }
+  .demo-step .step-body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .demo-step h5 {
+    font-family: var(--serif);
+    font-size: clamp(16px, 1.3vw, 20px);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .demo-step p {
+    font-size: clamp(14px, 1.05vw, 17px);
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* ======================== Roadmap / future ======================== */
+  .horizon {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 8px;
+  }
+  .horizon-col {
+    background: var(--bg-card);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 280px;
+  }
+  .horizon-col .when {
+    font-family: var(--mono);
+    font-size: clamp(12px, 0.9vw, 14px);
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .horizon-col h4 {
+    font-family: var(--serif);
+    font-size: clamp(22px, 1.8vw, 28px);
+    color: var(--ink);
+    line-height: 1.25;
+    font-weight: 500;
+  }
+  .horizon-col p {
+    font-size: clamp(14px, 1.05vw, 17px);
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  .horizon-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .horizon-col li {
+    font-size: clamp(14px, 1.05vw, 17px);
+    color: var(--ink-soft);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .horizon-col li::before {
+    content: '→';
+    position: absolute;
+    left: 0; color: var(--accent); font-weight: 700;
+  }
+
+  /* ======================== Closing slide ======================== */
+  .closing {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 28px;
+  }
+  .closing .quote-big {
+    font-family: var(--serif);
+    font-size: clamp(40px, 3.8vw, 66px);
+    line-height: 1.2;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+    font-weight: 500;
+  }
+  .closing .quote-big p {
+    margin: 0;
+    white-space: nowrap;        /* 「を。」が改行されるのを防ぐ */
+  }
+  .closing .quote-big em { color: var(--accent); font-style: normal; font-weight: 600; }
+  .closing .sig {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(20px, 1.7vw, 28px);
+    color: var(--ink-soft);
+  }
+
+  /* ======================== Print ======================== */
+  @media print {
+    body { overflow: visible; background: white; }
+    .stage { position: relative; padding: 0; }
+    .deck { box-shadow: none; border: none; aspect-ratio: auto; }
+    .slide {
+      position: relative;
+      opacity: 1 !important;
+      page-break-after: always;
+      min-height: 100vh;
+    }
+    .nav-controls, .progress-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <!-- ====================================================
+         Slide 01 — Cover
+         ==================================================== -->
+    <section class="slide cover active" data-title="Cover">
+      <div class="cover-main">
+        <div class="cover-text">
+          <div class="eyebrow">人をダメにする、新しい意思決定支援。</div>
+          <h1 class="title">YesMan.</h1>
+          <div class="tagline">— 人間最後の仕事は、<em>YES</em> で承認すること。</div>
+          <div class="sub">
+            <p>AI があなたの欲しい答えを<br/>予測して提案する。</p>
+            <p>あなたの仕事は、<em>YES</em> で承認するだけ。</p>
+            <p>合議による多角的な言い当てと、議論履歴の透明性で、<br/>安心して任せられる — そして、心地よくダメになっていく。</p>
+          </div>
+        </div>
+        <div class="cover-phone" aria-label="App screen capture placeholder">
+          <span class="cover-phone-label">App<br/>Screen<br/>Capture</span>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <span class="pill">● Built with AI-DLC × Claude × AWS</span>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 02 — Team
+         ==================================================== -->
+    <section class="slide" data-title="Team">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">— Team</div>
+        </div>
+      </div>
+
+      <!-- インフォリスト: チーム名 / 所属 / メンバー (label-value 形式) -->
+      <div style="
+          display: grid;
+          grid-template-columns: clamp(140px, 12vw, 180px) 1fr;
+          column-gap: clamp(24px, 3vw, 48px);
+          row-gap: clamp(14px, 1.6vh, 22px);
+          margin-bottom: clamp(20px, 2.5vh, 36px);
+          max-width: 1000px;
+        ">
+        <div style="font-family: var(--sans); font-size: clamp(13px, 0.95vw, 16px); color: var(--accent); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; align-self: center;">チーム名</div>
+        <div style="font-family: var(--serif); font-size: clamp(32px, 2.8vw, 48px); color: var(--ink); font-weight: 600; line-height: 1.1;">ぐうたラボ</div>
+
+        <div style="font-family: var(--sans); font-size: clamp(13px, 0.95vw, 16px); color: var(--accent); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; align-self: center;">所属</div>
+        <div style="font-family: var(--serif); font-size: clamp(16px, 1.25vw, 22px); color: var(--ink-soft); line-height: 1.45; white-space: nowrap;">NEC ソリューションイノベータ株式会社 イノベーションラボラトリ</div>
+
+        <div style="font-family: var(--sans); font-size: clamp(13px, 0.95vw, 16px); color: var(--accent); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; align-self: center;">メンバー</div>
+        <div style="font-family: var(--serif); font-size: clamp(18px, 1.4vw, 24px); color: var(--ink-soft);">4 名</div>
+      </div>
+
+      <!-- 区切り線 -->
+      <div style="border-top: 1px solid var(--line);"></div>
+
+      <div style="flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 3vw, 48px); align-items: center; justify-items: center;">
+
+        <!-- Member 1 -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 2vh, 28px);">
+          <div style="
+              width: clamp(180px, 17vw, 260px);
+              height: clamp(180px, 17vw, 260px);
+              border-radius: 50%;
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">森松 祐樹</div>
+          </div>
+        </div>
+
+        <!-- Member 2 -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 2vh, 28px);">
+          <div style="
+              width: clamp(180px, 17vw, 260px);
+              height: clamp(180px, 17vw, 260px);
+              border-radius: 50%;
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">佐々木 航太</div>
+          </div>
+        </div>
+
+        <!-- Member 3 -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 2vh, 28px);">
+          <div style="
+              width: clamp(180px, 17vw, 260px);
+              height: clamp(180px, 17vw, 260px);
+              border-radius: 50%;
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">辻 朋子</div>
+          </div>
+        </div>
+
+        <!-- Member 4 -->
+        <div style="display: flex; flex-direction: column; align-items: center; gap: clamp(18px, 2vh, 28px);">
+          <div style="
+              width: clamp(180px, 17vw, 260px);
+              height: clamp(180px, 17vw, 260px);
+              border-radius: 50%;
+              border: 2.5px dashed var(--line);
+              background: var(--bg-card-tint);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: clamp(76px, 7.5vw, 112px);
+              color: var(--ink-faint);
+            ">👤</div>
+          <div style="text-align: center;">
+            <div style="font-family: var(--serif); font-size: clamp(22px, 1.9vw, 30px); color: var(--ink); font-weight: 500;">水野 良祐</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 03 — Problem (A + C ハイブリッド)
+         「決断は毒」科学的フレーミング × 「あなたの今日の決断リスト」共感誘発
+         ==================================================== -->
+    <section class="slide" data-title="Problem">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">01 — Problem</div>
+          <h2 class="section">人を最も消耗させるのは、<em style="color: var(--accent); font-style: normal; font-weight: 600;">決めること</em>。</h2>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap: 32px; flex: 1; align-items: stretch; margin-top: 8px;">
+
+        <!-- LEFT: 統計 3 つ (縦 stack) -->
+        <div class="col" style="gap: 16px;">
+          <div class="card tint" style="display: flex; align-items: baseline; gap: 20px;">
+            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">35,000</div>
+            <div class="stat-cap" style="flex: 1; margin-top: 0;">大人が 1 日に下す意思決定の数。<br/><span style="font-style: italic; color: var(--ink-muted);">— ケンブリッジ大学 Barbara Sahakian 教授の研究による</span></div>
+          </div>
+          <div class="card tint" style="display: flex; align-items: baseline; gap: 20px;">
+            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">94<span style="font-size: 0.55em;">%</span></div>
+            <div class="stat-cap" style="flex: 1; margin-top: 0;">「日々の選択」をストレス源として挙げた人の割合 (年により変動)。<br/><span style="font-style: italic; color: var(--ink-muted);">— American Psychological Association, Stress in America</span></div>
+          </div>
+          <div class="card tint" style="display: flex; align-items: baseline; gap: 20px;">
+            <div class="big-stat" style="flex: 0 0 auto; line-height: 1; font-size: clamp(56px, 5vw, 84px);">40<span style="font-size: 0.55em;">%</span></div>
+            <div class="stat-cap" style="flex: 1; margin-top: 0;">1 日の行動のうち、習慣 (= 決めずに済ませる行動) が占める割合。<br/><span style="font-style: italic; color: var(--ink-muted);">— Wood &amp; Neal, Duke University (2007)</span></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: 今日の決断リスト -->
+        <div class="card" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="label" style="margin-bottom: 4px;">今日、この会場に来るまでに決めたこと</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; flex: 1;">
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 何時に起きるか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ シャワーを浴びるか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 朝ごはん (食べる / 食べない)</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ コーヒー / 紅茶</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 着てくる服</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 髪のセット / 化粧</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 持ち物 (名刺 / USB / ケーブル)</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ PC の充電は足りるか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ モバイルバッテリーを持つか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 何時に家を出るか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 駅まで歩く / タクシー</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 電車のルート</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ どの車両に乗るか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ コンビニで何か買うか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ プレゼン内容の最終確認</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ デモが動くか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 質問されたらどう答えるか</div>
+            <div style="font-family: var(--serif); font-size: clamp(15px, 1.2vw, 19px); color: var(--ink); padding: 4px 0;">☑ 自己紹介で何を話すか</div>
+          </div>
+          <div style="font-family: var(--serif); font-style: italic; font-size: clamp(16px, 1.3vw, 21px); color: var(--ink-muted); text-align: center; padding: 10px 0 0; border-top: 1px solid var(--line-soft);">… ここに着くまで、何回決めましたか?</div>
+        </div>
+
+      </div>
+
+      <!-- 共通結論 -->
+      <div style="margin-top: 24px; padding: 18px 24px; border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
+        <p style="font-family: var(--serif); font-size: clamp(20px, 1.7vw, 28px); color: var(--ink); font-style: italic; font-weight: 500;">
+          ▶ 決めるのをやめ、<b style="color: var(--accent-deep); font-style: normal;">心地よくダメになろう</b>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 04 — Concept
+         ==================================================== -->
+    <section class="slide" data-title="Concept">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">02 — Concept</div>
+          <h2 class="section">決めなくていい、を実現する。</h2>
+        </div>
+      </div>
+
+      <div class="concept-hero">
+        <div style="flex: 1;">
+          <div class="concept-quote">
+            AI が日常〜人生レベルの<br/>
+            欲しい答えを言い当て、<br/>
+            ユーザーは <em>Yes をスワイプ</em>するだけ。
+          </div>
+          <p class="body" style="margin-top: 28px; font-size: 17px;">
+            合議による多角的な言い当てと、議論履歴の透明性で、安心して任せられる
+            新しい意思決定支援サービス。最終承認だけは人間が握り、その判断疲労を
+            限りなくゼロに近づける — 言い換えれば、人を心地よくダメにする。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 05 — Two-pillar approach overview
+         ==================================================== -->
+    <section class="slide" data-title="Approach">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">03 — How we spoil humans</div>
+          <h2 class="section">人をダメにする二つのアプローチ。</h2>
+          <p class="kicker" style="margin-top: 8px;">あなたを学ぶ × 信頼の人を呼ぶ。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="flex: 1; align-content: start;">
+        <div class="pillar">
+          <div class="badge">APPROACH 1</div>
+          <h4>ユーザーの嗜好を言い当てる</h4>
+          <p class="desc">過去の Yes/No 履歴から嗜好プロファイルを構築し、その人が本当に欲しい候補を予測生成する。</p>
+          <ul>
+            <li>Onboarding swipe (最大 50 問) で初期プロファイル</li>
+            <li>QuickStart: 時刻 × 曜日 × 嗜好で候補を動的生成</li>
+            <li>Yes/No の都度、EventBridge で非同期に精度更新</li>
+          </ul>
+        </div>
+
+        <div class="pillar">
+          <div class="badge">APPROACH 2</div>
+          <h4>自分が信頼するペルソナを設定する</h4>
+          <p class="desc">"誰のレンズで絞り込むか" が言い当てを深める。ビルトイン / 知り合い / カスタムの 3 系統から最大 3 人を合議に招集。</p>
+          <ul>
+            <li>ビルトイン: 慎重派・楽観派・効率派</li>
+            <li>知り合い: 価値観タグで共有 / 招集</li>
+            <li>カスタム: 親・尊敬する人・理想の自分を作る</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 06 — Approach 1a: 嗜好に応じた質問
+         ==================================================== -->
+    <section class="slide" data-title="Preference Questions">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">03 · 1 — Personalization</div>
+          <h2 class="section">嗜好を言い当てる。</h2>
+          <p class="kicker" style="margin-top: 8px;">"あなたが本当に欲しかった答え" を当てに行く学習ループ。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="flex: 1; align-items: stretch;">
+        <div class="col" style="gap: 18px;">
+          <div class="card">
+            <div class="num">STEP 01</div>
+            <h4>Onboarding swipe (最大 50 問)</h4>
+            <p>性格 × 生活の Yes/No 質問を Tinder 風 swipe で。確信ライン到達で「もういい、進む」 CTA で離脱許容。</p>
+          </div>
+          <div class="card">
+            <div class="num">STEP 02</div>
+            <h4>QuickStart 候補生成</h4>
+            <p>時刻 + 曜日 + 嗜好プロファイルから「もしかして〜について?」候補を build-time + runtime で動的提示。</p>
+          </div>
+          <div class="card">
+            <div class="num">STEP 03</div>
+            <h4>非同期で嗜好プロファイル更新</h4>
+            <p>Yes/No の都度 EventBridge にイベント発行。提案レイテンシを劣化させず、嗜好を蓄積。</p>
+          </div>
+        </div>
+
+        <div class="card tint" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="label">嗜好プロファイル (実装通り)</div>
+
+          <!-- 1. 採択された domain (accepted_patterns 集計) -->
+          <div>
+            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">採択された domain <span style="font-size: 12px; color: var(--ink-muted); font-family: var(--mono);">(accepted_patterns 集計)</span></div>
+            <div class="col" style="gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">食事</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 70%; height: 100%; background: var(--accent);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">12 件</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">仕事</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 47%; height: 100%; background: var(--accent);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">8 件</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">娯楽</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 30%; height: 100%; background: var(--accent);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">5 件</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">旅行</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden;">
+                  <div style="width: 18%; height: 100%; background: var(--accent);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink-muted);">3 件</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 推定タグ (inferred_tags) -->
+          <div>
+            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">推定タグ <span style="font-size: 12px; color: var(--ink-muted); font-family: var(--mono);">(inferred_tags)</span></div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <span class="actor-chip">work-focused</span>
+              <span class="actor-chip">family-focused</span>
+              <span class="actor-chip">career</span>
+              <span class="actor-chip">health</span>
+              <span class="actor-chip">growth</span>
+            </div>
+          </div>
+
+          <!-- 3. ペルソナ嗜好 (persona_style_preference, score [-1, 1]) -->
+          <div>
+            <div style="font-family: var(--serif); font-size: 18px; color: var(--ink); margin-bottom: 8px;">ペルソナ嗜好 <span style="font-size: 12px; color: var(--ink-muted); font-family: var(--mono);">(score [-1, 1])</span></div>
+            <div class="col" style="gap: 6px;">
+              <!-- 慎重派 +0.56 -->
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">慎重派</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative;">
+                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink-faint);"></div>
+                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 28%; background: var(--sky);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink); width: 48px; text-align: right;">+0.56</span>
+              </div>
+              <!-- 楽観派 -0.16 -->
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">楽観派</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative;">
+                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink-faint);"></div>
+                  <div style="position: absolute; right: 50%; top: 0; bottom: 0; width: 8%; background: var(--amber);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink); width: 48px; text-align: right;">-0.16</span>
+              </div>
+              <!-- 効率派 +0.30 -->
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+                <span style="width: 60px; color: var(--ink-soft);">効率派</span>
+                <div style="flex: 1; height: 12px; background: #E8DFC9; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; position: relative;">
+                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--ink-faint);"></div>
+                  <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 15%; background: var(--violet);"></div>
+                </div>
+                <span style="font-family: var(--mono); font-size: 14px; color: var(--ink); width: 48px; text-align: right;">+0.30</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-muted); font-style: italic;">
+            ユーザーがいつでも閲覧・修正・全リセット可能。エコーチェンバー回避設計。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 07 — Approach 2: Persona Setting
+         ==================================================== -->
+    <section class="slide" data-title="Trusted Persona">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">03 · 2 — Trusted Persona</div>
+          <h2 class="section">自分が信頼するペルソナと、決める。</h2>
+          <p class="kicker" style="margin-top: 8px;">"誰のレンズで絞るか" が、言い当ての解像度を決める。</p>
+        </div>
+      </div>
+
+      <p class="body" style="margin-bottom: 22px;">
+        合議に参加する 3 人は、ユーザーが <b>3 つの系統</b>から自由に mix できる。
+        ビルトインの安心感、知り合いが持つ予測不能性、そして自分が育てた完全な信頼。
+      </p>
+
+      <div class="persona-grid" style="flex: 1;">
+        <div class="persona-tile">
+          <span class="tag sky">BUILTIN</span>
+          <h5>ビルトイン 3 人格</h5>
+          <p>YesMan 標準搭載。それぞれが固有の theme color と発話 tone を持つ。<br/>嗜好親和度の高い人格には 💡 おすすめ badge。</p>
+          <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: #2F6FA3;">慎重派</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">リスクを丁寧に点検する</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: #8A6418;">楽観派</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">ポジティブな可能性から提案する</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: #5D479A;">効率派</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">最短ルートと時間効率を優先する</span>
+            </div>
+          </div>
+
+          <div style="margin-top: auto; padding: 16px 18px; background: var(--accent-pale); border: 2px solid var(--accent); border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center;">
+              <div style="font-family: var(--serif); font-size: clamp(17px, 1.4vw, 22px); font-weight: 600; color: var(--accent-deep);">0 設定で、すぐ使える</div>
+              <div style="font-family: var(--mono); font-size: clamp(12px, 0.95vw, 15px); color: var(--ink-soft);">3 人格 / 0 設定</div>
+            </div>
+            <div style="border-top: 1.5px solid var(--accent); padding-top: 8px;">
+              <div style="font-size: clamp(12px, 0.95vw, 14px); color: var(--ink-muted); font-style: italic; text-align: center;">● 推奨: 迷ったら、まずビルトイン</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="persona-tile">
+          <span class="tag amber">知り合い</span>
+          <h5>知り合いと共有</h5>
+          <p>知り合いが作成したペルソナを共有して借りる。<br/>価値観タグ + 言語 + formality で検索 / 招集。</p>
+          <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">#沖縄移住</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">ゆったりした暮らしを大切にする</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">#料理研究家</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">食を中心に生活設計する</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">#FIRE 達成</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">お金と時間の両立を重視する</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">#子育て中</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">家族と過ごす時間を最優先する</span>
+            </div>
+          </div>
+
+          <div style="margin-top: auto; padding: 16px 18px; background: var(--accent-pale); border: 2px solid var(--accent); border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center;">
+              <div style="font-family: var(--serif); font-size: clamp(17px, 1.4vw, 22px); font-weight: 600; color: var(--accent-deep);">リアルな価値観で 借りる</div>
+              <div style="font-family: var(--mono); font-size: clamp(12px, 0.95vw, 15px); color: var(--ink-soft);">opt-in × ∞ 候補</div>
+            </div>
+            <div style="border-top: 1.5px solid var(--accent); padding-top: 8px;">
+              <div style="font-size: clamp(12px, 0.95vw, 14px); color: var(--ink-muted); font-style: italic; text-align: center;">● 推奨: 自分にない視点が欲しいとき</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="persona-tile">
+          <span class="tag violet">CUSTOM</span>
+          <h5>自作 (My persona)</h5>
+          <p>name + description + prompt (≥30 字) + avatar で完全自作。<br/>"父の口調", "10 年後の自分", "推し" — 信頼の源泉を自分で定義。</p>
+          <div class="actors" style="flex-direction: column; gap: 12px; align-items: stretch; margin-top: 16px;">
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">父さん</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">励ましと厳しさを併せ持つ</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">未来の自分</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">10 年スパンの長期視点で考える</span>
+            </div>
+            <div style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.5;">
+              <b style="color: var(--ink);">先輩</b> <span style="color: var(--ink-muted);">—</span> <span style="color: var(--ink-soft);">経験から無理を諌め、緩やかに導く</span>
+            </div>
+          </div>
+
+          <div style="margin-top: auto; padding: 16px 18px; background: var(--accent-pale); border: 2px solid var(--accent); border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center;">
+              <div style="font-family: var(--serif); font-size: clamp(17px, 1.4vw, 22px); font-weight: 600; color: var(--accent-deep);">プロンプト 1 つで完成</div>
+              <div style="font-family: var(--mono); font-size: clamp(12px, 0.95vw, 15px); color: var(--ink-soft);">prompt ≥30 字 / 1 つ</div>
+            </div>
+            <div style="border-top: 1.5px solid var(--accent); padding-top: 8px;">
+              <div style="font-size: clamp(12px, 0.95vw, 14px); color: var(--ink-muted); font-style: italic; text-align: center;">● 推奨: 自分の信頼を細部まで形にしたい</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================
+         Slide 08 — Business Plan (Free + Affiliate)
+         ==================================================== -->
+    <section class="slide" data-title="Business">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">04 — Business</div>
+          <h2 class="section">全ユーザー基本無料。アフィリエイトで支える。</h2>
+          <p class="kicker" style="margin-top: 8px;">"言い当てた瞬間 = 自然な次の一歩" を活かす、判断疲労ゼロのコマース動線。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap: 28px; flex: 1; align-items: stretch;">
+
+        <!-- LEFT: 2 affiliate channels -->
+        <div class="col" style="gap: 18px;">
+          <div class="card">
+            <div class="num">CHANNEL 01</div>
+            <h4>アプリ画面内のアドホック広告</h4>
+            <p>嗜好プロファイル × 時間帯 × 直近の質問から、UI に溶け込むネイティブ広告枠を 1 画面 1 つだけ。</p>
+            <ul style="list-style: none; margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+              <li style="font-size: clamp(15px, 1.1vw, 17px); color: var(--ink-soft); padding-left: 18px; position: relative;">
+                <span style="position: absolute; left: 0; color: var(--accent); font-weight: 700;">→</span>
+                Home の "最近の決定" の合間に挿入
+              </li>
+              <li style="font-size: clamp(15px, 1.1vw, 17px); color: var(--ink-soft); padding-left: 18px; position: relative;">
+                <span style="position: absolute; left: 0; color: var(--accent); font-weight: 700;">→</span>
+                Score 画面の AI コメント横に 1 枠
+              </li>
+              <li style="font-size: clamp(15px, 1.1vw, 17px); color: var(--ink-soft); padding-left: 18px; position: relative;">
+                <span style="position: absolute; left: 0; color: var(--accent); font-weight: 700;">→</span>
+                沈黙ドメイン (宗教 / 選挙 / 暴力 / 卑猥) では <b>必ず非表示</b>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="num">CHANNEL 02</div>
+            <h4>YES 深堀り回答のアフィリエイトリンク</h4>
+            <p>"明日のランチを決めて" → 店候補にホットペッパー。<b>言い当てた瞬間は、最も自然な次の一歩</b>を踏み出す瞬間。</p>
+            <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div style="background: var(--bg-card-tint); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;">
+                <div style="font-size: 11px; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; text-transform: uppercase;">食事</div>
+                <div style="font-size: 14px; color: var(--ink-soft); margin-top: 2px;">食べログ / ホットペッパー</div>
+              </div>
+              <div style="background: var(--bg-card-tint); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;">
+                <div style="font-size: 11px; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; text-transform: uppercase;">旅行</div>
+                <div style="font-size: 14px; color: var(--ink-soft); margin-top: 2px;">楽天トラベル / じゃらん</div>
+              </div>
+              <div style="background: var(--bg-card-tint); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;">
+                <div style="font-size: 11px; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; text-transform: uppercase;">EC</div>
+                <div style="font-size: 14px; color: var(--ink-soft); margin-top: 2px;">Amazon / 楽天 Associates</div>
+              </div>
+              <div style="background: var(--bg-card-tint); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;">
+                <div style="font-size: 11px; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; text-transform: uppercase;">学習</div>
+                <div style="font-size: 14px; color: var(--ink-soft); margin-top: 2px;">Udemy / Coursera</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Unit economics + Why -->
+        <div class="col" style="gap: 18px;">
+          <div class="card accent">
+            <div class="label" style="color: var(--accent-deep);">単位経済性 (1 ユーザー / 月、内部試算)</div>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+              <tr>
+                <td style="padding: 6px 0; font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft);">LLM (Claude Haiku 中心)</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 22px); color: var(--ink);">- ¥38</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft);">Fargate + Aurora</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 22px); color: var(--ink);">- ¥12</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft);">CloudFront + S3</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 22px); color: var(--ink);">- ¥6</td>
+              </tr>
+              <tr style="border-top: 1.5px solid var(--line);">
+                <td style="padding: 8px 0 4px; font-size: clamp(15px, 1.1vw, 18px); color: var(--ink); font-weight: 600;">コスト合計</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(22px, 1.8vw, 28px); color: var(--ink); font-weight: 600;">¥56</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft);">広告 ARPU</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 22px); color: #2F7A4F;">+ ¥40</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft);">アフィリエイト ARPU</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(18px, 1.5vw, 22px); color: #2F7A4F;">+ ¥120</td>
+              </tr>
+              <tr style="border-top: 2.5px solid var(--accent);">
+                <td style="padding: 10px 0 2px; font-size: clamp(15px, 1.15vw, 18px); color: var(--ink); font-weight: 700;">粗利 / ユーザー</td>
+                <td style="text-align: right; font-family: var(--serif); font-size: clamp(28px, 2.4vw, 38px); color: var(--accent-deep); font-weight: 600;">¥104</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="label">なぜ言い当てとアフィリエイトは相性が良いか</div>
+            <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="font-size: clamp(14px, 1.1vw, 17px); color: var(--ink-soft);">
+                <b style="color: var(--accent);">① 自然な行動連続</b> — "本当に欲しかった答え" の直後は実行に動く瞬間
+              </div>
+              <div style="font-size: clamp(14px, 1.1vw, 17px); color: var(--ink-soft);">
+                <b style="color: var(--accent);">② 超パーソナライズ</b> — 嗜好プロファイルで CTR / CVR が数倍
+              </div>
+              <div style="font-size: clamp(14px, 1.1vw, 17px); color: var(--ink-soft);">
+                <b style="color: var(--accent);">③ 体験を壊さない</b> — "次のアクション" として自然に統合
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 09 — AWS Architecture
+         ==================================================== -->
+    <section class="slide" data-title="AWS Architecture">
+
+      <div class="slide-header" style="margin-bottom: clamp(8px, 1vh, 16px);">
+        <div class="left">
+          <div class="eyebrow">05 — AWS Architecture</div>
+          <h2 class="section" style="font-size: clamp(40px, 4.4vw, 72px);">AWS インフラ全体像。</h2>
+          <p class="kicker" style="margin-top: 6px;">Serverless-First × AWS Well-Architected — 運用ゼロで Agentic AI に集中。</p>
+        </div>
+
+        <!-- サービスバッジ (右上) -->
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; max-width: 380px;">
+          <span style="font-size: clamp(10px, 0.75vw, 12px); padding: 4px 10px; border-radius: 999px; background: var(--accent-pale); color: var(--accent-deep); font-weight: 700; letter-spacing: 0.06em;">Serverless</span>
+          <span style="font-size: clamp(10px, 0.75vw, 12px); padding: 4px 10px; border-radius: 999px; background: var(--accent-pale); color: var(--accent-deep); font-weight: 700; letter-spacing: 0.06em;">Strands Agent</span>
+          <span style="font-size: clamp(10px, 0.75vw, 12px); padding: 4px 10px; border-radius: 999px; background: var(--accent-pale); color: var(--accent-deep); font-weight: 700; letter-spacing: 0.06em;">IAM 認証</span>
+        </div>
+      </div>
+
+      <div style="
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          min-height: 0;
+          background: var(--bg-card);
+          border: 1px solid var(--line);
+          border-radius: 14px;
+          padding: clamp(16px, 2.5vh, 32px) clamp(20px, 3vw, 48px);
+          box-shadow:
+            0 10px 32px rgba(151, 63, 34, 0.06),
+            0 2px 8px rgba(0, 0, 0, 0.03);
+        ">
+        <img src="../architecture/yesman-aws-architecture-simple.drawio.svg" alt="YesMan AWS Architecture" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+      </div>
+
+    </section>
+
+    <!-- ====================================================
+         Slide 10 — AI-DLC で工夫したこと (認知負債の軽減)
+         ==================================================== -->
+    <section class="slide" data-title="AI-DLC Approach">
+      <div class="slide-header" style="margin-bottom: 22px;">
+        <div class="left">
+          <div class="eyebrow">06 — AI-DLC Workflow</div>
+          <h2 class="section">AI-DLC で工夫したこと。</h2>
+          <p class="kicker" style="margin-top: 10px; margin-bottom: 0;">テーマは <b style="color: var(--accent-deep); font-style: normal;">チーム内の認知負債を、軽減する</b>。 AI で <b>ひとりでできること</b> が広がる分、<b>チーム内の理解差</b> も広がる。AI-DLC のプロセスを通じて、その差を縮める設計を試みた。</p>
+        </div>
+      </div>
+
+      <div class="grid-3" style="gap: 20px;">
+        <div class="card">
+          <div class="num">01</div>
+          <h4 style="font-size: clamp(18px, 1.45vw, 23px);">毎日のモブで、設計知見を全員に</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">AI × 個人での開発が中心になり、設計判断や仕様の理解が <b>個人に閉じやすい</b>。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">メンバ全員で <b>モブする時間を毎日確保</b>。設計フェーズから合議する場をルーチン化。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">全員の知見を <b>設計時点で取り込み</b>、認知負債が蓄積する前に解消できる。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="num">02</div>
+          <h4 style="font-size: clamp(18px, 1.45vw, 23px);">大きな判断は ADR で資産化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">モブに不在のメンバが「いつ・何が・<b>なぜ</b> 変わったか」を後から辿れない。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">大きな修正時は <b>Architecture Decision Record (ADR)</b> の発行をルール化。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">判断の <b>経緯と理由</b> がリポジトリに残り、後追いでも文脈を再構築できる。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="num">03</div>
+          <h4 style="font-size: clamp(18px, 1.45vw, 23px);">Skill + hooks で "今の仕様" を最新化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">ADR は判断の履歴。<b>現時点の正しい仕様</b> は別途追わないと把握できない。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">プロジェクト全体ドキュメントを更新する <b>Skill</b> を作成。ソース変更時に <b>hooks で自動実行</b>。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(13px, 1vw, 16px); color: var(--ink-soft); line-height: 1.55;">ドキュメントが <b>常に最新</b>。誰でも・いつでも、現在の仕様にアクセスできる。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 18px; padding: 12px 22px; border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
+        <p style="font-family: var(--serif); font-size: clamp(16px, 1.35vw, 22px); color: var(--ink); font-style: italic; font-weight: 500;">
+          ▶ ひとりが速くなるだけでは足りない。<b style="color: var(--accent-deep); font-style: normal;">チームの理解を、同じ速度で更新する</b>。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 10b — AI-DLC で工夫したこと (補足: その他)
+         ==================================================== -->
+    <section class="slide" data-title="AI-DLC Approach (補足)">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">06 · 補足 — Other Practices</div>
+          <h2 class="section">他にも、こんな工夫を。</h2>
+          <p class="kicker" style="margin-top: 8px;">仕様 → 設計 → 実装の全工程を、AI と人間が協働。"言い当て" の精度を支える透明性。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap: 22px;">
+        <div class="card">
+          <div class="num">01</div>
+          <h4>drawio &amp; HTML 可視化によるメンバーのコンテキスト共通化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">Markdown 形式の資料だけでは、コンポーネント間の関係性や全体像が伝わらず、レビューで認識ズレが起きる。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">設計フェーズに <b>drawio</b> + <b>HTML 可視化</b> を組み込み、アーキ / UX / ストーリーを多層で見せる。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">設計レビューの認識ズレが激減。技術者にも非技術者にも、同じ仕様が違う深さで伝わる。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="num">02</div>
+          <h4>機能拡張で AI-DLC を強化</h4>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--accent-deep);">⚠ 問題</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">AI-DLC コア単独では、Security / テスト / UI 品質などの観点が薄く、AI が自由気ままに進む傾向。</div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: var(--ink-soft);">🔧 対策</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;"><b>opt-in 拡張機能</b> と <b>Superpowers</b> を組み合わせ、品質ガードを多層化。</div>
+              <div style="margin-top: 6px; display: flex; flex-direction: column; gap: 4px; font-size: clamp(12px, 0.9vw, 14px); color: var(--ink-muted);">
+                <div>opt-in: 🛡️ Security Baseline / 🔬 PBT / 🛠️ Construction Flow <span style="color: var(--accent); font-weight: 700;">(独自)</span> / 🎨 Frontend Design <span style="color: var(--accent); font-weight: 700;">(独自)</span></div>
+                <div>Superpowers: brainstorming / TDD / executing-plans / parallel agents</div>
+              </div>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom: 4px; color: #2F7A4F;">✓ 効果</div>
+              <div style="font-size: clamp(14px, 1.05vw, 17px); color: var(--ink-soft); line-height: 1.55;">品質ガード × スピード両立。AI の暴走を防ぎながら、4 週間で 12 ユニット完走。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; padding: 14px 22px; border-left: 4px solid var(--accent); background: var(--accent-pale); border-radius: 0 8px 8px 0;">
+        <p style="font-family: var(--serif); font-size: clamp(18px, 1.5vw, 24px); color: var(--ink); font-style: italic; font-weight: 500;">
+          ▶ 結果: <b style="color: var(--accent-deep); font-style: normal;">4 週間 / 12 ユニット / 全工程の追跡可能性</b>を両立。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 11 — Demo Scenario
+         ==================================================== -->
+    <section class="slide" data-title="Demo">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">07 — Demo Scenario</div>
+          <h2 class="section">デモシナリオ (5 分以内)。</h2>
+          <p class="kicker" style="margin-top: 8px;"><code style="font-family: var(--mono); font-size: 15px; background: var(--bg-card-tint); padding: 2px 6px; border-radius: 4px;">MOCK_SEED_DEMO_DECISIONS=true</code> で 30 日分の履歴 + 嗜好プロファイルが初期投入。</p>
+        </div>
+      </div>
+
+      <div class="grid-2" style="flex: 1; gap: 32px;">
+        <div class="demo-list">
+          <div class="demo-step">
+            <div class="step-no">01</div>
+            <div class="step-body">
+              <h5>サインイン → Onboarding swipe</h5>
+              <p>性格 × 生活の 25 問を swipe、確信ラインで「もういい、進む」。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">02</div>
+            <div class="step-body">
+              <h5>ペルソナ 3 人を mix</h5>
+              <p>ビルトイン 1 + 知り合い 1 + マイ 1 を選択、source breakdown を確認。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">03</div>
+            <div class="step-body">
+              <h5>「明日のランチを決めて」</h5>
+              <p>テキスト or 音声入力 → MangaStage で 3 人格が SSE streaming 議論。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">04</div>
+            <div class="step-body">
+              <h5>右スワイプ Yes → ✨🎉✨</h5>
+              <p>コンボ tier badge + confetti + マスコット 🤵 が「言い当てた!」。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">05</div>
+            <div class="step-body">
+              <h5>「結婚すべき?」 → No 連打</h5>
+              <p>プリフェッチで体感ゼロ秒、microcopy が stage 別に変化 (LLM 動的)。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-list">
+          <div class="demo-step">
+            <div class="step-no">06</div>
+            <div class="step-body">
+              <h5>/score ダッシュボード</h5>
+              <p>円形チャート + 30 日推移 + AI 可変コメント + 最近の Yes 採択 20 件 (🌟 一発 / 🔄 N 回目)。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">07</div>
+            <div class="step-body">
+              <h5>/preferences で嗜好可視化</h5>
+              <p>採択傾向 / 棄却傾向 / ペルソナ親和度バー / 推定タグ pill を一覧。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">08</div>
+            <div class="step-body">
+              <h5>「来週の選挙、誰に投票?」 → 🤐</h5>
+              <p>沈黙演出発動。ダーク背景 + ⛪🗳️⚔️🔞、Bedrock Guardrails で二重ブロック。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">09</div>
+            <div class="step-body">
+              <h5>LLM_PROVIDER を切替</h5>
+              <p><code style="font-family: var(--mono); font-size: 14px;">mock → claude-cli → litellm</code> を env 一発で。本物の Bedrock / Ollama / Codex を比較。</p>
+            </div>
+          </div>
+          <div class="demo-step">
+            <div class="step-no">10</div>
+            <div class="step-body">
+              <h5>10 連 Yes 達成 → 🏆 大爆発</h5>
+              <p>3 wave 金色 confetti + 「<b>素晴らしくダメに仕上がっています</b>」マイクロコピーで締め。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 12 — Future / Roadmap
+         ==================================================== -->
+    <section class="slide" data-title="Future">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">08 — Future</div>
+          <h2 class="section">今後の展望。</h2>
+          <p class="kicker" style="margin-top: 8px;">もっと多くの場面で Yes 、その先の手続きも全部 AI に。</p>
+        </div>
+      </div>
+
+      <div class="horizon" style="grid-template-columns: 1fr;">
+        <div class="horizon-col">
+          <h4>Yes だけで、選んで、実行して、完了</h4>
+          <ul>
+            <li>iOS / Android ネイティブ wrap (Capacitor)</li>
+            <li>Apple Watch / Wear OS で 1-tap Yes</li>
+            <li>Siri / Google Assistant 連携 (音声で起動)</li>
+            <li>カレンダー連動 (今夜の予定を決めて)</li>
+            <li>外部情報連動 (天気 / 交通 / 現在地) で文脈に応じた提案</li>
+            <li>Agentic 自動予約 (レストラン / 美容院 / 病院 を Yes ワンタップで完了)</li>
+            <li>Agentic 自動電話発信 (注文 / 問い合わせ / 予約確認を AI 音声が代行)</li>
+            <li>Agentic 自動購入 (Amazon / 楽天 / EC で Yes → 決済まで一気通貫)</li>
+            <li>月次「あなたの判断レポート」(Premium)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px; padding: 16px 20px; background: var(--accent-pale); border-radius: 10px; border-left: 3px solid var(--accent);">
+        <p style="font-family: var(--serif); font-size: 18px; color: var(--ink); font-style: italic;">
+          「人間最後の仕事は、YES で承認すること」 — その世界を、技術と倫理の両輪で作っていく。
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         Slide 13 — Closing
+         ==================================================== -->
+    <section class="slide" data-title="Closing">
+      <div class="slide-header">
+        <div class="left">
+          <div class="eyebrow">— Thank you</div>
+        </div>
+      </div>
+
+      <div class="closing" style="flex-direction: row; align-items: stretch; gap: clamp(40px, 5vw, 80px);">
+
+        <!-- LEFT: メッセージ -->
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 28px;">
+          <div class="quote-big">
+            <p>決められない人に、</p>
+            <p style="padding-left: 3em; margin-bottom: 0.5em;"><em>言い当てる優しさ</em>を。</p>
+            <p>考えたくない人に、</p>
+            <p style="padding-left: 3em;"><em>心地よくダメになる自由</em>を。</p>
+          </div>
+          <div class="sig">— あなたの最後の仕事は、YES で承認すること。</div>
+          <div style="font-family: var(--serif); font-style: italic; font-size: clamp(16px, 1.2vw, 20px); color: var(--ink-muted); margin-top: 4px;">— ぐうたラボ —</div>
+        </div>
+
+        <!-- RIGHT: QR カード (Live Demo) -->
+        <div style="
+            flex: 0 0 clamp(280px, 26vw, 380px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(14px, 1.5vh, 22px);
+            padding: clamp(24px, 3vh, 36px) clamp(20px, 2vw, 32px);
+            background: var(--bg-card);
+            border: 2.5px solid var(--accent);
+            border-radius: 18px;
+            position: relative;
+          ">
+          <!-- 付箋: ダミー注記 (実装時は削除可) -->
+          <div style="
+              position: absolute;
+              top: -14px; right: -14px;
+              background: #FFF1A8;
+              border: 1.5px solid #E2C347;
+              color: #3D2E00;
+              font-family: 'Hiragino Maru Gothic ProN', var(--sans);
+              font-size: clamp(10px, 0.75vw, 12px);
+              font-weight: 700;
+              padding: 5px 10px;
+              border-radius: 3px;
+              transform: rotate(6deg);
+              box-shadow: 2px 3px 0 rgba(60, 40, 10, 0.12);
+              letter-spacing: 0.06em;
+            ">📝 後で本物 QR と差し替え</div>
+
+          <div style="
+              font-family: var(--serif);
+              font-size: clamp(20px, 1.7vw, 28px);
+              color: var(--ink);
+              font-weight: 600;
+              text-align: center;
+              letter-spacing: 0.02em;
+            ">📱 今すぐ試す</div>
+
+          <!-- 擬似 QR (25x25 viewBox) -->
+          <svg viewBox="0 0 25 25" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" style="
+              width: clamp(180px, 18vw, 260px);
+              height: clamp(180px, 18vw, 260px);
+              background: white;
+              padding: 8px;
+              border: 1.5px solid var(--line);
+              border-radius: 6px;
+            ">
+            <!-- finder pattern: top-left -->
+            <rect x="0" y="0" width="7" height="7" fill="#1A1814"/>
+            <rect x="1" y="1" width="5" height="5" fill="#FFFFFF"/>
+            <rect x="2" y="2" width="3" height="3" fill="#1A1814"/>
+            <!-- finder pattern: top-right -->
+            <rect x="18" y="0" width="7" height="7" fill="#1A1814"/>
+            <rect x="19" y="1" width="5" height="5" fill="#FFFFFF"/>
+            <rect x="20" y="2" width="3" height="3" fill="#1A1814"/>
+            <!-- finder pattern: bottom-left -->
+            <rect x="0" y="18" width="7" height="7" fill="#1A1814"/>
+            <rect x="1" y="19" width="5" height="5" fill="#FFFFFF"/>
+            <rect x="2" y="20" width="3" height="3" fill="#1A1814"/>
+
+            <!-- alignment pattern (bottom-right area) -->
+            <rect x="16" y="16" width="5" height="5" fill="#1A1814"/>
+            <rect x="17" y="17" width="3" height="3" fill="#FFFFFF"/>
+            <rect x="18" y="18" width="1" height="1" fill="#1A1814"/>
+
+            <!-- timing patterns (horizontal at y=6, vertical at x=6) -->
+            <rect x="8"  y="6" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="6" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="6" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="6" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="6" width="1" height="1" fill="#1A1814"/>
+            <rect x="6" y="8"  width="1" height="1" fill="#1A1814"/>
+            <rect x="6" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="6" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="6" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="6" y="16" width="1" height="1" fill="#1A1814"/>
+
+            <!-- data cells: 擬似ランダム配置 -->
+            <rect x="8"  y="0" width="1" height="1" fill="#1A1814"/>
+            <rect x="9"  y="0" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="0" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="0" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="0" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="0" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="1" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="1" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="1" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="1" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="1" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="9"  y="2" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="2" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="2" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="2" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="2" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="3" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="3" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="3" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="3" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="3" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="9"  y="4" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="4" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="4" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="4" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="4" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="5" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="5" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="5" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="5" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="5" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="0" y="8"  width="1" height="1" fill="#1A1814"/>
+            <rect x="2" y="8"  width="1" height="1" fill="#1A1814"/>
+            <rect x="4" y="8"  width="1" height="1" fill="#1A1814"/>
+            <rect x="8" y="8"  width="1" height="1" fill="#1A1814"/>
+            <rect x="9" y="8"  width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="8" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="8" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="8" width="1" height="1" fill="#1A1814"/>
+            <rect x="18" y="8" width="1" height="1" fill="#1A1814"/>
+            <rect x="20" y="8" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="8" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="8" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="1" y="9"  width="1" height="1" fill="#1A1814"/>
+            <rect x="3" y="9"  width="1" height="1" fill="#1A1814"/>
+            <rect x="8" y="9"  width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="9" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="9" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="9" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="9" width="1" height="1" fill="#1A1814"/>
+            <rect x="19" y="9" width="1" height="1" fill="#1A1814"/>
+            <rect x="21" y="9" width="1" height="1" fill="#1A1814"/>
+            <rect x="23" y="9" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="0" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="2" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="5" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="9" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="18" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="20" y="10" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="10" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="1" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="4" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="8" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="19" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="21" y="11" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="11" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="0" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="3" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="5" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="9" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="18" y="12" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="12" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="2" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="4" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="8" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="19" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="21" y="13" width="1" height="1" fill="#1A1814"/>
+            <rect x="23" y="13" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="0" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="3" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="9" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="18" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="20" y="14" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="14" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="1" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="4" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="8" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="19" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="21" y="15" width="1" height="1" fill="#1A1814"/>
+            <rect x="23" y="15" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="2" y="16" width="1" height="1" fill="#1A1814"/>
+            <rect x="9" y="16" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="16" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="16" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="16" width="1" height="1" fill="#1A1814"/>
+            <rect x="23" y="16" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8" y="17" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="17" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="17" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="17" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="17" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="18" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="18" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="18" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="18" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="18" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="9"  y="19" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="19" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="19" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="19" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="19" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="20" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="20" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="20" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="20" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="20" width="1" height="1" fill="#1A1814"/>
+            <rect x="23" y="20" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="9"  y="21" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="21" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="21" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="21" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="21" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="21" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="11" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="19" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="21" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="22" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="22" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="9"  y="23" width="1" height="1" fill="#1A1814"/>
+            <rect x="12" y="23" width="1" height="1" fill="#1A1814"/>
+            <rect x="14" y="23" width="1" height="1" fill="#1A1814"/>
+            <rect x="16" y="23" width="1" height="1" fill="#1A1814"/>
+            <rect x="18" y="23" width="1" height="1" fill="#1A1814"/>
+            <rect x="20" y="23" width="1" height="1" fill="#1A1814"/>
+            <rect x="23" y="23" width="1" height="1" fill="#1A1814"/>
+
+            <rect x="8"  y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="10" y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="13" y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="15" y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="17" y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="19" y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="22" y="24" width="1" height="1" fill="#1A1814"/>
+            <rect x="24" y="24" width="1" height="1" fill="#1A1814"/>
+          </svg>
+
+          <div style="text-align: center; display: flex; flex-direction: column; gap: 4px;">
+            <div style="font-family: var(--mono); font-size: clamp(15px, 1.15vw, 19px); color: var(--ink); font-weight: 700; letter-spacing: 0.02em;">yesman.app</div>
+            <div style="font-size: clamp(12px, 0.85vw, 14px); color: var(--ink-muted);">スマホで読み取り、今すぐ体験</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="footer">
+      <div class="brand"><b>YesMan</b> × ぐうたラボ — AWS Summit Japan 2026 / AI-DLC ハッカソン</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="nav-controls">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous slide">‹</button>
+  <button class="nav-btn" id="nextBtn" aria-label="Next slide">›</button>
+  <div class="pager" id="pager">01 / 12</div>
+</div>
+
+<div id="blackout" style="display:none; position:fixed; inset:0; background:#000; z-index:200;"></div>
+
+<div id="helpOverlay" style="display:none; position:fixed; inset:0; background:rgba(20,20,20,0.92); z-index:300; align-items:center; justify-content:center;">
+  <div style="background:#FFF; color:#1A1814; padding:40px 56px; border-radius:14px; max-width:560px; font-family: var(--sans);">
+    <h3 style="font-family: var(--serif); font-size:28px; margin-bottom:18px; color: var(--accent);">キーボード操作</h3>
+    <table style="font-size:16px; line-height:2;">
+      <tr><td style="width:120px;"><b>→ / Space</b></td><td>次のスライド</td></tr>
+      <tr><td><b>← / PageUp</b></td><td>前のスライド</td></tr>
+      <tr><td><b>Home / End</b></td><td>先頭 / 末尾</td></tr>
+      <tr><td><b>P</b></td><td>発表モード切替 (UI 非表示)</td></tr>
+      <tr><td><b>B</b></td><td>黒画面 toggle</td></tr>
+      <tr><td><b>F</b></td><td>フルスクリーン</td></tr>
+      <tr><td><b>画面右半</b></td><td>次へ / <b>左半</b> 戻る</td></tr>
+      <tr><td><b>?</b></td><td>このヘルプ</td></tr>
+      <tr><td><b>Esc</b></td><td>閉じる</td></tr>
+    </table>
+    <div style="margin-top:20px; font-size:13px; color: var(--ink-muted);">投影開始前に <b>F</b> でフルスクリーン → <b>P</b> で発表モード ON を推奨</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const deck = document.getElementById('deck');
+    const pager = document.getElementById('pager');
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const blackout = document.getElementById('blackout');
+    const helpOverlay = document.getElementById('helpOverlay');
+    let idx = 0;
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      pager.textContent = `${pad(idx + 1)} / ${pad(slides.length)}`;
+      progressBar.style.width = `${((idx + 1) / slides.length) * 100}%`;
+
+      const hash = `#${idx + 1}`;
+      if (location.hash !== hash) history.replaceState(null, '', hash);
+    }
+    function go(n) {
+      idx = Math.max(0, Math.min(slides.length - 1, n));
+      render();
+    }
+    function togglePresenting() {
+      deck.classList.toggle('presenting');
+    }
+    function toggleBlackout() {
+      blackout.style.display = (blackout.style.display === 'none') ? 'block' : 'none';
+    }
+    function toggleHelp() {
+      const showing = helpOverlay.style.display !== 'none';
+      helpOverlay.style.display = showing ? 'none' : 'flex';
+    }
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      // help / blackout の時は Esc で閉じる
+      if (e.key === 'Escape') {
+        if (helpOverlay.style.display === 'flex') { helpOverlay.style.display = 'none'; return; }
+        if (blackout.style.display === 'block')   { blackout.style.display = 'none';    return; }
+      }
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(idx + 1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp')                  { e.preventDefault(); go(idx - 1); }
+      else if (e.key === 'Home')                                              { e.preventDefault(); go(0); }
+      else if (e.key === 'End')                                               { e.preventDefault(); go(slides.length - 1); }
+      else if (e.key === 'p' || e.key === 'P')                                { e.preventDefault(); togglePresenting(); }
+      else if (e.key === 'b' || e.key === 'B')                                { e.preventDefault(); toggleBlackout(); }
+      else if (e.key === 'f' || e.key === 'F')                                { e.preventDefault(); toggleFullscreen(); }
+      else if (e.key === '?' || e.key === '/')                                { e.preventDefault(); toggleHelp(); }
+    });
+
+    prevBtn.addEventListener('click', () => go(idx - 1));
+    nextBtn.addEventListener('click', () => go(idx + 1));
+
+    // クリックナビ: 画面の右半クリックで次、左半クリックで前 (発表モード時のみ)
+    deck.addEventListener('click', (e) => {
+      if (!deck.classList.contains('presenting')) return;
+      const rect = deck.getBoundingClientRect();
+      const isRight = (e.clientX - rect.left) > rect.width / 2;
+      go(idx + (isRight ? 1 : -1));
+    });
+
+    // touch swipe
+    let touchX = null;
+    document.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (touchX === null) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+      touchX = null;
+    }, { passive: true });
+
+    // initial hash support
+    const initial = parseInt((location.hash || '#1').slice(1), 10);
+    if (Number.isFinite(initial) && initial >= 1 && initial <= slides.length) {
+      idx = initial - 1;
+    }
+    render();
+  })();
+</script>
+
+</body>
+</html>

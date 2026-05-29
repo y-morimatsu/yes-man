@@ -3,6 +3,11 @@
 NFR Req I2 反映 + ultrathink Imp1 (ConsensusOutput vs DecisionResponse 分離):
 - user_input max_length=100_000 (413 reject)
 - ProfileResponse パターン踏襲 (Pydantic v2 + ConfigDict from_attributes=True)
+
+2026-05-24 v4 (persona unification): 3 source mix 選択対応.
+- selected_personas: [{source, id}] — builtin/anonymous/my の混在選択 (max 3)
+- 旧 selected_persona_ids + persona_source は backward-compat で維持 (auto-migration)
+- anonymous の random sampling + self injection は廃止
 """
 from __future__ import annotations
 
@@ -16,11 +21,33 @@ from pydantic import BaseModel, ConfigDict, Field
 # ============================================================
 # Request
 # ============================================================
+PersonaSourceLiteral = Literal["builtin", "anonymous", "my"]
+
+
+class SelectedPersonaDTO(BaseModel):
+    """3 source mix 選択用 entry. source ごとに id の解決先が異なる:
+    - builtin / my: persona_repo の DB UUID
+    - anonymous: pool_repo の persona_id (sub-deterministic UUID)
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: PersonaSourceLiteral
+    id: UUID
+
+
 class DecisionRequestDTO(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     user_input: str = Field(min_length=1, max_length=100_000)
+    # 2026-05-24 v4: 新規 — 3 source mix 選択. 指定時はこれを優先 (max 3).
+    selected_personas: list[SelectedPersonaDTO] | None = Field(default=None, max_length=3)
+    # backward compat (~v3-γ): builtin/my 選択. selected_personas 未指定時のみ使用.
     selected_persona_ids: list[UUID] | None = None
+    # 2026-05-23: Drill-down chain — Yes 連鎖時に親提案列を context として渡す.
+    chain_context: list[str] | None = Field(default=None, max_length=10)
+    # backward compat (~v3-γ): persona source 選択. selected_personas 未指定時のみ使用.
+    persona_source: Literal["builtin", "anonymous"] = "builtin"
 
 
 class ChoiceRequest(BaseModel):
@@ -83,6 +110,8 @@ class ScoreResponse(BaseModel):
     ratio: float | None  # Yes 比率 = (total - no_count) / total、total=0 → None
     message: str
     history: list[ScoreHistoryPointResponse] = []
+    # Demo mode (2026-05-28): ドメイン別委任率の内訳 (例 {"食事":0.91,...})。通常は None。
+    breakdown: dict[str, float] | None = None
 
 
 class DecisionHistoryItemDTO(BaseModel):

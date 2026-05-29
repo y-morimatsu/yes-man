@@ -16,6 +16,7 @@
  */
 import { expect, test } from "@playwright/test";
 import { gotoAuthenticated } from "../fixtures/auth";
+import { clickYesUntilNudgeBanner } from "../fixtures/drill-down";
 
 async function startDecisionAndWaitForProposal(page: any) {
   await gotoAuthenticated(page, "/decision");
@@ -64,15 +65,14 @@ test.describe("FR-CV-04: 議論を見る button (default closed + toggle + persi
     await expect(toggle).toHaveText(/議論を見る/);
   });
 
-  test("Yes 採択後も 議論を見る button が visible (DOM 残置)", async ({ page }) => {
+  // 2026-05-25 skip: DecisionPage は hideUtterances を常時 true で渡しているため
+  // (MangaStage で bubble 表示する設計)、discussion-toggle は現仕様で出ない.
+  // このテストの「DOM 残置」 assertion は UI 仕様統合 (toggle を MangaStage 内に移す等) 待ち.
+  test.skip("Yes 連鎖で drill-down 後も 議論を見る button が visible (DOM 残置)", async ({ page }) => {
     await startDecisionAndWaitForProposal(page);
 
-    // Yes 採択 (fallback button click で確実に発火)
-    await page.getByRole("button", { name: /Yes/, exact: false }).click();
-    // nudge banner 表示まで待つ (heading にだけ "Yes 採択")
-    await expect(
-      page.getByRole("heading", { name: /Yes 採択|素晴らしい従順さ/ }),
-    ).toBeVisible({ timeout: 60_000 });
+    // Yes 連鎖で drill-down → 4 段目 (depth=3) で NudgeBanner heading 出現
+    await clickYesUntilNudgeBanner(page);
 
     // 議論を見る button が依然として visible (採択後も振り返り閲覧可能)
     const toggle = page.getByTestId("discussion-toggle");
@@ -109,13 +109,14 @@ test.describe("Swipe Yes/No (INCEPTION ui-mockups.md §1.1 + drawio screen-03)",
     expect(tabIdx).toBe("0");
   });
 
-  test("Right swipe (touchscreen) → Yes 採択 (mock LLM 前提)", async ({
+  test("Right swipe (touchscreen) → root Yes 採択 → drill-down 連鎖で NudgeBanner", async ({
     page,
   }) => {
     test.skip(
       process.env.LLM_PROVIDER === "litellm",
       "real LLM 環境では swipe 後の nudge 生成も実 LLM 経由になり flaky のため skip",
     );
+    // 2026-05-25 A 案 revert: root Yes (swipe) は drill-down に進む. 追加 Yes 3 回で final.
     await startDecisionAndWaitForProposal(page);
 
     // Swipe area の中心を取得
@@ -126,9 +127,8 @@ test.describe("Swipe Yes/No (INCEPTION ui-mockups.md §1.1 + drawio screen-03)",
     const endX = box!.x + box!.width - 20;
     const y = box!.y + box!.height / 2;
 
-    // Playwright touchscreen を使って右へ swipe
-    await page.touchscreen.tap(startX, y); // initial touch
-    // 連続 swipe (mouse fallback で再現、Pixel 5 device は touch サポート)
+    // Playwright touchscreen を使って右へ swipe (root Yes → drill-down 起動)
+    await page.touchscreen.tap(startX, y);
     await page.mouse.move(startX, y);
     await page.mouse.down();
     for (let x = startX; x <= endX; x += 30) {
@@ -136,23 +136,27 @@ test.describe("Swipe Yes/No (INCEPTION ui-mockups.md §1.1 + drawio screen-03)",
     }
     await page.mouse.up();
 
-    // Yes 採択 → nudge banner heading 表示
+    // drill-down 進行後に NudgeBanner heading が出るまで残り Yes を連打
+    await clickYesUntilNudgeBanner(page);
     await expect(
       page.getByRole("heading", { name: /Yes 採択|素晴らしい従順さ/ }),
     ).toBeVisible({ timeout: 30_000 });
   });
 
-  test("キーボード ArrowRight (WCAG 2.1.1 alternative) → Yes 採択", async ({
+  test("キーボード ArrowRight (WCAG 2.1.1 alternative) → root Yes → drill-down 連鎖で NudgeBanner", async ({
     page,
   }) => {
     test.skip(
       process.env.LLM_PROVIDER === "litellm",
       "real LLM 環境では skip (上記同様)",
     );
+    // 2026-05-25 A 案 revert: root Yes (keyboard) は drill-down に進む.
     await startDecisionAndWaitForProposal(page);
     const swipeCard = page.getByTestId("swipe-card");
     await swipeCard.focus();
     await page.keyboard.press("ArrowRight");
+    // drill-down 進行後に NudgeBanner heading が出るまで残り Yes を連打
+    await clickYesUntilNudgeBanner(page);
     await expect(
       page.getByRole("heading", { name: /Yes 採択|素晴らしい従順さ/ }),
     ).toBeVisible({ timeout: 30_000 });

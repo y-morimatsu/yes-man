@@ -1,0 +1,17 @@
+{
+  "name": "@yesman/bedrock-proxy",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Minimal Lambda proxy that forwards browser requests to Bedrock Converse API. Deployed as Function URL behind CloudFront /api/*.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "handler.mjs",
+  "scripts": {
+    "test": "echo \"no tests yet\" && exit 0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.700.0"
+  }
+}

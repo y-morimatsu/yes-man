@@ -27,7 +27,9 @@ Thumbs.db
 !.aidlc-rule-details/extensions/frontend/**
 
 # === Claude Code session / settings ===
-.claude/
+.claude/*
+# 共有スキルは追跡対象 (settings*.json は引き続き無視)
+!.claude/skills/
 
 # === Python (CONSTRUCTION フェーズで apps/api 配下に登場予定) ===
 __pycache__/
@@ -42,6 +44,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+!infra/lib/
+!infra/lib/**
 lib64/
 parts/
 sdist/

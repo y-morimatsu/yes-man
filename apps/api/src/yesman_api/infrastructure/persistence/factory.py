@@ -90,7 +90,13 @@ class RepositoryFactory:
         else:
             # Production Mock backend: builtin personas を alembic 0002 と等価で seed
             # (DecisionEngine の SYSTEM_USER_ID fallback path を機能させる)
-            self._mock_store = MockStore(seed_builtin=True)
+            # 2026-05-27: AWS Lambda multi-instance 対応で S3 永続化を有効化
+            # (env 未設定なら in-memory のまま動作).
+            self._mock_store = MockStore(
+                seed_builtin=True,
+                s3_bucket=config.mock_store_s3_bucket,
+                s3_key=config.mock_store_s3_key,
+            )
 
     @asynccontextmanager
     async def bundle(self) -> AsyncIterator[RepositoryBundle]:
@@ -117,16 +123,23 @@ class RepositoryFactory:
         else:
             assert self._mock_store is not None
             store = self._mock_store
-            yield RepositoryBundle(
-                profile=MockProfileRepository(store),
-                decision=MockDecisionRepository(store),
-                preference=MockPreferenceProfileRepository(store),
-                silence=MockSilenceLogRepository(store),
-                persona=MockPersonaRepository(store),
-                persona_report=MockPersonaReportRepository(store),
-                user_persona_selection=MockUserPersonaSelectionRepository(store),
-                health=MockDatabaseHealth(),
-            )
+            # 2026-05-27 fix: AWS Lambda multi-instance による mock storage 分断回避.
+            # bundle 開始時に S3 から最新 state を load、終了時に save. 単一 instance
+            # 環境 (local dev / unit test) では mock_store_s3_bucket 未設定で no-op.
+            store.load_from_s3()
+            try:
+                yield RepositoryBundle(
+                    profile=MockProfileRepository(store),
+                    decision=MockDecisionRepository(store),
+                    preference=MockPreferenceProfileRepository(store),
+                    silence=MockSilenceLogRepository(store),
+                    persona=MockPersonaRepository(store),
+                    persona_report=MockPersonaReportRepository(store),
+                    user_persona_selection=MockUserPersonaSelectionRepository(store),
+                    health=MockDatabaseHealth(),
+                )
+            finally:
+                store.save_to_s3()
 
     async def dispose(self) -> None:
         """Dispose engine on shutdown."""

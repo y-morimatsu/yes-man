@@ -27,8 +27,10 @@ from yesman_api.infrastructure.decision.llm_providers.factory import LLMProvider
 from yesman_api.infrastructure.learning.consumer import DecisionConfirmedConsumer
 from yesman_api.infrastructure.learning.supervisor import ConsumerSupervisor
 from yesman_api.infrastructure.persistence.factory import RepositoryFactory
+from yesman_api.infrastructure.persistence.mock_pool_repository import MockPoolRepository
 from yesman_api.interface.http.decisions import router as decisions_router
 from yesman_api.interface.http.health import router as health_router
+from yesman_api.interface.http.persona_pool import router as persona_pool_router
 from yesman_api.interface.http.persona_selections import router as persona_selections_router
 from yesman_api.interface.http.personas import router as personas_router
 from yesman_api.interface.http.preferences import router as preferences_router
@@ -72,7 +74,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     event_publisher = await event_factory.create()
 
     # U4 シングルトン (stateless / process-wide)
-    silence_guard = SilenceGuard(llm=llm_provider, salt=config.silence_hash_salt)
+    silence_guard = SilenceGuard(
+        llm=llm_provider,
+        salt=config.silence_hash_salt,
+        llm_enabled=config.silence_guard_llm_enabled,
+    )
     orchestrator = ConsensusOrchestrator()
     nudge_cache = NudgeCache(ttl=config.nudge_cache_ttl_seconds)
     nudge_generator = NudgeMessageGenerator(
@@ -87,6 +93,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # U6 voice: VoiceProviderFactory + adapter は app-wide singleton (stateless)
     voice_factory = VoiceProviderFactory(config)
     voice_provider = await voice_factory.create()
+
+    # v3-γ anonymous-strangers: in-memory pool singleton (NFR-1)
+    # 1 user only でも合議が成立するよう fixture 4 名分を seed (ja, ライフスタイル別「知り合い」)。
+    # SqlModel backend 経路は MVP 未実装、本番化時に追加する TODO は NFR-1 に記録済。
+    anonymous_pool = MockPoolRepository(seed_fixtures=True)
 
     # DecisionEngine は per-request の RepositoryBundle を使うため、
     # ファクトリ参照を保持し handler 内で組み立てる方が綺麗だが、MVP では
@@ -131,14 +142,27 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # Mock backend + MOCK_SEED_DEMO_DECISIONS=true で、デモ用の過去 30 日履歴を投入
     # (ScoreLineChart の右肩上がりトレンド可視化用)
+    # 2026-05-27: S3 永続化が有効な場合、既存 state があれば seed をスキップし
+    # 他 instance の state を尊重する (multi-instance での重複 seed 防止).
     if config.mock_seed_demo_decisions and repo_factory.mock_store is not None:
-        seeded = repo_factory.mock_store.seed_demo_decisions(user_id=config.mock_user_sub)
-        if seeded > 0:
+        store = repo_factory.mock_store
+        loaded_from_s3 = store.load_from_s3()
+        if loaded_from_s3 and len(store.decisions) > 0:
             get_logger("startup").info(
-                "mock.seed_demo_decisions",
-                user_id=str(config.mock_user_sub),
-                seeded_count=seeded,
+                "mock.s3_state_loaded",
+                source="s3",
+                decision_count=len(store.decisions),
             )
+        else:
+            seeded = store.seed_demo_decisions(user_id=config.mock_user_sub)
+            if seeded > 0:
+                get_logger("startup").info(
+                    "mock.seed_demo_decisions",
+                    user_id=str(config.mock_user_sub),
+                    seeded_count=seeded,
+                )
+                # 初回 seed を S3 に保存 → 後続 instance は load_from_s3 で同じ state を共有
+                store.save_to_s3()
 
     app.state.repo_factory = repo_factory
     app.state.auth_factory = auth_factory
@@ -156,6 +180,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.persona_moderator = persona_moderator  # U-Persona
     app.state.voice_factory = voice_factory  # U6
     app.state.voice_provider = voice_provider  # U6
+    app.state.anonymous_pool = anonymous_pool  # v3-γ anonymous-strangers
     app.state.config = config
 
     get_logger("startup").info(
@@ -232,6 +257,7 @@ def create_app() -> FastAPI:
     app.include_router(personas_router)  # U-Persona
     app.include_router(persona_selections_router)  # U-Persona
     app.include_router(voice_router)  # U6
+    app.include_router(persona_pool_router)  # v3-γ anonymous-strangers
     return app
 
 

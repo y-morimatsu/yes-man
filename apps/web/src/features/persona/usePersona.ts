@@ -1,12 +1,11 @@
 /**
  * usePersona — React Query hooks for Persona endpoints (U7d FD §4).
+ *
+ * 2026-05-24 v4: 旧 useSelection / useSetSelection / useResetSelection を撤去.
+ *   新 unified selection は features/persona/useUnifiedSelection.ts (localStorage ベース).
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type {
-  PersonaCreate,
-  PersonaSelectionUpdate,
-  SharedSort,
-} from "@yesman/api-client";
+import type { PersonaCreate, PersonaUpdate, SharedSort } from "@yesman/api-client";
 import { useApi } from "../../shell/ApiProvider";
 
 export function useMyPersonas() {
@@ -49,32 +48,15 @@ export function useCreatePersona() {
   });
 }
 
-export function useSelection() {
-  const api = useApi();
-  return useQuery({
-    queryKey: ["persona", "selection", "me"],
-    queryFn: () => api.personaSelections.getMe(),
-  });
-}
-
-export function useSetSelection() {
+export function useUpdatePersona() {
   const api = useApi();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (payload: PersonaSelectionUpdate) => api.personaSelections.setMe(payload),
+    mutationFn: ({ id, payload }: { id: string; payload: PersonaUpdate }) =>
+      api.personas.update(id, payload),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["persona", "selection"] });
+      qc.invalidateQueries({ queryKey: ["persona", "list", "my"] });
     },
   });
 }
 
-export function useResetSelection() {
-  const api = useApi();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: () => api.personaSelections.resetMe(),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["persona", "selection"] });
-    },
-  });
-}

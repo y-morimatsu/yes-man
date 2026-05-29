@@ -1,0 +1,569 @@
+<!--
+  Visual supplement (VIS-SUPP-03): drill-down-auto-open / final proposal card before-after.
+
+  Purpose:
+    - Show the depth=MAX_DRILL_DEPTH (=4) final proposal card UI for the
+      drill-down-auto-open feature, contrasting current (declarative form +
+      manual CTA click) vs new (interrogative "open?" + auto window.open on Yes).
+    - Reviewed in browser at Pixel 5 viewport (393 x 851) per FE-DESIGN-05.
+
+  Related docs:
+    - aidlc-docs/inception/drill-down-auto-open/requirements.md (v2)
+    - aidlc-docs/inception/drill-down-auto-open/application-design.md
+    - aidlc-docs/inception/application-design/screens/03-proposal-card.svg (FE-DESIGN-01 canonical)
+
+  Palette (FE-DESIGN-03 INCEPTION values):
+    cream    #FFF7E8   (page bg)
+    card     #FFFCF4   (proposal card bg)
+    text     #2E2418   (card body italic serif)
+    coral    #E8775A   (CTA / pink-nudge text)
+    pink-bg  #FFD6E0   (pink nudge banner)
+    pink-bd  #FF8FAE   (pink nudge border)
+    blue-bg  #E7F0FF   (intermediate stage hint bg — NOT shown here, final stage only)
+    success  #22C55E   (external CTA border)
+    success-grad linear-gradient(135deg, #ECFDF5, #86EFAC33)
+    success-text #065F46
+    chain    #9F88C8   (drill-down chain breadcrumb accent)
+
+  Conventions:
+    Single-file HTML, inline CSS, no external dependencies (VIS-SUPP-03 spec).
+    No JS (showcase mockup only).
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>drill-down-auto-open — Final Proposal Card (Before vs After)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;700&family=Crimson+Pro:ital,wght@1,500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --cream: #FFF7E8;
+      --card: #FFFCF4;
+      --text: #2E2418;
+      --text-muted: rgba(46, 36, 24, 0.55);
+      --coral: #E8775A;
+      --pink-bg: #FFD6E0;
+      --pink-bd: #FF8FAE;
+      --success-text: #065F46;
+      --success-bd: #22C55E;
+      --chain: #9F88C8;
+      --neutral-600: #715B62;
+      --note-bg: #FAFAF6;
+      --note-bd: #E0D5BC;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 24px 16px;
+      background: var(--cream);
+      font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .page-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 4px;
+      color: var(--text);
+    }
+
+    .page-sub {
+      text-align: center;
+      color: var(--neutral-600);
+      font-size: 12px;
+      margin: 0 0 32px;
+    }
+
+    .compare-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: 1fr;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 880px) {
+      .compare-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .panel {
+      background: rgba(245, 229, 196, 0.18);
+      border: 1px solid var(--note-bd);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .panel h2 {
+      margin: 0 0 4px;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 16px;
+    }
+
+    .panel .panel-sub {
+      margin: 0 0 16px;
+      font-size: 11px;
+      color: var(--neutral-600);
+    }
+
+    .panel.before h2 { color: var(--neutral-600); }
+    .panel.after h2 { color: var(--coral); }
+
+    /* === device frame (Pixel 5 393x851 simulation, scaled) === */
+    .device {
+      width: 360px;
+      max-width: 100%;
+      margin: 0 auto;
+      background: var(--cream);
+      border-radius: 28px;
+      border: 6px solid #2E2418;
+      padding: 16px 12px 24px;
+      box-shadow: 0 14px 36px rgba(46, 36, 24, 0.14);
+    }
+
+    .stage-header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 4px 4px 8px;
+      border-bottom: 1px dashed var(--note-bd);
+      margin-bottom: 8px;
+    }
+    .stage-header .back { font-size: 16px; color: var(--neutral-600); }
+    .stage-header h3 {
+      margin: 0;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .stage-header .topic {
+      font-family: 'Crimson Pro', 'Noto Serif JP', serif;
+      font-style: italic;
+      color: var(--neutral-600);
+      font-size: 12px;
+    }
+    .stage-status {
+      font-size: 11px;
+      color: var(--coral);
+      margin: 0 0 8px 4px;
+    }
+
+    /* drill-down chain breadcrumb */
+    .chain {
+      background: rgba(159, 136, 200, 0.10);
+      border: 1px solid rgba(159, 136, 200, 0.35);
+      border-radius: 12px;
+      padding: 6px 8px;
+      font-size: 10px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .chain .chain-head {
+      font-weight: 700;
+      color: #6B5390;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .chain .chain-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+    }
+    .chain .chain-item {
+      background: #fff;
+      border: 1px solid rgba(159, 136, 200, 0.35);
+      border-radius: 6px;
+      padding: 1px 6px;
+    }
+    .chain .chain-arrow { color: var(--chain); }
+
+    /* proposal card */
+    .proposal-card {
+      background: var(--card);
+      border: 0.5px solid rgba(46, 36, 24, 0.15);
+      border-radius: 24px;
+      box-shadow: 0 14px 36px rgba(46, 36, 24, 0.14);
+      padding: 12px 16px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .proposal-card p {
+      margin: 0;
+      font-family: 'Crimson Pro', 'Noto Serif JP', serif;
+      font-style: italic;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    /* pink nudge banner (isFinal=true variant — pink) */
+    .pink-nudge {
+      background: var(--pink-bg);
+      border: 1px solid var(--pink-bd);
+      border-radius: 12px;
+      padding: 6px 10px;
+      text-align: center;
+      font-size: 10px;
+      color: var(--coral);
+      margin-bottom: 8px;
+    }
+    .pink-nudge strong { font-weight: 700; }
+
+    /* swipe hint */
+    .swipe-hint {
+      text-align: center;
+      font-size: 10px;
+      font-style: italic;
+      color: var(--neutral-600);
+      margin-bottom: 6px;
+    }
+    .swipe-hint .arrows { color: #22C55E; font-weight: 700; }
+
+    /* Yes/No buttons */
+    .choice-row {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      flex: 1;
+      padding: 10px 0;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      border: 0;
+      cursor: default;
+    }
+    .btn-no {
+      background: #E0E0E0;
+      color: #4A3D45;
+    }
+    .btn-yes {
+      background: #22C55E;
+      color: #fff;
+    }
+
+    /* External CTA (green gradient) */
+    .ext-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 2px solid var(--success-bd);
+      background: linear-gradient(135deg, #ECFDF5, #86EFAC33);
+      color: var(--success-text);
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .ext-cta .emoji { font-size: 22px; }
+
+    /* nudge banner (採択後の祝福) */
+    .nudge-banner-mock {
+      background: linear-gradient(135deg, #FFF7E8, #FFEBC9);
+      border: 1px solid #E0D5BC;
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text);
+      text-align: center;
+    }
+    .nudge-banner-mock h4 {
+      margin: 0 0 4px;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px;
+      color: var(--coral);
+    }
+
+    /* annotation notes */
+    .notes {
+      margin-top: 12px;
+      background: var(--note-bg);
+      border-left: 3px solid var(--coral);
+      padding: 8px 10px;
+      font-size: 11px;
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .notes code {
+      background: rgba(159, 136, 200, 0.12);
+      border-radius: 4px;
+      padding: 0 4px;
+      font-family: ui-monospace, monospace;
+      font-size: 10.5px;
+    }
+    .notes ul { margin: 4px 0 0 16px; padding: 0; }
+    .notes li { margin: 2px 0; }
+    .notes .label-old { color: var(--neutral-600); }
+    .notes .label-new { color: var(--coral); font-weight: 700; }
+
+    .legend {
+      max-width: 920px;
+      margin: 32px auto 0;
+      background: var(--note-bg);
+      border: 1px dashed var(--note-bd);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 11px;
+      color: var(--text);
+    }
+    .legend h2 {
+      margin: 0 0 6px;
+      font-size: 13px;
+      font-family: 'Noto Serif JP', serif;
+    }
+    .legend table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .legend th, .legend td {
+      text-align: left;
+      padding: 4px 6px;
+      vertical-align: top;
+      border-bottom: 1px dotted var(--note-bd);
+    }
+    .legend th { font-weight: 700; }
+
+    .change-arrow {
+      text-align: center;
+      font-size: 24px;
+      color: var(--coral);
+      margin: 16px 0 -4px;
+    }
+    @media (min-width: 880px) {
+      .change-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="page-title">drill-down-auto-open — Final Proposal Card</h1>
+  <p class="page-sub">VIS-SUPP-03 visual supplement / FE-DESIGN-01 inherits 03-proposal-card.svg / Pixel 5 viewport</p>
+
+  <div class="compare-grid">
+    <!-- ============================================== -->
+    <!-- BEFORE: current behavior (declarative + manual CTA) -->
+    <!-- ============================================== -->
+    <section class="panel before" aria-label="Before (current behavior)">
+      <h2>① Before (現状)</h2>
+      <p class="panel-sub">depth=4 final / 断定調 proposal / Yes → choose API only / 外部遷移は CTA を手動 click</p>
+
+      <div class="device">
+        <header class="stage-header">
+          <span class="back" aria-hidden>‹</span>
+          <h3>結論</h3>
+          <span class="topic">"映画見たい"</span>
+        </header>
+        <p class="stage-status">● 3 人の意見が まとまりました</p>
+
+        <nav class="chain" aria-label="深堀り chain">
+          <span class="chain-head">🪜 これまでの決定:</span>
+          <span class="chain-items">
+            <span class="chain-item">観たい映画を 1 本選ぼう</span>
+            <span class="chain-arrow">→</span>
+            <span class="chain-item">配信で観ますか?</span>
+            <span class="chain-arrow">→</span>
+            <span class="chain-item">じんわり泣ける気分</span>
+            <span class="chain-arrow">→</span>
+            <span class="chain-item">Amazon Prime Video で観る</span>
+          </span>
+        </nav>
+
+        <article class="proposal-card" aria-label="提案">
+          <p>『パターソン』を Amazon Prime Video で 観ましょう。</p>
+        </article>
+
+        <div class="pink-nudge" role="region" aria-label="合議メッセージ">
+          <strong>✨ これで決定。</strong> Yes で 外部サービスへ →
+        </div>
+
+        <p class="swipe-hint">
+          👆 スワイプして決定 <span class="arrows">→ → →</span> Yes
+        </p>
+
+        <div class="choice-row">
+          <button class="btn btn-no" aria-label="No、提案を拒否">← No</button>
+          <button class="btn btn-yes" aria-label="Yes、提案を採択">Yes →</button>
+        </div>
+
+        <a class="ext-cta" href="#" aria-label="Amazon Prime Video で開く (外部リンク)">
+          <span class="emoji">📺</span>
+          Amazon Prime Video で開く →
+        </a>
+      </div>
+
+      <div class="notes">
+        <strong>現状の挙動 / 課題</strong>
+        <ul>
+          <li>proposal text は<span class="label-old">断定形「観ましょう。」</span></li>
+          <li>Yes button の aria-label は固定で<span class="label-old">「Yes、提案を採択」</span></li>
+          <li>Yes → <code>choose</code> API のみ. 外部遷移は ↓ の緑 CTA を <span class="label-old">user が再度 click</span></li>
+          <li>結果: 多くの user が CTA に気付かず、外部 service に到達せずに終わる</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="change-arrow" aria-hidden>↓</div>
+
+    <!-- ============================================== -->
+    <!-- AFTER: drill-down-auto-open (interrogative + auto window.open) -->
+    <!-- ============================================== -->
+    <section class="panel after" aria-label="After (drill-down-auto-open)">
+      <h2>② After (drill-down-auto-open)</h2>
+      <p class="panel-sub">depth=4 final / 疑問形 "開きますか?" / Yes → window.open 同期発火 → 新タブで外部 / 元タブで NudgeBanner</p>
+
+      <div class="device">
+        <header class="stage-header">
+          <span class="back" aria-hidden>‹</span>
+          <h3>結論</h3>
+          <span class="topic">"映画見たい"</span>
+        </header>
+        <p class="stage-status">● 3 人の意見が まとまりました</p>
+
+        <nav class="chain" aria-label="深堀り chain">
+          <span class="chain-head">🪜 これまでの決定:</span>
+          <span class="chain-items">
+            <span class="chain-item">観たい映画を 1 本選ぼう</span>
+            <span class="chain-arrow">→</span>
+            <span class="chain-item">配信で観ますか?</span>
+            <span class="chain-arrow">→</span>
+            <span class="chain-item">じんわり泣ける気分</span>
+            <span class="chain-arrow">→</span>
+            <span class="chain-item">Amazon Prime Video で観る</span>
+          </span>
+        </nav>
+
+        <article class="proposal-card" aria-label="提案">
+          <p>『パターソン』を Amazon Prime Video で <strong style="font-weight:700;color:var(--coral);">開きますか?</strong></p>
+        </article>
+
+        <div class="pink-nudge" role="region" aria-label="合議メッセージ">
+          <strong>✨ これで決定。</strong> Yes で 外部サービスへ →
+        </div>
+
+        <p class="swipe-hint">
+          👆 スワイプして決定 <span class="arrows">→ → →</span> Yes
+        </p>
+
+        <div class="choice-row">
+          <button class="btn btn-no" aria-label="No、提案を拒否">← No</button>
+          <button
+            class="btn btn-yes"
+            aria-label="Yes、提案を採択 (新しいタブで Amazon Prime Video を開きます)"
+            title="Yes、提案を採択 (新しいタブで Amazon Prime Video を開きます)"
+          >
+            Yes →
+          </button>
+        </div>
+
+        <a class="ext-cta" href="#" aria-label="Amazon Prime Video で開く (外部リンク、フォールバック)">
+          <span class="emoji">📺</span>
+          Amazon Prime Video で開く → <span style="font-size:10px;font-weight:500;color:var(--neutral-600);">（fallback）</span>
+        </a>
+
+        <div class="nudge-banner-mock" aria-label="Yes 採択後 NudgeBanner (元タブに残る)">
+          <h4>✨🎉✨ 素晴らしい従順さです</h4>
+          素晴らしい従順さです。あとは行動するだけ♪<br />
+          <em style="font-size: 10px; color: var(--neutral-600);">↑ 新タブで外部サイトを開いた後、元タブに残る祝福 banner</em>
+        </div>
+      </div>
+
+      <div class="notes">
+        <strong>新挙動 (drill-down-auto-open)</strong>
+        <ul>
+          <li>proposal text 末尾を<span class="label-new">疑問形「開きますか?」に固定</span> (LLM prompt 改修 / FR-DAO-01)</li>
+          <li>Yes button の aria-label を<span class="label-new">「Yes、提案を採択 (新しいタブで XXX を開きます)」に動的切替</span> (NFR-DAO-10)</li>
+          <li>Yes click → SwipeChoice の <code>onYesSync</code> で <code>window.open(url, "_blank", "noopener,noreferrer")</code> を <span class="label-new">user gesture chain 内同期発火</span> (FR-DAO-09)</li>
+          <li>その後 <code>await choose.mutateAsync</code> + NudgeBanner 表示 (元タブに残置)</li>
+          <li>緑 CTA は <span class="label-new">fallback として残置</span> (popup block 時の救済 / NFR-DAO-01 / Q3=A)</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- Legend -->
+  <!-- ============================================== -->
+  <section class="legend" aria-label="差分凡例">
+    <h2>差分凡例 (Before → After)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>要素</th>
+          <th>Before</th>
+          <th>After</th>
+          <th>根拠</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>proposal text (depth=MAX)</td>
+          <td>断定形「XXX で 観ましょう。」</td>
+          <td><strong>疑問形「XXX で 開きますか?」</strong></td>
+          <td>FR-DAO-01 (C1)</td>
+        </tr>
+        <tr>
+          <td>Yes button aria-label</td>
+          <td>「Yes、提案を採択」固定</td>
+          <td><strong>「…(新しいタブで XXX を開きます)」</strong> 動的切替</td>
+          <td>NFR-DAO-10 (M3)</td>
+        </tr>
+        <tr>
+          <td>Yes click 時の遷移</td>
+          <td>choose API のみ / 外部は手動 click</td>
+          <td><strong>onYesSync で window.open → 自動新タブ</strong></td>
+          <td>FR-DAO-02, 03, 09</td>
+        </tr>
+        <tr>
+          <td>window.open option</td>
+          <td>—</td>
+          <td><strong>"_blank", "noopener,noreferrer"</strong></td>
+          <td>NFR-DAO-06 (SECURITY-13)</td>
+        </tr>
+        <tr>
+          <td>外部 CTA button</td>
+          <td>primary entry point</td>
+          <td><strong>fallback (popup block 救済)</strong></td>
+          <td>NFR-DAO-01 (Q3=A)</td>
+        </tr>
+        <tr>
+          <td>NudgeBanner (採択後)</td>
+          <td>(同じ — 不変)</td>
+          <td>(同じ — 不変、元タブに残置)</td>
+          <td>FR-DAO-04</td>
+        </tr>
+        <tr>
+          <td>中間段 (depth &lt; MAX)</td>
+          <td>断定形 + drill-down 進行</td>
+          <td>(同じ — 不変)</td>
+          <td>FR-DAO-05</td>
+        </tr>
+        <tr>
+          <td>color palette / typography</td>
+          <td>INCEPTION 03-proposal-card.svg 継承</td>
+          <td>(同じ — 不変、text content のみ変化)</td>
+          <td>FE-DESIGN-01, 02, 03</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</body>
+</html>

@@ -19,6 +19,7 @@ import {
   PersonasModule,
   PersonaSelectionsModule,
   VoiceModule,
+  PersonaPoolModule,
 } from "./modules";
 
 export interface YesmanApiClientOptions {
@@ -69,6 +70,7 @@ export class YesmanApiClient {
   readonly personas: PersonasModule;
   readonly personaSelections: PersonaSelectionsModule;
   readonly voice: VoiceModule;
+  readonly personaPool: PersonaPoolModule;  // v3-γ anonymous-strangers
 
   constructor(options: YesmanApiClientOptions) {
     validateBaseUrl(options.baseUrl); // NFR Req §2.1 + ultrathink I2
@@ -92,6 +94,7 @@ export class YesmanApiClient {
     this.personas = new PersonasModule(this);
     this.personaSelections = new PersonaSelectionsModule(this);
     this.voice = new VoiceModule(this);
+    this.personaPool = new PersonaPoolModule(this);  // v3-γ anonymous-strangers
   }
 }
 

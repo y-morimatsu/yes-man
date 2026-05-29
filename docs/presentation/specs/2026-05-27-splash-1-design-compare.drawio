@@ -1,0 +1,159 @@
+<mxfile host="app.diagrams.net" modified="2026-05-27T06:00:00.000Z" agent="claude-code" version="24.0.0">
+  <diagram name="splash-1-compare" id="splash-1-compare">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="SplashPage 比較 — 現 branch (HEAD, #3 cherry-pick 後) vs ui-polish #1 (ecc0bde)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1760" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="iPhone 13 viewport 390×844 想定. 左=現状, 中央=#1 提案, 右=差分注釈" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="20" y="60" width="1760" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- =============== 左: 現 branch (HEAD) =============== -->
+        <mxCell id="left-frame" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EEE2;strokeColor=#2E2418;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="110" width="500" height="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="left-label" value="◉ 現 branch (HEAD) — #3 cherry-pick 後" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- L: 3 blob (size 36, aligned, gap 12) - 整列 -->
+        <mxCell id="L-blob-o" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EF7A62;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="220" y="480" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="L-blob-g" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#21A48F;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="268" y="480" width="36" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="L-blob-b" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#8AB2DF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="316" y="480" width="36" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- L: YesMan title text-3xl (~30px italic) -->
+        <mxCell id="L-title" value="YesMan" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=30;fontStyle=2;fontColor=#2E2418;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="60" y="540" width="500" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- L: tagline 残存 -->
+        <mxCell id="L-tagline" value="人間最後の仕事は、&#10;YES で承認すること。" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="60" y="610" width="500" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- L: 「はじめる」 button w-78% -->
+        <mxCell id="L-btn" value="はじめる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E2418;strokeColor=#2E2418;arcSize=50;fontSize=15;fontColor=#F2EEE2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="115" y="690" width="390" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- L: 比率注釈 -->
+        <mxCell id="L-annot" value="↑ blob size 36 (整列、揺らぎなし)&#10;↑ YesMan 30px italic Crimson&#10;↑ tagline「人間最後の仕事は…」残存&#10;↑ 「はじめる」 w-78% (画面の 78%、ほぼ全幅)" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="60" y="770" width="500" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- =============== 中央: #1 提案 =============== -->
+        <mxCell id="mid-frame" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EEE2;strokeColor=#2E2418;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="640" y="110" width="500" height="1100" as="geometry" />
+        </mxCell>
+        <mxCell id="mid-label" value="◉ #1 提案 (ecc0bde) — mockup §1 splash-cast 仕様" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="640" y="80" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- M: 3 blob (size 44, with offset for asymmetric rhythm) -->
+        <!-- orange: translate-y -4, translate-x -1 -->
+        <mxCell id="M-blob-o" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EF7A62;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="789" y="436" width="44" height="44" as="geometry" />
+        </mxCell>
+        <!-- green: translate-y +5, translate-x +1 -->
+        <mxCell id="M-blob-g" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#21A48F;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="847" y="445" width="44" height="44" as="geometry" />
+        </mxCell>
+        <!-- blue: translate-y -3, translate-x -1 -->
+        <mxCell id="M-blob-b" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#8AB2DF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="903" y="437" width="44" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- M: YesMan title 46px italic -->
+        <mxCell id="M-title" value="YesMan" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=46;fontStyle=2;fontColor=#2E2418;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="640" y="520" width="500" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- M: tagline 削除済 → 何もなし -->
+        <mxCell id="M-tagline-removed" value="(tagline 削除済)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontColor=#CCCCCC;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="640" y="610" width="500" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- M: 「はじめる」 button w-65% max-220px (compact) -->
+        <mxCell id="M-btn" value="はじめる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E2418;strokeColor=#2E2418;arcSize=50;fontSize=15;fontColor=#F2EEE2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="780" y="700" width="220" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- M: 比率注釈 -->
+        <mxCell id="M-annot" value="↑ blob size 44 (大きく、+ 縦横微小オフセット)&#10;↑ YesMan 46px italic Crimson (約 1.5 倍に拡大)&#10;↑ tagline 完全削除 (空気感を出す)&#10;↑ 「はじめる」 w-65% max-220px py-3 (絞って厚く)" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#666666;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="640" y="780" width="500" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- =============== 右: 差分注釈 =============== -->
+        <mxCell id="diff-header" value="主要差分 (5 項目)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="80" width="540" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diff-1" value="① 3 blob のサイズと配置&#10;現: 36px 整列 (横並び、揺らぎなし)&#10;#1: 44px + 縦横 ±1〜5px の微小オフセット&#10;  - orange: -y4 -x1 (上にずらす)&#10;  - green:  +y5 +x1 (下にずらす)&#10;  - blue:   -y3 -x1 (上にずらす)&#10;→ 機械的整列を緩めて「生きてる」 感を演出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#D4A55D;strokeWidth=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="120" width="540" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diff-2" value="② blob と title の余白&#10;現: mb-4 (16px)&#10;#1: mb-7 (28px)&#10;→ blob 群と title 間に空気感、密集感を解消" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#D4A55D;strokeWidth=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="260" width="540" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diff-3" value="③ YesMan title サイズ&#10;現: text-3xl (30px) italic Crimson Pro&#10;#1: fontSize 46px italic Crimson Pro + mb-4 (16px)&#10;→ 約 1.5 倍に拡大、splash の主役感を強化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#D4A55D;strokeWidth=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="350" width="540" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diff-4" value="④ tagline 「人間最後の仕事は…」&#10;現: italic serif tagline 残存 (2 行)&#10;#1: 完全削除&#10;→ ミニマル化、3 blob + YesMan + button のみのシンプル splash&#10;  (tagline は宣言的すぎる、コンセプトは「はじめる」 行動で表現)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#D4A55D;strokeWidth=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="450" width="540" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diff-5" value="⑤ 「はじめる」 button サイズ&#10;現: w-[78%] py-2.5 (画面の 78%、ほぼ全幅)&#10;#1: w-[65%] max-w-[220px] py-3 (65%、上限 220px、厚く)&#10;→ ボタンを画面幅から切り離して「タップしたい」要素として強調&#10;  iPhone SE / 12 Pro どちらも 220px cap で同じ視覚スケール" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E7;strokeColor=#D4A55D;strokeWidth=1;fontSize=11;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="570" width="540" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- 取込判断 -->
+        <mxCell id="decision" value="📋 取込判断&#10;&#10;✅ ①③⑤ (blob 揺らぎ + title 拡大 + button 絞り) — splash の主役感 / 完成度向上&#10;⚠️ ④ tagline 削除 — 「YesMan の世界観を 1 行で伝える」 説明要素が消える&#10;   ハッカソンデモ的にはサブテキストあった方が分かりやすい可能性&#10;❌ ログイン link 関連 (mt-4 / text-11px) — #3 で link 既に削除済、適用先なし&#10;&#10;💡 推奨: blob 揺らぎ + title 46px + button 絞り (①②③⑤) のみ部分採用、&#10;   tagline (④) は残す方向 でいくか? user 判断待ち" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E7F0FF;strokeColor=#3A66B5;strokeWidth=1.5;fontSize=12;align=left;verticalAlign=top;spacingLeft=12;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="700" width="540" height="190" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-title" value="🎨 配色 (両画面共通)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=12;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1230" width="1080" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-orange" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EF7A62;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1260" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-orange-lbl" value="#EF7A62 (orange)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="135" y="1265" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-green" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#21A48F;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="300" y="1260" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-green-lbl" value="#21A48F (green)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="335" y="1265" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-blue" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#8AB2DF;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1260" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-blue-lbl" value="#8AB2DF (blue)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="535" y="1265" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-umber" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E2418;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="700" y="1265" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-umber-lbl" value="#2E2418 (umber, button BG)" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="745" y="1265" width="220" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

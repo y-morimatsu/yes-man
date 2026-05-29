@@ -55,7 +55,8 @@ class PersonaCreateRequest(BaseModel):
 
     name: str = Field(min_length=1, max_length=50)
     description: str | None = Field(default=None, max_length=200)
-    prompt_text: str = Field(min_length=30, max_length=2000)
+    # 2026-05-26: ハッカソン UX 向上のため min_length 30 → 10 に緩和.
+    prompt_text: str = Field(min_length=10, max_length=2000)
     avatar_url: str | None = Field(default=None, max_length=500)
 
 
@@ -66,7 +67,7 @@ class PersonaUpdateRequest(BaseModel):
 
     name: str | None = Field(default=None, min_length=1, max_length=50)
     description: str | None = Field(default=None, max_length=200)
-    prompt_text: str | None = Field(default=None, min_length=30, max_length=2000)
+    prompt_text: str | None = Field(default=None, min_length=10, max_length=2000)
     avatar_url: str | None = Field(default=None, max_length=500)
 
 

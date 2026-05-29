@@ -10,12 +10,16 @@ FD §5 + spec 2026-05-21 parallel-persona-consensus + I6 (Yes/No 両方発火) �
 from __future__ import annotations
 
 import asyncio
+import re
 from datetime import datetime, timezone
-from typing import AsyncIterator, Literal
+from typing import Any, AsyncIterator, Literal
 from uuid import UUID, uuid4
+
+import json
 
 from yesman_api.application.decision.event_publisher import EventPublisher
 from yesman_api.application.decision.llm_provider import LLMProviderAdapter
+from yesman_api.application.learning.anonymous_seed import derive_spec
 from yesman_api.application.persistence.protocols import (
     DecisionRepository,
     PersonaRepository,
@@ -39,9 +43,69 @@ from yesman_api.domain.decision.models import (
 from yesman_api.domain.decision.silence_guard import SilenceGuard
 from yesman_api.domain.persistence.constants import SYSTEM_USER_ID
 from yesman_api.domain.persistence.models import Decision, SilenceLog
+from yesman_api.domain.persona_pool.models import AnonymousPersonaSpec
+from yesman_api.domain.persona_pool.protocols import PoolRepository
+from yesman_api.fixtures.anonymous_pool_seed import fixture_utterances
 from yesman_api.infrastructure.config import AppConfig
 from yesman_api.shared.logging import audit_log, get_logger
 from yesman_api.shared.pii_filter import mask_pii
+
+
+# v3-γ anonymous-strangers: in-engine 用 duck-typed proxy.
+# Persona (SQLModel) と AnonymousPersonaSpec の seam として .id + .name を持つ.
+class _AnonymousProxy:
+    """anonymous persona を既存 utterance loop に渡すための薄 proxy.
+
+    属性:
+        id   = AnonymousPersonaSpec.persona_id (UUID)
+        name = display 表示用ラベル (「あなたの声」 / 「知り合い #1」 等)
+        spec = 派生元 spec (LLM prompt 用 metadata + primary_language / formality)
+    """
+
+    __slots__ = ("id", "name", "spec")
+
+    def __init__(self, id_, name, spec):
+        self.id = id_
+        self.name = name
+        self.spec = spec
+
+
+#: 2026-05-25 drill-down chain の最大深さ. depth 0 (root) から数えて MAX に到達したら is_final=true.
+#: 値の増減で UX の刻みが変わる (4 = 5 click で final、自然な絞り込みのレンジ).
+#: 2026-05-26 update: _detect_final_signal() で LLM が早期 final を signal した場合は
+#: MAX_DRILL_DEPTH 未満でも is_final=true になる. MAX は safety net.
+MAX_DRILL_DEPTH = 4
+
+
+#: 2026-05-26 drill-down 柔軟化 (A 案 + C 案): LLM が proposal 末尾に
+#: "開きますか?" / "決めますか?" / "決まり!" 等の **決定 signal** を含めた場合に
+#: depth が MAX 未満でも is_final=true にする (early-final).
+#: regex は末尾近辺 (句点・感嘆符の前後) を許容するが、語頭マッチは禁止.
+_FINAL_SIGNAL_RE = re.compile(
+    r"("
+    r"開きますか[??]?"
+    r"|決めますか[??]?"
+    r"|決まりますか[??]?"
+    r"|これで決まり[!!]?"
+    r"|これで決定[!!]?"
+    r"|これに決めよう"
+    r")\s*[。.]?\s*$"
+)
+
+
+def _detect_final_signal(proposal_text: str) -> bool:
+    """LLM が proposal 末尾に decisively "決定 OK" の signal を含めたか検出.
+
+    Returns True if proposal_text ends with one of:
+    - "〜開きますか?" / "〜決めますか?" / "〜決まりますか?" (疑問形・外部 service ありなしどちらでも OK)
+    - "これで決まり!" / "これで決定!" / "これに決めよう" (断定形)
+
+    末尾 (\\s*[。.]?\\s*$) なので 1 文 1 句点を破壊しない.
+    Returns False for 中間段の "〜にしよう" / "〜が おすすめ" / "〜どうですか?" 等.
+    """
+    if not proposal_text:
+        return False
+    return bool(_FINAL_SIGNAL_RE.search(proposal_text))
 
 
 class DecisionEngine:
@@ -62,6 +126,8 @@ class DecisionEngine:
         preference_repo: PreferenceProfileRepository | None = None,
         # spec 2026-05-21 parallel-persona-consensus: per-persona / proposal timeout を参照
         config: AppConfig | None = None,
+        # v3-γ anonymous-strangers: 「世界の誰か」persona source (任意、None で builtin only)
+        pool_repo: PoolRepository | None = None,
     ) -> None:
         self._llm = llm
         self._orchestrator = orchestrator
@@ -76,6 +142,7 @@ class DecisionEngine:
         self._preference_repo = preference_repo  # Issue #4 Dynamic Persona Routing
         self._config = config or AppConfig()
         self._logger = get_logger("decision.engine")
+        self._pool_repo = pool_repo  # v3-γ anonymous-strangers
 
     # ============================================================
     # 非ストリーミング合議
@@ -165,7 +232,39 @@ class DecisionEngine:
 
         start event は handler 側で送信済 (decision_id 事前確定).
         ここでは silence / utterance × N / proposal / complete / error を yield.
+
+        v3-γ anonymous-strangers (2026-05-24): persona_source="anonymous" の場合は
+        `_run_stream_anonymous` に dispatch (token streaming なし、fixture+LLM hybrid).
+
+        v4 (2026-05-24): request.selected_personas (3 source mix) が指定されていれば
+        `_run_stream_mixed` に dispatch. 旧 persona_source / selected_persona_ids は
+        backward compat 用. self_spec injection なし (「自分を discussion から除外」).
         """
+        # v4 dispatch: selected_personas (3 source mix) を最優先
+        if request.selected_personas:
+            async for event in self._run_stream_mixed(
+                decision_id=decision_id, request=request
+            ):
+                yield event
+            return
+
+        # v3-γ dispatch: anonymous source は別 path
+        if request.persona_source == "anonymous":
+            if self._pool_repo is None:
+                yield StreamEvent(
+                    "error",
+                    {
+                        "reason": "anonymous_pool_unavailable",
+                        "detail": "pool repository not configured in engine",
+                    },
+                )
+                return
+            async for event in self._run_stream_anonymous(
+                decision_id=decision_id, request=request
+            ):
+                yield event
+            return
+
         # 1. SilenceGuard
         verdict = await self._silence_guard.evaluate(user_input=request.user_input)
         if verdict.is_silenced:
@@ -194,7 +293,90 @@ class DecisionEngine:
         # spec Post-CONSTRUCTION v3 (2026-05-23): _llm.stream() 経由で
         # utterance_delta event を chunk 単位 yield、最後に cleaned text を
         # utterance event として送出 (backward compat + 最終確定)。
-        masked_user_input = mask_pii(request.user_input)
+        # 2026-05-23 Drill-down chain: chain_context があれば user_input に prepend して
+        # 段階別の指示 (粒度ガイド) を加える。
+        # depth 0: domain choice (映画 / 旅行 / 洋服 等)
+        # 2026-05-25 統一指針: 固定 stage 制 (action / service / subtype / instance) を廃し、
+        # LLM 自身が「徐々に具体化」する自然な絞り込みに任せる. 最終 (depth=MAX) で Amazon
+        # サービスで開ける固有名に必ず到達するよう、終盤ほど instance 寄りに誘導.
+        depth = len(request.chain_context)
+        if request.chain_context:
+            context_line = " → ".join(request.chain_context)
+            remaining = MAX_DRILL_DEPTH - depth
+            # 2026-05-26 drill-down-auto-open (FR-DAO-01): prompt と is_final の境界を
+            # depth == MAX_DRILL_DEPTH に厳密一致させる. depth=MAX-1 (= remaining=1) では
+            # 中間段 guide を維持し、depth=MAX のみ疑問形 "開きますか?" 1 文を要求する.
+            if depth == MAX_DRILL_DEPTH:
+                # final 段 (MAX 到達): 外部 service ありなしどちらでも OK の最終提案.
+                # 2026-05-26 (C 案): service 強制紐づけを撤廃. 自宅完結 action も許可.
+                guide = (
+                    "**最終段** (MAX 到達). 上の絞り込みを受けて **疑問形 1 文** で出してください.\n"
+                    "**case A: 外部サイトで購入 / 視聴 / 注文できる action** の場合:\n"
+                    "  → **「〜を XX で 開きますか?」** で締める (Yes で 外部サイトが 新しいタブで開く)\n"
+                    "  例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                    "『「貞子」を Amazon Prime Video で 開きますか?』 / "
+                    "『「君たちはどう生きるか」を Kindle で 開きますか?』.\n"
+                    "**case B: 自宅で完結する action** (自家調理 / 散歩 / 既存所有物利用 等) の場合:\n"
+                    "  → **「〜決まり!」 / 「〜決めますか?」** で締める (外部サイト不要)\n"
+                    "  例: 『「冷凍うどんを 茹でて めんつゆで 食べる」 で 決まり!』 / "
+                    "『「近所を 20 分 散歩する」 で 決まり!』 / "
+                    "『「家にある コーヒー豆で ハンドドリップする」 に 決めますか?』.\n"
+                    "**chain 内で 自宅完結意図が明確** (例: 『家にある物で〜』『冷蔵庫の〜』『手持ちの〜』) "
+                    "なら case B を選ぶ. 強引に外部 service に紐づけない."
+                )
+            elif depth == 1:
+                # 最初の drill-down: 必ず media / channel / 入手経路を提案する.
+                guide = (
+                    f"絞り込み chain 残 {remaining} 段. "
+                    "**今は media / channel / 場所 / 入手経路 を 1 つ提案する** 短い疑問 1 文 (~40 字). "
+                    "user に「どの経路で実現するか」を **やさしく問う** 段階です.\n"
+                    "例:\n"
+                    "- 『映画見たい』 → 『配信で 観るのは どう?』『劇場で 観に行く?』 のどちらか **1 つだけ**\n"
+                    "- 『服 買いたい』 → 『通販で 買う?』『店舗で 試着して 買う?』 のどちらか **1 つだけ**\n"
+                    "- 『夜食』 → 『出前で 注文する?』『コンビニで 買う?』『家にある物で 済ます?』 から **1 つだけ**\n"
+                    "**重要**: 前段の root proposal で示された **主要な対象 / 食材 / ジャンル / 目的** を "
+                    "**必ず維持** してください (NG: root 『卵料理にしよう』 → 中間段 『うどん 食べる?』 のような pivot 禁止).\n"
+                    "**1 つの media** を選んで提示する. "
+                    "`or` / `/` / `+` / `＋` / 『〜か〜』 / 『〜と〜』 / 『〜、〜』 等で "
+                    "**複数選択肢 / 複数要素を 1 文に詰めるのは 禁止** "
+                    "(NG: 『配信 or 劇場 で 観ますか?』『ごはん＋目玉焼き』 — 1 文に 2 つ並べない). "
+                    "user が No なら別案 (別 media) が出る仕組みなので、1 つに絞って OK.\n"
+                    "**1 文 / 句点 1 つ**. 投げ返し表現 (『〜決めてみよう』『〜から選ぼう』) は禁止. "
+                    "根拠説明 (『〜と満足度が上がるよ』『まずは〜』) は付加しない.\n"
+                    "**柔らかい提案調**: 『〜で 〜する?』『〜は どう?』 程度. "
+                    "**命令形 (『〜しろ』『今すぐ〜』『迷わず〜』) は禁止**. "
+                    "service 名 (Amazon / Netflix 等) はまだ出さない."
+                )
+            else:
+                # depth >= 2 中間段: 前段の media を受け継いで subtype / ジャンル / 価格 等 1 軸絞り込み.
+                guide = (
+                    f"絞り込み chain 残 {remaining} 段. "
+                    "**前段までの絞り込み (root の対象 / 食材 / ジャンル / 目的 + media / channel) "
+                    "を 1 つ残らず 受け継いで** ください. "
+                    "**chain で 既に確定した主題から の pivot (例: root 卵料理 → 中間段 うどん) は 厳禁**.\n"
+                    "今は **subtype / ジャンル / 価格帯 / シーン 等 1 軸だけ絞る** "
+                    "短い 提案 1 文 (~40 字). "
+                    "前段で配信系 media が選ばれていれば Amazon Prime Video / Amazon Music / "
+                    "Kindle / Amazon.co.jp 等の Amazon サービスへ自然に寄せ、合わない場合 "
+                    "(劇場 / 店舗 / 出前 等) は無理に Amazon を出さず、user 相談に最も適した "
+                    "他 service (TOHO シネマズ / 出前館 / Uber Eats / じゃらん 等) を選ぶ. "
+                    "**お題と前段 media からの逸脱は厳禁**. "
+                    "極端に具体的な固有名は最終段まで温存.\n"
+                    "**1 つの subtype だけ** 提示. "
+                    "`or` / `/` / `+` / `＋` / 『〜か〜』 / 『〜と〜』 / 『〜、〜』 で **複数並べない** "
+                    "(NG: 『ごはん＋目玉焼き＋野菜』『丼か スープ』). "
+                    "**1 文 / 句点 1 つ**. 投げ返し表現 / 根拠説明の付加は禁止.\n"
+                    "**柔らかい提案調**: 『〜が おすすめ』『〜は どう?』 程度. "
+                    "**命令形 (『〜しろ』『今すぐ〜』 等) は禁止**."
+                )
+            enriched_input = (
+                f"[これまでの絞り込み: {context_line}]\n"
+                f"{guide}\n"
+                f"元の要望: {request.user_input}"
+            )
+            masked_user_input = mask_pii(enriched_input)
+        else:
+            masked_user_input = mask_pii(request.user_input)
         user_messages = [{"role": "user", "content": masked_user_input}]
         per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
         proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
@@ -289,6 +471,39 @@ class DecisionEngine:
 
         # 6. proposal 生成 (4 つ目の LLM call、timeout 付き)
         proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        # 2026-05-25 外部サービス誘導: depth=0 root proposal は次段で Amazon サービスへ
+        # 繋がる action を含む内容にする (drill-down chain 起点の役割).
+        if depth == 0:
+            proposal_system += (
+                "\n\n"
+                "**重要**: この proposal は drill-down chain の **起点** です. "
+                "ユーザーの相談を **広く受け止めた 大まかな方向性** だけを示す短い 1 文を出してください. "
+                "『〇〇しよう / 〇〇するのが良い』程度の素直な助言に留め、以下を **必ず守って** ください:\n"
+                "- **手段 / 場所 / 媒体を決め打ちしない** "
+                "(例: 『映画見たい』 → 『劇場で 1 本観ろ』 はダメ. "
+                "『観たい映画を 1 本 観よう』 のように、劇場 / 配信 / DVD 等の channel は明示しない).\n"
+                "- **特定 service 名 (Amazon / Prime Video / Netflix / Uber Eats / 出前館 等) を出さない**. "
+                "service への誘導は次段以降の役割.\n"
+                "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
+                "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
+                "- **1 つの 具体的な action だけ** 提示する. "
+                "複数選択肢 (`or` / `/` / `(または)` / 『〜か〜』 / 『〜と〜』) での列挙は **禁止**.\n"
+                "- **柔らかい提案調**: 『〜しよう』『〜が 良いよ』『〜どう?』 程度. "
+                "**命令形 (『〜しろ』『〜するな』『〜せよ』『即〜』『今すぐ〜』『迷わず〜』) は禁止**.\n"
+                "- **1 文 / 句点 (。) は 1 つだけ** — 2 文に分けない、複数情報を詰めない.\n"
+                "- **ユーザに 決定を 投げ返す表現は 禁止** ← yesman の本旨と矛盾するため最重要 "
+                "(NG: 『〜決めてみよう』『〜気軽に〜』『〜選んでみる?』『〜書き出して』 "
+                "『〜から 選ぼう』『〜どちらかに 寄せて』『〜を 軸に 決めて』). "
+                "→ YesMan が **代わりに 1 つに決めて** 提示する.\n"
+                "- **根拠 / 期待効果 / 説明の付加は 禁止** "
+                "(NG: 『〜と 満足度が 上がるよ』『〜が 効率的だよ』『〜したほうが 楽だよ』 "
+                "『まずは 〜』『すると 〜』). action 動詞 1 つで完結する短文に.\n"
+                "- **action 動詞 + 大まかな対象** で構成 "
+                "(OK: 『今夜は 温かい一品を 作ろう』『映画を 1 本 観よう』 のように 1 action 1 名詞).\n"
+                "- **root では 最終決定 signal を 絶対に 出さない** ← drill-down の起点なので最重要 "
+                "(NG: 『これで決まり!』『〜開きますか?』『〜決めますか?』 を末尾に置かない. "
+                "必ず『〜しよう』『〜どう?』『〜が 良いよ』 等の **継続 signal** で締める)."
+            )
         try:
             raw_proposal = await asyncio.wait_for(
                 self._llm.complete(
@@ -308,7 +523,43 @@ class DecisionEngine:
             )
             return
 
-        yield StreamEvent("proposal", {"proposal_text": proposal_text})
+        # 2026-05-23 Drill-down chain: is_final + service を proposal event に同梱.
+        # is_final = chain depth >= MAX_DRILL_DEPTH (3) のみ。
+        # depth 0..2 は Yes で onDrillDown 経路 (chain_context を積んで再 stream)、
+        # 4 段目 (depth=3) で final → NudgeBanner + 外部 service CTA を表示.
+        # service 情報は depth 問わず付与し、final で CTA、それまでは「ヒント」表示に使える。
+        from yesman_api.domain.decision.service_catalog import pick_service
+        combined_text = (
+            proposal_text + " " + " ".join(request.chain_context)
+        ).strip()
+        picked = pick_service(combined_text)
+        service_payload: dict | None = None
+        if picked is not None:
+            service, category = picked
+            service_payload = {
+                "name": service.name,
+                "url": service.url,
+                "emoji": service.emoji,
+                "category": category,
+            }
+        # 2026-05-25 revert (A 案): Yes 連鎖で深堀り → 4 段目 (depth=3) で final.
+        # depth >= MAX_DRILL_DEPTH (3) のときのみ is_final=true。
+        # depth 0..2 は Yes で onDrillDown が起動し、chain_context を積んで再 stream。
+        # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
+        # early-final で 5 段強制ではなく LLM 判断で 2-4 段で完結可能.
+        # depth=0 root は drill-down の起点であり、early-final は許可しない (signal 暴発防止).
+        is_final = depth >= MAX_DRILL_DEPTH or (
+            depth >= 1 and _detect_final_signal(proposal_text)
+        )
+        yield StreamEvent(
+            "proposal",
+            {
+                "proposal_text": proposal_text,
+                "is_final": is_final,
+                "depth": depth,
+                "service": service_payload,
+            },
+        )
 
         # 7. 永続化 (synchronous、complete event の前に実行)
         utterances_persist = [
@@ -533,7 +784,13 @@ class DecisionEngine:
         request: DecisionRequest,
         consensus: ConsensusOutput,
         personas: list,
+        *,
+        is_anonymous: bool = False,
     ) -> Decision:
+        # v3-γ: anonymous 経路は selected_persona_ids を空にする
+        # (anonymous persona の UUID は personas table に存在しないため、
+        # apply_choice の record_usage で persona_repo.get → not_found を起こさない).
+        selected_ids = [] if is_anonymous else [str(p.id) for p in personas]
         decision = Decision(
             id=decision_id,
             user_id=request.user_id,
@@ -553,13 +810,690 @@ class DecisionEngine:
                     }
                     for u in consensus.utterances
                 ],
+                "source": "anonymous" if is_anonymous else "builtin",
             },
             user_choice="pending",
             no_attempt_count=0,
             llm_provider=request.llm_provider,
-            selected_persona_ids=[str(p.id) for p in personas],
+            selected_persona_ids=selected_ids,
         )
         return await self._decision_repo.insert(decision)
+
+    # ============================================================
+    # v3-γ anonymous-strangers helpers
+    # ============================================================
+    def _build_anonymous_prompt(
+        self,
+        *,
+        spec: AnonymousPersonaSpec,
+        chain_context: tuple[str, ...] = (),
+    ) -> str:
+        """anonymous persona 用 LLM prompt (system message).
+
+        chain_context があれば drill-down 段階別ガイドを inject (I-4 fix).
+        depth に応じて「service routing」「subtype 絞り込み」「specific instance」
+        の方向性を示し、builtin path と同じ深堀り段階を再現する.
+        """
+        tags_str = "、".join(spec.value_tags) if spec.value_tags else "(未設定)"
+        formality_hint = {
+            "polite": "polite=丁寧な ですます調",
+            "casual": "casual=フランクな タメ口",
+            "blunt": "blunt=短文・断定調",
+        }.get(spec.formality, spec.formality)
+        base = (
+            f"あなたは {tags_str} の価値観を持つ人物です。\n"
+            f"日常会話で {spec.primary_language} を話します。\n"
+            f"話し方は {formality_hint} です。"
+        )
+        # I-4: chain_context を inject (builtin path の統一指針と整合)
+        chain_section = ""
+        if chain_context:
+            depth = len(chain_context)
+            context_line = " → ".join(chain_context)
+            remaining = MAX_DRILL_DEPTH - depth
+            # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
+            # 疑問形 "開きますか?" 1 文を要求 (builtin path と境界一致).
+            if depth == MAX_DRILL_DEPTH:
+                guide = (
+                    "**最終段**. Amazon で実際に開ける固有名 (作品名 / 商品名 / "
+                    "ストア名 / 著者名 / アーティスト名) を含む **疑問形 1 文** で提案. "
+                    "**必ず末尾を「開きますか?」で締める**. Yes で外部サイトが新しいタブで開きます."
+                )
+            else:
+                guide = (
+                    f"chain 残 {remaining} 段. 一段だけ具体化してください "
+                    "(ジャンル / service / subtype / シーン / 価格帯 等 1 軸). "
+                    "ユーザー相談に自然に合う場合のみ Amazon Prime Video / Music / Fashion / "
+                    "Kindle / Prime Gaming / Amazon.co.jp に寄せる. 合わない場合は他 service "
+                    "(Uber Eats / 出前館 / 食べログ / じゃらん 等). お題からの逸脱は禁止. "
+                    "**前段までの絞り込み (root 対象 / media) を必ず継承 — pivot は厳禁**. "
+                    "極端に具体的すぎる固有名は最終段まで温存. "
+                    "**1 案のみ** (`or`/`/`/`+`/`＋`/『〜と〜』 で複数並べない). "
+                    "**1 文 / 句点 1 つ**. "
+                    "**提案調** (『〜が おすすめ』『〜は どう?』). **命令形は禁止**."
+                )
+            chain_section = (
+                f"\n\nこれまでの絞り込み: {context_line}\n{guide}"
+            )
+        return (
+            f"{base}{chain_section}\n\n"
+            "ユーザーの相談に対し、自分の価値観を反映して短く日本語で 1-2 文で意見を述べてください。\n"
+            "前置きや JSON 等の構造化は不要、自然な日本語の発話だけを返してください。"
+        )
+
+    @staticmethod
+    def _fallback_spec_for_empty_preference(
+        empty_spec: AnonymousPersonaSpec,
+    ) -> AnonymousPersonaSpec:
+        """I-5 fix: signal_total=0 (新規 user / onboarding 未完了) の self_spec を
+        意味のある default 値で埋め直す.
+
+        persona_id / primary_language / seed_at は保持、value_tags のみ default 適用.
+        これにより blank persona ("(未設定)" だらけ) を LLM に渡すことを避け、UX 崩れを防止.
+        """
+        return AnonymousPersonaSpec(
+            persona_id=empty_spec.persona_id,
+            value_tags=("迷い中", "新規"),
+            primary_language=empty_spec.primary_language,
+            formality=empty_spec.formality,
+            seed_at=empty_spec.seed_at,
+        )
+
+    @staticmethod
+    def _clean_anonymous_text(raw: str) -> str:
+        """LLM 出力を anonymous bubble 用に寛容に正規化.
+
+        - ```...``` code fence を除去
+        - 旧 JSON 形式 {"original":..., "translation_ja":...} で返ってきた場合は
+          translation_ja を抽出 (LLM の癖で稀に発生する後方互換)
+        - それ以外はそのまま trim して返す
+        """
+        s = (raw or "").strip()
+        if s.startswith("```"):
+            lines = s.split("\n")
+            tail = -1 if lines and lines[-1].strip().startswith("```") else None
+            s = "\n".join(lines[1:tail] if tail is not None else lines[1:]).strip()
+        if s.startswith("{") and s.endswith("}"):
+            try:
+                data = json.loads(s)
+                if isinstance(data, dict):
+                    ja = data.get("translation_ja") or data.get("text") or ""
+                    return str(ja or "").strip()
+            except (json.JSONDecodeError, ValueError):
+                pass
+        return s
+
+    async def _run_stream_anonymous(
+        self,
+        *,
+        decision_id: UUID,
+        request: DecisionRequest,
+    ) -> AsyncIterator[StreamEvent]:
+        """v3-γ anonymous-strangers: 漫画ステージ用 utterance 生成.
+
+        - token streaming は emit しない (FR-3 / NFR-2): bubble は完成 text fade-in
+        - fixture spec は LLM 呼ばず hardcoded 発話を即 emit (FR-3 hybrid)
+        - その他は LLM が日本語で短い発話を返す (2026-05-24: 原文表示機能削除に伴い JSON 廃止)
+        - utterance event payload:
+            { persona_id, persona_name, text, primary_language, formality }
+        - drill-down chain_context は anonymous prompt に inject される (I-4 fix)
+        - signal_total=0 の self_spec (新規 user) は default fallback (I-5 fix)
+        - 永続化は selected_persona_ids 空 + persona_outputs.source="anonymous"
+        """
+        assert self._pool_repo is not None
+        pool = self._pool_repo
+
+        # 1. SilenceGuard (builtin path と共通)
+        verdict = await self._silence_guard.evaluate(user_input=request.user_input)
+        if verdict.is_silenced:
+            await self._record_silence(request, verdict.domain)
+            yield StreamEvent("silence", {"text": verdict.response_text or ""})
+            return
+
+        # 2. self spec (derive_spec) + pool sample 2 = 3 specs
+        sub = str(request.user_id)
+        profile = await self._profile_repo.get(request.user_id)
+        pref = None
+        if self._preference_repo is not None:
+            try:
+                pref = await self._preference_repo.get(request.user_id)
+            except Exception as exc:
+                self._logger.warning(
+                    "anonymous.preference_load_failed",
+                    user_id=sub,
+                    error=str(exc),
+                )
+        if pref is None:
+            from yesman_api.domain.persistence.models import PreferenceProfile
+            pref = PreferenceProfile(
+                user_id=request.user_id,
+                accepted_patterns=[],
+                rejected_patterns=[],
+                persona_style_preference={},
+                inferred_tags=[],
+            )
+        self_spec = derive_spec(sub=sub, preference=pref, profile=profile)
+        # I-5 fix: 空 preference user (signal_total=0) は default fallback で blank 防止
+        if self_spec.signal_total == 0:
+            self_spec = self._fallback_spec_for_empty_preference(self_spec)
+            self._logger.info(
+                "anonymous.self_spec_fallback_applied",
+                user_id=sub,
+                reason="empty_preference_signals",
+            )
+        sampled = pool.sample(n=2, excluding_sub=sub)
+        specs: list[AnonymousPersonaSpec] = [self_spec, *sampled]
+        proxies: list[_AnonymousProxy] = []
+        for idx, spec in enumerate(specs):
+            name = "あなたの声" if idx == 0 else f"知り合い #{idx}"
+            proxies.append(_AnonymousProxy(id_=spec.persona_id, name=name, spec=spec))
+
+        # 3. personas event (frontend で bubble pre-render)
+        yield StreamEvent(
+            "personas",
+            {
+                "personas": [
+                    {"id": str(p.id), "name": p.name} for p in proxies
+                ]
+            },
+        )
+
+        # 4. utterance 順次生成 (token streaming なし、漫画ステージは完成 text fade-in)
+        masked_user_input = mask_pii(request.user_input)
+        user_messages = [{"role": "user", "content": masked_user_input}]
+        fixtures = fixture_utterances()
+        per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
+        utterance_outputs: list[tuple] = []
+
+        for proxy in proxies:
+            spec = proxy.spec
+            fixture_ut = fixtures.get(spec.persona_id)
+            if fixture_ut is not None:
+                # fixture 経路: LLM 呼ばずに hardcoded を即 emit
+                yield StreamEvent(
+                    "utterance",
+                    {
+                        "persona_id": str(proxy.id),
+                        "persona_name": proxy.name,
+                        "text": fixture_ut.text,
+                        "primary_language": spec.primary_language,
+                        "formality": spec.formality,
+                    },
+                )
+                utterance_outputs.append((proxy, fixture_ut.text))
+                continue
+
+            # LLM 経路 (self_spec or 他 user の opt-in spec)
+            # I-4 fix: chain_context を inject して drill-down 段階別ガイドを反映
+            prompt = self._build_anonymous_prompt(
+                spec=spec,
+                chain_context=request.chain_context,
+            )
+            text = ""
+            try:
+                raw = await asyncio.wait_for(
+                    self._llm.complete(system=prompt, messages=user_messages),
+                    timeout=per_persona_timeout,
+                )
+                text = self._clean_anonymous_text(raw)
+            except asyncio.TimeoutError:
+                audit_log(
+                    "audit.decision.anonymous_timeout",
+                    decision_id=str(decision_id),
+                    persona=proxy.name,
+                    timeout_seconds=per_persona_timeout,
+                )
+            except Exception as exc:
+                audit_log(
+                    "audit.decision.anonymous_error",
+                    decision_id=str(decision_id),
+                    persona=proxy.name,
+                    error=str(exc),
+                )
+            # text 空でも utterance event は emit (frontend bubble loading 解除)
+            yield StreamEvent(
+                "utterance",
+                {
+                    "persona_id": str(proxy.id),
+                    "persona_name": proxy.name,
+                    "text": text,
+                    "primary_language": spec.primary_language,
+                    "formality": spec.formality,
+                },
+            )
+            if text and not text.isspace():
+                utterance_outputs.append((proxy, text))
+
+        # 5. 全 persona 失敗時は early return
+        if not utterance_outputs:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "all_personas_failed",
+                    "detail": "all anonymous personas returned empty",
+                },
+            )
+            return
+
+        # 6. proposal 生成 (builtin path と同じ orchestrator を流用)
+        proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        # 2026-05-25 外部サービス誘導: depth=0 root は次段で Amazon サービスへ繋がる action を含める.
+        if len(request.chain_context) == 0:
+            proposal_system += (
+                "\n\n"
+                "**重要**: この proposal は drill-down chain の **起点** です. "
+                "ユーザーの相談を **広く受け止めた 大まかな方向性** だけを示す短い 1 文を出してください. "
+                "『〇〇しよう / 〇〇するのが良い』程度の素直な助言に留め、以下を **必ず守って** ください:\n"
+                "- **手段 / 場所 / 媒体を決め打ちしない** "
+                "(例: 『映画見たい』 → 『劇場で 1 本観ろ』 はダメ. "
+                "『観たい映画を 1 本 観よう』 のように、劇場 / 配信 / DVD 等の channel は明示しない).\n"
+                "- **特定 service 名 (Amazon / Prime Video / Netflix / Uber Eats / 出前館 等) を出さない**. "
+                "service への誘導は次段以降の役割.\n"
+                "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
+                "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
+                "- **1 つの 具体的な action だけ** 提示する. "
+                "複数選択肢 (`or` / `/` / `(または)` / 『〜か〜』 / 『〜と〜』) での列挙は **禁止**.\n"
+                "- **柔らかい提案調**: 『〜しよう』『〜が 良いよ』『〜どう?』 程度. "
+                "**命令形 (『〜しろ』『〜するな』『〜せよ』『即〜』『今すぐ〜』『迷わず〜』) は禁止**.\n"
+                "- **1 文 / 句点 (。) は 1 つだけ** — 2 文に分けない、複数情報を詰めない.\n"
+                "- **ユーザに 決定を 投げ返す表現は 禁止** ← yesman の本旨と矛盾するため最重要 "
+                "(NG: 『〜決めてみよう』『〜気軽に〜』『〜選んでみる?』『〜書き出して』 "
+                "『〜から 選ぼう』『〜どちらかに 寄せて』『〜を 軸に 決めて』). "
+                "→ YesMan が **代わりに 1 つに決めて** 提示する.\n"
+                "- **根拠 / 期待効果 / 説明の付加は 禁止** "
+                "(NG: 『〜と 満足度が 上がるよ』『〜が 効率的だよ』『〜したほうが 楽だよ』 "
+                "『まずは 〜』『すると 〜』). action 動詞 1 つで完結する短文に.\n"
+                "- **action 動詞 + 大まかな対象** で構成 "
+                "(OK: 『今夜は 温かい一品を 作ろう』『映画を 1 本 観よう』 のように 1 action 1 名詞).\n"
+                "- **root では 最終決定 signal を 絶対に 出さない** ← drill-down の起点なので最重要 "
+                "(NG: 『これで決まり!』『〜開きますか?』『〜決めますか?』 を末尾に置かない. "
+                "必ず『〜しよう』『〜どう?』『〜が 良いよ』 等の **継続 signal** で締める)."
+            )
+        # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
+        # 疑問形 "開きますか?" 1 文を要求 (builtin path と境界一致).
+        elif len(request.chain_context) == MAX_DRILL_DEPTH:
+            proposal_system += (
+                "\n\n"
+                "**最終段** (MAX 到達). 上の絞り込みを受けて **疑問形 1 文** で出してください.\n"
+                "**case A: 外部サイトで購入 / 視聴 / 注文できる action** の場合:\n"
+                "  → **「〜を XX で 開きますか?」** で締める (Yes で 新しいタブで開く)\n"
+                "  例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                "『「貞子」を Amazon Prime Video で 開きますか?』.\n"
+                "**case B: 自宅で完結する action** (自家調理 / 散歩 / 既存所有物利用 等) の場合:\n"
+                "  → **「〜決まり!」 / 「〜決めますか?」** で締める (外部サイト不要)\n"
+                "  例: 『「冷凍うどんを 茹でて めんつゆで 食べる」 で 決まり!』 / "
+                "『「家にある コーヒー豆で ハンドドリップする」 に 決めますか?』.\n"
+                "chain 内で 自宅完結意図が明確 (例: 『家にある物で〜』『冷蔵庫の〜』) なら "
+                "case B を選ぶ. 強引に外部 service に紐づけない."
+            )
+        proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
+        try:
+            raw_proposal = await asyncio.wait_for(
+                self._llm.complete(system=proposal_system, messages=user_messages),
+                timeout=proposal_timeout,
+            )
+            proposal_text = clean_proposal_output(raw_proposal)
+        except asyncio.TimeoutError:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "proposal_timeout",
+                    "detail": f"proposal LLM call exceeded {proposal_timeout}s",
+                },
+            )
+            return
+
+        # 7. drill-down chain depth + service catalog (builtin path と同じ)
+        from yesman_api.domain.decision.service_catalog import pick_service
+
+        depth = len(request.chain_context)
+        combined_text = (
+            proposal_text + " " + " ".join(request.chain_context)
+        ).strip()
+        picked = pick_service(combined_text)
+        service_payload: dict | None = None
+        if picked is not None:
+            service, category = picked
+            service_payload = {
+                "name": service.name,
+                "url": service.url,
+                "emoji": service.emoji,
+                "category": category,
+            }
+        # 2026-05-25 revert (A 案): builtin path と同じく depth >= MAX_DRILL_DEPTH のみ final.
+        # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
+        # early-final で 5 段強制ではなく LLM 判断で 2-4 段で完結可能.
+        # depth=0 root は drill-down の起点であり、early-final は許可しない (signal 暴発防止).
+        is_final = depth >= MAX_DRILL_DEPTH or (
+            depth >= 1 and _detect_final_signal(proposal_text)
+        )
+        yield StreamEvent(
+            "proposal",
+            {
+                "proposal_text": proposal_text,
+                "is_final": is_final,
+                "depth": depth,
+                "service": service_payload,
+            },
+        )
+
+        # 8. 永続化 (anonymous は selected_persona_ids 空)
+        utterances_persist = [
+            PersonaUtterance(persona_id=p.id, persona_name=p.name, text=text)
+            for p, text in utterance_outputs
+        ]
+        consensus = ConsensusOutput(
+            domain_classification="daily",
+            utterances=utterances_persist,
+            proposal_text=proposal_text,
+        )
+        try:
+            await self._persist_decision(
+                decision_id, request, consensus, [], is_anonymous=True
+            )
+        except Exception as exc:
+            self._logger.warning(
+                "anonymous.persist_failed",
+                decision_id=str(decision_id),
+                error=str(exc),
+            )
+
+        # 9. complete
+        yield StreamEvent("complete", {"decision_id": str(decision_id)})
+
+    # ============================================================
+    # v4 (2026-05-24): 3 source mix selection 統合 flow
+    # ============================================================
+    async def _run_stream_mixed(
+        self,
+        *,
+        decision_id: UUID,
+        request: DecisionRequest,
+    ) -> AsyncIterator[StreamEvent]:
+        """selected_personas (3 source mix) を resolve して合議.
+
+        - source ごとに spec/persona を取得 (builtin/my: persona_repo, anonymous: pool_repo)
+        - self_spec injection なし (「自分を discussion から除外」)
+        - 全 persona 非 streaming (anonymous flow と整合)
+        - anonymous の caller persona は exclude (NFR-6 + pool.get_by_id 内で拒否)
+        """
+        # 1. SilenceGuard
+        verdict = await self._silence_guard.evaluate(user_input=request.user_input)
+        if verdict.is_silenced:
+            await self._record_silence(request, verdict.domain)
+            yield StreamEvent("silence", {"text": verdict.response_text or ""})
+            return
+
+        # 2. Resolve each selected_persona
+        sub = str(request.user_id)
+        # resolved: list of (source, id_str, display_name, spec_or_persona)
+        resolved: list[tuple[str, str, str, object]] = []
+        for ref in request.selected_personas:
+            if ref.source == "anonymous":
+                if self._pool_repo is None:
+                    continue
+                spec = self._pool_repo.get_by_id(ref.id, excluding_sub=sub)
+                if spec is not None:
+                    # display name: 「知り合い #N」
+                    idx = sum(1 for r in resolved if r[0] == "anonymous") + 1
+                    resolved.append(
+                        ("anonymous", str(spec.persona_id), f"知り合い #{idx}", spec)
+                    )
+            else:
+                # builtin or my
+                persona = await self._persona_repo.get(ref.id)
+                if persona is not None:
+                    resolved.append((ref.source, str(persona.id), persona.name, persona))
+
+        if not resolved:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "no_personas_resolved",
+                    "detail": "selected_personas を解決できませんでした (削除済 / 不正 ID)",
+                },
+            )
+            return
+
+        # 3. personas event (frontend で bubble pre-render)
+        yield StreamEvent(
+            "personas",
+            {
+                "personas": [
+                    {"id": id_str, "name": name} for (_, id_str, name, _) in resolved
+                ]
+            },
+        )
+
+        # 4. utterances 順次生成 (non-streaming for all sources)
+        masked_user_input = mask_pii(request.user_input)
+        user_messages = [{"role": "user", "content": masked_user_input}]
+        per_persona_timeout = self._config.decision_llm_per_persona_timeout_seconds
+        fixtures = fixture_utterances()
+        utterance_outputs: list[tuple] = []  # (proxy or persona, text)
+
+        for source, id_str, name, item in resolved:
+            event_extras: dict[str, Any] = {}
+            text = ""
+
+            if source == "anonymous":
+                spec: AnonymousPersonaSpec = item  # type: ignore[assignment]
+                event_extras["primary_language"] = spec.primary_language
+                event_extras["formality"] = spec.formality
+                # fixture 経路: LLM 呼ばず hardcoded
+                fixture_ut = fixtures.get(spec.persona_id)
+                if fixture_ut is not None:
+                    text = fixture_ut.text
+                else:
+                    prompt = self._build_anonymous_prompt(
+                        spec=spec, chain_context=request.chain_context
+                    )
+                    try:
+                        raw = await asyncio.wait_for(
+                            self._llm.complete(system=prompt, messages=user_messages),
+                            timeout=per_persona_timeout,
+                        )
+                        text = self._clean_anonymous_text(raw)
+                    except (asyncio.TimeoutError, Exception) as exc:
+                        audit_log(
+                            "audit.decision.mixed_anonymous_failed",
+                            decision_id=str(decision_id),
+                            persona=name,
+                            error=str(exc),
+                        )
+            else:
+                # builtin or my: 既存 builtin prompt builder を使う
+                prompt = self._orchestrator.build_persona_prompt(item)
+                try:
+                    raw = await asyncio.wait_for(
+                        self._llm.complete(system=prompt, messages=user_messages),
+                        timeout=per_persona_timeout,
+                    )
+                    text = (raw or "").strip()
+                except (asyncio.TimeoutError, Exception) as exc:
+                    audit_log(
+                        "audit.decision.mixed_builtin_failed",
+                        decision_id=str(decision_id),
+                        persona=name,
+                        error=str(exc),
+                    )
+
+            yield StreamEvent(
+                "utterance",
+                {
+                    "persona_id": id_str,
+                    "persona_name": name,
+                    "text": text,
+                    **event_extras,
+                },
+            )
+            if text and not text.isspace():
+                # proposal 用 proxy: id/name 持てば proposal builder で参照可
+                proxy = _AnonymousProxy(
+                    id_=UUID(id_str), name=name, spec=item if source == "anonymous" else None  # type: ignore[arg-type]
+                ) if source == "anonymous" else item
+                utterance_outputs.append((proxy, text))
+
+        # 5. early return if all personas failed
+        if not utterance_outputs:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "all_personas_failed",
+                    "detail": "all selected personas returned empty",
+                },
+            )
+            return
+
+        # 6. proposal 生成
+        proposal_system = self._orchestrator.build_proposal_prompt(utterance_outputs)
+        # 2026-05-25 外部サービス誘導: depth=0 root は次段で Amazon サービスへ繋がる action を含める.
+        if len(request.chain_context) == 0:
+            proposal_system += (
+                "\n\n"
+                "**重要**: この proposal は drill-down chain の **起点** です. "
+                "ユーザーの相談を **広く受け止めた 大まかな方向性** だけを示す短い 1 文を出してください. "
+                "『〇〇しよう / 〇〇するのが良い』程度の素直な助言に留め、以下を **必ず守って** ください:\n"
+                "- **手段 / 場所 / 媒体を決め打ちしない** "
+                "(例: 『映画見たい』 → 『劇場で 1 本観ろ』 はダメ. "
+                "『観たい映画を 1 本 観よう』 のように、劇場 / 配信 / DVD 等の channel は明示しない).\n"
+                "- **特定 service 名 (Amazon / Prime Video / Netflix / Uber Eats / 出前館 等) を出さない**. "
+                "service への誘導は次段以降の役割.\n"
+                "- **時間 / 数量 / 価格 等の細かい指示も避ける** "
+                "(『今すぐ』『1 本だけ』『60 分以内』 等の詰めすぎ表現は不要).\n"
+                "- **1 つの 具体的な action だけ** 提示する. "
+                "複数選択肢 (`or` / `/` / `(または)` / 『〜か〜』 / 『〜と〜』) での列挙は **禁止**.\n"
+                "- **柔らかい提案調**: 『〜しよう』『〜が 良いよ』『〜どう?』 程度. "
+                "**命令形 (『〜しろ』『〜するな』『〜せよ』『即〜』『今すぐ〜』『迷わず〜』) は禁止**.\n"
+                "- **1 文 / 句点 (。) は 1 つだけ** — 2 文に分けない、複数情報を詰めない.\n"
+                "- **ユーザに 決定を 投げ返す表現は 禁止** ← yesman の本旨と矛盾するため最重要 "
+                "(NG: 『〜決めてみよう』『〜気軽に〜』『〜選んでみる?』『〜書き出して』 "
+                "『〜から 選ぼう』『〜どちらかに 寄せて』『〜を 軸に 決めて』). "
+                "→ YesMan が **代わりに 1 つに決めて** 提示する.\n"
+                "- **根拠 / 期待効果 / 説明の付加は 禁止** "
+                "(NG: 『〜と 満足度が 上がるよ』『〜が 効率的だよ』『〜したほうが 楽だよ』 "
+                "『まずは 〜』『すると 〜』). action 動詞 1 つで完結する短文に.\n"
+                "- **action 動詞 + 大まかな対象** で構成 "
+                "(OK: 『今夜は 温かい一品を 作ろう』『映画を 1 本 観よう』 のように 1 action 1 名詞).\n"
+                "- **root では 最終決定 signal を 絶対に 出さない** ← drill-down の起点なので最重要 "
+                "(NG: 『これで決まり!』『〜開きますか?』『〜決めますか?』 を末尾に置かない. "
+                "必ず『〜しよう』『〜どう?』『〜が 良いよ』 等の **継続 signal** で締める)."
+            )
+        # 2026-05-26 drill-down-auto-open (FR-DAO-01): depth == MAX_DRILL_DEPTH のみ
+        # 疑問形 "開きますか?" 1 文を要求 (builtin / anonymous path と境界一致).
+        elif len(request.chain_context) == MAX_DRILL_DEPTH:
+            proposal_system += (
+                "\n\n"
+                "**最終段** (MAX 到達). 上の絞り込みを受けて **疑問形 1 文** で出してください.\n"
+                "**case A: 外部サイトで購入 / 視聴 / 注文できる action** の場合:\n"
+                "  → **「〜を XX で 開きますか?」** で締める (Yes で 新しいタブで開く)\n"
+                "  例: 『「パターソン」を Amazon Prime Video で 開きますか?』 / "
+                "『「貞子」を Amazon Prime Video で 開きますか?』.\n"
+                "**case B: 自宅で完結する action** (自家調理 / 散歩 / 既存所有物利用 等) の場合:\n"
+                "  → **「〜決まり!」 / 「〜決めますか?」** で締める (外部サイト不要)\n"
+                "  例: 『「冷凍うどんを 茹でて めんつゆで 食べる」 で 決まり!』 / "
+                "『「家にある コーヒー豆で ハンドドリップする」 に 決めますか?』.\n"
+                "chain 内で 自宅完結意図が明確 (例: 『家にある物で〜』『冷蔵庫の〜』) なら "
+                "case B を選ぶ. 強引に外部 service に紐づけない."
+            )
+        proposal_timeout = self._config.decision_llm_proposal_timeout_seconds
+        try:
+            raw_proposal = await asyncio.wait_for(
+                self._llm.complete(system=proposal_system, messages=user_messages),
+                timeout=proposal_timeout,
+            )
+            proposal_text = clean_proposal_output(raw_proposal)
+        except asyncio.TimeoutError:
+            yield StreamEvent(
+                "error",
+                {
+                    "reason": "proposal_timeout",
+                    "detail": f"proposal LLM call exceeded {proposal_timeout}s",
+                },
+            )
+            return
+
+        # 7. drill-down + service catalog
+        from yesman_api.domain.decision.service_catalog import pick_service
+
+        depth = len(request.chain_context)
+        combined_text = (
+            proposal_text + " " + " ".join(request.chain_context)
+        ).strip()
+        picked = pick_service(combined_text)
+        service_payload: dict | None = None
+        if picked is not None:
+            service, category = picked
+            service_payload = {
+                "name": service.name,
+                "url": service.url,
+                "emoji": service.emoji,
+                "category": category,
+            }
+        # 2026-05-25 revert (A 案): mixed path も depth >= MAX_DRILL_DEPTH のみ final.
+        # 2026-05-26 (A 案): MAX 到達 OR (depth >= 1 で LLM が末尾に決定 signal を含めた場合) に is_final=true.
+        # early-final で 5 段強制ではなく LLM 判断で 2-4 段で完結可能.
+        # depth=0 root は drill-down の起点であり、early-final は許可しない (signal 暴発防止).
+        is_final = depth >= MAX_DRILL_DEPTH or (
+            depth >= 1 and _detect_final_signal(proposal_text)
+        )
+
+        yield StreamEvent(
+            "proposal",
+            {
+                "proposal_text": proposal_text,
+                "is_final": is_final,
+                "depth": depth,
+                "service": service_payload,
+            },
+        )
+
+        # 8. persistence (anonymous + builtin 混在のため selected_persona_ids を builtin/my のみで構成)
+        builtin_my_ids = [
+            UUID(r[1]) for r in resolved if r[0] in ("builtin", "my")
+        ]
+        utterances_persist = [
+            PersonaUtterance(
+                persona_id=proxy.id if hasattr(proxy, "id") else proxy.persona_id,
+                persona_name=proxy.name if hasattr(proxy, "name") else proxy.persona_name,
+                text=text,
+            )
+            for proxy, text in utterance_outputs
+        ]
+        consensus = ConsensusOutput(
+            domain_classification="daily",
+            utterances=utterances_persist,
+            proposal_text=proposal_text,
+        )
+        # selected_persona_ids を builtin/my のみで一時的に inject (persist 側で参照される)
+        persist_request = DecisionRequest(
+            user_id=request.user_id,
+            user_input=request.user_input,
+            selected_persona_ids=builtin_my_ids,
+            chain_context=request.chain_context,
+            persona_source=request.persona_source,
+            selected_personas=request.selected_personas,
+        )
+        try:
+            # anonymous が含まれていれば is_anonymous=True で永続化 (record_usage 404 を回避)
+            has_anonymous = any(r[0] == "anonymous" for r in resolved)
+            await self._persist_decision(
+                decision_id,
+                persist_request,
+                consensus,
+                # builtin/my personas のみを persona list として渡す
+                [r[3] for r in resolved if r[0] in ("builtin", "my")],
+                is_anonymous=has_anonymous,
+            )
+        except Exception as exc:
+            self._logger.warning(
+                "mixed.persist_failed",
+                decision_id=str(decision_id),
+                error=str(exc),
+            )
+
+        # 9. complete
+        yield StreamEvent("complete", {"decision_id": str(decision_id)})
 
 
 __all__ = ["DecisionEngine"]

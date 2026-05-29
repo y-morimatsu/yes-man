@@ -25,6 +25,17 @@ export function personaIconFor(name: string): string {
   return "🎭";
 }
 
+/** 2026-05-24: builtin persona ごとの icon 背景色 (Tailwind class).
+ *
+ * 慎重 = sky (落ち着き / 思慮)、楽観 = amber (太陽 / 明るさ)、
+ * 効率 = violet (稲妻 / パワー)、default = brand-100 (orange-pink). */
+export function personaBackgroundFor(name: string): string {
+  if (name.includes("慎重")) return "bg-sky-100 dark:bg-sky-900";
+  if (name.includes("楽観")) return "bg-amber-100 dark:bg-amber-900";
+  if (name.includes("効率")) return "bg-violet-100 dark:bg-violet-900";
+  return "bg-brand-100 dark:bg-brand-900";
+}
+
 export function DecisionUtteranceBubble({
   personaName,
   text,
@@ -52,7 +63,7 @@ export function DecisionUtteranceBubble({
         </span>
         {streaming && (
           <span
-            className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 animate-pulse motion-reduce:animate-none"
+            className="text-[12px] font-medium px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 animate-pulse motion-reduce:animate-none"
             aria-hidden
           >
             発言中…

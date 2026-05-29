@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Claude (YesMan presentation, slide6 card footer)" version="24.7.5">
+
+  <!-- ============================================================
+       Common card layout (3 tiles horizontal):
+       canvas 1920 x 1080
+       padding: 80 left/right + 60 top
+       card width: ~ 570, gap 18, card height: ~ 800 (top section 380 + footer)
+       ============================================================ -->
+
+  <!-- ============================================================
+       Page A — シンプル footer リボン
+       各カードの下部に accent-pale 帯 + キャッチコピー
+       ============================================================ -->
+  <diagram id="page-a" name="A. footer リボン">
+    <mxGraphModel dx="1920" dy="1080" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- bg -->
+        <mxCell id="bgA" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry width="1920" height="1080" as="geometry"/>
+        </mxCell>
+
+        <!-- title -->
+        <mxCell id="ttlA" value="案 A — シンプル footer リボン (accent-pale 帯)" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="1760" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 1: BUILTIN ===== -->
+        <mxCell id="A_card1" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_tag1" value="BUILTIN" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#C8DEF0;strokeColor=none;fontColor=#1F5481;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_h1" value="ビルトイン 3 人格" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="110" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_p1" value="YesMan 標準搭載。それぞれが固有の theme color と発話 tone を持つ。&#xa;嗜好親和度の高い人格には 💡 おすすめ badge。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="245" width="510" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l1a" value="慎重派 — リスクを丁寧に点検する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="340" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l1b" value="楽観派 — ポジティブな可能性から提案する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="375" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l1c" value="効率派 — 最短ルートと時間効率を優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="410" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- footer ribbon -->
+        <mxCell id="A_rib1" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#EFC5B3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="110" y="800" width="510" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_ribt1" value="💡 0 設定で、すぐ使える" style="text;html=1;align=center;verticalAlign=middle;fontColor=#973F22;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="110" y="800" width="510" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 2: 知り合い ===== -->
+        <mxCell id="A_card2" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="675" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_tag2" value="知り合い" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F2D89D;strokeColor=none;fontColor=#6E4C0E;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="705" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_h2" value="知り合いと共有" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="705" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_p2" value="知り合いが作成したペルソナを共有して借りる。&#xa;価値観タグ + 言語 + formality で検索 / 招集。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="245" width="510" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l2a" value="#沖縄移住 — ゆったりした暮らしを大切にする" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="340" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l2b" value="#料理研究家 — 食を中心に生活設計する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="375" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l2c" value="#FIRE 達成 — お金と時間の両立を重視する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="410" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l2d" value="#子育て中 — 家族と過ごす時間を最優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="445" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="A_rib2" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#EFC5B3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="705" y="800" width="510" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_ribt2" value="🤝 リアルな価値観で、ハズさない" style="text;html=1;align=center;verticalAlign=middle;fontColor=#973F22;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="705" y="800" width="510" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 3: CUSTOM ===== -->
+        <mxCell id="A_card3" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_tag3" value="CUSTOM" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#DECDED;strokeColor=none;fontColor=#432F75;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_h3" value="自作 (My persona)" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_p3" value="name + description + prompt (≥30 字) + avatar で完全自作。&#xa;&quot;父の口調&quot;, &quot;10 年後の自分&quot;, &quot;推し&quot; — 信頼の源泉を自分で定義。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="245" width="510" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l3a" value="父さん — 励ましと厳しさを併せ持つ" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="340" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l3b" value="未来の自分 — 10 年スパンの長期視点で考える" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="375" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_l3c" value="先輩 — 経験から無理を諌め、緩やかに導く" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="410" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="A_rib3" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#EFC5B3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="800" width="510" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_ribt3" value="✨ プロンプト 1 つで、自分専用 AI" style="text;html=1;align=center;verticalAlign=middle;fontColor=#973F22;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="800" width="510" height="100" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ============================================================
+       Page B — 使い方の例 (mini scenario boxed message)
+       ============================================================ -->
+  <diagram id="page-b" name="B. 使い方の例">
+    <mxGraphModel dx="1920" dy="1080" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="bgB" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry width="1920" height="1080" as="geometry"/>
+        </mxCell>
+        <mxCell id="ttlB" value="案 B — 使い方の例 (mini scenario)" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="1760" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 1: BUILTIN ===== -->
+        <mxCell id="B_card1" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_tag1" value="BUILTIN" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#C8DEF0;strokeColor=none;fontColor=#1F5481;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_h1" value="ビルトイン 3 人格" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="110" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_p1" value="YesMan 標準搭載。それぞれが固有の theme color と発話 tone を持つ。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l1a" value="慎重派 — リスクを丁寧に点検する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l1b" value="楽観派 — ポジティブな可能性から提案する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l1c" value="効率派 — 最短ルートと時間効率を優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- scenario box -->
+        <mxCell id="B_scd1" value="── 使い方の例 ──" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=14;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="660" width="510" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_scbox1" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F5F1E3;strokeColor=#B8AC91;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="110" y="690" width="510" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_scq1" value="Q. 明日のランチを決めて" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=18;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="130" y="710" width="470" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_sca1" value="→ 慎重派: 「胃に優しいうどんを」&#xa;→ 楽観派: 「新店の韓国料理どう?」&#xa;→ 効率派: 「最寄りの定食屋へ」&#xa;&#xa;━ 合議: 「定食屋 で きまり」" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=15;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="130" y="750" width="470" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 2: 知り合い ===== -->
+        <mxCell id="B_card2" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="675" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_tag2" value="知り合い" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F2D89D;strokeColor=none;fontColor=#6E4C0E;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="705" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_h2" value="知り合いと共有" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="705" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_p2" value="知り合いが作成したペルソナを共有して借りる。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l2a" value="#沖縄移住 — ゆったりした暮らしを大切にする" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l2b" value="#料理研究家 — 食を中心に生活設計する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l2c" value="#FIRE 達成 — お金と時間の両立を重視する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l2d" value="#子育て中 — 家族と過ごす時間を最優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="435" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="B_scd2" value="── 使い方の例 ──" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=14;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="660" width="510" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_scbox2" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F5F1E3;strokeColor=#B8AC91;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="705" y="690" width="510" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_scq2" value="Q. 沖縄に移住すべき?" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=18;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="725" y="710" width="470" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_sca2" value="→ #沖縄移住: 「ぜひ来て、暖かい」&#xa;→ #FIRE 達成: 「貯蓄計画は固めて」&#xa;→ #子育て中: 「学校選び要注意」&#xa;&#xa;━ 合議: 「3 年計画で 段階移住」" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=15;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="725" y="750" width="470" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 3: CUSTOM ===== -->
+        <mxCell id="B_card3" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_tag3" value="CUSTOM" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#DECDED;strokeColor=none;fontColor=#432F75;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_h3" value="自作 (My persona)" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_p3" value="name + description + prompt (≥30 字) + avatar で完全自作。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l3a" value="父さん — 励ましと厳しさを併せ持つ" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l3b" value="未来の自分 — 10 年スパンの長期視点で考える" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_l3c" value="先輩 — 経験から無理を諌め、緩やかに導く" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="B_scd3" value="── 使い方の例 ──" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=14;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="660" width="510" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_scbox3" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F5F1E3;strokeColor=#B8AC91;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="690" width="510" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_scq3" value="Q. 転職、すべき?" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=18;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="710" width="470" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_sca3" value="→ 父さん: 「お前ならどこでもやれる」&#xa;→ 未来の自分: 「10 年後 後悔するな」&#xa;→ 先輩: 「いまは 残れ、半年後に」&#xa;&#xa;━ 合議: 「半年計画で 転職準備」" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=15;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="750" width="470" height="150" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ============================================================
+       Page C — 装飾アイコン (大型シンボル + キャッチ)
+       ============================================================ -->
+  <diagram id="page-c" name="C. 装飾アイコン">
+    <mxGraphModel dx="1920" dy="1080" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="bgC" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry width="1920" height="1080" as="geometry"/>
+        </mxCell>
+        <mxCell id="ttlC" value="案 C — 装飾アイコン (大型シンボル + キャッチコピー)" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="1760" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 1: BUILTIN ===== -->
+        <mxCell id="C_card1" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_tag1" value="BUILTIN" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#C8DEF0;strokeColor=none;fontColor=#1F5481;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_h1" value="ビルトイン 3 人格" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="110" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_p1" value="YesMan 標準搭載。それぞれが固有の theme color と発話 tone を持つ。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l1a" value="慎重派 — リスクを丁寧に点検する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l1b" value="楽観派 — ポジティブな可能性から提案する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l1c" value="効率派 — 最短ルートと時間効率を優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- 大型シンボル -->
+        <mxCell id="C_icon1" value="🎭" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=180;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="110" y="600" width="510" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_capt1" value="すぐ使える 3 人格" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="110" y="850" width="510" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 2: 知り合い ===== -->
+        <mxCell id="C_card2" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="675" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_tag2" value="知り合い" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F2D89D;strokeColor=none;fontColor=#6E4C0E;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="705" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_h2" value="知り合いと共有" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="705" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_p2" value="知り合いが作成したペルソナを共有して借りる。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l2a" value="#沖縄移住 — ゆったりした暮らしを大切にする" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l2b" value="#料理研究家 — 食を中心に生活設計する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l2c" value="#FIRE 達成 — お金と時間の両立を重視する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l2d" value="#子育て中 — 家族と過ごす時間を最優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="435" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="C_icon2" value="🤝" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=180;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="705" y="600" width="510" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_capt2" value="リアルな価値観で、ハズさない" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="705" y="850" width="510" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 3: CUSTOM ===== -->
+        <mxCell id="C_card3" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_tag3" value="CUSTOM" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#DECDED;strokeColor=none;fontColor=#432F75;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_h3" value="自作 (My persona)" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_p3" value="name + description + prompt (≥30 字) + avatar で完全自作。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l3a" value="父さん — 励ましと厳しさを併せ持つ" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l3b" value="未来の自分 — 10 年スパンの長期視点で考える" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_l3c" value="先輩 — 経験から無理を諌め、緩やかに導く" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="C_icon3" value="✨" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=180;opacity=40;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="600" width="570" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_capt3" value="プロンプト 1 つで、自分専用 AI" style="text;html=1;align=center;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="850" width="510" height="40" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ============================================================
+       Page D — ハイブリッド (リボン + アイコン + 数字)
+       ============================================================ -->
+  <diagram id="page-d" name="D. ハイブリッド">
+    <mxGraphModel dx="1920" dy="1080" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="bgD" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry width="1920" height="1080" as="geometry"/>
+        </mxCell>
+        <mxCell id="ttlD" value="案 D — ハイブリッド (アイコン + キャッチ + 数字)" style="text;html=1;align=left;verticalAlign=middle;fontColor=#B85C3D;fontSize=22;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="1760" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 1: BUILTIN ===== -->
+        <mxCell id="D_card1" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_tag1" value="BUILTIN" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#C8DEF0;strokeColor=none;fontColor=#1F5481;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_h1" value="ビルトイン 3 人格" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="110" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_p1" value="YesMan 標準搭載。それぞれが固有の theme color と発話 tone を持つ。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l1a" value="慎重派 — リスクを丁寧に点検する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l1b" value="楽観派 — ポジティブな可能性から提案する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l1c" value="効率派 — 最短ルートと時間効率を優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="110" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- hybrid footer: icon + box + number -->
+        <mxCell id="D_fbox1" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#B85C3D;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="110" y="700" width="510" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_ficon1" value="🎭" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=64;" vertex="1" parent="1">
+          <mxGeometry x="130" y="720" width="120" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fcap1" value="0 設定で、すぐ使える" style="text;html=1;align=left;verticalAlign=middle;fontColor=#973F22;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="260" y="720" width="340" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fnum1" value="3 人格 / 0 設定" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=16;fontFamily=monospace;" vertex="1" parent="1">
+          <mxGeometry x="260" y="770" width="340" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fbar1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="130" y="830" width="470" height="2" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_ftag1" value="● 推奨: 迷ったら、まずビルトイン" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=14;fontStyle=2;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="130" y="850" width="470" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 2: 知り合い ===== -->
+        <mxCell id="D_card2" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="675" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_tag2" value="知り合い" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#F2D89D;strokeColor=none;fontColor=#6E4C0E;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="705" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_h2" value="知り合いと共有" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="705" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_p2" value="知り合いが作成したペルソナを共有して借りる。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l2a" value="#沖縄移住 — ゆったりした暮らしを大切にする" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l2b" value="#料理研究家 — 食を中心に生活設計する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l2c" value="#FIRE 達成 — お金と時間の両立を重視する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l2d" value="#子育て中 — 家族と過ごす時間を最優先する" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="705" y="435" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="D_fbox2" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#B85C3D;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="705" y="700" width="510" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_ficon2" value="🤝" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=64;" vertex="1" parent="1">
+          <mxGeometry x="725" y="720" width="120" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fcap2" value="リアルな価値観で 借りる" style="text;html=1;align=left;verticalAlign=middle;fontColor=#973F22;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="855" y="720" width="340" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fnum2" value="opt-in × ∞ 候補" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=16;fontFamily=monospace;" vertex="1" parent="1">
+          <mxGeometry x="855" y="770" width="340" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fbar2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="725" y="830" width="470" height="2" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_ftag2" value="● 推奨: 自分にない視点が欲しいとき" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=14;fontStyle=2;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="725" y="850" width="470" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Card 3: CUSTOM ===== -->
+        <mxCell id="D_card3" value="" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B8AC91;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1270" y="120" width="570" height="820" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_tag3" value="CUSTOM" style="rounded=1;arcSize=40;whiteSpace=wrap;html=1;fillColor=#DECDED;strokeColor=none;fontColor=#432F75;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="150" width="100" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_h3" value="自作 (My persona)" style="text;html=1;align=left;verticalAlign=top;fontColor=#1A1814;fontSize=26;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="195" width="500" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_p3" value="name + description + prompt (≥30 字) + avatar で完全自作。" style="text;html=1;align=left;verticalAlign=top;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="245" width="510" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l3a" value="父さん — 励ましと厳しさを併せ持つ" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="330" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l3b" value="未来の自分 — 10 年スパンの長期視点で考える" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="365" width="510" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_l3c" value="先輩 — 経験から無理を諌め、緩やかに導く" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=17;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="400" width="510" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="D_fbox3" value="" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FAE5D9;strokeColor=#B85C3D;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="700" width="510" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_ficon3" value="✨" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1A1814;fontSize=64;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="720" width="120" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fcap3" value="プロンプト 1 つで完成" style="text;html=1;align=left;verticalAlign=middle;fontColor=#973F22;fontSize=22;fontStyle=1;fontFamily=serif;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="720" width="340" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fnum3" value="prompt ≥30 字 / 1 つ" style="text;html=1;align=left;verticalAlign=middle;fontColor=#3A362E;fontSize=16;fontFamily=monospace;" vertex="1" parent="1">
+          <mxGeometry x="1450" y="770" width="340" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_fbar3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B85C3D;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="830" width="470" height="2" as="geometry"/>
+        </mxCell>
+        <mxCell id="D_ftag3" value="● 推奨: 自分の信頼を完全に形にしたい" style="text;html=1;align=center;verticalAlign=middle;fontColor=#6B6557;fontSize=14;fontStyle=2;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="850" width="470" height="30" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+</mxfile>

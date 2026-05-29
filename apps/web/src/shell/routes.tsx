@@ -17,8 +17,14 @@ const PersonaListPage = lazy(() => import("../features/persona/PersonaListPage")
 const PersonaSelectionPage = lazy(() => import("../features/persona/PersonaSelectionPage"));
 const ScorePage = lazy(() => import("../features/score/ScorePage"));
 const PreferencePage = lazy(() => import("../features/preference/PreferencePage"));
+// アイデア検証 v3-β: 新規登録時 嗜好把握 onboarding
+const OnboardingPage = lazy(() => import("../features/onboarding/OnboardingPage"));
+// 2026-05-24: AnonymousPersonaList / AnonymousPersonaDetail (履歴専用画面) 撤去
 
 export const router = createBrowserRouter([
+  // 2026-05-24: SplashPage は Layout 外の独立 route. 画面全体に background
+  // (cream + earth horizon) を表示するため、Layout header / padding を経由しない.
+  { path: "/auth/splash", element: <SplashPage /> },
   {
     path: "/",
     element: <Layout />,
@@ -31,7 +37,6 @@ export const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
-      { path: "auth/splash", element: <SplashPage /> },
       { path: "auth/signin", element: <SignInPage /> },
       { path: "auth/callback", element: <CallbackPage /> },
       {
@@ -79,6 +84,14 @@ export const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <PreferencePage />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "onboarding",
+        element: (
+          <RequireAuth>
+            <OnboardingPage />
           </RequireAuth>
         ),
       },

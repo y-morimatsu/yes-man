@@ -46,4 +46,27 @@ describe("PersonaCard", () => {
     const card = container.firstChild as HTMLElement;
     expect(card.className).toContain("opacity-50");
   });
+
+  it("decodes yesman-avatar: emoji avatar and renders the emoji (not as img)", () => {
+    // {mode:"emoji", color:"pink", emoji:"👩"} を base64 encode
+    const json = JSON.stringify({ mode: "emoji", color: "pink", emoji: "👩" });
+    const b64 = btoa(unescape(encodeURIComponent(json)));
+    const { container } = render(
+      <PersonaCard
+        persona={{ ...samplePersona, name: "妻", avatar_url: `yesman-avatar:${b64}` }}
+      />,
+    );
+    // emoji がアバター枠に表示され、img は使われない
+    expect(container.querySelector("img")).toBeNull();
+    expect(screen.getAllByText("👩").length).toBeGreaterThan(0);
+  });
+
+  it("renders plain URL avatar as img", () => {
+    const { container } = render(
+      <PersonaCard
+        persona={{ ...samplePersona, avatar_url: "https://example.com/a.png" }}
+      />,
+    );
+    expect(container.querySelector("img")).not.toBeNull();
+  });
 });

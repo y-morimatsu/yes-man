@@ -26,7 +26,7 @@ export function DecisionHistoryList(): JSX.Element | null {
     // skeleton 3 件
     return (
       <section className="mt-6">
-        <h2 className="font-serif font-semibold text-base text-brand-700 px-3 mb-2">
+        <h2 className="font-sans font-semibold text-base text-brand-700 px-3 mb-2">
           📜 最近の Yes 採択
           <span className="text-xs text-neutral-500 font-normal ml-2">
             (最大 {limit} 件)
@@ -49,7 +49,7 @@ export function DecisionHistoryList(): JSX.Element | null {
 
   return (
     <section className="mt-6" aria-label="最近の Yes 採択履歴">
-      <h2 className="font-serif font-semibold text-base text-brand-700 px-3 mb-2">
+      <h2 className="font-sans font-semibold text-base text-brand-700 px-3 mb-2">
         📜 最近の Yes 採択
         <span className="text-xs text-neutral-500 font-normal ml-2">
           (最大 {data.limit} 件)
@@ -58,7 +58,7 @@ export function DecisionHistoryList(): JSX.Element | null {
       {data.items.length === 0 ? (
         <div className="rounded-xl border-2 border-dashed border-neutral-300 p-6 text-center">
           <div className="text-2xl mb-2" aria-hidden="true">📭</div>
-          <p className="text-sm italic text-neutral-500">
+          <p className="text-sm text-neutral-500">
             まだ Yes 採択の履歴がありません
           </p>
         </div>
@@ -74,7 +74,7 @@ export function DecisionHistoryList(): JSX.Element | null {
                   ✓
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-serif italic text-sm text-neutral-800 truncate">
+                  <p className="font-sans text-sm text-neutral-800 truncate">
                     「{truncate(item.user_input, 60)}」
                   </p>
                   <p className="text-sm text-neutral-700 truncate">

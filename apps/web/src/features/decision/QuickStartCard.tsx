@@ -32,7 +32,7 @@ export function QuickStartCard({
 }: QuickStartCardProps) {
   return (
     <section
-      className="rounded-2xl border-2 px-4 py-5 flex flex-col gap-4"
+      className="rounded-2xl border-2 px-2 py-2.5 flex flex-col gap-2"
       style={{ borderColor: "#9F88C8", background: "#FFFBF1" }}
       aria-label="クイック質問"
       data-testid="quickstart-card"
@@ -45,16 +45,13 @@ export function QuickStartCard({
         onNo={onNo}
       >
         <div
-          className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 px-6 py-8 text-center flex flex-col items-center gap-1 shadow-md"
+          className="rounded-2xl border-2 border-neutral-800 bg-neutral-0 px-4 py-12 text-center flex flex-col items-center justify-center gap-3 shadow-md min-h-[260px]"
           aria-live="polite"
           aria-atomic="true"
         >
-          <p className="text-3xl" aria-hidden="true">💭</p>
-          <p className="font-serif text-xl font-bold text-neutral-900">
+          <p className="text-4xl" aria-hidden="true">💭</p>
+          <p className="font-sans text-2xl font-bold text-neutral-900">
             {title}
-          </p>
-          <p className="font-serif text-base text-neutral-700">
-            {t("quickStartSuffix")}
           </p>
         </div>
       </SwipeChoice>
@@ -64,7 +61,7 @@ export function QuickStartCard({
         onClick={onSwitchToText}
         data-testid="quickstart-switch-to-text"
         className="
-          self-center text-sm italic text-neutral-500 underline underline-offset-4
+          self-center text-sm text-neutral-500 underline underline-offset-4
           hover:text-neutral-700 hover:no-underline
         "
       >
@@ -73,7 +70,7 @@ export function QuickStartCard({
 
       {noCount > 0 && noCount < NO_LIMIT && (
         <p
-          className="text-center text-[11px] italic text-neutral-400"
+          className="text-center text-[13px] text-neutral-400"
           data-testid="quickstart-no-count"
         >
           ▼ NO {noCount} / {NO_LIMIT}

@@ -4,9 +4,25 @@
 - **Project Name**: YesMan
 - **Project Type**: Greenfield
 - **Start Date**: 2026-05-09T00:00:00Z
-- **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** + 🔁 **Post-CONSTRUCTION 改修フェーズ v3** (Hackathon Pragmatism + Git-Flow `feature/* → develop → main` 運用、2026-05-17 〜 進行中) / OPERATIONS phase (placeholder)
+- **Current Stage**: 🎉 **CONSTRUCTION フェーズ完全完了** + 🔁 **Post-CONSTRUCTION 改修フェーズ v4** (Hackathon Pragmatism + Git-Flow `feature/* → develop → main` 運用、2026-05-17 〜 進行中) / OPERATIONS phase (placeholder)
 - **Last Approved Stage**: CONSTRUCTION - Build and Test (approved 2026-05-16、CONSTRUCTION フェーズ 11 unit + Build and Test ALWAYS EXECUTE 全完了)
-- **Latest Post-CONSTRUCTION Commit**: PR #97 merged (`51c613c`、2026-05-23、v0.4.0 release pending)
+- **Latest Commit**: `73d1dda` (2026-05-24、`feature/next-spec-ideas-anonymous-strangers` branch、anonymous-strangers feature + UI ポリッシュ 126 files / +19866 / -3310、merge 承認待ち)
+- **Post-CONSTRUCTION 改修フェーズ v4 主要追加** (2026-05-24):
+  - **anonymous-strangers feature (案 5)**: 「世界の誰か」匿名 persona pool との合議。`persona_pool` domain (models / protocols / MockPoolRepository) + 5 endpoint (list / detail / opt-in / opt-out / status)。decision engine の **mixed 経路** (builtin + anonymous + my の任意 mix、selected_personas DTO で渡す)、self_spec injection は廃止。
+  - **3-source persona selection**: ビルトイン / 世界の誰か / **カスタム (自作)** の 3-tab に再設計。`PersonaSource = "builtin" | "anonymous" | "my"`、`localStorage:yesman:persona-source`。`useUnifiedSelection` で `{ source, id }[]` を統一管理 (max 3 across all sources)。
+  - **ペルソナ作成 Modal**: `/personas/selection` に「＋ 新規」 button 追加、PersonaCreateModal を共有。成功時 `useCreatePersona` invalidate + `onCreated` callback で **my タブに自動切替**。builtin おすすめ badge は **常時表示** (preference top N は追加で merge)。
+  - **MangaStage (漫画ステージ)**: 3 actor が底辺に並ぶ漫画調レイアウト + EarthHorizon 背景。**flex column 3 段** (Overlay / Spacer / Cluster 220px) で mobile fit。builtin persona は **theme color icon** (慎重=sky 🛡️ / 楽観=amber ☀️ / 効率=violet ⚡)、anonymous は BlobAvatar。Bubble bg も同 theme で `bgColorOverride`。両経路 (builtin + anonymous) で統一 (旧 ChatStage 廃止)。
+  - **Bubble / Actor click 前面化**: 過去 bubble (small / opacity 0.3) または actor を tap で前面化、再 tap で auto に戻る。`MangaBubble` に `onClick` prop、actor wrapper は `<button>` 化。
+  - **StageHeader 状態切替**: 「決め中 / 考え中」 (streaming) → 「結論 / まとまりました」 (completed)。
+  - **Yes 採択後 overlay 残置**: SwipeChoice 押下後も「決まったこと」 read-only card を overlay 同位置に残置、「ばーんと消える」体感を抑制。
+  - **Avatar カスタマイズ**: 8 color preset + 12 emoji preset + custom emoji 入力。`profile.avatar_config` (JSONB) で persist。ProfileCard 統合 (案 A) で表示 / 編集を一元化。
+  - **Home / Score 再構成**: 委任率 strip を Home 先頭に移動 + placeholder 入力 box 廃止。Score に「📊 過去の傾向」 (PreferenceTrends) を embed (`/preferences` と shared)。BottomNav 4-tab (Home / スコア / ペルソナ / プロフィール)、履歴専用画面は撤去。
+  - **削除した機能**: 原文表示 (`OriginalTextToggle`) / 口グセ (quirks) / AnonymousPersonaList / Detail / 「今日 N 件」 (UX 過剰として撤去)。
+  - 影響ユニット: U4-decision / U7d-features / U7c-api-client / U7b-ui / U2-storage (profile.avatar_config) / **新規 persona_pool domain**
+  - tests: api 約 290 PASS / web **262 PASS** / 42 files / ui **51 PASS** / e2e 安定化済
+  - 関連 spec: `2026-05-24-anonymous-strangers-design.md` §7 (現状実装からの差分) + `2026-05-24-final-ui-walkthrough.md` (画面遷移 + testid)
+  - キャプチャ: `docs/screens/current/` (26 PNG) / ツアー動画: `docs/demo/output/YesMan-tour-20260524-231509.mp4` (~3:50)
+- **Latest Post-CONSTRUCTION v3 Commit**: PR #97 merged (`51c613c`、2026-05-23、v0.4.0 release pending)
 - **Post-CONSTRUCTION 改修フェーズ v3 主要追加** (2026-05-23):
   - **議論チャット token streaming + persona pre-fill (PR #86、`e791650`)**: `engine.run_stream` を `_llm.stream()` ベースに refactor、`asyncio.Queue` で 3 persona 並列 stream し新 SSE event `utterance_delta` (chunk yield) を emit。`personas` event で delta 前に bubble pre-fill。失敗 persona も空 text utterance event で「発言中…」状態を解除。frontend reducer に `onPersonasResolved` + `onUtteranceDelta` action 追加、`Utterance.done` で streaming 中 / 確定済を区別。`PersonaThinkingChips` 廃止、`DecisionUtteranceBubble` header に persona icon + 「発言中…」amber pill 統合。同 PR で QuickStart catchAll 除外バグ修正 + `VITE_QUICKSTART_DEDUPE=off` env var 追加。
   - **EVENT_BACKEND=inline-async で preference 同プロセス更新 (PR #89、`a094204`、Closes #88)**: `SyncPublisher` no-op バグを修正。`InlineLearningHandler` (`RepositoryFactory.bundle()` 経由で `apply_yes`/`apply_no`) を新設、`EventPublisherFactory(config, repo_factory=...)` で injection。`.env` 既定値を `sync` → `inline-async` に変更し dev/demo で preference profile が反映されるよう修復。
@@ -50,6 +66,16 @@
 | Property-Based Testing | Yes | Requirements Analysis (2026-05-09) |
 | Construction Flow | Yes | Issue #6 implementation (2026-05-19) |
 | Frontend Design | Yes | Issue #6 implementation (2026-05-19) |
+| Visual Supplements | Yes (Full) | drill-down-auto-open Requirements Analysis (2026-05-26) |
+
+### Feature-specific overrides
+| Feature | Extension | Enforcement | Decided At |
+|---|---|---|---|
+| drill-down-auto-open | Visual Supplements | **Full** | 2026-05-26 (Q1=A) |
+| drill-down-auto-open | Frontend Design | **Full** | 2026-05-26 (Q2=A) |
+| drill-down-auto-open | Security Baseline | **Full** | 2026-05-26 (Q3=A) |
+| drill-down-auto-open | Property-Based Testing | **Skip (No)** | 2026-05-26 (Q4=C, feature-specific override of project-wide Yes — drill-down handler は単純な条件分岐、pure function なし) |
+| drill-down-auto-open | Construction Flow | **Partial (01/03/05)** | 2026-05-26 (Q5=B, parallel sub-agent / approval gating / phase summary は scope 外、exploration / multi-approach / confidence-filtered review のみ強制) |
 
 ## Stage Progress
 ### 🔵 INCEPTION PHASE
@@ -422,3 +448,48 @@ CONSTRUCTION 全完了 (2026-05-16) 以降に発生した実装/仕様変更を�
 2. **Post-CONSTRUCTION 改修注記**: 改修が発生した unit には末尾に `## Post-CONSTRUCTION 改修注記 (YYYY-MM-DD)` セクションを追記
 3. **audit.md は Append-only**: 全ての改修は `audit.md` 末尾に時系列追記
 4. **本 `aidlc-state.md` の改修ログ表**: 上記「改修一覧」を単一の起点として参照
+
+---
+
+## アイデア検証 (Post-v0.4.0) — Idea Track
+
+> v0.4.0 release 後、user 明示許可なく develop/main へ merge しない (memory: `project-ideation-phase-no-auto-merge`)。各 idea は branch 内で完結し、demo 動画とともに評価される。
+
+### v3-α: drill-down decision chain (merged into `feature/next-spec-ideas`)
+- branch: `feature/drill-down-decision` (deleted、`feature/next-spec-ideas` に統合)
+- 機能: YES 採択 → 最大 4 段 chain で深堀り (映画 → ホラー → 貞子)、final で service catalog CTA
+- 状態: ✅ 実装完了、demo 動画 ~258s 録画済
+
+### v3-β: 新規登録時 嗜好把握 onboarding (merged into `feature/next-spec-ideas`)
+- branch: `feature/next-spec-ideas` 上で直接実装
+- 機能: 50 問 YES/NO (性格 25 + 生活 20 + 興味 5)、SwipeChoice 再利用、per-user 完了 flag
+- 状態: ✅ 実装完了、demo 動画 ~258s に統合済
+
+### v3-γ: anonymous-strangers (案 5、Inception 完了)
+- **branch**: `feature/next-spec-ideas-anonymous-strangers`
+- **由来**: [docs/superpowers/idea/合議アイデアとして考えたこと.txt](../docs/superpowers/idea/合議アイデアとして考えたこと.txt) 案 5 (ideator 一推し)、mockup [docs/superpowers/idea/mockup-anonymous-strangers.html](../docs/superpowers/idea/mockup-anonymous-strangers.html)
+- **core**: 自分の opt-in 公開した価値観 tags + 口グセが、世界の誰かの合議で persona として動く相互参加体験
+- **inception 成果物** ([aidlc-docs/inception/anonymous-strangers/](inception/anonymous-strangers/)):
+  - requirements.md (6 FR + 6 NFR + 5 SC、Standard depth)
+  - user-stories.md (4 Epic + 9 Story、P0-P3 優先度)
+  - workflow-plan.md (どの stage 実行 / skip、Hackathon Pragmatism 適用)
+  - application-design.md (component 階層 + data model + LLM prompt + i18n)
+  - units-decomposition.md (1 unit、10 task、~18-19h)
+- **Inception Stage Progress**:
+  - [x] Workspace Detection (brownfield、既存 v0.4.0 + drill-down + onboarding)
+  - [⏭] Reverse Engineering (skip、既知)
+  - [x] Requirements Analysis (Standard depth、mockup を input)
+  - [x] User Stories (Standard depth)
+  - [x] Workflow Planning
+  - [x] Application Design
+  - [x] Units Generation (1 unit、Minimal)
+- **状態**: ⏳ user 承認待ち (Construction 開始可否)
+- **next step**: user approve → Task 1 (backend persona pool 基盤) から着手
+
+### v3-γ rev2: ultrathink fixes + drawio + screenshots (2026-05-24)
+- ultrathink レビュー: Critical 5 / Important 6 / Improvements 6 件、全 17 fixes applied
+- inception 成果物 5 ファイル全 update、合計時間見積 ~18-19h → **~26-30h** = 3-4 営業日
+- drawio 追加: [aidlc-docs/inception/anonymous-strangers/diagrams/anonymous-strangers-design.drawio](inception/anonymous-strangers/diagrams/anonymous-strangers-design.drawio) (2 page: 画面フロー + コンポーネント依存)、同内容を [docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio](../docs/superpowers/specs/diagrams/2026-05-24-anonymous-strangers-screens.drawio) にもコピー
+- superpowers spec: [docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md](../docs/superpowers/specs/2026-05-24-anonymous-strangers-design.md) (brainstorming + Gherkin 受入基準)
+- 画面キャプチャ: [aidlc-docs/inception/anonymous-strangers/screens/](inception/anonymous-strangers/screens/) (13 PNG、全景 1 + mockup 12 画面、2.4MB)
+- 状態: ⏳ Construction 着手承認待ち

@@ -9,6 +9,7 @@ import { fetchAuthSession, signInWithRedirect, signOut } from "aws-amplify/auth"
 import type { TokenProvider } from "@yesman/api-client";
 import { env } from "./env";
 import * as mockAuthStorage from "./mockAuthStorage";
+import { clearUnifiedSelection } from "../features/persona/unifiedSelectionStorage";
 
 export function configureAuth(): void {
   // bypass mode (e2e / dev) では Amplify を初期化しない (fake Cognito domain で接続試行を回避)
@@ -71,6 +72,9 @@ export async function signIn(email?: string): Promise<void> {
 }
 
 export async function signOutUser(): Promise<void> {
+  // ペルソナ選択 (localStorage) を消して、同一ブラウザで次に登録/ログインした
+  // user が前 user の選択を引き継がず、builtin 3 のデフォルト選択から始まるようにする。
+  clearUnifiedSelection();
   if (env.authBypass) {
     mockAuthStorage.clearCurrent();
     return;

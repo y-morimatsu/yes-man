@@ -38,19 +38,22 @@ class BedrockLLMAdapter:
         temperature: float = 0.7,
     ) -> str:
         timeout_seconds = self._cfg.decision_llm_timeout_seconds
+        # 2026-05-27: Bedrock の RPM (Rate Exceeded) に当たった場合、exponential
+        # backoff で最大 5 回 retry. SSE drill-down で短時間に複数 LLM 呼ぶため
+        # RPM スパイクを吸収する.
+        rate_limit_max_retries = 5
         for attempt in range(self._cfg.decision_llm_retry_count + 1):
             try:
                 # ultrathink ★★ FU: LiteLLM の timeout kwarg に加え asyncio.timeout で
                 # I/O キャンセル保証 (LiteLLM 内部 timeout は HTTP layer のみで pending
                 # socket read を強制中断できないケースがある).
                 async with asyncio.timeout(timeout_seconds):
-                    resp = await litellm.acompletion(
-                        model=f"bedrock/{self._cfg.bedrock_model_id}",
-                        messages=[{"role": "system", "content": system}] + messages,
+                    resp = await self._acompletion_with_rate_limit_retry(
+                        system=system,
+                        messages=messages,
                         temperature=temperature,
-                        timeout=timeout_seconds,
-                        aws_region_name=self._cfg.bedrock_region,
-                        **self._guardrail_kwargs(),
+                        timeout_seconds=timeout_seconds,
+                        max_retries=rate_limit_max_retries,
                     )
                 return resp["choices"][0]["message"]["content"]
             except (litellm_exceptions.Timeout, asyncio.TimeoutError) as exc:
@@ -60,6 +63,46 @@ class BedrockLLMAdapter:
             except (litellm_exceptions.APIError, litellm_exceptions.APIConnectionError) as exc:
                 raise DecisionError("llm_unavailable", detail=str(exc)) from exc
         raise RuntimeError("unreachable")
+
+    async def _acompletion_with_rate_limit_retry(
+        self,
+        *,
+        system: str,
+        messages: list[dict[str, str]],
+        temperature: float,
+        timeout_seconds: float,
+        max_retries: int,
+    ) -> Any:
+        """RateLimitError 専用 exponential backoff retry.
+
+        Bedrock の RPM/TPM スロットリング (HTTP 429 → litellm.RateLimitError) を
+        0.5s → 1s → 2s → 4s → 8s で retry. timeout_seconds に達するか max_retries
+        を超えたら raise.
+        """
+        backoff = 0.5
+        last_exc: Exception | None = None
+        for retry in range(max_retries + 1):
+            try:
+                return await litellm.acompletion(
+                    model=f"bedrock/{self._cfg.bedrock_model_id}",
+                    messages=[{"role": "system", "content": system}] + messages,
+                    temperature=temperature,
+                    timeout=timeout_seconds,
+                    aws_region_name=self._cfg.bedrock_region,
+                    **self._guardrail_kwargs(),
+                )
+            except getattr(litellm_exceptions, "RateLimitError", Exception) as exc:
+                last_exc = exc
+                if retry == max_retries:
+                    break
+                await asyncio.sleep(backoff)
+                backoff = min(backoff * 2, 8.0)
+        # max_retries 超 → APIError として再 raise (上位 retry / DecisionError 化)
+        raise litellm_exceptions.APIError(
+            message=f"Bedrock rate limit exceeded after {max_retries} retries: {last_exc}",
+            llm_provider="bedrock",
+            model=self._cfg.bedrock_model_id,
+        ) from last_exc
 
     async def stream(
         self,

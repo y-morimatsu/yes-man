@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YesMan Wireframe — group-chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:   #FFF8F0;
+  --slate:   #2C3E50;
+  --navy:    #1B2C4A;
+  --orange:  #FF8C5A;
+  --teal:    #4ECDC4;
+  --peach:   #FFB5A7;
+  --mustard: #FFC97E;
+  --bubble-bg: #FFFFFF;
+  --muted:   rgba(44, 62, 80, 0.5);
+  --hairline: rgba(44, 62, 80, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: "Noto Sans JP", system-ui, sans-serif;
+  color: var(--slate);
+  background: #F2EEE6;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+body { padding: 40px 20px 80px; }
+
+.doc-header {
+  max-width: 1000px;
+  margin: 0 auto 40px;
+  padding-bottom: 24px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.doc-title { font-size: 22px; font-weight: 500; margin-bottom: 6px; }
+.doc-sub { font-size: 13px; color: var(--muted); }
+
+.flow {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.screen-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.screen-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.screen-label strong {
+  color: var(--slate);
+  font-weight: 500;
+  margin-left: 6px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.phone-pair {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+.phone-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.screen-sublabel {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.phone {
+  width: 320px;
+  height: 640px;
+  background: var(--cream);
+  border-radius: 22px;
+  border: 0.5px solid var(--hairline);
+  box-shadow: 0 8px 24px rgba(44, 62, 80, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.transition {
+  padding: 20px 0;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+.transition .arrow {
+  font-size: 16px;
+  color: var(--slate);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* ========== Common ========== */
+.app-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-bottom: 0.5px solid var(--hairline);
+  background: var(--cream);
+  gap: 10px;
+  flex-shrink: 0;
+}
+.app-bar-back { font-size: 18px; color: var(--slate); width: 20px; }
+.app-bar-title { font-size: 14px; font-weight: 500; }
+.app-bar-spacer { flex: 1; }
+.app-bar-action { font-size: 12px; color: var(--slate); opacity: 0.7; }
+
+.av {
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.av-self    { background: var(--teal); }
+.av-wife    { background: var(--peach); }
+.av-suzuki  { background: var(--mustard); color: #FFFFFF; }
+
+.av-stack { display: inline-flex; }
+.av-stack .av {
+  border: 1.5px solid var(--cream);
+  margin-left: -6px;
+}
+.av-stack .av:first-child { margin-left: 0; }
+
+.btn-primary {
+  background: var(--orange);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 0;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--slate);
+  border: 0.5px solid var(--slate);
+  border-radius: 999px;
+  padding: 11px 0;
+  font-size: 13px;
+  text-align: center;
+  width: 100%;
+  font-family: inherit;
+}
+
+.link-text {
+  color: var(--slate);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ========== Tab bar (4 tabs) ========== */
+.tab-bar {
+  display: flex;
+  border-top: 0.5px solid var(--hairline);
+  background: var(--cream);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  padding: 8px 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.tab.active { color: var(--orange); }
+.tab-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: currentColor;
+  opacity: 0.65;
+}
+.tab.active .tab-icon { opacity: 1; }
+.tab-label { letter-spacing: 0.05em; }
+
+/* ========== Splash ========== */
+.s-splash { display: flex; flex-direction: column; height: 100%; }
+.s-splash-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+/* Splash A: 3 bubbles */
+.bubble-mark {
+  position: relative;
+  width: 96px;
+  height: 82px;
+  margin-bottom: 26px;
+}
+.bm-b { position: absolute; }
+.bm-b1 {
+  top: 0; left: 6px;
+  width: 44px; height: 32px;
+  background: var(--peach);
+  border-radius: 16px 16px 16px 4px;
+}
+.bm-b1::after {
+  content: ""; position: absolute;
+  bottom: -5px; left: 3px;
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--peach);
+}
+.bm-b2 {
+  top: 4px; right: 0;
+  width: 40px; height: 28px;
+  background: var(--mustard);
+  border-radius: 14px 14px 4px 14px;
+}
+.bm-b2::after {
+  content: ""; position: absolute;
+  bottom: -4px; right: 3px;
+  width: 0; height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--mustard);
+}
+.bm-b3 {
+  bottom: 6px; left: 50%;
+  transform: translateX(-50%);
+  width: 56px; height: 36px;
+  background: var(--teal);
+  border-radius: 18px;
+}
+.bm-b3::after {
+  content: ""; position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 9px solid var(--teal);
+}
+
+/* Splash B: YESMAN-kun (copied from yesman_top_cluster_v3.html) */
+.yk-mark {
+  position: relative;
+  width: 220px;
+  height: 130px;
+  margin-bottom: 30px;
+}
+.yk-face {
+  position: absolute;
+  top: 33px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--peach);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+.yk-face::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--navy);
+}
+.yk-face::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 24px;
+  width: 4px;
+  height: 4px;
+  background: var(--navy);
+  border-radius: 50%;
+  box-shadow: 18px 0 0 var(--navy);
+}
+
+.yk-member { position: absolute; border-radius: 50%; z-index: 2; opacity: 0.35; }
+.yk-m1 { top: 8px;  left: 36px;  width: 28px; height: 28px; background: var(--mustard); }
+.yk-m2 { top: 60px; left: 18px;  width: 22px; height: 22px; background: var(--teal); }
+.yk-m3 { top: 88px; right: 28px; width: 26px; height: 26px; background: #8AB2DF; }
+.yk-m4 { top: 16px; right: 40px; width: 18px; height: 18px; background: var(--peach); }
+
+.yk-mini { position: absolute; border-radius: 50%; opacity: 0.5; z-index: 1; }
+.yk-mn1 { top: 0;     left: 12px;  width: 7px; height: 7px; background: var(--teal); }
+.yk-mn2 { top: 40px;  right: 8px;  width: 5px; height: 5px; background: var(--mustard); }
+.yk-mn3 { bottom: 24px; left: 60px; width: 6px; height: 6px; background: var(--orange); }
+.yk-mn4 { bottom: 14px; right: 56px; width: 4px; height: 4px; background: var(--teal); }
+.yk-mn5 { top: 84px;  left: 50px;  width: 5px; height: 5px; background: var(--peach); }
+
+.s-splash-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 18px;
+  font-style: italic;
+}
+.s-splash-sub {
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+.s-splash-cta { width: 80%; margin-bottom: 16px; }
+.s-splash-foot { font-size: 10px; color: var(--muted); }
+
+/* ========== Auth (Sign up / Log in) ========== */
+.s-auth { display: flex; flex-direction: column; height: 100%; }
+.auth-bar {
+  padding: 12px 16px 6px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.auth-back { font-size: 22px; color: var(--slate); width: 16px; line-height: 1; }
+.auth-body {
+  flex: 1;
+  padding: 18px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.auth-heading {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 2px;
+  letter-spacing: 0.02em;
+}
+.auth-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.auth-field {
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.auth-field-label {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+.auth-field-input {
+  font-size: 13px;
+  color: var(--slate);
+}
+.auth-foot {
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 8px;
+}
+
+/* ========== Home ========== */
+.s-home { display: flex; flex-direction: column; height: 100%; }
+.home-scroll {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.section-l {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  padding: 16px 18px 6px;
+  font-weight: 500;
+}
+.decide-card {
+  margin: 18px 18px 6px;
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.05);
+}
+.decide-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.decide-head-l {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+.decide-head .av-stack .av {
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+  border: 1.5px solid #FFFFFF;
+}
+.decide-head-arrow {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 14px;
+}
+.decide-input {
+  background: var(--cream);
+  border: 0.5px solid var(--hairline);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 60px;
+}
+.decide-input-text {
+  flex: 1;
+  font-size: 12px;
+  color: var(--slate);
+  line-height: 1.55;
+}
+.decide-mic {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--teal);
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+.decide-mic::before {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  top: 7px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.decide-mic::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 8px;
+  border: 2px solid #FFFFFF;
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.decide-btn {
+  background: var(--orange);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+  width: 100%;
+}
+.history-list {
+  margin: 0 18px 14px;
+  display: flex;
+  flex-direction: column;
+}
+.hist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.hist-row:last-child { border-bottom: none; }
+.hist-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+.hist-check.teal    { background: var(--teal); }
+.hist-check.peach   { background: var(--peach); }
+.hist-check.mustard { background: var(--mustard); }
+.hist-text { flex: 1; font-size: 12px; }
+.hist-time { font-size: 9px; color: var(--muted); }
+
+/* score-strip: sits ABOVE tab-bar, OUTSIDE home-scroll, always at bottom */
+.score-strip {
+  flex-shrink: 0;
+  margin: 0 18px 12px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 10px;
+}
+.score-strip-l {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.score-strip-num {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--slate);
+}
+.score-strip-m {
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ========== Chat / Decision ========== */
+.s-log, .s-decision { display: flex; flex-direction: column; height: 100%; }
+.chat-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--cream);
+  border-bottom: 0.5px solid var(--hairline);
+  gap: 10px;
+  flex-shrink: 0;
+}
+.chat-bar-back { font-size: 16px; color: var(--slate); }
+.chat-bar-title { font-size: 13px; font-weight: 500; }
+.chat-bar-meta { font-size: 10px; color: var(--muted); margin-top: 1px; display: flex; align-items: center; gap: 4px; }
+.chat-bar-blip { width: 5px; height: 5px; background: var(--orange); border-radius: 50%; }
+.chat-body {
+  flex: 1;
+  background: var(--cream);
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  overflow: hidden;
+}
+.msg { display: flex; gap: 6px; align-items: flex-end; }
+.msg .av { width: 26px; height: 26px; font-size: 10px; }
+.msg-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 70%;
+}
+.msg-name {
+  font-size: 10px;
+  color: var(--muted);
+  padding-left: 4px;
+}
+.bubble {
+  background: var(--bubble-bg);
+  border: 0.5px solid var(--hairline);
+  border-radius: 12px 12px 12px 4px;
+  padding: 7px 11px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.msg.mine { justify-content: flex-end; }
+.msg.mine .msg-content { align-items: flex-end; }
+.msg.mine .msg-name {
+  padding-left: 0;
+  padding-right: 4px;
+  color: var(--teal);
+}
+.msg.mine .bubble {
+  background: var(--teal);
+  color: #FFFFFF;
+  border-radius: 12px 12px 4px 12px;
+  border: none;
+}
+.msg-time {
+  font-size: 9px;
+  color: var(--muted);
+  align-self: flex-end;
+  padding-bottom: 2px;
+}
+.bubble.typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 10px 14px;
+}
+.typing-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--peach);
+  opacity: 0.7;
+}
+.typing-dot:nth-child(2) { opacity: 0.5; }
+.typing-dot:nth-child(3) { opacity: 0.3; }
+.conclusion {
+  background: var(--orange);
+  color: #FFFFFF;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin: 4px 0;
+}
+.system-note {
+  font-size: 10px;
+  color: var(--muted);
+  text-align: center;
+  padding: 4px 0;
+}
+.system-marker {
+  align-self: center;
+  background: var(--orange);
+  color: #FFFFFF;
+  font-size: 11px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.progress-bar {
+  padding: 10px 14px;
+  background: var(--cream);
+  border-top: 0.5px solid var(--hairline);
+  flex-shrink: 0;
+}
+.pb-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.pb-track {
+  height: 4px;
+  background: var(--hairline);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.pb-fill {
+  height: 100%;
+  background: var(--orange);
+  border-radius: 999px;
+}
+.chat-actions {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--cream);
+  flex-shrink: 0;
+}
+.chat-actions .btn-secondary,
+.chat-actions .btn-primary {
+  padding: 10px 0;
+  font-size: 12px;
+}
+
+/* Swipe card (decision result) */
+.swipe-card {
+  margin: 6px 4px 2px;
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 18px;
+  padding: 22px 18px 20px;
+  text-align: center;
+  box-shadow: 0 10px 22px rgba(44, 62, 80, 0.1);
+  position: relative;
+}
+.swipe-card-tag {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--orange);
+  letter-spacing: 0.15em;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.swipe-card-title {
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--slate);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.swipe-card-detail {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+/* Vote buttons (under swipe card, slight overlap) */
+.vote-buttons {
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  padding: 0 0 22px;
+  margin-top: -22px;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.vote-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  box-shadow: 0 6px 16px rgba(44, 62, 80, 0.18);
+}
+.vote-no {
+  background: #FFFFFF;
+  color: var(--slate);
+  border: 0.5px solid var(--hairline);
+}
+.vote-yes {
+  background: var(--orange);
+  color: #FFFFFF;
+}
+
+/* ========== Partner selection ========== */
+.s-select { display: flex; flex-direction: column; height: 100%; }
+.select-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+.select-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.select-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 10px;
+}
+.select-row.fixed { opacity: 0.6; }
+.select-row.checked {
+  border-color: var(--orange);
+  background: rgba(255, 140, 90, 0.06);
+}
+.select-row .av { width: 36px; height: 36px; font-size: 12px; }
+.select-row-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.select-row-name { font-size: 13px; font-weight: 500; }
+.select-row-tag { font-size: 10px; color: var(--muted); }
+.select-row-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #FFFFFF;
+}
+.select-row.checked .select-row-check {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+.select-row.fixed .select-row-check {
+  background: var(--slate);
+  border-color: var(--slate);
+  opacity: 0.5;
+}
+.select-row-add {
+  background: transparent;
+  border: 0.5px dashed var(--hairline);
+  color: var(--muted);
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  text-align: center;
+}
+.select-footer {
+  padding: 12px 14px;
+  background: var(--cream);
+  flex-shrink: 0;
+}
+
+/* ========== Personas list ========== */
+.s-personas { display: flex; flex-direction: column; height: 100%; }
+.personas-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--cream);
+  overflow: hidden;
+}
+.persona-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 10px;
+}
+.persona-row .av { width: 40px; height: 40px; font-size: 13px; }
+.persona-row-info { flex: 1; }
+.persona-row-name { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.persona-row-tag { font-size: 10px; color: var(--muted); }
+.persona-row-chevron { color: var(--muted); font-size: 14px; }
+
+/* ========== Detail / Profile ========== */
+.s-detail { display: flex; flex-direction: column; height: 100%; }
+.detail-body {
+  flex: 1;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow: hidden;
+}
+.detail-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.detail-head .av { width: 60px; height: 60px; font-size: 18px; }
+.detail-name { font-size: 16px; font-weight: 500; }
+.detail-meta { font-size: 11px; color: var(--muted); }
+.detail-section-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 201, 126, 0.25);
+  color: var(--slate);
+}
+.quote-list { display: flex; flex-direction: column; gap: 8px; }
+.quote {
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 12px 12px 12px 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--slate);
+}
+.detail-footer {
+  padding: 12px 14px;
+  background: var(--cream);
+  flex-shrink: 0;
+}
+.s-self .tag { background: rgba(78, 205, 196, 0.18); }
+.s-self .quote { background: rgba(78, 205, 196, 0.08); }
+
+/* ========== Share ========== */
+.s-share { display: flex; flex-direction: column; height: 100%; }
+.share-body {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  overflow: hidden;
+}
+.share-head { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.share-head .av { width: 48px; height: 48px; font-size: 16px; }
+.share-name { font-size: 14px; font-weight: 500; }
+.share-qr {
+  width: 152px;
+  height: 152px;
+  background:
+    repeating-linear-gradient(0deg, var(--slate) 0 6px, transparent 6px 14px),
+    repeating-linear-gradient(90deg, var(--slate) 0 6px, transparent 6px 14px);
+  background-color: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.share-qr-inner {
+  width: 30px;
+  height: 30px;
+  background: var(--cream);
+  border-radius: 4px;
+}
+.share-url {
+  font-size: 11px;
+  color: var(--muted);
+  background: #FFFFFF;
+  border: 0.5px solid var(--hairline);
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 100%;
+  text-align: center;
+}
+.share-note {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+}
+.share-actions { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <h1 class="doc-title">YesMan Wireframe — group-chat</h1>
+  <p class="doc-sub">案2: 知り合い (家族・友人・恋人) を相談相手にする / LINE 風</p>
+</header>
+
+<main class="flow">
+
+  <!-- ============ Screen 1: /auth/splash (2 variants) ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 1 <strong>/auth/splash — スプラッシュ (2 パターン)</strong></div>
+    <div class="phone-pair">
+
+      <div class="phone-col">
+        <div class="screen-sublabel">A — 3 吹き出し</div>
+        <div class="phone">
+          <div class="s-splash">
+            <div class="s-splash-body">
+              <div class="bubble-mark">
+                <div class="bm-b bm-b1"></div>
+                <div class="bm-b bm-b2"></div>
+                <div class="bm-b bm-b3"></div>
+              </div>
+              <div class="s-splash-title">YesMan</div>
+              <div class="s-splash-sub">人間最後の仕事は、<br>YES で承認すること。</div>
+              <button class="btn-primary s-splash-cta">はじめる</button>
+              <div class="s-splash-foot">すでにアカウントがある方は <a href="#" class="link-text">ログイン</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-col">
+        <div class="screen-sublabel">B — YESMANくん</div>
+        <div class="phone">
+          <div class="s-splash">
+            <div class="s-splash-body">
+              <div class="yk-mark">
+                <div class="yk-mini yk-mn1"></div>
+                <div class="yk-mini yk-mn2"></div>
+                <div class="yk-mini yk-mn3"></div>
+                <div class="yk-mini yk-mn4"></div>
+                <div class="yk-mini yk-mn5"></div>
+                <div class="yk-member yk-m1"></div>
+                <div class="yk-member yk-m2"></div>
+                <div class="yk-member yk-m3"></div>
+                <div class="yk-member yk-m4"></div>
+                <div class="yk-face"></div>
+              </div>
+              <div class="s-splash-title">YesMan</div>
+              <div class="s-splash-sub">人間最後の仕事は、<br>YES で承認すること。</div>
+              <button class="btn-primary s-splash-cta">はじめる</button>
+              <div class="s-splash-foot">すでにアカウントがある方は <a href="#" class="link-text">ログイン</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    「はじめる」 → アカウント作成 / 「ログイン」 → ログイン画面
+  </div>
+
+  <!-- ============ Screen 2: Sign up ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 2 <strong>/auth/signup — アカウント作成</strong></div>
+    <div class="phone">
+      <div class="s-auth">
+        <div class="auth-bar">
+          <div class="auth-back">‹</div>
+        </div>
+        <div class="auth-body">
+          <div class="auth-heading">はじめましょう。</div>
+          <div class="auth-sub">メールアドレスとパスワードを設定してください。</div>
+
+          <div class="auth-field">
+            <div class="auth-field-label">メールアドレス</div>
+            <div class="auth-field-input">you@example.com</div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-label">パスワード</div>
+            <div class="auth-field-input">8 文字以上</div>
+          </div>
+
+          <button class="btn-primary">アカウントを作る</button>
+
+          <div class="auth-foot">
+            続けることで、<a href="#" class="link-text">利用規約</a> と<br>
+            <a href="#" class="link-text">プライバシーポリシー</a> に同意したものとみなされます。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    スプラッシュの「ログイン」リンクから
+  </div>
+
+  <!-- ============ Screen 3: Log in ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 3 <strong>/auth/login — ログイン</strong></div>
+    <div class="phone">
+      <div class="s-auth">
+        <div class="auth-bar">
+          <div class="auth-back">‹</div>
+        </div>
+        <div class="auth-body">
+          <div class="auth-heading">おかえりなさい。</div>
+          <div class="auth-sub">アカウントの情報を入力してください。</div>
+
+          <div class="auth-field">
+            <div class="auth-field-label">メールアドレス</div>
+            <div class="auth-field-input">wataru@yesman.app</div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-label">パスワード</div>
+            <div class="auth-field-input">●●●●●●●●</div>
+          </div>
+
+          <button class="btn-primary">ログイン</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    アカウント作成 / ログイン完了
+  </div>
+
+  <!-- ============ Screen 4: Home ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 4 <strong>/ — ホーム (トップ画面)</strong></div>
+    <div class="phone">
+      <div class="s-home">
+        <div class="home-scroll">
+          <div class="decide-card">
+            <div class="decide-head">
+              <div class="decide-head-l">相談メンバー</div>
+              <div class="av-stack">
+                <div class="av av-self">私</div>
+                <div class="av av-wife">妻</div>
+                <div class="av av-suzuki">鈴</div>
+              </div>
+              <div class="decide-head-arrow">›</div>
+            </div>
+            <div class="decide-input">
+              <div class="decide-input-text">今夜の夕飯どうしよ、予算 2000 円までで</div>
+              <div class="decide-mic"></div>
+            </div>
+            <button class="decide-btn">決めてもらう</button>
+          </div>
+
+          <div class="section-l">最近の決定</div>
+          <div class="history-list">
+            <div class="hist-row">
+              <div class="hist-check teal">✓</div>
+              <div class="hist-text">ラーメンを食べる</div>
+              <div class="hist-time">昨日</div>
+            </div>
+            <div class="hist-row">
+              <div class="hist-check peach">✓</div>
+              <div class="hist-text">早めに寝る</div>
+              <div class="hist-time">一昨日</div>
+            </div>
+            <div class="hist-row">
+              <div class="hist-check mustard">✓</div>
+              <div class="hist-text">本を 1 冊買う</div>
+              <div class="hist-time">3 日前</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="score-strip">
+          <div class="score-strip-l">主体性スコア</div>
+          <div class="score-strip-num">8%</div>
+          <div class="score-strip-m">うまく任せられてます</div>
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    「決めてもらう」をタップ (入力内容 = 議論の出発点)
+  </div>
+
+  <!-- ============ Screen 5: Decision — in discussion ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 5 <strong>/decision — 決定画面 (議論中)</strong></div>
+    <div class="phone">
+      <div class="s-decision">
+        <div class="chat-bar">
+          <div class="chat-bar-back">‹</div>
+          <div>
+            <div class="chat-bar-title">今夜の夕飯どうしよ</div>
+            <div class="chat-bar-meta"><div class="chat-bar-blip"></div>議論中・あと少し</div>
+          </div>
+          <div class="app-bar-spacer"></div>
+          <div class="av-stack">
+            <div class="av av-self" style="width:22px;height:22px;font-size:9px;">私</div>
+            <div class="av av-wife" style="width:22px;height:22px;font-size:9px;">妻</div>
+            <div class="av av-suzuki" style="width:22px;height:22px;font-size:9px;">鈴</div>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="msg mine">
+            <div class="msg-content">
+              <div class="bubble">今夜の夕飯どうしよ、予算 2000 円までで</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-wife">妻</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:var(--peach);">妻</div>
+              <div class="bubble">和食がいいな〜、昨日もこってり食べたし</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-suzuki">鈴</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:#C99454;">すずき</div>
+              <div class="bubble">えー、肉食いたい気分なんだけど</div>
+            </div>
+          </div>
+          <div class="msg mine">
+            <div class="msg-content">
+              <div class="bubble">肉はわりと気分かも</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-suzuki">鈴</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:#C99454;">すずきさんが考え中…</div>
+              <div class="bubble typing">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    議論が完了、AI が結論を提示
+  </div>
+
+  <!-- ============ Screen 6: Decision — concluded ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 6 <strong>/decision — 決定画面 (結論)</strong></div>
+    <div class="phone">
+      <div class="s-decision">
+        <div class="chat-bar">
+          <div class="chat-bar-back">‹</div>
+          <div>
+            <div class="chat-bar-title">今夜の夕飯どうしよ</div>
+            <div class="chat-bar-meta"><div class="chat-bar-blip"></div>議論完了</div>
+          </div>
+          <div class="app-bar-spacer"></div>
+          <div class="av-stack">
+            <div class="av av-self" style="width:22px;height:22px;font-size:9px;">私</div>
+            <div class="av av-wife" style="width:22px;height:22px;font-size:9px;">妻</div>
+            <div class="av av-suzuki" style="width:22px;height:22px;font-size:9px;">鈴</div>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="msg mine">
+            <div class="msg-content">
+              <div class="bubble">今夜の夕飯どうしよ、予算 2000 円までで</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-wife">妻</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:var(--peach);">妻</div>
+              <div class="bubble">和食がいいな〜</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-suzuki">鈴</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:#C99454;">すずき</div>
+              <div class="bubble">えー、肉食いたい気分なんだけど</div>
+            </div>
+          </div>
+          <div class="msg mine">
+            <div class="msg-content">
+              <div class="bubble">肉はわりと気分かも</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-wife">妻</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:var(--peach);">妻</div>
+              <div class="bubble">じゃあとんかつ屋は?</div>
+            </div>
+          </div>
+          <div class="swipe-card">
+            <div class="swipe-card-tag">結論</div>
+            <div class="swipe-card-title">とんかつ屋で食べる</div>
+            <div class="swipe-card-detail">3 人とも気分は肉寄り<br>予算 2000 円以内</div>
+          </div>
+        </div>
+        <div class="vote-buttons">
+          <div class="vote-btn vote-no">NO</div>
+          <div class="vote-btn vote-yes">YES</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    YES で採択 → ホームに戻り、後日「最近の決定」から閲覧
+  </div>
+
+  <!-- ============ Screen 7: Past log ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 7 <strong>過去の決定ログ</strong></div>
+    <div class="phone">
+      <div class="s-log">
+        <div class="chat-bar">
+          <div class="chat-bar-back">‹</div>
+          <div>
+            <div class="chat-bar-title">とんかつ屋で食べる</div>
+            <div class="chat-bar-meta">私 / 妻 / 鈴木 · 23:48</div>
+          </div>
+          <div class="app-bar-spacer"></div>
+          <div class="av-stack">
+            <div class="av av-self" style="width:22px;height:22px;font-size:9px;">私</div>
+            <div class="av av-wife" style="width:22px;height:22px;font-size:9px;">妻</div>
+            <div class="av av-suzuki" style="width:22px;height:22px;font-size:9px;">鈴</div>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="system-note">2026-05-22 (木)</div>
+          <div class="msg mine">
+            <div class="msg-content">
+              <div class="bubble">今夜の夕飯どうしよ、予算 2000 円までで</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-wife">妻</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:var(--peach);">妻</div>
+              <div class="bubble">和食がいいな〜</div>
+            </div>
+          </div>
+          <div class="msg">
+            <div class="av av-suzuki">鈴</div>
+            <div class="msg-content">
+              <div class="msg-name" style="color:#C99454;">すずき</div>
+              <div class="bubble">肉食いたい気分なんだけど</div>
+            </div>
+          </div>
+          <div class="msg mine">
+            <div class="msg-content">
+              <div class="bubble">肉はわりと気分かも</div>
+            </div>
+          </div>
+          <div class="conclusion">→ とんかつ屋で食べる</div>
+          <div class="system-marker">✓ YES で採択 — 23:48</div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    ホームに戻り、「相談メンバー」の › をタップ
+  </div>
+
+  <!-- ============ Screen 8: Partner selection ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 8 <strong>/personas/selection — 相談相手の選択</strong></div>
+    <div class="phone">
+      <div class="s-select">
+        <div class="app-bar">
+          <div class="app-bar-back">‹</div>
+          <div class="app-bar-title">今回は誰と相談する?</div>
+        </div>
+        <div class="select-body">
+          <div class="select-hint">最大 3 名まで選べます</div>
+
+          <div class="select-row fixed">
+            <div class="av av-self" style="width:36px;height:36px;font-size:12px;">私</div>
+            <div class="select-row-info">
+              <div class="select-row-name">あなた</div>
+              <div class="select-row-tag">いつも参加</div>
+            </div>
+            <div class="select-row-check">✓</div>
+          </div>
+
+          <div class="select-row checked">
+            <div class="av av-wife" style="width:36px;height:36px;font-size:12px;">妻</div>
+            <div class="select-row-info">
+              <div class="select-row-name">妻</div>
+              <div class="select-row-tag">和食派 / 健康志向</div>
+            </div>
+            <div class="select-row-check">✓</div>
+          </div>
+
+          <div class="select-row checked">
+            <div class="av av-suzuki" style="width:36px;height:36px;font-size:12px;">鈴</div>
+            <div class="select-row-info">
+              <div class="select-row-name">鈴木</div>
+              <div class="select-row-tag">肉食派 / コスパ重視</div>
+            </div>
+            <div class="select-row-check">✓</div>
+          </div>
+
+          <div class="select-row-add">+ 相手を追加</div>
+        </div>
+        <div class="select-footer">
+          <button class="btn-primary">この相手で保存</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    タブ「相談相手」をタップ
+  </div>
+
+  <!-- ============ Screen 9: Personas list ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 9 <strong>/personas — 相談相手の管理</strong></div>
+    <div class="phone">
+      <div class="s-personas">
+        <div class="app-bar">
+          <div class="app-bar-title">相談相手</div>
+          <div class="app-bar-spacer"></div>
+          <div class="app-bar-action">検索</div>
+        </div>
+        <div class="personas-body">
+          <div class="persona-row">
+            <div class="av av-wife" style="width:40px;height:40px;font-size:13px;">妻</div>
+            <div class="persona-row-info">
+              <div class="persona-row-name">妻</div>
+              <div class="persona-row-tag">和食派 / 健康志向</div>
+            </div>
+            <div class="persona-row-chevron">›</div>
+          </div>
+          <div class="persona-row">
+            <div class="av av-suzuki" style="width:40px;height:40px;font-size:13px;">鈴</div>
+            <div class="persona-row-info">
+              <div class="persona-row-name">鈴木</div>
+              <div class="persona-row-tag">肉食派 / コスパ重視</div>
+            </div>
+            <div class="persona-row-chevron">›</div>
+          </div>
+          <div class="select-row-add">+ 新しい相手を追加</div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    相手 (例: 鈴木) をタップ
+  </div>
+
+  <!-- ============ Screen 10: Persona detail ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 10 <strong>相談相手プロファイル詳細</strong></div>
+    <div class="phone">
+      <div class="s-detail">
+        <div class="app-bar">
+          <div class="app-bar-back">‹</div>
+          <div class="app-bar-title">鈴木さん</div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-head">
+            <div class="av av-suzuki" style="width:60px;height:60px;font-size:18px;">鈴</div>
+            <div class="detail-name">鈴木</div>
+            <div class="detail-meta">友人 / 登録 2026-04-12</div>
+          </div>
+
+          <div>
+            <div class="detail-section-label">価値観タグ</div>
+            <div class="tag-row">
+              <span class="tag">肉食派</span>
+              <span class="tag">コスパ重視</span>
+              <span class="tag">即決派</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-section-label">鈴木さんの口グセ</div>
+            <div class="quote-list">
+              <div class="quote">肉、肉、肉</div>
+              <div class="quote">えー、まじか</div>
+              <div class="quote">とりあえずビール</div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-footer">
+          <button class="btn-primary">相談に呼ぶ</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    タブ「プロフィール」をタップ
+  </div>
+
+  <!-- ============ Screen 11: Profile (self) ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 11 <strong>/preferences — プロフィール (自分)</strong></div>
+    <div class="phone">
+      <div class="s-detail s-self">
+        <div class="app-bar">
+          <div class="app-bar-title">あなたのプロフィール</div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-head">
+            <div class="av av-self" style="width:60px;height:60px;font-size:18px;">私</div>
+            <div class="detail-name">たろう</div>
+            <div class="detail-meta">決定 24 回 / Yes 採択 18 回</div>
+          </div>
+
+          <div>
+            <div class="detail-section-label">価値観タグ</div>
+            <div class="tag-row">
+              <span class="tag">控えめ予算</span>
+              <span class="tag">慎重派</span>
+              <span class="tag">健康志向</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-section-label">あなたの口グセ</div>
+            <div class="quote-list">
+              <div class="quote">ま、いっか</div>
+              <div class="quote">めんどいなぁ</div>
+              <div class="quote">明日でいいや</div>
+            </div>
+          </div>
+        </div>
+        <div class="detail-footer">
+          <button class="btn-primary">他人にシェア</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    「他人にシェア」をタップ
+  </div>
+
+  <!-- ============ Screen 12: Share ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 12 <strong>自分をシェア</strong></div>
+    <div class="phone">
+      <div class="s-share">
+        <div class="app-bar">
+          <div class="app-bar-back">‹</div>
+          <div class="app-bar-title">自分をシェア</div>
+        </div>
+        <div class="share-body">
+          <div class="share-head">
+            <div class="av av-self" style="width:48px;height:48px;font-size:16px;">私</div>
+            <div class="share-name">たろう</div>
+          </div>
+          <div class="share-qr">
+            <div class="share-qr-inner"></div>
+          </div>
+          <div class="share-url">yesman.app/import/abc123</div>
+          <div class="share-note">このリンクから、家族や友人があなたを<br>相談相手に呼べるようになります</div>
+          <div class="share-actions">
+            <button class="btn-primary">URL をコピー</button>
+            <button class="btn-secondary">共有シートを開く</button>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div class="tab-label">相談相手</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div class="tab-label">プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

@@ -25,8 +25,16 @@ export const STRINGS = {
     "ここまで慎重なあなただからこそ、今回は AI に任せてみませんか?",
   // 2026-05-22 yes-no-quickstart: Quick-Start カードの文言 (v3: SwipeChoice 統一で
   // YES/NO ラベル + キーボード hint は SwipeChoice 側に移譲)
-  quickStartSuffix: "してみますか？",
+  // 2026-05-26: quickStartSuffix ("してみますか?") は user 指示で UI から削除. title 単独表示.
   quickStartSwitchToText: "✏️ 自分で入力する",
+  // 2026-05-24 mockup §5 整合: 合議進行中の専用 header.
+  streamingTitle: "決め中",
+  // {count} で「3 人 / 5 人」等を動的差し込み、suffix で「で 考え中」を追加.
+  streamingSubtitlePrefix: "人で 考え中",
+  // 2026-05-24: 合議完了後の subtitle. 「考え中」を残さず「まとまりました」に切替.
+  completedTitle: "結論",
+  completedSubtitlePrefix: "人の意見が まとまりました",
+  topicLabel: "お題",
 } as const;
 
 export type DecisionStringKey = keyof typeof STRINGS;

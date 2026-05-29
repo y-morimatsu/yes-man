@@ -32,6 +32,7 @@ vi.mock("react-router-dom", async () => {
 import { AuthProvider } from "../../../src/shell/AuthProvider";
 import SignInPage from "../../../src/features/auth/SignInPage";
 import { registerUser, listUsers, getCurrentEmail } from "../../../src/shell/mockAuthStorage";
+import { markOnboarded } from "../../../src/features/onboarding/onboardingStorage";
 
 function renderPage() {
   return render(
@@ -54,44 +55,46 @@ describe("SignInPage — bypass mode", () => {
 
   it("初回訪問: 空 list の placeholder と form が表示される", () => {
     renderPage();
-    expect(screen.getByRole("heading", { name: /サインイン/ })).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /はじめましょう/ })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: /メールアドレス/ })).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: /表示名/ })).toBeInTheDocument();
     expect(screen.getByText(/まだ登録ユーザはいません/)).toBeInTheDocument();
   });
 
-  it("email 未入力時 [サインイン] が disabled", () => {
+  it("email 未入力時 [続ける] が disabled", () => {
     renderPage();
-    const btn = screen.getByRole("button", { name: "サインイン" });
+    const btn = screen.getByRole("button", { name: "続ける" });
     expect(btn).toBeDisabled();
   });
 
-  it("不正な email format で [サインイン] が disabled", async () => {
+  it("不正な email format で [続ける] が disabled", async () => {
     const user = userEvent.setup();
     renderPage();
-    await user.type(screen.getByRole("textbox", { name: /email/i }), "not-an-email");
-    expect(screen.getByRole("button", { name: "サインイン" })).toBeDisabled();
+    await user.type(screen.getByRole("textbox", { name: /メールアドレス/ }), "not-an-email");
+    expect(screen.getByRole("button", { name: "続ける" })).toBeDisabled();
   });
 
-  it("有効な email 入力 + [サインイン] click で自動登録 + navigate (/decision)", async () => {
+  it("有効な email 入力 + [続ける] click で自動登録 + navigate (新規ユーザは /onboarding)", async () => {
     const user = userEvent.setup();
     renderPage();
-    await user.type(screen.getByRole("textbox", { name: /email/i }), "taro@example.com");
+    await user.type(screen.getByRole("textbox", { name: /メールアドレス/ }), "taro@example.com");
     await user.type(screen.getByRole("textbox", { name: /表示名/ }), "Taro");
-    await user.click(screen.getByRole("button", { name: "サインイン" }));
+    await user.click(screen.getByRole("button", { name: "続ける" }));
 
     await waitFor(() => {
       expect(listUsers()).toHaveLength(1);
-      expect(listUsers()[0].email).toBe("taro@example.com");
-      expect(listUsers()[0].display_name).toBe("Taro");
+      expect(listUsers()[0]!.email).toBe("taro@example.com");
+      expect(listUsers()[0]!.display_name).toBe("Taro");
       expect(getCurrentEmail()).toBe("taro@example.com");
     });
-    // from 未指定 (default "/") は /decision に振替される
-    expect(navigateMock).toHaveBeenCalledWith("/decision", { replace: true });
+    // v3-β: 新規ユーザは default flow で /onboarding に redirect (嗜好把握)
+    expect(navigateMock).toHaveBeenCalledWith("/onboarding", { replace: true });
   });
 
   it("既存 user row click で setCurrentEmail + navigate (/decision)", async () => {
-    registerUser("hanako@example.com", "Hanako");
+    const hanako = registerUser("hanako@example.com", "Hanako");
+    // v3-β rev3: 既存ユーザは onboarding 完了済として扱う
+    markOnboarded(hanako.sub);
     const user = userEvent.setup();
     renderPage();
     // 行内の email がクリック可能 button として表示される
@@ -124,8 +127,8 @@ describe("SignInPage — bypass mode", () => {
         </ToastProvider>
       </MemoryRouter>,
     );
-    await user.type(screen.getByRole("textbox", { name: /email/i }), "taro@example.com");
-    await user.click(screen.getByRole("button", { name: "サインイン" }));
+    await user.type(screen.getByRole("textbox", { name: /メールアドレス/ }), "taro@example.com");
+    await user.click(screen.getByRole("button", { name: "続ける" }));
     await waitFor(() => expect(navigateMock).toHaveBeenCalledWith("/score", { replace: true }));
   });
 });

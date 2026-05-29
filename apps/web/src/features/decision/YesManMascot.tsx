@@ -70,11 +70,14 @@ export function YesManMascot({ state }: YesManMascotProps) {
 
   return (
     <div
-      className="fixed top-20 right-4 z-50 flex items-start gap-2 pointer-events-none"
+      className="fixed top-[43px] right-3 z-50 flex items-start gap-2 pointer-events-none"
       role="status"
       aria-label={`YesMan: ${look.message}`}
       data-testid="yesman-mascot"
       data-ym-mascot-state={state}
+      // bob を container 全体に適用し、吹き出し + マスコットを一緒に上下させる
+      style={{ animation: "ym-mascot-bob 2.4s ease-in-out infinite" }}
+      data-ym-anim
     >
       {/* speech bubble (mascot の左側、tail は右向き) */}
       <div
@@ -110,13 +113,8 @@ export function YesManMascot({ state }: YesManMascotProps) {
         />
       </div>
 
-      {/* mascot (絵文字、bobbing animation) — 右 */}
-      <div
-        aria-hidden
-        className="text-4xl select-none"
-        style={{ animation: "ym-mascot-bob 2.4s ease-in-out infinite" }}
-        data-ym-anim
-      >
+      {/* mascot (絵文字) — 右。bob は親 container に適用済 (吹き出しと一緒に上下) */}
+      <div aria-hidden className="text-4xl select-none">
         🤵
       </div>
     </div>

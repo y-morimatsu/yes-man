@@ -34,7 +34,7 @@ describe("DecisionPage", () => {
     expect(screen.getByTestId("swipe-choice")).toBeInTheDocument();
     // SwipeChoice fallback button
     expect(screen.getByRole("button", { name: /Yes、提案を採択/ })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /No、提案を拒否/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /No、別案を再生成/ })).toBeInTheDocument();
     // textbox は QuickStart モードでは非表示
     expect(screen.queryByPlaceholderText(/今日/)).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /送信/ })).not.toBeInTheDocument();

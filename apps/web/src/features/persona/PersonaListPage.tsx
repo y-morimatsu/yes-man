@@ -20,7 +20,7 @@ export default function PersonaListPage() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
+        <h1 className="font-sans text-lg font-bold">{t("pageTitle")}</h1>
         <div className="flex gap-2">
           <Link to="/personas/selection">
             <Button variant="secondary" size="sm">選択管理</Button>
@@ -57,10 +57,10 @@ export default function PersonaListPage() {
       {tab === "my" ? <MyTab query={query} /> : <SharedTab sort={sort} setSort={setSort} query={query} />}
 
       {/* INCEPTION footnote: 最大 3 個 + 共有はオプトイン */}
-      <p className="mt-4 text-center text-xs italic text-neutral-400">
+      <p className="mt-4 text-center text-xs text-neutral-400">
         {t("footnoteMaxThree")}
       </p>
-      <p className="text-center text-xs italic text-neutral-400">
+      <p className="text-center text-xs text-neutral-400">
         {t("footnoteShareOptIn")}
       </p>
 

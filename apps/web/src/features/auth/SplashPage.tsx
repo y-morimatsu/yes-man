@@ -1,12 +1,20 @@
 /**
- * SplashPage — 未認証時の hero / ブランド導入画面.
+ * SplashPage — mockup §1 通り (2026-05-24 visual overhaul).
  *
- * spec: docs/superpowers/specs/2026-05-21-splash-signin-design.md
- * - 🪞 emoji + YESMAN wordmark + tagline + disclaimer + coral CTA + secondary link
- * - staged fade-in アニメーション (合計 ~2.1 秒、prefers-reduced-motion 対応は CSS 側)
- * - CTA / secondary link 両方で /auth/signin に navigate、location.state.from を引き継ぐ
+ * mockup §1 構成:
+ *   - 上下中央配置
+ *   - 3 blob (orange / green / blue) 横並び (size 44 + 2 eyes)
+ *   - YesMan italic serif title (大、Crimson Pro、46px — 唯一残存ブランド要素)
+ *   - 「人間最後の仕事は、YES で承認すること。」 tagline (sans 化、user 指示で保持)
+ *   - 黒楕円 button「はじめる」 (cream-lt text, sans-serif、単独 CTA、w-65% max-220px)
+ *   - 画面下部に地球地平線 (緑 / オレンジ / 青の半円 3 つが重なる)
  */
 import { useLocation, useNavigate } from "react-router-dom";
+import { BlobAvatar } from "@yesman/ui";
+
+const MK_CREAM = "#F2EEE2";
+const MK_CREAM_LT = "#FFFCF4";
+const MK_UMBER = "#2E2418";
 
 export default function SplashPage() {
   const location = useLocation();
@@ -15,7 +23,6 @@ export default function SplashPage() {
     (location.state as { from?: { pathname: string } } | null)?.from?.pathname ?? "/";
 
   const goToSignIn = () => {
-    // replace: false で Back ボタンで Splash に戻れるようにする (spec §4.3 UX 配慮)
     navigate("/auth/signin", {
       state: { from: { pathname: from } },
       replace: false,
@@ -23,94 +30,130 @@ export default function SplashPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 px-6 py-12">
-      <div className="w-full max-w-md text-center">
+    // 2026-05-24: SplashPage は Layout 外の独立 route (routes.tsx 参照).
+    //   画面全体に background (cream + earth horizon) を full-bleed で表示.
+    //   min-h-screen で viewport を完全に占有、scroll 不要 (compact content).
+    <main
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-4 relative overflow-hidden"
+      style={{ background: MK_CREAM, color: MK_UMBER }}
+    >
+      {/* 地球地平線 (画面下、3 色半円が重なる) */}
+      <div aria-hidden className="absolute inset-x-0 bottom-0 h-48 pointer-events-none">
         <div
-          className="text-6xl leading-none select-none splash-fade-in"
-          style={{ animationDelay: "0ms" }}
-          aria-hidden="true"
-        >
-          🪞
+          style={{
+            position: "absolute",
+            bottom: -120,
+            left: -60,
+            right: -60,
+            height: 220,
+            background: "#21A48F",
+            opacity: 0.3,
+            borderRadius: "50%",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -90,
+            left: -80,
+            right: "38%",
+            height: 160,
+            background: "#EF7A62",
+            opacity: 0.34,
+            borderRadius: "50%",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -110,
+            left: "30%",
+            right: -90,
+            height: 150,
+            background: "#8AB2DF",
+            opacity: 0.32,
+            borderRadius: "50% 65% 50% 55%",
+          }}
+        />
+      </div>
+
+      {/* Body (z-10 で 地球より前) */}
+      <div className="relative z-10 w-full max-w-md text-center flex flex-col items-center">
+        {/* 3 blob (orange / green / blue) — mockup §1 splash-cast 仕様 + ほんの少しランダム.
+            x/y 両軸に微小オフセット (±1〜2px) を入れ、整列感を緩める */}
+        <div className="flex items-end gap-3.5 mb-7">
+          <BlobAvatar
+            size={44}
+            color="orange"
+            gaze="upright"
+            name=""
+            className="-translate-y-1 -translate-x-px"
+          />
+          <BlobAvatar
+            size={44}
+            color="green"
+            gaze="downleft"
+            name=""
+            className="translate-y-[5px] translate-x-px"
+          />
+          <BlobAvatar
+            size={44}
+            color="blue"
+            gaze="center"
+            name=""
+            className="-translate-y-[3px] -translate-x-px"
+          />
         </div>
 
         <h1
-          className="mt-4 font-serif text-5xl font-bold text-neutral-800 tracking-[0.15em] splash-fade-in"
-          style={{ animationDelay: "200ms" }}
+          className="font-medium mb-4"
+          style={{
+            fontFamily: "'Crimson Pro', 'Noto Serif JP', serif",
+            fontStyle: "italic",
+            fontSize: 46,
+            letterSpacing: "0.02em",
+            color: MK_UMBER,
+          }}
         >
-          YESMAN
+          YesMan
         </h1>
 
-        <div
-          className="mx-auto mt-8 h-px w-24 bg-[#E0D5BC] splash-fade-in"
-          style={{ animationDelay: "500ms" }}
-          aria-hidden="true"
-        />
-
+        {/* tagline (user 指示で残置). 2026-05-27 sans 化 + 2026-05-27 #1 cherry-pick で
+            #1 自体は tagline 削除だったが、user 指示で UI 上は維持. */}
         <p
-          className="mt-6 font-serif italic text-xl text-neutral-700 leading-relaxed splash-fade-in"
-          style={{ animationDelay: "700ms" }}
+          className="text-xs leading-relaxed mb-4"
+          style={{
+            fontFamily: "var(--font-sans)",
+            color: MK_UMBER,
+            opacity: 0.75,
+          }}
         >
           人間最後の仕事は、
-        </p>
-        <p
-          className="mt-1 font-serif italic text-xl text-neutral-700 leading-relaxed splash-fade-in"
-          style={{ animationDelay: "800ms" }}
-        >
+          <br />
           YES で承認すること。
         </p>
 
-        <p
-          className="mt-10 text-sm leading-relaxed text-neutral-600 max-w-xs mx-auto splash-fade-in"
-          style={{ animationDelay: "1100ms" }}
+        {/* 黒楕円 「はじめる」 CTA — mockup §1: 65% width max 220px、絞って厚く */}
+        <button
+          type="button"
+          onClick={goToSignIn}
+          className="w-[65%] max-w-[220px] rounded-full py-3 transition-opacity hover:opacity-90 active:opacity-80"
+          style={{
+            background: MK_UMBER,
+            color: MK_CREAM,
+            fontFamily: "var(--font-sans)",
+            fontSize: 15,
+            letterSpacing: "0.05em",
+            fontWeight: 500,
+          }}
+          data-testid="splash-start"
         >
-          本作品は AI が人間の主体性を奪う体験を演出する作品です。
-          <br />
-          「委任度スコア」「沈黙演出」 などは意図的な
-          <strong className="font-semibold text-brand-700"> 逆説的設計 </strong>
-          です。
-        </p>
-
-        <div
-          className="mt-10 splash-fade-in-cta"
-          style={{ animationDelay: "1400ms" }}
-        >
-          <button
-            type="button"
-            onClick={goToSignIn}
-            className="
-              inline-flex items-center justify-center gap-2
-              rounded-2xl px-10 py-3.5
-              bg-[#E8775A] text-white text-base font-semibold
-              shadow-[0_4px_12px_rgba(232,119,90,0.35)]
-              transition-all duration-150 ease-out
-              hover:bg-[#D66547] hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(232,119,90,0.45)]
-              active:scale-[0.98]
-              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#E8775A]/40
-            "
-          >
-            はじめる
-            <span className="text-lg" aria-hidden="true">→</span>
-          </button>
-        </div>
-
-        <div
-          className="mt-6 splash-fade-in"
-          style={{ animationDelay: "1700ms" }}
-        >
-          <button
-            type="button"
-            onClick={goToSignIn}
-            className="
-              text-xs text-neutral-500 underline underline-offset-4
-              hover:text-neutral-700 hover:no-underline
-              transition-colors
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400
-            "
-          >
-            すでにアカウントがある方は <span className="font-semibold">サインイン</span>
-          </button>
-        </div>
+          はじめる
+        </button>
       </div>
     </main>
   );
 }
+
+// keep export for vite chunking compatibility with previous code
+export const __SplashCardBg = MK_CREAM_LT;

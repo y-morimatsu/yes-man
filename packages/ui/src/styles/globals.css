@@ -131,6 +131,13 @@ html.dark {
   100% { opacity: 0; transform: translateX(6px); }
 }
 
+/* Left-direction swipe hint chevrons (marching arrows toward No, 左流れ) */
+@keyframes ym-swipe-hint-arrow-left {
+  0% { opacity: 0; transform: translateX(6px); }
+  30%, 70% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(-6px); }
+}
+
 /* Right-edge glow pulse (proposal card 右辺、Yes 側を視覚的誘導) */
 @keyframes ym-yes-edge-glow {
   0%, 100% { box-shadow: inset -8px 0 16px -8px rgba(34, 197, 94, 0.18); }
@@ -153,4 +160,48 @@ html.dark {
   [data-ym-anim] {
     animation: none !important;
   }
+}
+
+/* ================================================================
+ * iOS Safari input auto-zoom 防止 (2026-05-28)
+ * input の font-size < 16px だと、focus 時に iOS Safari が自動でズームし
+ * 「画面が 100% 以上」になって収まらなくなる (SignInPage 等の text-[13px]
+ * input で発生)。タッチデバイスで text 系 form control を 16px 以上に固定
+ * して auto-zoom を抑止する (viewport の pinch-zoom 自体は維持し a11y を保つ)。
+ * Tailwind の text-[NNpx] utility (specificity 0,1,0) を上書きするため
+ * !important を付与。checkbox/radio/range/color は対象外。
+ * ================================================================ */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* ================================================================
+ * v3-γ anonymous-strangers (2026-05-24, Task 5): 漫画ステージ用
+ * ================================================================ */
+
+/* MangaBubble pop-in (large 時のみ trigger). slide-in と差別化、漫画らしい弾み */
+@keyframes ym-manga-bubble-pop {
+  0% { opacity: 0; transform: translateY(8px) scale(0.92); }
+  60% { opacity: 1; transform: translateY(-2px) scale(1.03); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* MangaBubble の large → small 移行 (opacity + 縮小、subtle) */
+@keyframes ym-manga-bubble-fade {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0.55; transform: scale(0.96); }
+}
+
+/* i18n font fallback (Noto Sans Arabic / Noto Sans SC は apps/web/index.html で CDN load).
+ * NFR-5 fix: font 未 load 時は system font fallback で graceful degrade. */
+.lang-ar {
+  font-family: "Noto Sans Arabic", "Noto Naskh Arabic", system-ui, sans-serif;
+  /* Arabic は dir=rtl で bubble 内側のみ反転 (stage 全体は LTR 維持). */
+}
+.lang-zh {
+  font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
 }

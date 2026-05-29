@@ -6,7 +6,7 @@
  * - 文末 footnote 「スコアが たかいほど AI を信頼できています」
  */
 export const STRINGS = {
-  pageTitle: "委任度 スコア",
+  pageTitle: "YesMan スコア",
   metricLabel: "委任度 (Yes 比率)",
   warningNoStreak: "⚠ No 連発を検知しました。ご自身の判断軸を見直してみましょう。",
   warningLowYesRatio: "最近 Yes の比率が低めです。",

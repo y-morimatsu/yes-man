@@ -1,0 +1,194 @@
+<mxfile host="app.diagrams.net" modified="2026-05-29T00:00:00.000Z" agent="claude-code" version="24.0.0">
+  <diagram id="swipe-options" name="4方向スワイプ表現案">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="980" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== 見出し ===== -->
+        <mxCell id="head" value="決定カードの上下スワイプ表現 — 3案 (左右 No/Yes ボタンは共通・固定)" style="text;html=1;fontSize=18;fontStyle=1;align=left;verticalAlign=middle;fontColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="900" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- 案A: 上下ゴーストボタン (方向と位置を一致) -->
+        <!-- ============================================================ -->
+        <mxCell id="aBg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=#E0D5BC;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="320" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="aTitle" value="案A: 上下ゴーストボタン (推奨)" style="text;html=1;fontSize=14;fontStyle=1;align=center;fontColor=#B85C3D;" vertex="1" parent="1">
+          <mxGeometry x="60" y="84" width="280" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="aDesc" value="方向と位置を一致。タップでも動作 (a11y◎)" style="text;html=1;fontSize=11;align=center;fontColor=#7A6B57;" vertex="1" parent="1">
+          <mxGeometry x="60" y="108" width="280" height="18" as="geometry" />
+        </mxCell>
+        <!-- 上ゴースト やめる -->
+        <mxCell id="aUp" value="↑ やめる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9AA5AD;dashed=1;fontColor=#6B7680;fontSize=12;arcSize=40;" vertex="1" parent="1">
+          <mxGeometry x="125" y="138" width="110" height="30" as="geometry" />
+        </mxCell>
+        <!-- カード -->
+        <mxCell id="aCard" value="明るく 元気が出る曲を&#10;聴こう。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#2E2418;fontColor=#1A1814;fontSize=15;fontStyle=1;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="70" y="180" width="260" height="70" as="geometry" />
+        </mxCell>
+        <!-- No / Yes -->
+        <mxCell id="aNo" value="← No" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AA5AD;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="70" y="268" width="120" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="aYes" value="Yes →" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5BA85C;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="210" y="268" width="120" height="46" as="geometry" />
+        </mxCell>
+        <!-- 下ゴースト もっと絞る -->
+        <mxCell id="aDown" value="↓ もっと絞る  (あと 4 段)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A66B5;dashed=1;fontColor=#3A66B5;fontSize=12;arcSize=40;" vertex="1" parent="1">
+          <mxGeometry x="95" y="332" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="aNote" value="位置 = 方向。&#10;上(やめる)はカード上、下(もっと絞る)はボタン下。&#10;スワイプ方向が直感的、タップ代替も兼ねる。" style="text;html=1;fontSize=10;align=center;fontColor=#7A6B57;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="55" y="378" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- 案B: アニメ矢印ガイド (スワイプ専用) -->
+        <!-- ============================================================ -->
+        <mxCell id="bBg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=#E0D5BC;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="400" y="70" width="320" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="bTitle" value="案B: アニメ矢印ガイド" style="text;html=1;fontSize=14;fontStyle=1;align=center;fontColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="420" y="84" width="280" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="bDesc" value="軽量・スッキリ。タップ代替は無し" style="text;html=1;fontSize=11;align=center;fontColor=#7A6B57;" vertex="1" parent="1">
+          <mxGeometry x="420" y="108" width="280" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="bUpLabel" value="↑ やめる" style="text;html=1;fontSize=12;align=center;fontColor=#9AA5AD;" vertex="1" parent="1">
+          <mxGeometry x="480" y="134" width="160" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="bUpArrow" value="" style="endArrow=classicThin;html=1;strokeColor=#9AA5AD;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="198" as="sourcePoint" />
+            <mxPoint x="560" y="156" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bCard" value="明るく 元気が出る曲を&#10;聴こう。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#2E2418;fontColor=#1A1814;fontSize=15;fontStyle=1;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="430" y="200" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="bDownArrow" value="" style="endArrow=classicThin;html=1;strokeColor=#3A66B5;strokeWidth=2;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="272" as="sourcePoint" />
+            <mxPoint x="560" y="312" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bDownLabel" value="↓ もっと絞る  (あと 4 段)" style="text;html=1;fontSize=12;align=center;fontColor=#3A66B5;" vertex="1" parent="1">
+          <mxGeometry x="460" y="314" width="200" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="bNo" value="← No" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AA5AD;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="430" y="344" width="120" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="bYes" value="Yes →" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5BA85C;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="570" y="344" width="120" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="bNote" value="カード上下に点滅矢印 + ラベルで&#10;「ここをスワイプ」を誘導。&#10;見た目はスッキリだがタップでは動かせない。" style="text;html=1;fontSize=10;align=center;fontColor=#7A6B57;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="415" y="404" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- 案C: バナー集約型 (最小変更) -->
+        <!-- ============================================================ -->
+        <mxCell id="cBg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=#E0D5BC;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="760" y="70" width="320" height="430" as="geometry" />
+        </mxCell>
+        <mxCell id="cTitle" value="案C: バナー集約型" style="text;html=1;fontSize=14;fontStyle=1;align=center;fontColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="780" y="84" width="280" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="cDesc" value="最小変更。4操作を 1 行に集約" style="text;html=1;fontSize=11;align=center;fontColor=#7A6B57;" vertex="1" parent="1">
+          <mxGeometry x="780" y="108" width="280" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="cCard" value="明るく 元気が出る曲を&#10;聴こう。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#2E2418;fontColor=#1A1814;fontSize=15;fontStyle=1;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="790" y="150" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cNo" value="← No" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9AA5AD;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="790" y="238" width="120" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="cYes" value="Yes →" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5BA85C;strokeColor=none;fontColor=#FFFFFF;fontSize=15;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="930" y="238" width="120" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="cBanner" value="→ 決定  ・  ↓ もっと絞る (残 4)  ・  ↑ やめる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E7F0FF;strokeColor=#7BAEFF;fontColor=#3A66B5;fontSize=12;fontStyle=1;arcSize=20;" vertex="1" parent="1">
+          <mxGeometry x="790" y="302" width="260" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cNote" value="上部の小ヒントを廃止し、下の 1 バナーに集約。&#10;実装は最小だが「どちらにスワイプ?」の&#10;方向アフォーダンスは弱め。" style="text;html=1;fontSize=10;align=center;fontColor=#7A6B57;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="775" y="360" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ===== 第2行 見出し: ボタン廃止案 ===== -->
+        <mxCell id="head2" value="── ボタン廃止案 (Yes/No 塗りボタンも無くし、4 方向を対等に) ──" style="text;html=1;fontSize=16;fontStyle=1;align=left;verticalAlign=middle;fontColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="40" y="530" width="900" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- 案D: 4方向ゴースト十字 (ボタン全廃・全方向チップ) -->
+        <!-- ============================================================ -->
+        <mxCell id="dBg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=#E0D5BC;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="570" width="380" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="dTitle" value="案D: 4方向ゴースト十字 (推奨)" style="text;html=1;fontSize=14;fontStyle=1;align=center;fontColor=#B85C3D;" vertex="1" parent="1">
+          <mxGeometry x="60" y="584" width="340" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="dDesc" value="塗りボタン廃止。4 方向を十字チップで対等に。右(決定)のみ緑で強調" style="text;html=1;fontSize=11;align=center;fontColor=#7A6B57;" vertex="1" parent="1">
+          <mxGeometry x="60" y="608" width="340" height="18" as="geometry" />
+        </mxCell>
+        <!-- 上 やめる -->
+        <mxCell id="dUp" value="↑ やめる" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9AA5AD;dashed=1;fontColor=#6B7680;fontSize=12;arcSize=40;" vertex="1" parent="1">
+          <mxGeometry x="170" y="640" width="120" height="30" as="geometry" />
+        </mxCell>
+        <!-- 左 別案 -->
+        <mxCell id="dLeft" value="← 別案" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9AA5AD;dashed=1;fontColor=#6B7680;fontSize=12;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="52" y="690" width="80" height="56" as="geometry" />
+        </mxCell>
+        <!-- カード -->
+        <mxCell id="dCard" value="明るく 元気が&#10;出る曲を&#10;聴こう。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#2E2418;fontColor=#1A1814;fontSize=14;fontStyle=1;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="150" y="686" width="160" height="64" as="geometry" />
+        </mxCell>
+        <!-- 右 決定 (緑強調) -->
+        <mxCell id="dRight" value="決定 →" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5BA85C;strokeWidth=2;fontColor=#3C7A3E;fontSize=12;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="328" y="690" width="80" height="56" as="geometry" />
+        </mxCell>
+        <!-- 下 もっと絞る -->
+        <mxCell id="dDown" value="↓ もっと絞る  (あと 4 段)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A66B5;dashed=1;fontColor=#3A66B5;fontSize=12;arcSize=40;" vertex="1" parent="1">
+          <mxGeometry x="145" y="766" width="170" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dNote" value="十字 = 4 方向が一目で対等に分かる。&#10;すべてスワイプ + タップ両対応。&#10;右(決定)を緑枠で「主アクション」と示す。" style="text;html=1;fontSize=10;align=center;fontColor=#7A6B57;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="55" y="812" width="350" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================================ -->
+        <!-- 案E: カードスワイプ + 四辺ラベル (超ミニマル) -->
+        <!-- ============================================================ -->
+        <mxCell id="eBg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBFAF5;strokeColor=#E0D5BC;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="460" y="570" width="380" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="eTitle" value="案E: カードスワイプ + 四辺ラベル" style="text;html=1;fontSize=14;fontStyle=1;align=center;fontColor=#2E2418;" vertex="1" parent="1">
+          <mxGeometry x="480" y="584" width="340" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="eDesc" value="超ミニマル。カードを掴んで離す方向で操作。四辺に薄ラベル" style="text;html=1;fontSize=11;align=center;fontColor=#7A6B57;" vertex="1" parent="1">
+          <mxGeometry x="480" y="608" width="340" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="eUp" value="↑ やめる" style="text;html=1;fontSize=12;align=center;fontColor=#9AA5AD;" vertex="1" parent="1">
+          <mxGeometry x="570" y="642" width="160" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="eLeft" value="←&#10;別案" style="text;html=1;fontSize=12;align=center;fontColor=#9AA5AD;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="688" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eCard" value="明るく 元気が出る曲を&#10;聴こう。&#10;&#10;(指でスワイプ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFCF4;strokeColor=#2E2418;fontColor=#1A1814;fontSize=14;fontStyle=1;arcSize=14;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="668" width="220" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="eRight" value="決定&#10;→" style="text;html=1;fontSize=12;align=center;fontColor=#3C7A3E;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="768" y="688" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eDown" value="↓ もっと絞る  (あと 4 段)" style="text;html=1;fontSize=12;align=center;fontColor=#3A66B5;" vertex="1" parent="1">
+          <mxGeometry x="550" y="762" width="200" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="eNote" value="チップも無し。カード周囲の薄ラベルだけ。&#10;最もスッキリだが、操作の発見性は最も低い。&#10;初見では「どう操作する?」となりやすい。" style="text;html=1;fontSize=10;align=center;fontColor=#7A6B57;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="475" y="800" width="350" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

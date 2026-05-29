@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YesMan Wireframe — anonymous-strangers (案 5)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:      #FAF6EC;
+  --cream-lt:   #FFFCF4;
+  --umber:      #2E2418;
+  --green:      #21A48F;
+  --orange:     #EF7A62;
+  --blue:       #8AB2DF;
+  --pink:       #F9CED0;
+
+  --serif:      'Crimson Pro', 'Noto Serif JP', Georgia, serif;
+  --sans:       'Noto Sans JP', 'Inter', system-ui, sans-serif;
+
+  --hairline:   rgba(46, 36, 24, 0.15);
+  --hairline-2: rgba(46, 36, 24, 0.08);
+  --muted:      rgba(46, 36, 24, 0.55);
+  --muted-2:    rgba(46, 36, 24, 0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: var(--sans);
+  color: var(--umber);
+  background: #F2EEE2;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+body { padding: 40px 20px 80px; }
+
+/* ============ Document chrome ============ */
+.doc-header {
+  max-width: 1200px;
+  margin: 0 auto 36px;
+  padding-bottom: 22px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.doc-title { font-family: var(--serif); font-style: italic; font-size: 26px; font-weight: 500; margin-bottom: 6px; }
+.doc-sub { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
+
+.flow {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.screen-block { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.screen-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-family: var(--sans);
+}
+.screen-label strong {
+  color: var(--umber);
+  font-weight: 500;
+  margin-left: 8px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+}
+.phone-row {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.phone-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.phone-sublabel {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--orange);
+  letter-spacing: 0.08em;
+}
+.transition {
+  padding: 18px 0;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+  font-family: var(--serif);
+  font-style: italic;
+}
+.transition .arrow {
+  font-size: 18px;
+  color: var(--umber);
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--sans);
+  font-style: normal;
+}
+
+/* ============ Phone frame ============ */
+.phone {
+  width: 320px;
+  height: 660px;
+  background: var(--cream);
+  border-radius: 26px;
+  border: 0.5px solid var(--hairline);
+  box-shadow: 0 10px 28px rgba(46, 36, 24, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============ Common pieces ============ */
+.app-bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-bottom: 0.5px solid var(--hairline-2);
+  background: var(--cream);
+  gap: 10px;
+  flex-shrink: 0;
+}
+.app-bar-back { font-size: 18px; color: var(--umber); width: 16px; opacity: 0.65; font-family: var(--sans); }
+.app-bar-title { font-size: 13px; font-weight: 500; font-family: var(--sans); }
+.app-bar-spacer { flex: 1; }
+.app-bar-action {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--orange);
+  letter-spacing: 0.04em;
+}
+
+/* Avatar = color blob with 2 eyes */
+.blob {
+  border-radius: 50%;
+  display: inline-flex;
+  flex-shrink: 0;
+  position: relative;
+}
+.blob.green   { background: var(--green); }
+.blob.orange  { background: var(--orange); }
+.blob.blue    { background: var(--blue); }
+.blob.pink    { background: var(--pink); }
+.blob.s-44 { width: 44px; height: 44px; }
+.blob.s-36 { width: 36px; height: 36px; }
+.blob.s-28 { width: 28px; height: 28px; }
+.blob.s-22 { width: 22px; height: 22px; }
+.blob.s-60 { width: 60px; height: 60px; }
+.blob.s-80 { width: 80px; height: 80px; }
+
+.blob::after {
+  content: "";
+  position: absolute;
+  background: var(--umber);
+  border-radius: 50%;
+}
+.blob.s-80::after { top: 32px; left: 26px; width: 6px; height: 6px; box-shadow: 22px 0 0 var(--umber); }
+.blob.s-60::after { top: 24px; left: 20px; width: 5px; height: 5px; box-shadow: 16px 0 0 var(--umber); }
+.blob.s-44::after { top: 18px; left: 14px; width: 4px; height: 4px; box-shadow: 12px 0 0 var(--umber); }
+.blob.s-36::after { top: 14px; left: 11px; width: 3.5px; height: 3.5px; box-shadow: 10px 0 0 var(--umber); }
+.blob.s-28::after { top: 11px; left: 8px;  width: 3px; height: 3px;   box-shadow: 8px 0 0 var(--umber); }
+.blob.s-22::after { top: 9px;  left: 6px;  width: 2.5px; height: 2.5px; box-shadow: 7px 0 0 var(--umber); }
+
+.blob.gaze-upright::after  { transform: translate(2px, -2px); }
+.blob.gaze-downleft::after { transform: translate(-2px, 2px); }
+.blob.gaze-upleft::after   { transform: translate(-2px, -2px); }
+.blob.gaze-downright::after{ transform: translate(2px, 2px); }
+.blob.gaze-up::after       { transform: translate(0, -2px); }
+
+.blob.dim { opacity: 0.32; }
+
+.blob-stack { display: inline-flex; }
+.blob-stack .blob {
+  border: 1.5px solid var(--cream);
+  margin-left: -8px;
+}
+.blob-stack .blob:first-child { margin-left: 0; }
+
+/* Photo icon (revealed real user avatar — sample) */
+.photo-icon {
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 600;
+  color: var(--cream-lt);
+  overflow: hidden;
+  background: linear-gradient(135deg, #2BB89E 0%, #15806E 100%);
+}
+.photo-icon::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 55%;
+  background: rgba(255,252,244,0.22);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.photo-icon-initial { position: relative; z-index: 2; }
+.photo-icon.s-44 { width: 44px; height: 44px; }
+.photo-icon.s-44 .photo-icon-initial { font-size: 18px; }
+.photo-icon.s-36 { width: 36px; height: 36px; }
+.photo-icon.s-36 .photo-icon-initial { font-size: 15px; }
+.photo-icon.s-28 { width: 28px; height: 28px; }
+.photo-icon.s-28 .photo-icon-initial { font-size: 12px; }
+.photo-icon.s-60 { width: 60px; height: 60px; }
+.photo-icon.s-60 .photo-icon-initial { font-size: 22px; }
+.photo-icon.dim { opacity: 0.32; }
+
+/* Buttons */
+.btn-primary {
+  background: var(--umber);
+  color: var(--cream);
+  border: none;
+  border-radius: 999px;
+  padding: 13px 0;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  font-family: var(--serif);
+  font-style: italic;
+  letter-spacing: 0.05em;
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--umber);
+  border: 0.5px solid var(--umber);
+  border-radius: 999px;
+  padding: 12px 0;
+  font-size: 13px;
+  text-align: center;
+  width: 100%;
+  font-family: var(--serif);
+  font-style: italic;
+}
+.link-text {
+  color: var(--umber);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Tab bar */
+.tab-bar {
+  display: flex;
+  border-top: 0.5px solid var(--hairline-2);
+  background: var(--cream);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  padding: 8px 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  font-family: var(--sans);
+}
+.tab.active { color: var(--orange); }
+.tab-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.tab.active .tab-icon { opacity: 1; }
+
+.refresh-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 0.5px solid var(--hairline);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange);
+  font-size: 14px;
+  font-family: var(--sans);
+  margin-left: auto;
+  cursor: pointer;
+}
+
+/* ============ Screen 1: Splash (Earth = dotted arcs / horizons) ============ */
+.s-splash {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--cream);
+}
+.earth-scene { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+/* 地球 = 3 色の塗りつぶし半円を画面下から重ねて 地平線を表現 (非対称・色ごとに違う形) */
+.earth-green {
+  position: absolute;
+  bottom: -160px;
+  left: -60px;
+  right: -60px;
+  height: 280px;
+  background: var(--green);
+  opacity: 0.3;
+  border-radius: 50%;
+}
+.earth-orange {
+  position: absolute;
+  bottom: -120px;
+  left: -80px;
+  right: 38%;
+  height: 210px;
+  background: var(--orange);
+  opacity: 0.34;
+  border-radius: 50%;
+}
+.earth-blue {
+  position: absolute;
+  bottom: -150px;
+  left: 30%;
+  right: -90px;
+  height: 200px;
+  background: var(--blue);
+  opacity: 0.32;
+  border-radius: 50% 65% 50% 55%;
+}
+.s-splash-body {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+.splash-cast {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 28px;
+  align-items: flex-end;
+}
+.splash-cast .blob.orange { transform: translateY(-4px); }
+.splash-cast .blob.green  { transform: translateY(4px); }
+.splash-cast .blob.blue   { transform: translateY(-2px); }
+.s-splash-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 46px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+  color: var(--umber);
+}
+.s-splash-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--umber);
+  opacity: 0.75;
+  margin-bottom: 32px;
+  line-height: 1.7;
+}
+.s-splash-cta { width: 82%; margin-bottom: 16px; }
+.s-splash-foot {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ============ Auth ============ */
+.s-auth { display: flex; flex-direction: column; height: 100%; }
+.auth-bar { padding: 12px 16px 6px; display: flex; align-items: center; flex-shrink: 0; }
+.auth-back { font-size: 22px; color: var(--umber); width: 16px; line-height: 1; opacity: 0.7; }
+.auth-body {
+  flex: 1;
+  padding: 18px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.auth-heading {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.auth-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  line-height: 1.7;
+  font-family: var(--serif);
+  font-style: italic;
+}
+.auth-field {
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline);
+  border-radius: 12px;
+  padding: 9px 14px;
+}
+.auth-field-label {
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  font-family: var(--sans);
+}
+.auth-field-input { font-size: 13px; color: var(--umber); font-family: var(--sans); }
+.auth-foot {
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+/* ============ Home ============ */
+.s-home { display: flex; flex-direction: column; height: 100%; }
+.home-scroll {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.call-card {
+  margin: 20px 16px 6px;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline);
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.call-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--hairline-2);
+}
+.call-card-head-l {
+  font-family: var(--sans);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.call-card-head .member-stack { display: inline-flex; }
+.call-card-head .member-stack > * {
+  border: 1.5px solid var(--cream-lt);
+  margin-left: -8px;
+}
+.call-card-head .member-stack > *:first-child { margin-left: 0; }
+
+.call-input {
+  background: var(--cream);
+  border: 0.5px solid var(--hairline-2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 60px;
+}
+.call-input-text {
+  flex: 1;
+  font-size: 12px;
+  color: var(--umber);
+  line-height: 1.55;
+  font-family: var(--serif);
+  font-style: italic;
+}
+.call-mic {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--green);
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+.call-mic::before {
+  content: "";
+  position: absolute;
+  width: 9px; height: 13px;
+  background: var(--cream-lt);
+  border-radius: 5px;
+  top: 6px; left: 50%;
+  transform: translateX(-50%);
+}
+.call-mic::after {
+  content: "";
+  position: absolute;
+  width: 15px; height: 7px;
+  border: 1.5px solid var(--cream-lt);
+  border-top: 0;
+  border-radius: 0 0 16px 16px;
+  bottom: 6px; left: 50%;
+  transform: translateX(-50%);
+}
+.call-btn {
+  background: var(--umber);
+  color: var(--cream);
+  border: none;
+  border-radius: 999px;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--serif);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  width: 100%;
+}
+
+.section-l {
+  font-family: var(--sans);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.22em;
+  padding: 16px 20px 6px;
+  text-transform: uppercase;
+}
+.history-list {
+  margin: 0 20px 12px;
+  display: flex;
+  flex-direction: column;
+}
+.hist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--hairline-2);
+}
+.hist-row:last-child { border-bottom: none; }
+.hist-check {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--cream);
+  flex-shrink: 0;
+}
+.hist-check.green   { background: var(--green); }
+.hist-check.orange  { background: var(--orange); }
+.hist-check.blue    { background: var(--blue); }
+.hist-text {
+  flex: 1;
+  font-size: 12px;
+  font-family: var(--serif);
+  font-style: italic;
+}
+.hist-time { font-size: 9px; color: var(--muted); font-family: var(--sans); letter-spacing: 0.05em; }
+
+.score-strip {
+  flex-shrink: 0;
+  margin: 0 20px 12px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline-2);
+  border-radius: 12px;
+}
+.score-strip-l {
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.score-strip-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--orange);
+}
+.score-strip-m {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ============ Decision (3 people talking) ============ */
+.s-decision { display: flex; flex-direction: column; height: 100%; }
+.chat-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--cream);
+  border-bottom: 0.5px solid var(--hairline-2);
+  gap: 10px;
+  flex-shrink: 0;
+}
+.chat-bar-back { font-size: 16px; color: var(--umber); opacity: 0.65; }
+.chat-bar-title {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+.chat-bar-meta {
+  font-family: var(--sans);
+  font-size: 9px;
+  color: var(--orange);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.12em;
+}
+.chat-bar-blip { width: 5px; height: 5px; background: var(--orange); border-radius: 50%; }
+
+.topic-strip {
+  padding: 12px 16px 10px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--umber);
+  background: var(--cream);
+  flex-shrink: 0;
+  text-align: center;
+  border-bottom: 0.5px solid var(--hairline-2);
+}
+.topic-strip-l {
+  display: block;
+  font-family: var(--sans);
+  font-size: 8.5px;
+  color: var(--muted);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  font-style: normal;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  background: var(--cream-lt);
+  overflow: hidden;
+}
+.stage .earth-back {
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  right: -40px;
+  height: 220px;
+  background: var(--green);
+  opacity: 0.18;
+  border-radius: 50%;
+}
+.stage .earth-front {
+  position: absolute;
+  bottom: -30px;
+  left: 30%;
+  right: -60px;
+  height: 180px;
+  background: var(--blue);
+  opacity: 0.24;
+  border-radius: 50%;
+}
+
+.actor-row {
+  position: absolute;
+  bottom: 100px;  /* 地平線のちょい下にアイコンが立つよう、画面下から離す */
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 30px;
+  z-index: 2;
+}
+/* Random vertical positions for stereoscopic depth */
+/* もっと立体感のあるランダム上下 — 差を大きく */
+.actor-row > *:nth-child(1) { margin-bottom: 32px; }   /* BOB 一番上 */
+.actor-row > *:nth-child(2) { margin-bottom: 0; }      /* 私 地面 */
+.actor-row > *:nth-child(3) { margin-bottom: 18px; }   /* SARA 中間 */
+
+/* Manga bubbles — same size, overlap with z-index/opacity */
+.manga-bubble {
+  position: absolute;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--umber);
+  line-height: 1.55;
+  border-radius: 18px;
+  width: 184px;
+  padding: 13px 16px;
+  font-size: 13.5px;
+}
+.manga-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  width: 0; height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+}
+/* is-large = currently speaking (front, full opacity, shadow) */
+.manga-bubble.is-large {
+  z-index: 10;
+  box-shadow: 0 10px 26px rgba(46,36,24,0.18);
+}
+/* is-small = already spoken (behind, faded) */
+.manga-bubble.is-small {
+  opacity: 0.55;
+}
+
+/* Position per actor — bubble bottom = アイコン上端 + 2px (tail がアイコン上端にぴったり着地) */
+/* actor-row bottom 100 + margin 32 + アイコン高 44 = 176 (BOB アイコン上端) → bubble bottom 184 */
+.bub-bob   { bottom: 184px; left: 12px; background: var(--pink); z-index: 3; }
+.bub-bob::after { left: 42px; border-top: 10px solid var(--pink); }
+/* 私 アイコン上端 = 100 + 0 + 44 = 144 → bubble bottom 152 */
+.bub-me    { bottom: 152px; left: 58px; background: var(--cream-lt); border: 0.5px solid var(--hairline); z-index: 4; }
+.bub-me::after { left: 50%; transform: translateX(-50%); border-top: 10px solid var(--cream-lt); }
+/* SARA アイコン上端 = 100 + 18 + 44 = 162 → bubble bottom 170 */
+.bub-sara  { bottom: 170px; right: 12px; background: var(--pink); z-index: 5; }
+.bub-sara::after { right: 42px; border-top: 10px solid var(--pink); }
+
+/* Lang link (Twitter X style) */
+.lang-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-style: normal;
+  color: var(--orange);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+/* Typing dots — アイコンの真上に吹き出し風 (考え中) で表示 */
+.bub-typing {
+  position: absolute;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline);
+  border-radius: 18px;
+  padding: 10px 14px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  z-index: 2;
+}
+.bub-typing::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid var(--cream-lt);
+}
+/* 私のアイコン真上 (アイコン上端 144 + 8 = 152) */
+.bt-me   { bottom: 152px; left: 140px; }
+.bt-me::after { left: 50%; transform: translateX(-50%); }
+/* SARA のアイコン真上 (アイコン上端 162 + 8 = 170) */
+.bt-sara { bottom: 170px; right: 38px; }
+.bt-sara::after { right: 22px; }
+.typing-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); opacity: 0.7; }
+.typing-dot:nth-child(2) { opacity: 0.5; }
+.typing-dot:nth-child(3) { opacity: 0.3; }
+
+/* ============ Decision conclusion (single card) ============ */
+.s-result { display: flex; flex-direction: column; height: 100%; background: var(--cream); }
+.result-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.result-card {
+  width: 100%;
+  max-width: 290px;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline);
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgba(46,36,24,0.14);
+  display: flex;
+  flex-direction: column;
+}
+.rc-stage {
+  height: 170px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #FFFCF4 0%, #FFFCF4 35%, var(--cream-lt) 100%);
+}
+.rc-stage .earth-back {
+  position: absolute;
+  bottom: -20px; left: -30px; right: -30px;
+  height: 120px;
+  background: var(--green); opacity: 0.22;
+  border-radius: 50%;
+}
+.rc-stage .earth-front {
+  position: absolute;
+  bottom: -14px; left: 30%; right: -50px;
+  height: 95px;
+  background: var(--blue); opacity: 0.28;
+  border-radius: 50%;
+}
+.rc-cast {
+  position: absolute;
+  bottom: 18px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 26px;
+  z-index: 2;
+}
+.rc-actor.chosen .blob,
+.rc-actor.chosen .photo-icon { transform: scale(1.2); }
+.rc-actor.dim .blob,
+.rc-actor.dim .photo-icon { opacity: 0.32; transform: scale(0.78); }
+
+.rc-conclusion {
+  padding: 22px 18px 14px;
+  text-align: center;
+}
+.rc-conclusion-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--umber);
+  line-height: 1.25;
+}
+.rc-actions {
+  display: flex;
+  gap: 38px;
+  justify-content: center;
+  padding: 4px 0 24px;
+}
+.vote-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  box-shadow: 0 6px 16px rgba(46,36,24,0.18);
+}
+.vote-no {
+  background: var(--cream-lt);
+  color: var(--umber);
+  border: 0.5px solid var(--hairline);
+}
+.vote-yes {
+  background: var(--orange);
+  color: var(--cream-lt);
+}
+
+/* ============ Past log ============ */
+.s-log { display: flex; flex-direction: column; height: 100%; background: var(--cream); }
+.log-body {
+  flex: 1;
+  padding: 14px 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.log-stage {
+  position: relative;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline-2);
+  border-radius: 18px;
+  height: 230px;
+  overflow: hidden;
+}
+.log-stage .earth-back {
+  position: absolute;
+  bottom: -30px; left: -30px; right: -30px;
+  height: 140px;
+  background: var(--green); opacity: 0.2;
+  border-radius: 50%;
+}
+.log-stage .earth-front {
+  position: absolute;
+  bottom: -20px; left: 30%; right: -40px;
+  height: 110px;
+  background: var(--blue); opacity: 0.26;
+  border-radius: 50%;
+}
+.log-cast {
+  position: absolute;
+  bottom: 22px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 22px;
+  z-index: 2;
+}
+.log-bubble {
+  position: absolute;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 10.5px;
+  background: var(--pink);
+  border-radius: 14px;
+  padding: 6px 10px;
+  max-width: 110px;
+  text-align: center;
+}
+.log-bubble.cream { background: var(--cream-lt); border: 0.5px solid var(--hairline); }
+.lb-bob   { top: 18px; left: 16px; z-index: 1; opacity: 0.85; }
+.lb-me    { top: 38px; left: 84px; z-index: 2; }
+.lb-sara  { top: 22px; right: 16px; z-index: 3; }
+
+.log-conclusion-card {
+  background: var(--cream-lt);
+  color: var(--umber);
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 0.5px solid var(--hairline);
+  text-align: center;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+}
+.log-yes-marker {
+  align-self: center;
+  background: var(--orange);
+  color: var(--cream);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+/* ============ Summon ============ */
+.s-summon { display: flex; flex-direction: column; height: 100%; }
+.summon-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+.summon-hint {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 4px;
+  line-height: 1.6;
+}
+.summon-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline);
+  border-radius: 14px;
+}
+.summon-row.me { background: rgba(33,164,143,0.08); border-color: rgba(33,164,143,0.3); }
+.summon-row-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.summon-row-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 500;
+}
+.summon-row-tag {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+.summon-dice-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: transparent;
+  border: 0.5px dashed var(--orange);
+  border-radius: 14px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--orange);
+}
+.summon-footer { padding: 12px 14px; background: var(--cream); flex-shrink: 0; }
+
+/* ============ Past strangers ============ */
+.s-strangers { display: flex; flex-direction: column; height: 100%; }
+.strangers-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--cream);
+  overflow: hidden;
+}
+.stranger-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline-2);
+  border-radius: 14px;
+}
+.stranger-row-info { flex: 1; }
+.stranger-row-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.stranger-row-tag {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.stranger-row-chevron { color: var(--muted-2); font-size: 14px; }
+
+/* ============ Profile detail ============ */
+.s-detail { display: flex; flex-direction: column; height: 100%; }
+.detail-body {
+  flex: 1;
+  padding: 22px 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+.detail-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid var(--hairline-2);
+}
+.detail-meta {
+  font-family: var(--sans);
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+.detail-section-l {
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--orange);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(239,122,98,0.12);
+  color: var(--umber);
+  border: 0.5px solid rgba(239,122,98,0.3);
+}
+.quote-block { display: flex; flex-direction: column; gap: 8px; }
+.quote-line {
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline-2);
+  border-radius: 12px 12px 12px 4px;
+  padding: 9px 12px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.quote-orig {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--sans);
+  font-size: 9px;
+  font-style: normal;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* ============ Self profile ============ */
+.s-self-profile { display: flex; flex-direction: column; height: 100%; background: var(--cream); }
+.self-body {
+  flex: 1;
+  padding: 20px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+.self-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 0.5px solid var(--hairline-2);
+}
+.self-head-info { display: flex; flex-direction: column; gap: 2px; }
+.self-name {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+}
+.self-stat {
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.toggle-card {
+  background: var(--cream-lt);
+  border: 0.5px solid var(--hairline);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.toggle-card-text { flex: 1; }
+.toggle-card-l {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--umber);
+}
+.toggle-card-sub {
+  font-family: var(--sans);
+  font-size: 9.5px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+  line-height: 1.6;
+}
+.toggle-card-stat {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--hairline-2);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 11.5px;
+  color: var(--orange);
+}
+.toggle-switch {
+  width: 38px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--orange);
+  position: relative;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.toggle-switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px; height: 16px;
+  background: var(--cream-lt);
+  border-radius: 50%;
+}
+.toggle-switch.off { background: var(--muted-2); }
+.toggle-switch.off::after { left: 3px; right: auto; }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <h1 class="doc-title">YesMan Wireframe — anonymous-strangers</h1>
+  <p class="doc-sub">案 5: どこかの誰か / メンバーは 匿名 (アイコンのみ)</p>
+</header>
+
+<main class="flow">
+
+  <!-- ============ 画面 1: Splash ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 1 <strong>/auth/splash — スプラッシュ</strong></div>
+    <div class="phone">
+      <div class="s-splash">
+        <div class="earth-scene">
+          <div class="earth-green"></div>
+          <div class="earth-blue"></div>
+          <div class="earth-orange"></div>
+        </div>
+        <div class="s-splash-body">
+          <div class="splash-cast">
+            <div class="blob orange s-44 gaze-upright"></div>
+            <div class="blob green s-44 gaze-downleft"></div>
+            <div class="blob blue s-44"></div>
+          </div>
+          <div class="s-splash-title">YesMan</div>
+          <div class="s-splash-sub">人間最後の仕事は、<br>YES で承認すること。</div>
+          <button class="btn-primary s-splash-cta">はじめる</button>
+          <div class="s-splash-foot">すでにアカウントがある方は <a href="#" class="link-text">ログイン</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    「はじめる」 → アカウント作成 / 「ログイン」 → ログイン画面
+  </div>
+
+  <!-- ============ 画面 2: Signup ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 2 <strong>/auth/signup — アカウント作成</strong></div>
+    <div class="phone">
+      <div class="s-auth">
+        <div class="auth-bar"><div class="auth-back">‹</div></div>
+        <div class="auth-body">
+          <div class="auth-heading">知らない人に、<br>決めてもらおう</div>
+          <div class="auth-sub">メールアドレスとパスワードを設定してください。</div>
+
+          <div class="auth-field">
+            <div class="auth-field-label">メールアドレス</div>
+            <div class="auth-field-input">you@example.com</div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-label">パスワード</div>
+            <div class="auth-field-input">8 文字以上</div>
+          </div>
+
+          <button class="btn-primary">アカウントを作る</button>
+
+          <div class="auth-foot">
+            続けることで、<a href="#" class="link-text">利用規約</a> と<br>
+            <a href="#" class="link-text">プライバシーポリシー</a> に同意したものとみなされます。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    スプラッシュの「ログイン」リンクから
+  </div>
+
+  <!-- ============ 画面 3: Login ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 3 <strong>/auth/login — ログイン</strong></div>
+    <div class="phone">
+      <div class="s-auth">
+        <div class="auth-bar"><div class="auth-back">‹</div></div>
+        <div class="auth-body">
+          <div class="auth-heading">おかえりなさい。</div>
+          <div class="auth-sub">アカウントの情報を入力してください。</div>
+
+          <div class="auth-field">
+            <div class="auth-field-label">メールアドレス</div>
+            <div class="auth-field-input">taro@yesman.app</div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-label">パスワード</div>
+            <div class="auth-field-input">●●●●●●●●</div>
+          </div>
+
+          <button class="btn-primary">ログイン</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    アカウント作成 / ログイン完了
+  </div>
+
+  <!-- ============ 画面 4: Home ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 4 <strong>/ — ホーム</strong></div>
+    <div class="phone">
+      <div class="s-home">
+        <div class="home-scroll">
+          <div class="call-card">
+            <div class="call-card-head">
+              <div class="call-card-head-l">決めてもらう人</div>
+              <div class="member-stack">
+                <span class="photo-icon s-28"><span class="photo-icon-initial">T</span></span>
+                <span class="blob orange s-28 gaze-upright"></span>
+                <span class="blob blue s-28 gaze-downleft"></span>
+              </div>
+              <div class="refresh-icon" title="ランダムで入れ替える">↻</div>
+            </div>
+            <div class="call-input">
+              <div class="call-input-text">"今夜の夕飯どうしよ、予算 2000 円までで"</div>
+              <div class="call-mic"></div>
+            </div>
+            <button class="call-btn">決めてもらう</button>
+          </div>
+
+          <div class="section-l">最近の決定</div>
+          <div class="history-list">
+            <div class="hist-row">
+              <div class="hist-check green">✓</div>
+              <div class="hist-text">カツ丼を 食べる</div>
+              <div class="hist-time">昨日</div>
+            </div>
+            <div class="hist-row">
+              <div class="hist-check orange">✓</div>
+              <div class="hist-text">早めに 寝る</div>
+              <div class="hist-time">一昨日</div>
+            </div>
+            <div class="hist-row">
+              <div class="hist-check blue">✓</div>
+              <div class="hist-text">本を 1 冊 買う</div>
+              <div class="hist-time">3 日前</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="score-strip">
+          <div class="score-strip-l">委任率</div>
+          <div class="score-strip-num">92%</div>
+          <div class="score-strip-m">うまく任せられてます</div>
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab active"><div class="tab-icon"></div><div>Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>履歴</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    「3 人を呼ぶ」をタップ → スタート
+  </div>
+
+  <!-- ============ 画面 5a/5b/5c: 漫画的に重なる吹き出し ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 5 <strong>/decision — 決め中 (話す人の吹き出しが大、既出は左上に小さく)</strong></div>
+    <div class="phone-row">
+
+      <!-- 5a -->
+      <div class="phone-col">
+        <div class="phone-sublabel">5a — 1 人目 が話す</div>
+        <div class="phone">
+          <div class="s-decision">
+            <div class="chat-bar">
+              <div class="chat-bar-back">‹</div>
+              <div>
+                <div class="chat-bar-title">決め中</div>
+                <div class="chat-bar-meta"><div class="chat-bar-blip"></div>3 人で 考え中</div>
+              </div>
+            </div>
+            <div class="topic-strip">
+              <span class="topic-strip-l">お題</span>
+              "今夜の夕飯どうしよ"
+            </div>
+            <div class="stage">
+              <div class="earth-back"></div>
+              <div class="earth-front"></div>
+
+              <div class="manga-bubble bub-bob is-large">
+                カレーいいよ！スパイスきいた元気でるやつ、今日はガツンといこ？
+                <a class="lang-link" href="#">原文を表示</a>
+              </div>
+              <div class="bub-typing bt-me">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+              <div class="bub-typing bt-sara">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+
+              <div class="actor-row">
+                <div class="blob orange s-44 gaze-upright"></div>
+                <span class="photo-icon s-44 dim"><span class="photo-icon-initial">T</span></span>
+                <div class="blob blue s-44 dim gaze-downleft"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5b -->
+      <div class="phone-col">
+        <div class="phone-sublabel">5b — 2 人目 が割り込む</div>
+        <div class="phone">
+          <div class="s-decision">
+            <div class="chat-bar">
+              <div class="chat-bar-back">‹</div>
+              <div>
+                <div class="chat-bar-title">決め中</div>
+                <div class="chat-bar-meta"><div class="chat-bar-blip"></div>3 人で 考え中</div>
+              </div>
+            </div>
+            <div class="topic-strip">
+              <span class="topic-strip-l">お題</span>
+              "今夜の夕飯どうしよ"
+            </div>
+            <div class="stage">
+              <div class="earth-back"></div>
+              <div class="earth-front"></div>
+
+              <div class="manga-bubble bub-bob is-small">
+                カレーいいよ！スパイスきいた…
+              </div>
+              <div class="manga-bubble bub-me is-large">
+                いやいや、カツ丼ですよ。サクサクの衣に つゆ染みててさ、たまんない
+              </div>
+              <div class="bub-typing bt-sara">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+
+              <div class="actor-row">
+                <div class="blob orange s-44 dim gaze-upright"></div>
+                <span class="photo-icon s-44"><span class="photo-icon-initial">T</span></span>
+                <div class="blob blue s-44 dim gaze-downleft"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5c -->
+      <div class="phone-col">
+        <div class="phone-sublabel">5c — 3 人目 が割り込む</div>
+        <div class="phone">
+          <div class="s-decision">
+            <div class="chat-bar">
+              <div class="chat-bar-back">‹</div>
+              <div>
+                <div class="chat-bar-title">決め中</div>
+                <div class="chat-bar-meta"><div class="chat-bar-blip"></div>3 人で 考え中</div>
+              </div>
+            </div>
+            <div class="topic-strip">
+              <span class="topic-strip-l">お題</span>
+              "今夜の夕飯どうしよ"
+            </div>
+            <div class="stage">
+              <div class="earth-back"></div>
+              <div class="earth-front"></div>
+
+              <div class="manga-bubble bub-bob is-small">
+                カレーいいよ！スパイスきいた…
+              </div>
+              <div class="manga-bubble bub-me is-small">
+                いやいや、カツ丼でしょ…
+              </div>
+              <div class="manga-bubble bub-sara is-large">
+                和食 おいしいじゃん！揚げ物 続いてるなら、お刺身とかさ、お味噌汁つきで
+                <a class="lang-link" href="#">原文を表示</a>
+              </div>
+
+              <div class="actor-row">
+                <div class="blob orange s-44 dim gaze-upright"></div>
+                <span class="photo-icon s-44 dim"><span class="photo-icon-initial">T</span></span>
+                <div class="blob blue s-44 gaze-downleft"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    吹き出し下の「原文を表示」リンクをタップ → 5d (原文表示)
+  </div>
+
+  <!-- ============ 画面 5d: 原文表示 ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 5d <strong>/decision — 原文表示 (リンクが「翻訳を表示」に切り替わる)</strong></div>
+    <div class="phone">
+      <div class="s-decision">
+        <div class="chat-bar">
+          <div class="chat-bar-back">‹</div>
+          <div>
+            <div class="chat-bar-title">決め中</div>
+            <div class="chat-bar-meta"><div class="chat-bar-blip"></div>3 人で 考え中</div>
+          </div>
+        </div>
+        <div class="topic-strip">
+          <span class="topic-strip-l">お題</span>
+          "今夜の夕飯どうしよ"
+        </div>
+        <div class="stage">
+          <div class="earth-back"></div>
+          <div class="earth-front"></div>
+
+          <div class="manga-bubble bub-bob is-large">
+            Definitely curry! Get the spicy one — gives you energy.
+            <a class="lang-link" href="#">翻訳を表示</a>
+          </div>
+          <div class="manga-bubble bub-me is-large">
+            いやいや、カツ丼ですよ。サクサクの衣に つゆ染みててさ、たまんない
+          </div>
+          <div class="manga-bubble bub-sara is-large">
+            Du japonais ! Si t'as enchaîné le gras, prends du sashimi avec une miso
+            <a class="lang-link" href="#">翻訳を表示</a>
+          </div>
+
+          <div class="actor-row">
+            <div class="blob orange s-44 dim gaze-upright"></div>
+            <span class="photo-icon s-44 dim"><span class="photo-icon-initial">T</span></span>
+            <div class="blob blue s-44 gaze-downleft"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    決まった
+  </div>
+
+  <!-- ============ 画面 6: 結論 (決定カード 1 枚) ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 6 <strong>/decision — 結論 (カード 1 枚に集約)</strong></div>
+    <div class="phone">
+      <div class="s-result">
+        <div class="chat-bar">
+          <div class="chat-bar-back">‹</div>
+          <div>
+            <div class="chat-bar-title">決まりました</div>
+          </div>
+        </div>
+
+        <div class="result-center">
+          <div class="result-card">
+            <div class="rc-stage">
+              <div class="earth-back"></div>
+              <div class="earth-front"></div>
+              <div class="rc-cast">
+                <div class="rc-actor dim">
+                  <div class="blob orange s-44 gaze-upright"></div>
+                </div>
+                <div class="rc-actor chosen">
+                  <span class="photo-icon s-60"><span class="photo-icon-initial">T</span></span>
+                </div>
+                <div class="rc-actor dim">
+                  <div class="blob blue s-44 gaze-downleft"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rc-conclusion">
+              <div class="rc-conclusion-text">カツ丼を 食べる</div>
+            </div>
+
+            <div class="rc-actions">
+              <div class="vote-btn vote-no">NO</div>
+              <div class="vote-btn vote-yes">YES</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    YES → ホームに戻り、後日「最近の決定」から閲覧
+  </div>
+
+  <!-- ============ 画面 7: 過去ログ ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 7 <strong>過去の決定ログ</strong></div>
+    <div class="phone">
+      <div class="s-log">
+        <div class="chat-bar">
+          <div class="chat-bar-back">‹</div>
+          <div>
+            <div class="chat-bar-title">カツ丼を 食べる</div>
+            <div class="chat-bar-meta">昨日 · 23:48</div>
+          </div>
+        </div>
+
+        <div class="log-body">
+          <div class="log-stage">
+            <div class="earth-back"></div>
+            <div class="earth-front"></div>
+
+            <div class="log-bubble lb-bob">カレーいいよ</div>
+            <div class="log-bubble cream lb-me">いやいや、カツ丼</div>
+            <div class="log-bubble lb-sara">和食 おいしいじゃん</div>
+
+            <div class="log-cast">
+              <div class="blob orange s-28 dim gaze-upright"></div>
+              <span class="photo-icon s-28"><span class="photo-icon-initial">T</span></span>
+              <div class="blob blue s-28 dim gaze-downleft"></div>
+            </div>
+          </div>
+
+          <div class="log-conclusion-card">
+            カツ丼を 食べる
+          </div>
+
+          <div class="log-yes-marker">✓ YES で 受け取った</div>
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div>Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>スコア</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div>履歴</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    ホームの「次に呼ぶ 3 人」card の更新アイコン ↻ をタップ
+  </div>
+
+  <!-- ============ 画面 8: 呼ぶメンバー (ランダム) ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 8 <strong>/personas/selection — 呼ぶ 3 人 (ランダム)</strong></div>
+    <div class="phone">
+      <div class="s-summon">
+        <div class="app-bar">
+          <div class="app-bar-back">‹</div>
+          <div class="app-bar-title">決めてもらう人</div>
+        </div>
+        <div class="summon-body">
+          <div class="summon-hint">世界から ランダムに 2 人 呼ばれます</div>
+
+          <div class="summon-row me">
+            <span class="photo-icon s-36"><span class="photo-icon-initial">T</span></span>
+            <div class="summon-row-info">
+              <div class="summon-row-name">あなた</div>
+              <div class="summon-row-tag">いつも参加</div>
+            </div>
+          </div>
+
+          <div class="summon-row">
+            <div class="blob orange s-36 gaze-upright"></div>
+            <div class="summon-row-info">
+              <div class="summon-row-name">世界の 誰か</div>
+              <div class="summon-row-tag">即決派 / 肉好き</div>
+            </div>
+          </div>
+
+          <div class="summon-row">
+            <div class="blob blue s-36 gaze-downleft"></div>
+            <div class="summon-row-info">
+              <div class="summon-row-name">世界の 誰か</div>
+              <div class="summon-row-tag">和食派 / 慎重派</div>
+            </div>
+          </div>
+
+          <button class="summon-dice-btn">
+            <span>↻</span>
+            <span>別の 2 人を 呼び直す</span>
+          </button>
+        </div>
+        <div class="summon-footer">
+          <button class="btn-primary">この 3 人に 決めてもらう</button>
+        </div>
+        <div class="tab-bar">
+          <div class="tab active"><div class="tab-icon"></div><div>Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>履歴</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    タブ「履歴」をタップ
+  </div>
+
+  <!-- ============ 画面 9: 過去に呼んだ世界の誰か ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 9 <strong>/personas — これまで 決めてくれた 世界の誰か</strong></div>
+    <div class="phone">
+      <div class="s-strangers">
+        <div class="app-bar">
+          <div class="app-bar-title">これまで 決めてくれた 世界の誰か</div>
+        </div>
+        <div class="strangers-body">
+          <div class="stranger-row">
+            <div class="blob orange s-36 gaze-upright"></div>
+            <div class="stranger-row-info">
+<div class="stranger-row-tag">3 日前</div>
+            </div>
+            <div class="stranger-row-chevron">›</div>
+          </div>
+          <div class="stranger-row">
+            <div class="blob blue s-36 gaze-downleft"></div>
+            <div class="stranger-row-info">
+<div class="stranger-row-tag">5 日前</div>
+            </div>
+            <div class="stranger-row-chevron">›</div>
+          </div>
+          <div class="stranger-row">
+            <div class="blob pink s-36 gaze-up"></div>
+            <div class="stranger-row-info">
+<div class="stranger-row-tag">1 週間前</div>
+            </div>
+            <div class="stranger-row-chevron">›</div>
+          </div>
+          <div class="stranger-row">
+            <div class="blob orange s-36 gaze-downright"></div>
+            <div class="stranger-row-info">
+<div class="stranger-row-tag">2 週間前</div>
+            </div>
+            <div class="stranger-row-chevron">›</div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div>Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>スコア</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div>履歴</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    リストから 1 人をタップ
+  </div>
+
+  <!-- ============ 画面 10: プロファイル詳細 ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 10 <strong>世界の誰か プロファイル詳細</strong></div>
+    <div class="phone">
+      <div class="s-detail">
+        <div class="app-bar">
+          <div class="app-bar-back">‹</div>
+          <div class="app-bar-title">プロフィール</div>
+        </div>
+        <div class="detail-body">
+          <div class="detail-head">
+            <div class="blob orange s-80 gaze-upright"></div>
+            <div class="detail-meta">3 回 一緒に決めた</div>
+          </div>
+
+          <div>
+            <div class="detail-section-l">価値観タグ</div>
+            <div class="tag-row">
+              <span class="tag">即決派</span>
+              <span class="tag">肉好き</span>
+              <span class="tag">自由人</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-section-l">口グセ</div>
+            <div class="quote-block">
+              <div class="quote-line">
+                カレーいいよ！
+                <span class="quote-orig">原文: Definitely curry.</span>
+              </div>
+              <div class="quote-line">
+                細かいこと 気にすんな
+                <span class="quote-orig">原文: Don't sweat the small stuff.</span>
+              </div>
+              <div class="quote-line">
+                とりあえず やってみよう
+                <span class="quote-orig">原文: Let's just try it.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div>Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>スコア</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div>履歴</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="transition">
+    <span class="arrow">↓</span>
+    タブ「プロフィール」をタップ
+  </div>
+
+  <!-- ============ 画面 11: プロフィール (自分) ============ -->
+  <div class="screen-block">
+    <div class="screen-label">画面 11 <strong>/preferences — プロフィール (自分)</strong></div>
+    <div class="phone">
+      <div class="s-self-profile">
+        <div class="app-bar">
+          <div class="app-bar-title">あなたのプロフィール</div>
+        </div>
+        <div class="self-body">
+          <div class="self-head">
+            <span class="photo-icon s-60"><span class="photo-icon-initial">T</span></span>
+            <div class="self-head-info">
+              <div class="self-name">たろう</div>
+              <div class="self-stat">決定 24 回 / Yes 採択 18 回</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-section-l">価値観タグ</div>
+            <div class="tag-row">
+              <span class="tag">慎重派</span>
+              <span class="tag">控えめ予算</span>
+              <span class="tag">健康志向</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-section-l">あなたの 口グセ</div>
+            <div class="quote-block">
+              <div class="quote-line">ま、いっか</div>
+              <div class="quote-line">めんどいなぁ</div>
+              <div class="quote-line">明日でいいや</div>
+            </div>
+          </div>
+
+          <div class="toggle-card">
+            <div class="toggle-card-text">
+              <div class="toggle-card-l">他の人の 決め事に 参加する</div>
+              <div class="toggle-card-sub">あなたの 価値観タグや 口グセが、世界の だれかの 決め事に 使われます</div>
+              <div class="toggle-card-stat">今日 7 件の 決め事に 登場しました</div>
+            </div>
+            <div class="toggle-switch"></div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab"><div class="tab-icon"></div><div>Home</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>スコア</div></div>
+          <div class="tab"><div class="tab-icon"></div><div>履歴</div></div>
+          <div class="tab active"><div class="tab-icon"></div><div>プロフィール</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+</body>
+</html>

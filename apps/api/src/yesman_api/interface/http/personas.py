@@ -18,6 +18,7 @@ from yesman_api.domain.persistence.models import PersonaReport
 from yesman_api.domain.persona.catalog import PersonaCatalogService
 from yesman_api.domain.persona.errors import PersonaError
 from yesman_api.interface.deps import (
+    ensure_demo_seeded_dep,
     get_current_user,
     get_persona_catalog,
     get_persona_report_repo,
@@ -62,6 +63,7 @@ def _raise_for_persona_error(exc: PersonaError) -> None:
 async def list_my_personas(
     user: AuthenticatedUser = Depends(get_current_user),
     catalog: PersonaCatalogService = Depends(get_persona_catalog),
+    _demo_seed: None = Depends(ensure_demo_seeded_dep),
 ) -> list[PersonaResponse]:
     personas = await catalog.list_my_personas(UUID(user.sub))
     return [PersonaResponse.model_validate(p) for p in personas]

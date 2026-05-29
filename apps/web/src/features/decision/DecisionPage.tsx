@@ -8,17 +8,23 @@
  */
 import { useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Input } from "@yesman/ui";
+import { Button, Input, decodeAvatarConfig, personaIconFor } from "@yesman/ui";
 import { VoiceMicInput } from "../voice/VoiceMicInput";
 import { decisionReducer, initialState } from "./reducer";
 import { useDecisionStream } from "./useDecisionStream";
 import { usePrefetchedDecisions } from "./usePrefetchedDecisions";
 import { DecisionResult } from "./DecisionResult";
+import { MangaStage } from "./MangaStage";
 import { NoMicroCopyBanner } from "./NoMicroCopyBanner";
 import { QuickStartCard } from "./QuickStartCard";
+import { StageHeader } from "./StageHeader";
 import { useQuickStart } from "./useQuickStart";
 import { useYesNudge } from "./useYesNudge";
 import { YesManMascot, type MascotState } from "./YesManMascot";
+import type { ChainNode, StageMode } from "./reducer";
+import { usePersonaSource } from "../persona/usePersonaSource";
+import { useUnifiedSelection } from "../persona/useUnifiedSelection";
+import { useBuiltinPersonas, useMyPersonas } from "../persona/usePersona";
 import { describeError } from "./describeError";
 import { t } from "./strings";
 
@@ -41,11 +47,64 @@ export default function DecisionPage() {
 
   // issue #93: No 採択 → 別案到着後に Yes 採択を後押しする LLM 動的 microcopy.
   const yesNudge = useYesNudge();
+  // 2026-05-23 Drill-down chain: 完了済 proposal 列を保持 (Yes 連鎖時の chain_context として送る)
+  const [chain, setChain] = useState<ChainNode[]>([]);
   // Hackathon: 直近の Yes/No 採択を mascot 用に保持 (1.6s で自動 clear).
   const [recentChoice, setRecentChoice] = useState<"yes" | "no" | null>(null);
+  // 2026-05-24: MangaStage 上部 overlay 用 DOM 要素 (DecisionResult が proposal-card を
+  // createPortal でここに転送). ref callback で state にセットして re-render を trigger.
+  const [proposalOverlayEl, setProposalOverlayEl] = useState<HTMLDivElement | null>(
+    null,
+  );
   const handleChoiceMade = (choice: "yes" | "no") => {
     setRecentChoice(choice);
     window.setTimeout(() => setRecentChoice(null), 1600);
+  };
+
+  // v3-γ Task 5: persona source 連携 (Task 4 connecting note の実装).
+  // "anonymous" 選択時は stageMode="manga"、DecisionRequestPayload に persona_source を inject.
+  const { source: personaSource } = usePersonaSource();
+  const stageMode: StageMode = personaSource === "anonymous" ? "manga" : "chat";
+  // API DTO の persona_source は "builtin" | "anonymous" のみ受理。"my" (自作タブ) は
+  // selected_personas 経由で送るため、persona_source としては "builtin" に正規化する
+  // (これを送らないと "my" で 422 validation_error になる)。
+  const payloadPersonaSource: "builtin" | "anonymous" =
+    personaSource === "anonymous" ? "anonymous" : "builtin";
+
+  // 2026-05-24 v4: 統合 selection (3 source mix). 指定時は selected_personas で送信.
+  const { selection: unifiedSelection } = useUnifiedSelection();
+
+  // persona_id → {name, avatar_url} の map (MangaStage の発話者アイコン / 選択ピル用).
+  // カスタム persona (妻/娘/ワンコ 等) の emoji アイコンを議論画面・ピルでも表示する。
+  const { data: myPersonas } = useMyPersonas();
+  const { data: builtinPersonas } = useBuiltinPersonas();
+  const avatarById: Record<string, string | null | undefined> = {};
+  const personaById: Record<string, { name: string; avatar_url?: string | null }> = {};
+  for (const p of [...(builtinPersonas ?? []), ...(myPersonas ?? [])]) {
+    avatarById[p.id] = p.avatar_url;
+    personaById[p.id] = { name: p.name, avatar_url: p.avatar_url };
+  }
+  // inline persona セレクタ pill のラベル (選択中ペルソナの emoji + 名前).
+  // 未解決 (persona list 未到着) は builtin 既定ラベルに fallback。
+  const pillItems = unifiedSelection
+    .map((s) => personaById[s.id])
+    .filter((p): p is { name: string; avatar_url?: string | null } => !!p)
+    .map((p) => {
+      const decoded = p.avatar_url ? decodeAvatarConfig(p.avatar_url) : null;
+      const emoji = decoded?.emoji ?? personaIconFor(p.name);
+      return `${emoji} ${p.name}`;
+    });
+  const pillLabel =
+    pillItems.length > 0
+      ? `${pillItems.join(" ・ ")} [▼]`
+      : "🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]";
+
+  /** stream payload に selected_personas を merge (非空時のみ). */
+  const buildStreamPayload = (
+    base: Parameters<typeof startStream>[0],
+  ): Parameters<typeof startStream>[0] => {
+    if (unifiedSelection.length === 0) return base;
+    return { ...base, selected_personas: unifiedSelection };
   };
 
   const { startStream } = useDecisionStream({
@@ -61,7 +120,14 @@ export default function DecisionPage() {
       }),
     onUtterance: (u) =>
       dispatch({ type: "onUtterance", utterance: { ...u, done: true } }),
-    onProposal: (text) => dispatch({ type: "onProposal", proposal: text }),
+    onProposal: (data) =>
+      dispatch({
+        type: "onProposal",
+        proposal: data.proposal,
+        isFinal: data.isFinal,
+        depth: data.depth,
+        service: data.service,
+      }),
     onComplete: () => {
       dispatch({ type: "onComplete" });
       setRegenerating(false);
@@ -87,10 +153,37 @@ export default function DecisionPage() {
     lastInputRef.current = state.input;
     setNoStage(0); // 新規 submit は No carry-forward を reset
     setRegenerating(false);
+    // 2026-05-23: 新規 submit は chain を必ず reset (前回の drill-down 履歴を引き継がない)
+    setChain([]);
     // 新規 submit のため、前のセッションの buffer を破棄
     prefetch.clear();
     dispatch({ type: "start" });
-    await startStream({ user_input: state.input });
+    await startStream(
+      buildStreamPayload({ user_input: state.input, persona_source: payloadPersonaSource }),
+    );
+  };
+
+  /** 2026-05-23 Drill-down chain: Yes (非 final) で次段に進む.
+   *  現 proposal を chain に push、chain_context を含めて新 stream を起動する. */
+  const handleDrillDown = async () => {
+    if (state.status !== "completed") return;
+    const newNode: ChainNode = {
+      decisionId: state.decisionId,
+      proposalText: state.proposal,
+      depth: state.depth,
+    };
+    const nextChain = [...chain, newNode];
+    setChain(nextChain);
+    setNoStage(0); // chain 進行は No carry-forward を reset
+    prefetch.clear();
+    dispatch({ type: "start" });
+    await startStream(
+      buildStreamPayload({
+        user_input: lastInputRef.current,
+        chain_context: nextChain.map((n) => n.proposalText),
+        persona_source: payloadPersonaSource,
+      }),
+    );
   };
 
   /** INCEPTION Journey C: No 採択 → 自動再生成 + 段階的 microcopy.
@@ -121,7 +214,9 @@ export default function DecisionPage() {
     // buffer 切れの fallback: 従来の同期 stream
     setRegenerating(true);
     dispatch({ type: "start" });
-    await startStream({ user_input: input });
+    await startStream(
+      buildStreamPayload({ user_input: input, persona_source: payloadPersonaSource }),
+    );
   };
 
   /** 完全 reset (Yes 採択後の もう一度 / silenced からの Home / error からのやり直し). */
@@ -129,6 +224,7 @@ export default function DecisionPage() {
     setNoStage(0);
     setRegenerating(false);
     yesNudge.clear();
+    setChain([]);
     lastInputRef.current = "";
     prefetch.clear();
     dispatch({ type: "reset" });
@@ -164,19 +260,42 @@ export default function DecisionPage() {
     setRegenerating(false);
     prefetch.clear();
     dispatch({ type: "start" });
-    await startStream({ user_input: title });
+    await startStream(
+      buildStreamPayload({ user_input: title, persona_source: payloadPersonaSource }),
+    );
   };
 
+  // mockup §5: 合議進行中 (streaming/completed) は専用 StageHeader を表示、
+  // idle/error 時は従来の pageTitle h1 を表示 (両経路で共通).
+  const isInDiscussion =
+    state.status === "streaming" || state.status === "completed";
+
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="font-serif text-2xl font-bold">{t("pageTitle")}</h1>
+    // 2026-05-24 v9: mobile (iPhone SE 667 / iPhone 12 Pro 844) で全要素を viewport に収めるため
+    //   h-full (= main の content area = viewport - header - pt - pb) を使用.
+    //   MangaStage は flex-1 で残り空間を動的フィット、bubble/actor は内部 absolute で配置.
+    //   idle / error 時は通常の auto-height layout (input area が小さいため不要).
+    <div
+      className={`flex flex-col gap-3 ${isInDiscussion ? "h-full" : ""}`}
+    >
+      {isInDiscussion ? (
+        <StageHeader
+          participantCount={state.utterances.length || 3}
+          topic={lastInputRef.current}
+          onBack={handleFullReset}
+          status={state.status === "completed" ? "completed" : "streaming"}
+        />
+      ) : (
+        <h1 className="font-sans text-lg font-bold">{t("pageTitle")}</h1>
+      )}
 
       {showQuickStart && quick.current && (
-        // key={current.id}: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐため
-        // QuickStartCard 全体を remount。reject 時に SwipeChoice の動的 state が
-        // 持ち越されると、新題目で「すでに左にスワイプされた」状態から始まってしまう.
+        // key に noCount も含める: 次候補へ進む際に SwipeChoice 内の confirming/dx 残留を防ぐ。
+        // 2026-05-29 fix: queue 枯渇時は current=catchAll 固定で id が変わらず、No しても
+        // remount されず「左にスワイプされたまま固まる」バグ。noCount を key に足して
+        // No のたびに必ず remount させる (catchAll が出続けても操作可能に保つ)。
         <QuickStartCard
-          key={quick.current.id}
+          key={`${quick.current.id}-${quick.noCount}`}
           title={quick.current.title}
           noCount={quick.noCount}
           onYes={handleQuickYes}
@@ -231,7 +350,7 @@ export default function DecisionPage() {
             aria-label="合議に使うペルソナを選択"
             data-testid="persona-selector-pill"
           >
-            🛡️ 慎重派 ・ ☀️ 楽観派 ・ ⚡ 効率派 [▼]
+            {pillLabel}
           </Link>
         </>
       )}
@@ -248,6 +367,22 @@ export default function DecisionPage() {
           />
         )}
 
+      {/* 2026-05-24: 両経路 (builtin + anonymous) で MangaStage を utterance render に使用.
+          DecisionResult の bubble は常時 hide (重複防止). proposal-card は React Portal で
+          MangaStage 上部 overlay に転送 (空き領域に SwipeChoice + 結論 + pink nudge を表示). */}
+      {(state.status === "streaming" || state.status === "completed") && (
+        <MangaStage
+          utterances={state.utterances}
+          currentSpeakerId={state.lastSpeakerId ?? undefined}
+          personaSource={personaSource}
+          avatarById={avatarById}
+        >
+          {/* proposal-card は DecisionResult が createPortal で ここに render する.
+              この div の ref を proposalOverlayEl state に登録して DecisionResult に渡す. */}
+          <div ref={setProposalOverlayEl} />
+        </MangaStage>
+      )}
+
       {(state.status === "streaming" || state.status === "completed") && (
         <DecisionResult
           utterances={state.utterances}
@@ -256,6 +391,17 @@ export default function DecisionPage() {
           onComplete={handleFullReset}
           onNoChosen={handleNoChosen}
           onChoiceMade={handleChoiceMade}
+          // 2026-05-23 Drill-down chain
+          isFinal={state.status === "completed" ? state.isFinal : false}
+          depth={state.status === "completed" ? state.depth : 0}
+          chain={chain}
+          service={state.status === "completed" ? state.service : null}
+          onDrillDown={handleDrillDown}
+          onAbort={handleFullReset}
+          // 2026-05-24: 両経路で MangaStage を bubble 表示に使うため、ここの bubble は常時 hide.
+          hideUtterances
+          // 2026-05-24: proposal-card を MangaStage の overlay 領域に Portal で render.
+          proposalCardPortal={proposalOverlayEl}
         />
       )}
 
@@ -292,7 +438,7 @@ export default function DecisionPage() {
             </svg>
           </div>
           <p
-            className="text-sm italic mt-1"
+            className="text-sm mt-1"
             style={{ color: "#78909C" }}
           >
             （沈黙）
@@ -314,10 +460,10 @@ export default function DecisionPage() {
             <span>⚔️</span>
             <span>🔞</span>
           </div>
-          <p className="text-[10px] mt-2" style={{ color: "#546E7A" }}>
+          <p className="text-[12px] mt-2" style={{ color: "#546E7A" }}>
             宗教 / 選挙 / 暴力 / 卑猥
           </p>
-          <p className="text-[10px]" style={{ color: "#546E7A" }}>
+          <p className="text-[12px]" style={{ color: "#546E7A" }}>
             ＝ ご自身で 判断する 領域
           </p>
           {state.message && (
@@ -328,7 +474,7 @@ export default function DecisionPage() {
           <button
             type="button"
             onClick={handleFullReset}
-            className="mt-6 text-xs italic underline"
+            className="mt-6 text-xs underline"
             style={{ color: "#455A64" }}
           >
             タップで Home へ もどる
@@ -344,7 +490,7 @@ export default function DecisionPage() {
 
       {/* INCEPTION screen-01 bottom hint (whisper copy、決定の重さを優しく問いかける) */}
       {showInputArea && (
-        <p className="mt-8 text-center text-xs italic text-neutral-400">
+        <p className="mt-8 text-center text-xs text-neutral-400">
           {t("bottomHint")}
         </p>
       )}
