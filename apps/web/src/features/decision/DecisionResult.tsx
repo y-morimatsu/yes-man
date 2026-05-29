@@ -526,24 +526,25 @@ export function DecisionResult({
                 upLabel="やめる"
               >
                 <article
-                  className="rounded-3xl overflow-hidden shadow-md flex flex-col"
+                  className="rounded-3xl overflow-hidden shadow-md flex flex-col justify-center"
                   style={{
                     background: "#FFFCF4",
                     border: "0.5px solid rgba(46, 36, 24, 0.30)",
                     boxShadow: "0 14px 36px rgba(46,36,24,0.14)",
+                    minHeight: 180,
                   }}
                   aria-label="提案"
                   role="article"
                   data-testid="proposal-result-card"
                 >
-                  <div className="px-4 pt-3 pb-2 text-center">
+                  <div className="px-5 py-8 text-center">
                     <p
-                      className="font-medium"
+                      className="font-bold"
                       style={{
                         fontFamily: "var(--font-sans)",
-                        fontSize: 20,
-                        lineHeight: 1.3,
-                        color: "#2E2418",
+                        fontSize: 24,
+                        lineHeight: 1.35,
+                        color: "#1A1814",
                       }}
                     >
                       {proposal}
